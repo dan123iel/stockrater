@@ -403,6 +403,23 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-main);min-hei
       </div>
     </div>
     <div class="card">
+      <div class="card-title">CORS Proxy (required for GitHub Pages)</div>
+      <div style="font-size:.8rem;color:var(--text2);margin-bottom:.75rem;line-height:1.6">
+        FMP blocks direct browser requests from external domains. Deploy the included <code style="background:var(--bg3);padding:2px 5px;border-radius:4px">worker.js</code> to Cloudflare Workers (free), then paste the worker URL here.<br>
+        <a href="https://dash.cloudflare.com" target="_blank" style="color:var(--accent)">dash.cloudflare.com</a> → Workers &amp; Pages → Create Worker → paste worker.js → Deploy → copy URL
+      </div>
+      <div class="form-grid" style="align-items:flex-end">
+        <div class="field">
+          <label>Cloudflare Worker URL</label>
+          <input type="text" id="proxy-url-input" placeholder="https://your-worker.your-name.workers.dev" oninput="validateProxyUrl()">
+        </div>
+        <div>
+          <button class="btn btn-primary" onclick="saveProxyUrl()">Save</button>
+        </div>
+      </div>
+      <div id="proxy-url-status" style="margin-top:.75rem;font-size:.8rem;color:var(--text3)"></div>
+    </div>
+    <div class="card">
       <div class="card-title">Cache & storage</div>
       <div style="font-size:.82rem;color:var(--text2);margin-bottom:.75rem">API responses are cached for 1 hour per ticker to save API calls.</div>
       <button class="btn btn-sm" onclick="clearCache()">Clear cache</button>
@@ -498,6 +515,24 @@ function showApiStatus(msg,type){
   el.style.color = type==='ok'?'var(--green)':type==='error'?'var(--red)':'var(--amber)';
   el.textContent = msg;
 }
+function saveProxyUrl(){
+  const v = document.getElementById('proxy-url-input').value.trim();
+  if(v && !v.startsWith('https://')){showProxyStatus('URL must start with https://','error');return;}
+  if(v) localStorage.setItem('sr_proxy',v);
+  else localStorage.removeItem('sr_proxy');
+  showProxyStatus(v?'Proxy URL saved ✓ — requests will go through your Worker':'Proxy removed — direct FMP calls (may hit CORS)',v?'ok':'warn');
+}
+function validateProxyUrl(){
+  const v = document.getElementById('proxy-url-input').value.trim();
+  if(!v){showProxyStatus('','ok');return;}
+  showProxyStatus(v.startsWith('https://')?'URL looks valid':'Must start with https://…',v.startsWith('https://')?'ok':'warn');
+}
+function showProxyStatus(msg,type){
+  const el = document.getElementById('proxy-url-status');
+  if(!el) return;
+  el.style.color = type==='ok'?'var(--green)':type==='error'?'var(--red)':'var(--amber)';
+  el.textContent = msg;
+}
 function updateApiBadge(){
   const k = getApiKey();
   const el = document.getElementById('api-status-badge');
@@ -511,10 +546,15 @@ function checkApiWarnings(){
   document.getElementById('api-warning-trading').innerHTML = warn;
 }
 
+function getProxyUrl(){ return localStorage.getItem('sr_proxy')||''; }
+
 async function fmpFetch(endpoint){
   const key = getApiKey();
   if(!key) throw new Error('No API key configured. Please go to Settings.');
-  const url = `https://financialmodelingprep.com/api/v3/${endpoint}&apikey=${key}`;
+  const proxy = getProxyUrl();
+  const url = proxy
+    ? `${proxy.replace(/\/$/,'')}/fmp/${endpoint}&apikey=${key}`
+    : `https://financialmodelingprep.com/api/v3/${endpoint}&apikey=${key}`;
   const cacheKey = endpoint;
   const now = Date.now();
   if(cache[cacheKey] && now - cache[cacheKey].ts < 3600000){
@@ -955,6 +995,8 @@ function clearAll(){if(confirm('Delete all data (portfolio, trades, watchlist, c
 // ==================== INIT ====================
 const storedKey = getApiKey();
 if(storedKey) document.getElementById('api-key-input').value=storedKey;
+const storedProxy = getProxyUrl();
+if(storedProxy) document.getElementById('proxy-url-input').value=storedProxy;
 updateApiBadge();
 checkApiWarnings();
 renderPortfolio();
