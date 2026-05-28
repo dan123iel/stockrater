@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StockRater — Company Rating & Trading Tool</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0f14;--bg2:#13161e;--bg3:#1a1e28;--bg4:#222736;
+  --border:#2a2f3f;--border2:#363d52;
+  --text:#e8eaf0;--text2:#8c92a8;--text3:#555d78;
+  --accent:#4f8ef7;--accent-dim:#1a2d52;
+  --green:#34c77b;--green-dim:#0e2e1e;
+  --red:#f75a5a;--red-dim:#2e0e0e;
+  --amber:#f0a020;--amber-dim:#2e1e05;
+  --purple:#a78bfa;--purple-dim:#1e1535;
+  --radius:10px;--radius-sm:6px;
+  --font-main:'Sora',sans-serif;--font-mono:'DM Mono',monospace;
+}
+html{font-size:15px}
+body{background:var(--bg);color:var(--text);font-family:var(--font-main);min-height:100vh}
+
+/* Layout */
+.app{display:flex;min-height:100vh}
+.sidebar{width:220px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;transition:transform .25s}
+.main{margin-left:220px;flex:1;padding:2rem;max-width:960px}
+.logo{padding:1.5rem 1.25rem 1rem;border-bottom:1px solid var(--border);margin-bottom:.75rem}
+.logo-title{font-size:1.1rem;font-weight:600;letter-spacing:-.02em;color:var(--text)}
+.logo-sub{font-size:.7rem;color:var(--text3);margin-top:2px;font-family:var(--font-mono)}
+.nav-item{display:flex;align-items:center;gap:10px;padding:.65rem 1.25rem;cursor:pointer;font-size:.85rem;color:var(--text2);border-radius:0;transition:all .15s;border-left:2px solid transparent}
+.nav-item:hover{color:var(--text);background:var(--bg3)}
+.nav-item.active{color:var(--accent);background:var(--accent-dim);border-left-color:var(--accent);font-weight:500}
+.nav-icon{font-size:1rem;width:18px;text-align:center}
+.nav-section{font-size:.65rem;font-weight:500;letter-spacing:.1em;color:var(--text3);padding:.75rem 1.25rem .35rem;text-transform:uppercase}
+.sidebar-bottom{margin-top:auto;padding:1rem 1.25rem;border-top:1px solid var(--border)}
+.api-badge{font-size:.7rem;color:var(--text3);font-family:var(--font-mono);background:var(--bg3);padding:4px 8px;border-radius:var(--radius-sm);border:1px solid var(--border)}
+
+/* Page */
+.page{display:none}.page.active{display:block}
+.page-header{margin-bottom:1.75rem}
+.page-title{font-size:1.5rem;font-weight:600;letter-spacing:-.02em}
+.page-sub{font-size:.85rem;color:var(--text2);margin-top:4px}
+
+/* Search bar */
+.search-bar{display:flex;gap:8px;margin-bottom:1.5rem}
+.search-input{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:.65rem 1rem;color:var(--text);font-size:.9rem;font-family:var(--font-main);outline:none;transition:border .15s}
+.search-input:focus{border-color:var(--accent)}
+.search-input::placeholder{color:var(--text3)}
+.btn{padding:.6rem 1.2rem;border-radius:var(--radius);cursor:pointer;font-size:.85rem;font-family:var(--font-main);font-weight:500;border:1px solid var(--border);background:var(--bg3);color:var(--text);transition:all .15s;white-space:nowrap}
+.btn:hover{background:var(--bg4);border-color:var(--border2)}
+.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-primary:hover{opacity:.88}
+.btn-sm{padding:.4rem .8rem;font-size:.78rem}
+.btn-ghost{background:transparent;border-color:transparent;color:var(--text2)}
+.btn-ghost:hover{background:var(--bg3);color:var(--text);border-color:var(--border)}
+
+/* API key setup */
+.api-setup{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1.5rem}
+.api-setup-title{font-size:.9rem;font-weight:500;margin-bottom:.35rem}
+.api-setup-desc{font-size:.8rem;color:var(--text2);margin-bottom:1rem;line-height:1.6}
+.api-setup-row{display:flex;gap:8px}
+.api-tag{display:inline-flex;align-items:center;gap:5px;font-size:.72rem;padding:2px 8px;border-radius:99px;font-family:var(--font-mono)}
+.tag-free{background:var(--green-dim);color:var(--green)}
+.tag-live{background:var(--accent-dim);color:var(--accent)}
+.tag-cached{background:var(--amber-dim);color:var(--amber)}
+
+/* Cards */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1rem}
+.card-title{font-size:.72rem;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1rem}
+
+/* Company header */
+.company-hero{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.5rem}
+.company-avatar{width:52px;height:52px;border-radius:12px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:600;flex-shrink:0;font-family:var(--font-mono)}
+.company-info{flex:1}
+.company-name{font-size:1.25rem;font-weight:600;letter-spacing:-.02em}
+.company-meta{font-size:.8rem;color:var(--text2);margin-top:3px}
+.company-price{text-align:right}
+.price-big{font-size:1.5rem;font-weight:600;font-family:var(--font-mono)}
+.price-change{font-size:.8rem;margin-top:2px;font-family:var(--font-mono)}
+.pos{color:var(--green)}.neg{color:var(--red)}
+
+/* Metrics grid */
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:1rem}
+.metric{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.85rem .9rem}
+.metric-label{font-size:.72rem;color:var(--text3);margin-bottom:5px;font-family:var(--font-mono)}
+.metric-value{font-size:1.15rem;font-weight:500;font-family:var(--font-mono);color:var(--text)}
+.metric-sub{font-size:.7rem;color:var(--text3);margin-top:3px}
+
+/* Ratio table */
+.rtable{width:100%;border-collapse:collapse;font-size:.82rem}
+.rtable th{font-size:.68rem;font-weight:500;color:var(--text3);text-align:left;padding:5px 6px;border-bottom:1px solid var(--border);font-family:var(--font-mono);letter-spacing:.05em}
+.rtable td{padding:6px 6px;border-bottom:1px solid var(--border);color:var(--text)}
+.rtable tr:last-child td{border:none}
+.rtable tr:hover td{background:var(--bg3)}
+.score-bar-wrap{width:80px;height:5px;background:var(--bg4);border-radius:3px;overflow:hidden;display:inline-block;vertical-align:middle}
+.score-bar-fill{height:100%;border-radius:3px}
+
+/* Qual stars */
+.qual-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border)}
+.qual-row:last-child{border:none}
+.qual-label{flex:1;font-size:.83rem}
+.star{cursor:pointer;font-size:1rem;color:var(--bg4);transition:color .1s;user-select:none}
+.star.on{color:var(--amber)}
+.qual-val{font-size:.83rem;font-weight:500;font-family:var(--font-mono);color:var(--accent);min-width:18px;text-align:right}
+
+/* Scorecard */
+.score-hero{display:flex;align-items:center;gap:1.25rem;margin-bottom:1.25rem}
+.gauge-wrap{position:relative;width:100px;height:100px;flex-shrink:0}
+.gauge-wrap svg{width:100%;height:100%}
+.gauge-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.gauge-num{font-size:1.4rem;font-weight:600;font-family:var(--font-mono)}
+.gauge-denom{font-size:.65rem;color:var(--text3);font-family:var(--font-mono)}
+.verdict-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:99px;font-size:.78rem;font-weight:500}
+.verdict-strong{background:var(--green-dim);color:var(--green)}
+.verdict-buy{background:var(--accent-dim);color:var(--accent)}
+.verdict-hold{background:var(--amber-dim);color:var(--amber)}
+.verdict-avoid{background:var(--red-dim);color:var(--red)}
+.score-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-size:.83rem}
+.score-row:last-child{border:none}
+.score-row.total{font-weight:600;border-top:1px solid var(--border2);padding-top:10px;margin-top:4px;font-size:.9rem}
+
+/* Trading */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px}
+.field label{display:block;font-size:.72rem;color:var(--text3);margin-bottom:5px;font-family:var(--font-mono);letter-spacing:.04em}
+.field input,.field select{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.55rem .75rem;color:var(--text);font-size:.85rem;font-family:var(--font-mono);outline:none;transition:border .15s}
+.field input:focus,.field select:focus{border-color:var(--accent)}
+.field select option{background:var(--bg2)}
+.tp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tp-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem;text-align:center}
+.tp-title{font-size:.68rem;color:var(--text3);font-family:var(--font-mono);margin-bottom:.5rem}
+.tp-val{font-size:1.1rem;font-weight:500;font-family:var(--font-mono)}
+.tp-sub{font-size:.7rem;color:var(--text3);margin-top:4px;font-family:var(--font-mono)}
+.trend-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:var(--radius-sm);font-size:.82rem;font-weight:500;font-family:var(--font-mono)}
+.trend-go{background:var(--green-dim);color:var(--green);border:1px solid rgba(52,199,123,.2)}
+.trend-stop{background:var(--red-dim);color:var(--red);border:1px solid rgba(247,90,90,.2)}
+
+/* Portfolio list */
+.company-list{list-style:none}
+.company-li{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.company-li:last-child{border:none}
+.company-li:hover .li-name{color:var(--accent)}
+.li-avatar{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:600;flex-shrink:0;font-family:var(--font-mono)}
+.li-name{font-size:.88rem;font-weight:500;transition:color .15s}
+.li-meta{font-size:.72rem;color:var(--text3);margin-top:1px;font-family:var(--font-mono)}
+.li-score{padding:3px 10px;border-radius:99px;font-size:.75rem;font-weight:500;font-family:var(--font-mono)}
+
+/* Loading & error */
+.loading{text-align:center;padding:2.5rem;color:var(--text3)}
+.spinner{display:inline-block;width:28px;height:28px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin-bottom:.75rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+.error-box{background:var(--red-dim);border:1px solid var(--red);border-radius:var(--radius);padding:1rem;font-size:.85rem;color:var(--red);margin-bottom:1rem}
+.info-box{background:var(--accent-dim);border:1px solid var(--accent);border-radius:var(--radius);padding:1rem;font-size:.85rem;color:var(--accent);margin-bottom:1rem;line-height:1.6}
+
+/* Hamburger (mobile) */
+.hamburger{display:none;position:fixed;top:1rem;left:1rem;z-index:200;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 10px;cursor:pointer;color:var(--text);font-size:1.1rem}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99}
+
+/* Section label */
+.section-label{font-size:.68rem;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin:1rem 0 .5rem;font-family:var(--font-mono)}
+
+/* Divider */
+.divider{height:1px;background:var(--border);margin:1rem 0}
+
+/* Wacc row */
+.wacc-info{display:flex;gap:1rem;flex-wrap:wrap;margin-top:.5rem}
+.wacc-chip{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:4px 10px;font-size:.75rem;font-family:var(--font-mono);color:var(--text2)}
+.wacc-chip span{color:var(--text);font-weight:500}
+
+/* Empty state */
+.empty{text-align:center;padding:2.5rem 1rem;color:var(--text3);font-size:.85rem}
+.empty-icon{font-size:2rem;margin-bottom:.5rem}
+
+@media(max-width:700px){
+  .hamburger{display:flex;align-items:center}
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .sidebar-overlay.open{display:block}
+  .main{margin-left:0;padding:1rem;padding-top:3.5rem}
+  .form-grid,.form-grid-3{grid-template-columns:1fr}
+  .tp-grid{grid-template-columns:1fr 1fr}
+  .metrics{grid-template-columns:1fr 1fr}
+  .company-hero{flex-wrap:wrap}
+  .company-price{width:100%;text-align:left}
+}
+@media(max-width:400px){.tp-grid,.metrics{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+<div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+<div class="sidebar" id="sidebar">
+  <div class="logo">
+    <div class="logo-title">StockRater</div>
+    <div class="logo-sub">v1.0 · FMP API</div>
+  </div>
+  <div class="nav-section">Analyse</div>
+  <div class="nav-item active" onclick="showPage('rating')" id="nav-rating">
+    <span class="nav-icon">📊</span> Company Rating
+  </div>
+  <div class="nav-item" onclick="showPage('trading')" id="nav-trading">
+    <span class="nav-icon">⚡</span> Leverage Trading
+  </div>
+  <div class="nav-section">Portfolio</div>
+  <div class="nav-item" onclick="showPage('portfolio')" id="nav-portfolio">
+    <span class="nav-icon">💼</span> My Portfolio
+  </div>
+  <div class="nav-item" onclick="showPage('watchlist')" id="nav-watchlist">
+    <span class="nav-icon">👁</span> Watchlist
+  </div>
+  <div class="nav-section">Settings</div>
+  <div class="nav-item" onclick="showPage('settings')" id="nav-settings">
+    <span class="nav-icon">⚙️</span> API Settings
+  </div>
+  <div class="sidebar-bottom">
+    <div class="api-badge" id="api-status-badge">API: not configured</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- ===== RATING PAGE ===== -->
+  <div class="page active" id="page-rating">
+    <div class="page-header">
+      <div class="page-title">Company Rating</div>
+      <div class="page-sub">Search a ticker to auto-load financials and run a full scorecard</div>
+    </div>
+    <div id="api-warning-rating"></div>
+    <div class="search-bar">
+      <input class="search-input" id="r-ticker" placeholder="Ticker symbol — e.g. AAPL, MSFT, NVDA" onkeydown="if(event.key==='Enter')fetchCompany()">
+      <button class="btn btn-primary" onclick="fetchCompany()">Load ↗</button>
+      <button class="btn" onclick="clearRating()">Clear</button>
+    </div>
+    <div id="rating-loading" style="display:none"><div class="loading"><div class="spinner"></div><br>Loading financials…</div></div>
+    <div id="rating-error" style="display:none"></div>
+    <div id="rating-content" style="display:none">
+      <!-- Company header -->
+      <div class="company-hero" id="company-hero"></div>
+      <div class="card">
+        <div class="card-title">A) Financial ratios <span class="api-tag tag-live" style="margin-left:4px">live data</span></div>
+        <div id="ratio-table"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">B) Qualitative assessment <span class="api-tag tag-cached" style="margin-left:4px">manual</span></div>
+        <div class="section-label">Management quality</div>
+        <div id="qual-mgmt"></div>
+        <div class="section-label" style="margin-top:.75rem">Moat / competitive positioning</div>
+        <div id="qual-moat"></div>
+        <div class="section-label" style="margin-top:.75rem">ESG & Risk</div>
+        <div id="qual-esg"></div>
+      </div>
+      <div class="card" id="scorecard-card">
+        <div class="card-title">C) Scorecard</div>
+        <div class="score-hero">
+          <div class="gauge-wrap">
+            <svg viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="40" fill="none" stroke="#1a1e28" stroke-width="12"/>
+              <circle cx="50" cy="50" r="40" fill="none" stroke="#4f8ef7" stroke-width="12"
+                stroke-dasharray="251" stroke-dashoffset="251" stroke-linecap="round"
+                transform="rotate(-90 50 50)" id="gauge-arc" style="transition:stroke-dashoffset .6s,stroke .4s"/>
+            </svg>
+            <div class="gauge-center">
+              <div class="gauge-num" id="gauge-num">—</div>
+              <div class="gauge-denom">/ 5.0</div>
+            </div>
+          </div>
+          <div>
+            <div id="verdict-pill" class="verdict-pill verdict-hold" style="margin-bottom:8px">—</div>
+            <div id="sc-company" style="font-size:1rem;font-weight:500;margin-bottom:3px">—</div>
+            <div id="sc-wacc" style="font-size:.78rem;color:var(--text3)">WACC: —</div>
+          </div>
+        </div>
+        <div id="scorecard-rows"></div>
+        <div class="divider"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-primary btn-sm" onclick="saveToPortfolio()">+ Add to portfolio</button>
+          <button class="btn btn-sm" onclick="saveToWatchlist()">+ Watchlist</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TRADING PAGE ===== -->
+  <div class="page" id="page-trading">
+    <div class="page-header">
+      <div class="page-title">Leverage Trading</div>
+      <div class="page-sub">Position sizing, SL/TP calculation based on ATR and account risk</div>
+    </div>
+    <div id="api-warning-trading"></div>
+    <div class="search-bar">
+      <input class="search-input" id="t-ticker" placeholder="Ticker — e.g. GOOGL (auto-fills price & ATR)" onkeydown="if(event.key==='Enter')fetchTradeData()">
+      <button class="btn btn-primary" onclick="fetchTradeData()">Load ↗</button>
+    </div>
+    <div class="card">
+      <div class="card-title">I. Entry data</div>
+      <div class="form-grid">
+        <div class="field"><label>Company</label><input id="t-name" type="text" placeholder="Company name" value="Alphabet A"></div>
+        <div class="field"><label>ISIN / WKN</label><input id="t-isin" type="text" placeholder="ISIN oder WKN" value="A14Y6F"></div>
+      </div>
+      <div class="form-grid-3">
+        <div class="field"><label>Account balance (€)</label><input id="t-balance" type="number" value="209.75" step="0.01" oninput="calcTrade()"></div>
+        <div class="field"><label>Stock entry price (P_s)</label><input id="t-ps" type="number" value="270.6" step="0.01" oninput="calcTrade()"></div>
+        <div class="field"><label>ATH (highest high)</label><input id="t-ath" type="number" value="350" step="0.01" oninput="calcTrade()"></div>
+      </div>
+      <div class="form-grid-3">
+        <div class="field"><label>Leverage entry price (P_l)</label><input id="t-pl" type="number" value="5.38" step="0.01" oninput="calcTrade()"></div>
+        <div class="field"><label>ATR (14)</label><input id="t-atr" type="number" value="6.4" step="0.1" oninput="calcTrade()"></div>
+        <div class="field"><label>ATR multiplier</label><input id="t-atr-mult" type="number" value="2" step="0.1" oninput="calcTrade()"></div>
+      </div>
+      <div class="form-grid-3">
+        <div class="field"><label>Risk per trade (%)</label><input id="t-risk" type="number" value="0.2" step="0.01" oninput="calcTrade()"></div>
+        <div class="field"><label>SMA 200</label><input id="t-sma" type="number" value="226" step="0.01" oninput="calcTrade()"></div>
+        <div class="field"><label>Market filter (S&P 500)</label>
+          <select id="t-mf" onchange="calcTrade()">
+            <option value="Y">Y — above SMA</option>
+            <option value="N">N — below SMA</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">II. Risk metrics</div>
+      <div class="metrics" id="trade-metrics"></div>
+      <div id="trade-trend" style="margin-top:.75rem"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">III. Profit targets</div>
+      <div class="tp-grid" id="tp-grid"></div>
+    </div>
+    <div style="margin-top:1rem;display:flex;gap:8px">
+      <button class="btn btn-primary" onclick="saveTrade()">+ Save trade</button>
+    </div>
+  </div>
+
+  <!-- ===== PORTFOLIO PAGE ===== -->
+  <div class="page" id="page-portfolio">
+    <div class="page-header">
+      <div class="page-title">My Portfolio</div>
+      <div class="page-sub">Saved company ratings and active trades</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Rated companies</div>
+      <ul class="company-list" id="portfolio-list"></ul>
+    </div>
+    <div class="card" style="margin-top:1rem">
+      <div class="card-title">Saved trades</div>
+      <ul class="company-list" id="trade-list"></ul>
+    </div>
+  </div>
+
+  <!-- ===== WATCHLIST PAGE ===== -->
+  <div class="page" id="page-watchlist">
+    <div class="page-header">
+      <div class="page-title">Watchlist</div>
+      <div class="page-sub">Companies on your radar — not yet rated</div>
+    </div>
+    <div class="card">
+      <ul class="company-list" id="watchlist-list"></ul>
+    </div>
+  </div>
+
+  <!-- ===== SETTINGS PAGE ===== -->
+  <div class="page" id="page-settings">
+    <div class="page-header">
+      <div class="page-title">API Settings</div>
+      <div class="page-sub">Configure your Financial Modeling Prep API key</div>
+    </div>
+    <div class="info-box">
+      <strong>How to get a free API key:</strong><br>
+      1. Go to <a href="https://financialmodelingprep.com/register" target="_blank" style="color:var(--accent)">financialmodelingprep.com/register</a><br>
+      2. Create a free account — no credit card required<br>
+      3. Copy your API key from the dashboard<br>
+      4. Paste it below — it's saved only in your browser (localStorage), never sent anywhere else<br><br>
+      <strong>Free tier includes:</strong> 250 requests/day · Balance sheet · Income statement · Cash flow · Ratios · Real-time quotes
+    </div>
+    <div class="card">
+      <div class="card-title">Financial Modeling Prep API key</div>
+      <div class="form-grid" style="align-items:flex-end">
+        <div class="field">
+          <label>API key</label>
+          <input type="password" id="api-key-input" placeholder="Paste your FMP API key here…" oninput="validateApiKey()">
+        </div>
+        <div>
+          <button class="btn btn-primary" onclick="saveApiKey()">Save key</button>
+        </div>
+      </div>
+      <div id="api-key-status" style="margin-top:.75rem;font-size:.8rem;color:var(--text3)"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Data sources</div>
+      <div style="font-size:.82rem;color:var(--text2);line-height:1.8">
+        <div>📈 <strong>Real-time quotes</strong> — FMP /quote endpoint</div>
+        <div>📋 <strong>Balance sheet</strong> — FMP /balance-sheet-statement</div>
+        <div>💰 <strong>Income statement</strong> — FMP /income-statement</div>
+        <div>💸 <strong>Cash flow</strong> — FMP /cash-flow-statement</div>
+        <div>📐 <strong>Key ratios</strong> — FMP /key-metrics + /ratios</div>
+        <div>🏭 <strong>WACC / Beta</strong> — calculated from industry benchmarks (Damodaran)</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Cache & storage</div>
+      <div style="font-size:.82rem;color:var(--text2);margin-bottom:.75rem">API responses are cached for 1 hour per ticker to save API calls.</div>
+      <button class="btn btn-sm" onclick="clearCache()">Clear cache</button>
+      <button class="btn btn-sm" style="margin-left:8px" onclick="clearAll()">Clear all data</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ==================== CONFIG ====================
+const WACC_TABLE = {
+  "Advertising":{"beta":1.34,"wacc":0.0922},"Aerospace/Defense":{"beta":0.90,"wacc":0.0768},
+  "Air Transport":{"beta":1.24,"wacc":0.0729},"Apparel":{"beta":0.99,"wacc":0.0744},
+  "Auto & Truck":{"beta":1.62,"wacc":0.1034},"Auto Parts":{"beta":1.23,"wacc":0.0809},
+  "Bank (Money Center)":{"beta":0.88,"wacc":0.0564},"Banks (Regional)":{"beta":0.52,"wacc":0.0569},
+  "Beverage (Alcoholic)":{"beta":0.61,"wacc":0.0655},"Beverage (Soft)":{"beta":0.57,"wacc":0.0659},
+  "Broadcasting":{"beta":0.92,"wacc":0.0603},"Building Materials":{"beta":1.36,"wacc":0.0946},
+  "Chemical (Specialty)":{"beta":0.92,"wacc":0.0767},"Computer Services":{"beta":1.23,"wacc":0.0872},
+  "Electronics (Consumer & Office)":{"beta":1.19,"wacc":0.0871},
+  "Financial Svcs. (Non-bank & Insurance)":{"beta":0.64,"wacc":0.0617},
+  "Healthcare Products":{"beta":0.99,"wacc":0.0880},"Healthcare Support Services":{"beta":0.91,"wacc":0.0784},
+  "Hotel/Gaming":{"beta":1.09,"wacc":0.0830},"Household Products":{"beta":0.82,"wacc":0.0726},
+  "Insurance (General)":{"beta":0.78,"wacc":0.0693},"Investment Co.":{"beta":0.96,"wacc":0.0740},
+  "Machinery":{"beta":1.24,"wacc":0.0948},"Metals & Mining":{"beta":1.07,"wacc":0.0825},
+  "Oil/Gas (Integrated)":{"beta":1.07,"wacc":0.0811},"Pharmaceutical":{"beta":0.77,"wacc":0.0720},
+  "Power":{"beta":0.59,"wacc":0.0530},"Real Estate (General)":{"beta":0.72,"wacc":0.0614},
+  "Retail (General)":{"beta":1.08,"wacc":0.0820},"Retail (Grocery and Food)":{"beta":0.60,"wacc":0.0609},
+  "Semiconductor":{"beta":1.48,"wacc":0.1010},"Software (System & Application)":{"beta":1.18,"wacc":0.0940},
+  "Telecom. Services":{"beta":0.82,"wacc":0.0700},"Transportation":{"beta":1.03,"wacc":0.0826},
+  "Utilities (General)":{"beta":0.44,"wacc":0.0473}
+};
+
+const RATIO_BENCH = {
+  currentRatio:{good:1.5,ok:1.0,bad:0.8,label:"Current ratio",fmt:"x"},
+  quickRatio:{good:1.0,ok:0.9,bad:0.7,label:"Quick ratio",fmt:"x"},
+  cashRatio:{good:0.3,ok:0.2,bad:0.1,label:"Cash ratio",fmt:"x"},
+  equityToAssets:{good:0.4,ok:0.25,bad:0.15,label:"Equity / assets",fmt:"%"},
+  debtToEquity:{good:1.0,ok:1.4,bad:1.6,label:"Debt / equity",fmt:"x",inv:true},
+  debtRatio:{good:0.3,ok:0.4,bad:0.5,label:"Debt ratio",fmt:"%",inv:true},
+  grossMargin:{good:0.35,ok:0.2,bad:0.1,label:"Gross margin",fmt:"%"},
+  netMargin:{good:0.12,ok:0.06,bad:0.02,label:"Net margin",fmt:"%"},
+  fcfMargin:{good:0.12,ok:0.06,bad:0.02,label:"FCF margin",fmt:"%"},
+  evEbitda:{good:12,ok:22,bad:35,label:"EV / EBITDA",fmt:"x",inv:true}
+};
+
+const QUAL_DEF = {
+  mgmt:[
+    {label:"Management & governance",key:"mgmt1",def:3},
+    {label:"Capital allocation",key:"mgmt2",def:3},
+    {label:"Track record",key:"mgmt3",def:3},
+    {label:"Skin in the game",key:"mgmt4",def:3},
+    {label:"Long-term orientation",key:"mgmt5",def:3}
+  ],
+  moat:[
+    {label:"Business model clarity",key:"moat1",def:3},
+    {label:"Competitive advantage (moat)",key:"moat2",def:3},
+    {label:"Innovation / reputation",key:"moat3",def:3}
+  ],
+  esg:[
+    {label:"Risk / ESG score",key:"esg1",def:3},
+    {label:"Ethics & compliance",key:"esg2",def:3},
+    {label:"Resilience (crises)",key:"esg3",def:3},
+    {label:"Redundancy & diversification",key:"esg4",def:3}
+  ]
+};
+
+// ==================== STATE ====================
+let qualScores = {};
+let currentRatioScore = 0;
+let currentCompany = null;
+let portfolio = JSON.parse(localStorage.getItem('sr_portfolio')||'[]');
+let watchlist = JSON.parse(localStorage.getItem('sr_watchlist')||'[]');
+let trades = JSON.parse(localStorage.getItem('sr_trades')||'[]');
+let cache = JSON.parse(localStorage.getItem('sr_cache')||'{}');
+
+// ==================== API ====================
+function getApiKey(){return localStorage.getItem('sr_apikey')||'';}
+function saveApiKey(){
+  const k = document.getElementById('api-key-input').value.trim();
+  if(!k){showApiStatus('Please enter a key','error');return;}
+  localStorage.setItem('sr_apikey',k);
+  showApiStatus('Key saved ✓','ok');
+  updateApiBadge();
+  checkApiWarnings();
+}
+function validateApiKey(){
+  const k = document.getElementById('api-key-input').value.trim();
+  showApiStatus(k.length>10?'Key format looks valid':'Key seems too short…',k.length>10?'ok':'warn');
+}
+function showApiStatus(msg,type){
+  const el = document.getElementById('api-key-status');
+  el.style.color = type==='ok'?'var(--green)':type==='error'?'var(--red)':'var(--amber)';
+  el.textContent = msg;
+}
+function updateApiBadge(){
+  const k = getApiKey();
+  const el = document.getElementById('api-status-badge');
+  if(k){el.textContent='API: ✓ configured';el.style.color='var(--green)';}
+  else{el.textContent='API: not configured';el.style.color='var(--text3)';}
+}
+function checkApiWarnings(){
+  const k = getApiKey();
+  const warn = k?'':'<div class="info-box">⚠️ No API key set. Go to <strong>Settings</strong> to add your free FMP key — otherwise data cannot be loaded. <button class="btn btn-sm" onclick="showPage(\'settings\')" style="margin-left:8px">Go to settings ↗</button></div>';
+  document.getElementById('api-warning-rating').innerHTML = warn;
+  document.getElementById('api-warning-trading').innerHTML = warn;
+}
+
+async function fmpFetch(endpoint){
+  const key = getApiKey();
+  if(!key) throw new Error('No API key configured. Please go to Settings.');
+  const url = `https://financialmodelingprep.com/api/v3/${endpoint}&apikey=${key}`;
+  const cacheKey = endpoint;
+  const now = Date.now();
+  if(cache[cacheKey] && now - cache[cacheKey].ts < 3600000){
+    return cache[cacheKey].data;
+  }
+  const res = await fetch(url);
+  if(!res.ok) throw new Error(`API error ${res.status}: ${res.statusText}`);
+  const data = await res.json();
+  if(data['Error Message']) throw new Error(data['Error Message']);
+  cache[cacheKey] = {ts:now,data};
+  localStorage.setItem('sr_cache', JSON.stringify(cache));
+  return data;
+}
+
+// ==================== RATING PAGE ====================
+async function fetchCompany(){
+  const ticker = document.getElementById('r-ticker').value.trim().toUpperCase();
+  if(!ticker) return;
+  showRatingLoading(true);
+  document.getElementById('rating-error').style.display='none';
+  document.getElementById('rating-content').style.display='none';
+  try{
+    const [quote, bs, is, cf, metrics, ratios] = await Promise.all([
+      fmpFetch(`quote/${ticker}?`),
+      fmpFetch(`balance-sheet-statement/${ticker}?limit=2&`),
+      fmpFetch(`income-statement/${ticker}?limit=2&`),
+      fmpFetch(`cash-flow-statement/${ticker}?limit=2&`),
+      fmpFetch(`key-metrics/${ticker}?limit=1&`),
+      fmpFetch(`ratios/${ticker}?limit=1&`)
+    ]);
+    if(!quote||!quote[0]) throw new Error('Ticker not found or no data available.');
+    const q = quote[0], b = bs[0]||{}, i = is[0]||{}, c = cf[0]||{}, m = metrics[0]||{}, r = ratios[0]||{};
+    currentCompany = {ticker, q, b, i, c, m, r};
+    renderCompanyHero(q);
+    renderRatios(b, i, c, m, r, q);
+    renderQual();
+    updateScorecard();
+    showRatingLoading(false);
+    document.getElementById('rating-content').style.display='block';
+  }catch(e){
+    showRatingLoading(false);
+    showRatingError(e.message);
+  }
+}
+
+function showRatingLoading(on){
+  document.getElementById('rating-loading').style.display = on?'block':'none';
+}
+function showRatingError(msg){
+  const el = document.getElementById('rating-error');
+  el.innerHTML = `<div class="error-box">⚠️ ${msg}</div>`;
+  el.style.display='block';
+}
+function clearRating(){
+  document.getElementById('r-ticker').value='';
+  document.getElementById('rating-content').style.display='none';
+  document.getElementById('rating-error').style.display='none';
+  currentCompany=null;
+}
+
+function renderCompanyHero(q){
+  const change = q.change||0, pct = q.changesPercentage||0;
+  const initials = (q.name||q.symbol||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const colors = ['#4f8ef7','#34c77b','#a78bfa','#f0a020','#f75a5a'];
+  const col = colors[(q.symbol||'A').charCodeAt(0)%colors.length];
+  document.getElementById('company-hero').innerHTML = `
+    <div class="company-avatar" style="color:${col};border-color:${col}33">${initials}</div>
+    <div class="company-info">
+      <div class="company-name">${q.name||q.symbol}</div>
+      <div class="company-meta">${q.symbol} · ${q.exchange||''} · ${q.sector||''}</div>
+    </div>
+    <div class="company-price">
+      <div class="price-big">${fmtNum(q.price,2)} ${q.currency||'USD'}</div>
+      <div class="price-change ${change>=0?'pos':'neg'}">${change>=0?'+':''}${fmtNum(change,2)} (${fmtNum(pct,2)}%)</div>
+    </div>`;
+}
+
+function scoreVal(val, bench){
+  if(bench.inv){
+    if(val<=bench.good) return 5;
+    if(val<=bench.ok) return 3.5;
+    if(val<=bench.bad) return 2;
+    return 1;
+  }
+  if(val>=bench.good) return 5;
+  if(val>=bench.ok) return 3.5;
+  if(val>=bench.bad) return 2;
+  return 1;
+}
+
+function fmtVal(val, fmt){
+  if(val===null||val===undefined||isNaN(val)) return '—';
+  if(fmt==='%') return (val*100).toFixed(1)+'%';
+  return val.toFixed(2)+'x';
+}
+function fmtNum(n, dec=0){
+  if(n===null||n===undefined||isNaN(n)) return '—';
+  return Number(n).toFixed(dec);
+}
+function fmtBig(n){
+  if(!n||isNaN(n)) return '—';
+  if(Math.abs(n)>=1e12) return (n/1e12).toFixed(2)+'T';
+  if(Math.abs(n)>=1e9) return (n/1e9).toFixed(2)+'B';
+  if(Math.abs(n)>=1e6) return (n/1e6).toFixed(2)+'M';
+  return n.toLocaleString();
+}
+
+function renderRatios(b, is, cf, m, r, q){
+  const ca = b.totalCurrentAssets||0, cl = b.totalCurrentLiabilities||0,
+    inv = b.inventory||0, cash = b.cashAndCashEquivalents||0, ms = b.shortTermInvestments||0,
+    eq = b.totalStockholdersEquity||0, ta = b.totalAssets||0, debt = (b.shortTermDebt||0)+(b.longTermDebt||0),
+    rev = is.revenue||0, gp = is.grossProfit||0, ni = is.netIncome||0,
+    ebitda = is.ebitda||0, fcf = cf.freeCashFlow||0,
+    ev = (q.marketCap||0)+(debt)-(cash);
+
+  const ratioVals = {
+    currentRatio: cl>0?ca/cl:0,
+    quickRatio: cl>0?(ca-inv)/cl:0,
+    cashRatio: cl>0?(cash+ms)/cl:0,
+    equityToAssets: ta>0?eq/ta:0,
+    debtToEquity: eq>0?debt/Math.abs(eq):0,
+    debtRatio: ta>0?debt/ta:0,
+    grossMargin: rev>0?gp/rev:0,
+    netMargin: rev>0?ni/rev:0,
+    fcfMargin: rev>0?fcf/rev:0,
+    evEbitda: ebitda>0?ev/ebitda:0
+  };
+
+  let total=0, cnt=0;
+  const rows = Object.entries(ratioVals).map(([k,val])=>{
+    const bench = RATIO_BENCH[k];
+    const sc = scoreVal(val, bench);
+    total+=sc; cnt++;
+    const col = sc>=4.5?'#34c77b':sc>=3?'#f0a020':'#f75a5a';
+    const barW = (sc/5)*100;
+    return `<tr>
+      <td style="color:var(--text2)">${bench.label}</td>
+      <td style="font-family:var(--font-mono);font-weight:500;color:var(--text)">${fmtVal(val, bench.fmt)}</td>
+      <td style="font-family:var(--font-mono);color:${col}">${sc.toFixed(1)}</td>
+      <td><div class="score-bar-wrap"><div class="score-bar-fill" style="width:${barW}%;background:${col}"></div></div></td>
+    </tr>`;
+  }).join('');
+
+  const section = `<div class="section-label">Key metrics</div>
+  <div class="metrics">
+    <div class="metric"><div class="metric-label">Market cap</div><div class="metric-value">${fmtBig(q.marketCap)}</div></div>
+    <div class="metric"><div class="metric-label">Revenue (TTM)</div><div class="metric-value">${fmtBig(rev)}</div></div>
+    <div class="metric"><div class="metric-label">EBITDA</div><div class="metric-value">${fmtBig(ebitda)}</div></div>
+    <div class="metric"><div class="metric-label">FCF</div><div class="metric-value">${fmtBig(fcf)}</div></div>
+    <div class="metric"><div class="metric-label">P/E ratio</div><div class="metric-value">${fmtNum(q.pe,1)}x</div></div>
+    <div class="metric"><div class="metric-label">52w range</div><div class="metric-value" style="font-size:.85rem">${fmtNum(q.yearLow,0)}–${fmtNum(q.yearHigh,0)}</div></div>
+  </div>
+  <div class="section-label" style="margin-top:.5rem">Ratio scoring</div>
+  <table class="rtable"><thead><tr><th>Ratio</th><th>Value</th><th>Score</th><th>Bar</th></tr></thead>
+  <tbody>${rows}</tbody></table>`;
+
+  document.getElementById('ratio-table').innerHTML = section;
+  currentRatioScore = total/cnt;
+
+  // WACC from sector
+  const sector = (currentCompany?.q?.sector)||'';
+  let waccInfo = {beta:1,wacc:0.09};
+  for(const [ind,dat] of Object.entries(WACC_TABLE)){
+    if(sector.toLowerCase().includes(ind.toLowerCase().split(' ')[0])) {waccInfo=dat;break;}
+  }
+  document.getElementById('sc-wacc').textContent = `WACC: ${(waccInfo.wacc*100).toFixed(1)}% · Beta: ${waccInfo.beta} · ${sector||'Unknown sector'}`;
+  document.getElementById('sc-company').textContent = currentCompany?.q?.name||'';
+}
+
+// ==================== QUALITATIVE ====================
+function renderQual(){
+  ['mgmt','moat','esg'].forEach(sec=>{
+    const el = document.getElementById('qual-'+sec);
+    el.innerHTML='';
+    QUAL_DEF[sec].forEach(item=>{
+      qualScores[item.key]=item.def;
+      const row = document.createElement('div');
+      row.className='qual-row';
+      row.innerHTML=`<span class="qual-label">${item.label}</span>
+        <div id="stars-${item.key}" style="display:flex;gap:3px"></div>
+        <span class="qual-val" id="qv-${item.key}">${item.def}</span>`;
+      el.appendChild(row);
+      renderStars(item.key,item.def);
+    });
+  });
+}
+function renderStars(key,val){
+  const el=document.getElementById('stars-'+key);
+  if(!el) return;
+  el.innerHTML='';
+  for(let i=1;i<=5;i++){
+    const s=document.createElement('span');
+    s.className='star'+(i<=val?' on':'');
+    s.textContent='★';
+    const v=i;
+    s.onclick=()=>{qualScores[key]=v;document.getElementById('qv-'+key).textContent=v;renderStars(key,v);updateScorecard();};
+    el.appendChild(s);
+  }
+}
+function avg(arr){return arr.reduce((a,b)=>a+b,0)/arr.length;}
+function getQualSubs(){
+  const mgmt=avg(QUAL_DEF.mgmt.map(i=>qualScores[i.key]||3));
+  const moat=avg(QUAL_DEF.moat.map(i=>qualScores[i.key]||3));
+  const esg=avg(QUAL_DEF.esg.map(i=>qualScores[i.key]||3));
+  return{mgmt,moat,esg};
+}
+
+// ==================== SCORECARD ====================
+function updateScorecard(){
+  const rs = currentRatioScore||0;
+  const {mgmt,moat,esg} = getQualSubs();
+  const total = rs*0.70 + mgmt*0.10 + moat*0.10 + esg*0.10;
+
+  const arc = document.getElementById('gauge-arc');
+  const circ = 2*Math.PI*40;
+  arc.style.strokeDasharray=circ;
+  arc.style.strokeDashoffset=circ-(total/5)*circ;
+  const col = total>=4?'#34c77b':total>=3?'#4f8ef7':total>=2?'#f0a020':'#f75a5a';
+  arc.style.stroke=col;
+  document.getElementById('gauge-num').textContent=total.toFixed(2);
+  document.getElementById('gauge-num').style.color=col;
+
+  let verdict,vClass;
+  if(total>=4.5){verdict='Strong buy';vClass='verdict-strong';}
+  else if(total>=3.5){verdict='Buy';vClass='verdict-buy';}
+  else if(total>=2.5){verdict='Hold';vClass='verdict-hold';}
+  else{verdict='Avoid';vClass='verdict-avoid';}
+  const vEl=document.getElementById('verdict-pill');
+  vEl.className='verdict-pill '+vClass;
+  vEl.textContent=verdict;
+
+  const rows=[
+    {label:'A) Financial ratios',score:rs,weight:'70%'},
+    {label:'B) Management quality',score:mgmt,weight:'10%'},
+    {label:'C) Competitive moat',score:moat,weight:'10%'},
+    {label:'D) ESG & risk',score:esg,weight:'10%'}
+  ];
+  document.getElementById('scorecard-rows').innerHTML = rows.map(r=>{
+    const c=r.score>=4?'#34c77b':r.score>=3?'#4f8ef7':r.score>=2?'#f0a020':'#f75a5a';
+    const bar=(r.score/5)*100;
+    return `<div class="score-row">
+      <span style="color:var(--text2)">${r.label}</span>
+      <span style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:.75rem;color:var(--text3);font-family:var(--font-mono)">${r.weight}</span>
+        <div class="score-bar-wrap" style="width:60px"><div class="score-bar-fill" style="width:${bar}%;background:${c}"></div></div>
+        <span style="font-family:var(--font-mono);font-weight:500;color:${c};min-width:28px">${r.score.toFixed(2)}</span>
+      </span>
+    </div>`;
+  }).join('')+`<div class="score-row total">
+    <span>Total score</span>
+    <span style="font-family:var(--font-mono);color:${col}">${total.toFixed(2)} / 5.00</span>
+  </div>`;
+}
+
+// ==================== TRADING ====================
+async function fetchTradeData(){
+  const ticker = document.getElementById('t-ticker').value.trim().toUpperCase();
+  if(!ticker) return;
+  try{
+    const [quote, hist] = await Promise.all([
+      fmpFetch(`quote/${ticker}?`),
+      fmpFetch(`historical-price-full/${ticker}?timeseries=20&`)
+    ]);
+    const q=quote[0];
+    if(!q) throw new Error('Ticker not found');
+    document.getElementById('t-name').value = q.name||ticker;
+    document.getElementById('t-ps').value = q.price?.toFixed(2)||0;
+    document.getElementById('t-sma').value = q.priceAvg200?.toFixed(2)||0;
+    document.getElementById('t-ath').value = q.yearHigh?.toFixed(2)||0;
+    if(hist?.historical&&hist.historical.length>14){
+      const prices=hist.historical.slice(0,14);
+      const highs=prices.map(p=>p.high),lows=prices.map(p=>p.low);
+      const atr=highs.reduce((s,h,i)=>s+h-lows[i],0)/14;
+      document.getElementById('t-atr').value=atr.toFixed(2);
+    }
+    if(q.price&&q.priceAvg200){
+      document.getElementById('t-mf').value = q.price>q.priceAvg200?'Y':'N';
+    }
+    calcTrade();
+  }catch(e){
+    const box=document.createElement('div');
+    box.className='error-box';
+    box.textContent='⚠️ '+e.message;
+    document.querySelector('#page-trading .search-bar').after(box);
+    setTimeout(()=>box.remove(),4000);
+  }
+}
+
+function calcTrade(){
+  const balance=+gv('t-balance'),ps=+gv('t-ps'),ath=+gv('t-ath'),pl=+gv('t-pl'),
+    atr=+gv('t-atr'),atrM=+gv('t-atr-mult'),risk=+gv('t-risk'),sma=+gv('t-sma'),mf=gv('t-mf');
+  const trend = ps>sma && mf==='Y';
+  const sl_stock = ps - atr*atrM;
+  const dynLev = atr*atrM>0?(pl*ps)/(atr*atrM):0;
+  const qty = pl>0?Math.floor((balance*risk)/pl):0;
+  const tp1=pl*1.5,tp2=pl*2.0;
+  const q1=Math.floor(qty*.25),q2=Math.floor(qty*.5),q3=qty-q1-q2;
+
+  document.getElementById('trade-metrics').innerHTML=`
+    <div class="metric"><div class="metric-label">Dynamic leverage</div><div class="metric-value">${dynLev.toFixed(1)}x</div></div>
+    <div class="metric"><div class="metric-label">Position size (qty)</div><div class="metric-value">${qty}</div></div>
+    <div class="metric"><div class="metric-label">SL stock price</div><div class="metric-value">${sl_stock.toFixed(2)}</div></div>
+    <div class="metric"><div class="metric-label">SL leverage</div><div class="metric-value">${(pl*0.2).toFixed(2)}</div></div>
+    <div class="metric"><div class="metric-label">Capital at risk</div><div class="metric-value">${(balance*risk).toFixed(2)} €</div></div>
+    <div class="metric"><div class="metric-label">Total position</div><div class="metric-value">${(qty*pl).toFixed(2)} €</div></div>`;
+
+  document.getElementById('trade-trend').innerHTML=`<div style="display:flex;align-items:center;gap:10px">
+    <span class="trend-badge ${trend?'trend-go':'trend-stop'}">${trend?'✅ GO':'🚫 STOP — trend not confirmed'}</span>
+    <span style="font-size:.75rem;color:var(--text3);font-family:var(--font-mono)">P_s ${ps>sma?'above':'below'} SMA200 (${sma})</span>
+  </div>`;
+
+  document.getElementById('tp-grid').innerHTML=`
+    <div class="tp-card">
+      <div class="tp-title">TP 1 (+50%) — sell 25%</div>
+      <div class="tp-val pos">${tp1.toFixed(2)} €</div>
+      <div class="tp-sub">Qty: ${q1} · Value: €${(q1*tp1).toFixed(0)}</div>
+      <div class="tp-sub">SL: ${(pl*0.2).toFixed(2)} €</div>
+    </div>
+    <div class="tp-card">
+      <div class="tp-title">TP 2 (+100%) — sell 50%</div>
+      <div class="tp-val pos">${tp2.toFixed(2)} €</div>
+      <div class="tp-sub">Qty: ${q2} · Value: €${(q2*tp2).toFixed(0)}</div>
+      <div class="tp-sub">SL: Trail ATR</div>
+    </div>
+    <div class="tp-card">
+      <div class="tp-title">TP 3 — rest</div>
+      <div class="tp-val" style="color:var(--purple)">Trail</div>
+      <div class="tp-sub">Qty: ${q3}</div>
+      <div class="tp-sub">ATR trailing stop</div>
+    </div>`;
+}
+
+// ==================== PORTFOLIO ====================
+function saveToPortfolio(){
+  if(!currentCompany){alert('Please load a company first.');return;}
+  const {mgmt,moat,esg}=getQualSubs();
+  const total=currentRatioScore*0.70+mgmt*0.10+moat*0.10+esg*0.10;
+  const verdict=total>=4.5?'Strong buy':total>=3.5?'Buy':total>=2.5?'Hold':'Avoid';
+  const entry={
+    ticker:currentCompany.ticker,name:currentCompany.q.name,
+    sector:currentCompany.q.sector||'',price:currentCompany.q.price,
+    score:total,verdict,ts:Date.now()
+  };
+  portfolio=portfolio.filter(p=>p.ticker!==entry.ticker);
+  portfolio.unshift(entry);
+  localStorage.setItem('sr_portfolio',JSON.stringify(portfolio));
+  renderPortfolio();
+  alert(`${entry.name} added to portfolio (Score: ${total.toFixed(2)})`);
+}
+function saveToWatchlist(){
+  if(!currentCompany){alert('Please load a company first.');return;}
+  const entry={ticker:currentCompany.ticker,name:currentCompany.q.name,price:currentCompany.q.price,sector:currentCompany.q.sector||'',ts:Date.now()};
+  watchlist=watchlist.filter(w=>w.ticker!==entry.ticker);
+  watchlist.unshift(entry);
+  localStorage.setItem('sr_watchlist',JSON.stringify(watchlist));
+  renderWatchlist();
+  alert(`${entry.name} added to watchlist.`);
+}
+function saveTrade(){
+  const entry={
+    name:gv('t-name'),isin:gv('t-isin'),ticker:gv('t-ticker'),
+    ps:+gv('t-ps'),pl:+gv('t-pl'),balance:+gv('t-balance'),
+    qty:+document.querySelector('#trade-metrics .metric-value')?.textContent||0,
+    ts:Date.now()
+  };
+  trades.unshift(entry);
+  localStorage.setItem('sr_trades',JSON.stringify(trades));
+  renderTrades();
+  alert(`Trade for ${entry.name} saved.`);
+}
+
+function renderPortfolio(){
+  const el=document.getElementById('portfolio-list');
+  if(!portfolio.length){el.innerHTML='<li class="empty"><div class="empty-icon">📊</div>No rated companies yet. Use the Rating tab to add one.</li>';return;}
+  el.innerHTML=portfolio.map((c,i)=>{
+    const col=c.score>=4?'#34c77b':c.score>=3?'#4f8ef7':c.score>=2?'#f0a020':'#f75a5a';
+    const bg=c.score>=4?'#0e2e1e':c.score>=3?'#1a2d52':c.score>=2?'#2e1e05':'#2e0e0e';
+    const init=(c.ticker||'?').slice(0,2);
+    return `<li class="company-li">
+      <div class="li-avatar" style="background:${bg};color:${col}">${init}</div>
+      <div style="flex:1">
+        <div class="li-name">${c.name||c.ticker}</div>
+        <div class="li-meta">${c.ticker} · ${c.sector} · $${fmtNum(c.price,2)}</div>
+      </div>
+      <span class="li-score" style="background:${bg};color:${col}">${c.score.toFixed(2)} — ${c.verdict}</span>
+      <button class="btn btn-ghost btn-sm" onclick="removePf(${i})">✕</button>
+    </li>`;
+  }).join('');
+}
+function renderTrades(){
+  const el=document.getElementById('trade-list');
+  if(!trades.length){el.innerHTML='<li class="empty"><div class="empty-icon">⚡</div>No trades saved yet.</li>';return;}
+  el.innerHTML=trades.map((t,i)=>`<li class="company-li">
+    <div class="li-avatar" style="background:var(--accent-dim);color:var(--accent)">${(t.ticker||t.name||'?').slice(0,2).toUpperCase()}</div>
+    <div style="flex:1">
+      <div class="li-name">${t.name||t.ticker}</div>
+      <div class="li-meta">${t.isin||''} · P_s: ${t.ps} · P_l: ${t.pl}</div>
+    </div>
+    <button class="btn btn-ghost btn-sm" onclick="removeTrade(${i})">✕</button>
+  </li>`).join('');
+}
+function renderWatchlist(){
+  const el=document.getElementById('watchlist-list');
+  if(!watchlist.length){el.innerHTML='<li class="empty"><div class="empty-icon">👁</div>Watchlist is empty. Add companies from the Rating tab.</li>';return;}
+  el.innerHTML=watchlist.map((w,i)=>`<li class="company-li">
+    <div class="li-avatar" style="background:var(--purple-dim);color:var(--purple)">${(w.ticker||'?').slice(0,2)}</div>
+    <div style="flex:1">
+      <div class="li-name">${w.name||w.ticker}</div>
+      <div class="li-meta">${w.ticker} · ${w.sector} · $${fmtNum(w.price,2)}</div>
+    </div>
+    <button class="btn btn-ghost btn-sm" onclick="removeWl(${i})">✕</button>
+  </li>`).join('');
+}
+function removePf(i){portfolio.splice(i,1);localStorage.setItem('sr_portfolio',JSON.stringify(portfolio));renderPortfolio();}
+function removeTrade(i){trades.splice(i,1);localStorage.setItem('sr_trades',JSON.stringify(trades));renderTrades();}
+function removeWl(i){watchlist.splice(i,1);localStorage.setItem('sr_watchlist',JSON.stringify(watchlist));renderWatchlist();}
+
+// ==================== NAV ====================
+function showPage(p){
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  document.getElementById('nav-'+p).classList.add('active');
+  if(window.innerWidth<=700){closeSidebar();}
+}
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
+function gv(id){return document.getElementById(id)?.value||'';}
+function clearCache(){cache={};localStorage.setItem('sr_cache','{}');alert('Cache cleared.');}
+function clearAll(){if(confirm('Delete all data (portfolio, trades, watchlist, cache)?')){localStorage.clear();location.reload();}}
+
+// ==================== INIT ====================
+const storedKey = getApiKey();
+if(storedKey) document.getElementById('api-key-input').value=storedKey;
+updateApiBadge();
+checkApiWarnings();
+renderPortfolio();
+renderTrades();
+renderWatchlist();
+calcTrade();
+</script>
+</body>
+</html>
