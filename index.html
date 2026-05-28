@@ -501,17 +501,12 @@ async function yahooSummary(ticker){
   const w=getWorkerUrl();
   if(!w) throw new Error('Kein Worker konfiguriert. Geh zu Settings und trag deine Cloudflare Worker URL ein.');
   const url=`${w}/yahoo/summary/${ticker}`;
-  const cacheKey='ys_'+ticker;
-  const now=Date.now();
-  if(cache[cacheKey]&&now-cache[cacheKey].ts<3600000) return cache[cacheKey].data;
   let res;
   try{res=await fetch(url);}
   catch(e){throw new Error('Netzwerkfehler — Worker nicht erreichbar. Prüfe die URL in Settings.');}
   if(!res.ok) throw new Error(`Yahoo Fehler ${res.status} — Ticker nicht gefunden oder Worker-Problem.`);
   const data=await res.json();
   if(data.error) throw new Error(`Yahoo: ${data.error}`);
-  cache[cacheKey]={ts:now,data};
-  localStorage.setItem('sr_cache',JSON.stringify(cache));
   return data;
 }
 
@@ -520,16 +515,11 @@ async function yahooChart(ticker, range='1y'){
   const w=getWorkerUrl();
   if(!w) throw new Error('Kein Worker konfiguriert.');
   const url=`${w}/yahoo/chart/${ticker}?range=${range}`;
-  const cacheKey=`yc_${ticker}_${range}`;
-  const now=Date.now();
-  if(cache[cacheKey]&&now-cache[cacheKey].ts<3600000) return cache[cacheKey].data;
   let res;
   try{res=await fetch(url);}
   catch(e){throw new Error('Netzwerkfehler.');}
   if(!res.ok) throw new Error(`Yahoo Chart Fehler ${res.status}`);
   const data=await res.json();
-  cache[cacheKey]={ts:now,data};
-  localStorage.setItem('sr_cache',JSON.stringify(cache));
   return data;
 }
 
