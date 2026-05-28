@@ -449,6 +449,20 @@ let portfolio = JSON.parse(localStorage.getItem('sr_portfolio')||'[]');
 let watchlist = JSON.parse(localStorage.getItem('sr_watchlist')||'[]');
 let trades = JSON.parse(localStorage.getItem('sr_trades')||'[]');
 let cache = JSON.parse(localStorage.getItem('sr_cache')||'{}');
+// Invalidate cache entries that still contain old Yahoo {raw,fmt} format
+(function(){
+  let dirty=false;
+  for(const k of Object.keys(cache)){
+    const d=cache[k]?.data;
+    if(d && typeof d==='object'){
+      const fd=d.financialData||{};
+      if(fd.currentRatio && typeof fd.currentRatio==='object'){
+        delete cache[k]; dirty=true;
+      }
+    }
+  }
+  if(dirty) localStorage.setItem('sr_cache',JSON.stringify(cache));
+})();
 
 // ==================== WORKER / YAHOO ====================
 function getWorkerUrl(){return (localStorage.getItem('sr_workerurl')||'').replace(/\/+$/,'');}
