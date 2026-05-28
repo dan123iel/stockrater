@@ -40,7 +40,7 @@ async function handleSummary(ticker) {
     const json = await res.json();
     const result = json?.quoteSummary?.result?.[0];
     if (!result) return corsResponse({ error: `Ticker ${ticker} not found` }, 404);
-    return corsResponse(result);
+    return corsResponse(flatten(result));
   } catch (e) {
     return corsResponse({ error: e.message }, 500);
   }
@@ -87,8 +87,17 @@ async function getCrumb() {
   return { crumb: crumb.trim(), cookie };
 }
 
-function corsResponse(body, status = 200) {
-  return new Response(body !== null ? JSON.stringify(body) : null, {
+// Unwrap Yahoo's {raw, fmt} wrapper objects recursively
+function flatten(obj) {
+  if (obj === null || typeof obj !== 'object') return obj;
+  if (Array.isArray(obj)) return obj.map(flatten);
+  if ('raw' in obj && Object.keys(obj).length <= 3) return obj.raw;
+  const out = {};
+  for (const [k, v] of Object.entries(obj)) out[k] = flatten(v);
+  return out;
+}
+
+function corsResponse(body, status = 200) {  return new Response(body !== null ? JSON.stringify(body) : null, {
     status,
     headers: {
       'Content-Type': 'application/json',
