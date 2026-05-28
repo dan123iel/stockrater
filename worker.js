@@ -104,7 +104,7 @@ function corsResponse(body, status = 200) {  return new Response(body !== null ?
       'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
       'Access-Control-Allow-Methods': 'GET, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
-      'Cache-Control': 'public, max-age=3600',
+      'Cache-Control': 'no-store',
     },
   });
 }
