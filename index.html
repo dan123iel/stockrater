@@ -897,19 +897,24 @@ function renderRatios(fd,ks,meta,closes,highs,lows){
   const ebitda=fd.ebitda||0;
   const ev=ks.enterpriseValue||0;
   const marketCap=price*(ks.sharesOutstanding||0);
-  const totalAssets=fd.totalAssets||ks.totalAssets||0;
-  const totalEquity=fd.totalStockholderEquity||fd.stockholdersEquity||0;
+  // totalAssets: try balance sheet first, fallback to derive from bookValue * shares
+  const sharesOut=ks.sharesOutstanding||0;
+  const bookValue=ks.bookValue||0;
+  const totalEquity=fd.totalStockholderEquity||fd.stockholdersEquity||(bookValue>0&&sharesOut>0?bookValue*sharesOut:0);
+  // totalAssets: derive from ROA if balance sheet missing (ROA = netIncome/totalAssets)
   const netIncome=fd.netIncomeToCommon||0;
+  const roaDirect=fd.returnOnAssets||0;
+  const totalAssets=fd.totalAssets||ks.totalAssets||(roaDirect>0&&netIncome>0?netIncome/roaDirect:0);
   const operatingCashflow=fd.operatingCashflow||0;
   const operatingIncome=fd.operatingIncome||(totalRevenue*(fd.operatingMargins||0));
 
-  // Compute all ratio values
+  // Compute all ratio values — use Yahoo direct ratios where balance sheet is unavailable
   const cashRatioApprox=totalDebt>0?totalCash/totalDebt:(totalCash>0?1:0);
-  const equityToAssetsVal=totalAssets>0?totalEquity/totalAssets:0;
-  const debtToEquityVal=totalEquity>0?totalDebt/totalEquity:0;
+  const equityToAssetsVal=totalAssets>0&&totalEquity>0?totalEquity/totalAssets:0;
+  const debtToEquityVal=fd.debtToEquity>0?fd.debtToEquity/100:(totalEquity>0?totalDebt/totalEquity:0);
   const debtRatioVal=totalAssets>0?totalDebt/totalAssets:0;
-  const roaVal=totalAssets>0?netIncome/totalAssets:0;
-  const roeVal=totalEquity>0?netIncome/totalEquity:0;
+  const roaVal=fd.returnOnAssets||0;
+  const roeVal=fd.returnOnEquity||0;
   const operatingMarginVal=fd.operatingMargins||0;
   const assetTurnoverVal=totalAssets>0?totalRevenue/totalAssets:0;
   const cfToDebtVal=totalDebt>0?operatingCashflow/totalDebt:0;
@@ -942,8 +947,8 @@ function renderRatios(fd,ks,meta,closes,highs,lows){
       <div class="metric"><div class="metric-label">FREE CASH FLOW</div><div class="metric-value">${fmtBig(freeCashflow)}</div></div>
       <div class="metric"><div class="metric-label">FORWARD P/E</div><div class="metric-value">${fmtNum(ks.forwardPE,1)}x</div></div>
       <div class="metric"><div class="metric-label">52W RANGE</div><div class="metric-value" style="font-size:.82rem">${fmtNum(meta.fiftyTwoWeekLow,0)} – ${fmtNum(meta.fiftyTwoWeekHigh,0)}</div></div>
-      <div class="metric"><div class="metric-label">TOTAL ASSETS</div><div class="metric-value">${fmtBig(totalAssets)}</div></div>
-      <div class="metric"><div class="metric-label">TOTAL EQUITY</div><div class="metric-value">${fmtBig(totalEquity)}</div></div>
+      <div class="metric"><div class="metric-label">TOTAL ASSETS</div><div class="metric-value">${fmtBig(totalAssets)||'—'}</div><div class="metric-sub">${totalAssets&&!fd.totalAssets?'derived':'direct'}</div></div>
+      <div class="metric"><div class="metric-label">TOTAL EQUITY</div><div class="metric-value">${fmtBig(totalEquity)||'—'}</div><div class="metric-sub">${totalEquity&&!fd.totalStockholderEquity?'book×shares':'direct'}</div></div>
     </div>`;
 
   // Build ratio table grouped by category
