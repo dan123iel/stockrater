@@ -12,7 +12,7 @@ export default {
     const url = new URL(request.url);
     const path = url.pathname;
 
-    // /yahoo/summary/:ticker — quoteSummary with auto-crumb
+    // /yahoo/summary/:ticker — full quoteSummary with all financial modules
     const summaryMatch = path.match(/^\/yahoo\/summary\/([A-Z0-9.\-^]+)$/i);
     if (summaryMatch) {
       return handleSummary(summaryMatch[1].toUpperCase());
@@ -32,15 +32,71 @@ export default {
 async function handleSummary(ticker) {
   try {
     const crumb = await getCrumb();
-    const modules = 'financialData,defaultKeyStatistics';
+
+    // All modules needed for full ratio coverage:
+    // financialData       → margins, revenue, cashflow, debt, currentRatio, quickRatio
+    // defaultKeyStatistics→ forwardPE, EV, sharesOutstanding, earningsGrowth, insiders
+    // balanceSheetHistory → totalAssets, totalLiab, totalStockholderEquity, currentLiabilities
+    // incomeStatementHistory → totalRevenue, netIncome, researchDevelopment, grossProfit
+    // cashflowStatementHistory → totalCashFromOperatingActivities, capitalExpenditures
+    // earningsTrend       → earningsGrowth, revenueGrowth per quarter
+    // esgScores           → totalEsg, environmentScore, socialScore, governanceScore
+    const modules = [
+      'financialData',
+      'defaultKeyStatistics',
+      'balanceSheetHistory',
+      'incomeStatementHistory',
+      'cashflowStatementHistory',
+      'earningsTrend',
+      'esgScores',
+    ].join(',');
+
     const res = await fetch(
-      `https://query1.finance.yahoo.com/v10/finance/quoteSummary/${ticker}?modules=${modules}&crumb=${encodeURIComponent(crumb.crumb)}`,
+      `https://query1.finance.yahoo.com/v10/finance/quoteSummary/${ticker}?modules=${encodeURIComponent(modules)}&crumb=${encodeURIComponent(crumb.crumb)}`,
       { headers: { Cookie: crumb.cookie, 'User-Agent': 'Mozilla/5.0' } }
     );
     const json = await res.json();
     const result = json?.quoteSummary?.result?.[0];
     if (!result) return corsResponse({ error: `Ticker ${ticker} not found` }, 404);
-    return corsResponse(flatten(result));
+
+    const flat = flatten(result);
+
+    // Merge most-recent balance sheet row into financialData for easy access
+    const bs = flat.balanceSheetHistory?.balanceSheetStatements?.[0] || {};
+    const is = flat.incomeStatementHistory?.incomeStatementHistory?.[0] || {};
+    const cf = flat.cashflowStatementHistory?.cashflowStatements?.[0] || {};
+
+    const fd = flat.financialData || {};
+
+    // Fill missing fields from statement history if not already present
+    fd.totalAssets            = fd.totalAssets            ?? bs.totalAssets;
+    fd.totalLiab              = fd.totalLiab              ?? bs.totalLiab;
+    fd.totalStockholderEquity = fd.totalStockholderEquity ?? bs.totalStockholderEquity;
+    fd.totalCurrentLiabilities= fd.totalCurrentLiabilities?? bs.totalCurrentLiabilities;
+    fd.totalCurrentAssets     = fd.totalCurrentAssets     ?? bs.totalCurrentAssets;
+    fd.cash                   = fd.cash                   ?? bs.cash;
+    fd.shortTermInvestments   = fd.shortTermInvestments   ?? bs.shortTermInvestments;
+    fd.inventory              = fd.inventory              ?? bs.inventory;
+    fd.shortLongTermDebt      = fd.shortLongTermDebt      ?? bs.shortLongTermDebt;
+    fd.longTermDebt           = fd.longTermDebt           ?? bs.longTermDebt;
+
+    // Income statement supplements
+    fd.researchDevelopment    = fd.researchDevelopment    ?? is.researchDevelopment;
+    fd.grossProfit            = fd.grossProfit            ?? is.grossProfit;
+    fd.totalRevenue           = fd.totalRevenue           ?? is.totalRevenue;
+    fd.netIncomeToCommon      = fd.netIncomeToCommon      ?? is.netIncome;
+    fd.ebit                   = fd.ebit                   ?? is.ebit;
+
+    // Cashflow supplements
+    fd.operatingCashflow      = fd.operatingCashflow      ?? cf.totalCashFromOperatingActivities;
+    fd.capitalExpenditures    = fd.capitalExpenditures    ?? cf.capitalExpenditures;
+    if (!fd.freeCashflow && fd.operatingCashflow != null && fd.capitalExpenditures != null) {
+      fd.freeCashflow = fd.operatingCashflow + fd.capitalExpenditures; // capex is negative
+    }
+
+    flat.financialData = fd;
+
+    return corsResponse(flat);
   } catch (e) {
     return corsResponse({ error: e.message }, 500);
   }
@@ -60,8 +116,8 @@ async function handleChart(ticker, range) {
     const timestamps = result.timestamp || [];
     const quote = result.indicators?.quote?.[0] || {};
     const closes = (quote.close || []).map(v => v ?? null);
-    const highs = (quote.high || []).map(v => v ?? null);
-    const lows = (quote.low || []).map(v => v ?? null);
+    const highs  = (quote.high  || []).map(v => v ?? null);
+    const lows   = (quote.low   || []).map(v => v ?? null);
 
     return corsResponse({ meta, timestamps, closes, highs, lows });
   } catch (e) {
@@ -97,7 +153,8 @@ function flatten(obj) {
   return out;
 }
 
-function corsResponse(body, status = 200) {  return new Response(body !== null ? JSON.stringify(body) : null, {
+function corsResponse(body, status = 200) {
+  return new Response(body !== null ? JSON.stringify(body) : null, {
     status,
     headers: {
       'Content-Type': 'application/json',
