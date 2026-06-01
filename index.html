@@ -795,7 +795,7 @@ let cache=JSON.parse(localStorage.getItem('sr_cache')||'{}');
 })();
 
 // ==================== WORKER ====================
-function getWorkerUrl(){return (localStorage.getItem('sr_workerurl')||'').replace(/\/+$/,'');}
+function getWorkerUrl(){return (localStorage.getItem('sr_workerurl')||'https://fragrant-wave-6bd7.d-lenz-contact.workers.dev').replace(/\/+$/,'');}
 function saveWorkerUrl(){
   const w=document.getElementById('worker-url-input').value.trim().replace(/\/+$/,'');
   if(w&&!w.startsWith('https://')){showWorkerStatus('URL must start with https://','error');return;}
