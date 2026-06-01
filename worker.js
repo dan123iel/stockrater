@@ -87,6 +87,13 @@ async function handleSummary(ticker) {
     fd.netIncomeToCommon      = fd.netIncomeToCommon      ?? is.netIncome;
     fd.ebit                   = fd.ebit                   ?? is.ebit;
 
+    // Derive R&D if Yahoo returns null: totalOpEx - COGS - SGA
+    if (!fd.researchDevelopment && is.totalOperatingExpenses && is.costOfRevenue) {
+      const sga = is.sellingGeneralAdministrative || 0;
+      const derived = is.totalOperatingExpenses - is.costOfRevenue - sga;
+      if (derived > 0) fd.researchDevelopment = derived;
+    }
+
     // Cashflow supplements
     fd.operatingCashflow      = fd.operatingCashflow      ?? cf.totalCashFromOperatingActivities;
     fd.capitalExpenditures    = fd.capitalExpenditures    ?? cf.capitalExpenditures;
@@ -144,10 +151,13 @@ async function getCrumb() {
 }
 
 // Unwrap Yahoo's {raw, fmt} wrapper objects recursively
+// Returns null for empty wrappers like {raw: null} or {}
 function flatten(obj) {
   if (obj === null || typeof obj !== 'object') return obj;
   if (Array.isArray(obj)) return obj.map(flatten);
-  if ('raw' in obj && Object.keys(obj).length <= 3) return obj.raw;
+  if ('raw' in obj && Object.keys(obj).length <= 3) return obj.raw; // {raw: null} → null, {raw: 123} → 123
+  const keys = Object.keys(obj);
+  if (keys.length === 0) return null; // empty {} → null
   const out = {};
   for (const [k, v] of Object.entries(obj)) out[k] = flatten(v);
   return out;
