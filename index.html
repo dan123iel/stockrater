@@ -1361,8 +1361,8 @@ function autoFillQual(fd, ks, closes, summary){
   else if(grossM >= 0.20) moat2 = 2;
   else moat2 = 1;
 
-  // --- moat3: Innovation / Reputation — same R&D proxy ---
-  const moat3 = rdScore;
+  // --- moat3: Innovation / Reputation — same R&D proxy as mgmt5 ---
+  const moat3 = mgmt5;
 
   // --- esg1: ESG Risk Score from Yahoo ---
   const esgScores = summary.esgScores || {};
