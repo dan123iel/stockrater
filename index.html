@@ -44,9 +44,9 @@ body::before{
 }
 .logo{padding:1.5rem 1.5rem 1.1rem;border-bottom:1px solid var(--border);margin-bottom:.5rem}
 .logo-mark{display:flex;align-items:center;gap:10px;margin-bottom:5px}
-.logo-icon{width:30px;height:30px;background:linear-gradient(135deg,var(--indigo),var(--violet));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;color:#fff;box-shadow:0 0 16px var(--indigo-glow);flex-shrink:0}
-.logo-title{font-size:.95rem;font-weight:600;letter-spacing:-.02em}
-.logo-sub{font-size:.65rem;color:var(--text3);font-family:var(--mono);margin-left:40px;margin-top:-2px}
+.logo-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--indigo),var(--violet));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:700;color:#fff;box-shadow:0 0 20px var(--indigo-glow);flex-shrink:0;letter-spacing:-.03em}
+.logo-title{font-size:1rem;font-weight:700;letter-spacing:-.03em;background:linear-gradient(135deg,#fff 30%,var(--indigo-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.logo-sub{font-size:.65rem;color:var(--text3);font-family:var(--mono);margin-left:44px;margin-top:-2px}
 .nav-section{font-size:.6rem;font-weight:500;letter-spacing:.12em;color:var(--text3);text-transform:uppercase;padding:.8rem 1.5rem .3rem}
 .nav-item{display:flex;align-items:center;gap:9px;padding:.58rem 1.1rem;margin:1px .65rem;cursor:pointer;font-size:.82rem;color:var(--text2);border-radius:var(--radius-sm);transition:all .15s;position:relative}
 .nav-item::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:2px;height:0;border-radius:2px;background:linear-gradient(180deg,var(--indigo),var(--violet));transition:height .2s}
@@ -241,6 +241,33 @@ code{background:var(--bg3);padding:2px 6px;border-radius:4px;font-size:.78em;fon
 .stagger-in{animation:staggerin .3s ease forwards;opacity:0}
 @keyframes staggerin{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
 
+/* DCF */
+.dcf-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:1rem}
+.dcf-metric{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.85rem 1rem;text-align:center}
+.dcf-label{font-size:.63rem;color:var(--text3);font-family:var(--mono);letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px}
+.dcf-val{font-size:1.15rem;font-weight:700;font-family:var(--mono)}
+.dcf-sub{font-size:.65rem;color:var(--text3);margin-top:2px;font-family:var(--mono)}
+.dcf-verdict{display:flex;align-items:center;gap:10px;padding:.75rem 1rem;border-radius:var(--radius-sm);margin-bottom:.85rem;font-size:.82rem;font-weight:500}
+.dcf-underval{background:var(--green-dim);border:1px solid rgba(16,185,129,.25);color:var(--green)}
+.dcf-overval{background:var(--red-dim);border:1px solid rgba(239,68,68,.25);color:var(--red)}
+.dcf-fair{background:var(--amber-dim);border:1px solid rgba(245,158,11,.25);color:var(--amber)}
+.dcf-params{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--border);font-size:.75rem;color:var(--text3);font-family:var(--mono)}
+.dcf-param{display:flex;align-items:center;gap:5px}
+.dcf-param input{width:60px;background:var(--bg4);border:1px solid var(--border);border-radius:5px;padding:2px 6px;color:var(--text);font-size:.75rem;font-family:var(--mono);outline:none;text-align:center}
+.dcf-param input:focus{border-color:var(--indigo)}
+
+/* PRICE CHART */
+.chart-line{fill:none;stroke:var(--indigo-light);stroke-width:1.5;stroke-linejoin:round;stroke-linecap:round}
+.chart-area{fill:url(#chartGrad);opacity:.35}
+.chart-zero{stroke:var(--border2);stroke-width:1;stroke-dasharray:3,3}
+
+/* CATEGORY WINNER TABLE */
+.winner-table{width:100%;border-collapse:collapse;font-size:.8rem;margin-top:.85rem}
+.winner-table th{font-size:.63rem;font-weight:600;color:var(--text3);text-align:left;padding:5px 8px;border-bottom:1px solid var(--border);font-family:var(--mono);text-transform:uppercase;letter-spacing:.07em}
+.winner-table td{padding:7px 8px;border-bottom:1px solid var(--border)}
+.winner-table tr:last-child td{border:none}
+.winner-chip{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:99px;font-size:.72rem;font-weight:600;font-family:var(--mono)}
+
 /* HAMBURGER */
 .hamburger{display:none;position:fixed;top:1rem;left:1rem;z-index:200;background:rgba(15,17,23,.9);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:var(--radius-sm);padding:7px 10px;cursor:pointer;color:var(--text);font-size:1rem}
 .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:99}
@@ -394,6 +421,21 @@ code{background:var(--bg3);padding:2px 6px;border-radius:4px;font-size:.78em;fon
       <div style="display:flex;gap:7px;flex-wrap:wrap">
         <button class="btn btn-primary btn-sm" onclick="saveToPortfolio()">+ Portfolio</button>
         <button class="btn btn-sm" onclick="saveToWatchlist()">+ Watchlist</button>
+        <button class="btn btn-sm" style="background:var(--indigo-dim);color:var(--indigo-light);border-color:rgba(99,102,241,.25)" onclick="compareCurrent()">⚖️ Compare with Peers</button>
+      </div>
+    </div>
+
+    <!-- D) INTRINSIC VALUE (DCF) -->
+    <div class="card" id="dcf-card">
+      <div class="card-title">D) Intrinsic Value <span class="tag tag-live">DCF · Yahoo Finance</span></div>
+      <div id="dcf-content"></div>
+    </div>
+
+    <!-- E) PRICE CHART -->
+    <div class="card">
+      <div class="card-title">E) Price Chart <span class="tag tag-live">12M · Yahoo Finance</span></div>
+      <div style="position:relative">
+        <svg id="price-chart-svg" viewBox="0 0 800 180" style="width:100%;overflow:visible"></svg>
       </div>
     </div>
   </div>
@@ -550,6 +592,7 @@ code{background:var(--bg3);padding:2px 6px;border-radius:4px;font-size:.78em;fon
         <svg id="cmp-radar" viewBox="0 0 420 360" style="width:100%;max-width:420px;overflow:visible"></svg>
       </div>
       <div id="cmp-radar-legend" style="display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;margin-top:.5rem;font-size:.74rem;font-family:var(--mono);color:var(--text2)"></div>
+      <div id="cmp-winner-table" style="margin-top:1rem"></div>
     </div>
     <div class="card" style="overflow-x:auto">
       <div class="card-title">Side-by-Side Comparison</div>
@@ -786,6 +829,8 @@ async function fetchCompany(){
     renderQual();
     autoFillQual(fd, ks, closes, summary);
     updateScorecard();
+    renderDCF(fd, ks, meta, getWaccInfo(fd));
+    renderPriceChart(closes, highs, lows);
     showRatingLoading(false);
     document.getElementById('rating-content').style.display='block';
     showProgress('done');
@@ -985,6 +1030,13 @@ function renderRatios(fd,ks,meta,closes,highs,lows){
   currentRatioScore=cnt>0?total/cnt:0;
 
   // WACC lookup
+  const waccInfo=getWaccInfo(fd);
+  document.getElementById('sc-wacc').textContent=
+    `WACC ${(waccInfo.wacc*100).toFixed(1)}%  ·  β ${waccInfo.beta}  ·  ${fd.sector||'Unknown sector'}`;
+  document.getElementById('sc-company').textContent=
+    currentCompany?.meta?.longName||currentCompany?.meta?.shortName||'';
+}
+function getWaccInfo(fd){
   const sector=fd.sector||'';
   let waccInfo={beta:1,wacc:0.09};
   for(const [ind,dat] of Object.entries(WACC_TABLE)){
@@ -993,10 +1045,7 @@ function renderRatios(fd,ks,meta,closes,highs,lows){
       waccInfo=dat;break;
     }
   }
-  document.getElementById('sc-wacc').textContent=
-    `WACC ${(waccInfo.wacc*100).toFixed(1)}%  ·  β ${waccInfo.beta}  ·  ${sector||'Unknown sector'}`;
-  document.getElementById('sc-company').textContent=
-    currentCompany?.meta?.longName||currentCompany?.meta?.shortName||'';
+  return waccInfo;
 }
 
 // ==================== QUALITATIVE ====================
@@ -1707,6 +1756,35 @@ function renderRadar(results){
       <span style="color:${CMP_COLORS[i]};font-weight:600">${r.ticker}</span>
       <span style="color:var(--text3)">${r.name}</span>
     </span>`).join('');
+
+  // Category winner table
+  const winnerEl = document.getElementById('cmp-winner-table');
+  let whtml = `<table class="winner-table"><thead><tr><th>Category</th><th>Winner</th>${results.map((_,i)=>`<th style="color:${CMP_COLORS[i]}">${results[i].ticker}</th>`).join('')}</tr></thead><tbody>`;
+  CMP_RADAR_DIMS.forEach(d => {
+    const vals = results.map(r => r.dims[d.key]||0);
+    const max = Math.max(...vals);
+    const winnerIdx = vals.indexOf(max);
+    const tied = vals.filter(v=>v===max).length > 1;
+    whtml += `<tr>
+      <td style="color:var(--text2);font-weight:500">${d.label}</td>
+      <td>${tied
+        ? `<span class="winner-chip" style="background:var(--amber-dim);color:var(--amber)">Tie</span>`
+        : `<span class="winner-chip" style="background:${CMP_COLORS[winnerIdx]}22;color:${CMP_COLORS[winnerIdx]}">${results[winnerIdx].ticker} ✓</span>`
+      }</td>
+      ${vals.map((v,i)=>`<td style="font-family:var(--mono);font-size:.78rem;color:${v===max?CMP_COLORS[i]:'var(--text3)'};font-weight:${v===max?'700':'400'}">${v.toFixed(2)}</td>`).join('')}
+    </tr>`;
+  });
+  // Overall winner
+  const totalVals = results.map(r=>r.score);
+  const totalMax = Math.max(...totalVals);
+  const totalWinner = totalVals.indexOf(totalMax);
+  whtml += `<tr style="border-top:1px solid var(--border2)">
+    <td style="font-weight:700">Overall Score</td>
+    <td><span class="winner-chip" style="background:${CMP_COLORS[totalWinner]}22;color:${CMP_COLORS[totalWinner]}">${results[totalWinner].ticker} 🏆</span></td>
+    ${totalVals.map((v,i)=>`<td style="font-family:var(--mono);font-weight:700;color:${CMP_COLORS[i]}">${v.toFixed(2)}</td>`).join('')}
+  </tr>`;
+  whtml += '</tbody></table>';
+  winnerEl.innerHTML = whtml;
 }
 
 function renderCmpTable(results){
@@ -1794,6 +1872,191 @@ function renderCmpTable(results){
   });
   html += '</tbody>';
   document.getElementById('cmp-table').innerHTML = html;
+}
+
+// ==================== COMPARE WITH PEERS ====================
+function compareCurrent(){
+  if(!currentCompany) return;
+  showPage('compare');
+  document.getElementById('cmp-t1').value = currentCompany.ticker;
+  document.getElementById('cmp-t2').focus();
+}
+
+// ==================== DCF INTRINSIC VALUE ====================
+function renderDCF(fd, ks, meta, waccInfo){
+  const price = meta.regularMarketPrice || 0;
+  const fcf = fd.freeCashflow || 0;
+  const rev = fd.totalRevenue || 1;
+  const sharesOut = ks.sharesOutstanding || 1;
+  const wacc = waccInfo.wacc || 0.09;
+  const epsGrowth = fd.earningsGrowth || 0;
+  const revGrowth = fd.revenueGrowth || 0;
+
+  // Default growth assumptions (editable)
+  const g1 = Math.min(Math.max((epsGrowth + revGrowth) / 2, 0.03), 0.30); // 10y growth capped 3-30%
+  const gTerm = 0.03; // terminal growth
+  const years = 10;
+  const wacc_ = wacc;
+
+  function calcFairValue(growthRate, termRate, discRate){
+    if(fcf <= 0) return null;
+    let pv = 0;
+    let cf = fcf;
+    for(let i = 1; i <= years; i++){
+      cf = cf * (1 + growthRate);
+      pv += cf / Math.pow(1 + discRate, i);
+    }
+    // Terminal value (Gordon Growth)
+    const terminalVal = cf * (1 + termRate) / (discRate - termRate);
+    pv += terminalVal / Math.pow(1 + discRate, years);
+    return pv / sharesOut;
+  }
+
+  const fairValue = calcFairValue(g1, gTerm, wacc_);
+  const el = document.getElementById('dcf-content');
+  if(!fairValue || price <= 0){ el.innerHTML='<div class="info-box" style="margin:0">⚠️ DCF requires positive Free Cash Flow.</div>'; return; }
+
+  const upside = (fairValue - price) / price;
+  const mos = upside; // margin of safety
+  const verdictClass = upside > 0.15 ? 'dcf-underval' : upside < -0.15 ? 'dcf-overval' : 'dcf-fair';
+  const verdictText = upside > 0.15 ? `🟢 Undervalued — ${(upside*100).toFixed(1)}% upside` : upside < -0.15 ? `🔴 Overvalued — ${Math.abs(upside*100).toFixed(1)}% downside` : `🟡 Fairly valued (±15%)`;
+
+  // Bull/Base/Bear
+  const bull = calcFairValue(Math.min(g1*1.5,0.40), gTerm+0.01, wacc_*0.9);
+  const bear = calcFairValue(Math.max(g1*0.5,0.01), gTerm-0.01, wacc_*1.1);
+
+  el.innerHTML = `
+    <div class="dcf-verdict ${verdictClass}">${verdictText}
+      <span style="margin-left:auto;font-size:.7rem;opacity:.7">MoS: ${(mos*100).toFixed(1)}%</span>
+    </div>
+    <div class="dcf-grid">
+      <div class="dcf-metric">
+        <div class="dcf-label">Current Price</div>
+        <div class="dcf-val">${fmtNum(price,2)}</div>
+        <div class="dcf-sub">${meta.currency||'USD'}</div>
+      </div>
+      <div class="dcf-metric" style="border-color:${upside>0?'rgba(16,185,129,.3)':'rgba(239,68,68,.3)'}">
+        <div class="dcf-label">Fair Value (Base)</div>
+        <div class="dcf-val" style="color:${upside>0?'var(--green)':'var(--red)'}">${fmtNum(fairValue,2)}</div>
+        <div class="dcf-sub">10y DCF</div>
+      </div>
+      <div class="dcf-metric">
+        <div class="dcf-label">Bull Case</div>
+        <div class="dcf-val" style="color:var(--green)">${bull?fmtNum(bull,2):'—'}</div>
+        <div class="dcf-sub">g×1.5, WACC−10%</div>
+      </div>
+      <div class="dcf-metric">
+        <div class="dcf-label">Bear Case</div>
+        <div class="dcf-val" style="color:var(--red)">${bear?fmtNum(bear,2):'—'}</div>
+        <div class="dcf-sub">g×0.5, WACC+10%</div>
+      </div>
+      <div class="dcf-metric">
+        <div class="dcf-label">FCF TTM</div>
+        <div class="dcf-val">${fmtBig(fcf)}</div>
+        <div class="dcf-sub">Free Cash Flow</div>
+      </div>
+      <div class="dcf-metric">
+        <div class="dcf-label">FCF Yield</div>
+        <div class="dcf-val">${price>0&&sharesOut>0?(fcf/sharesOut/price*100).toFixed(1)+'%':'—'}</div>
+        <div class="dcf-sub">FCF / Market Cap</div>
+      </div>
+    </div>
+    <div class="dcf-params">
+      <span>DCF Parameters (editable):</span>
+      <span class="dcf-param">Growth 10y: <input id="dcf-g" type="number" value="${(g1*100).toFixed(1)}" step="0.5" min="0" max="50" onchange="recalcDCF()">%</span>
+      <span class="dcf-param">Terminal g: <input id="dcf-gt" type="number" value="${(gTerm*100).toFixed(1)}" step="0.1" min="0" max="5" onchange="recalcDCF()">%</span>
+      <span class="dcf-param">WACC: <input id="dcf-w" type="number" value="${(wacc_*100).toFixed(1)}" step="0.1" min="1" max="25" onchange="recalcDCF()">%</span>
+      <span class="dcf-param">Years: <input id="dcf-y" type="number" value="${years}" step="1" min="5" max="20" onchange="recalcDCF()">y</span>
+    </div>`;
+}
+
+function recalcDCF(){
+  if(!currentCompany) return;
+  const {fd, ks, meta} = currentCompany;
+  const price = meta.regularMarketPrice || 0;
+  const fcf = fd.freeCashflow || 0;
+  const sharesOut = ks.sharesOutstanding || 1;
+  const g1 = (parseFloat(document.getElementById('dcf-g')?.value)||10)/100;
+  const gTerm = (parseFloat(document.getElementById('dcf-gt')?.value)||3)/100;
+  const wacc_ = (parseFloat(document.getElementById('dcf-w')?.value)||9)/100;
+  const years = parseInt(document.getElementById('dcf-y')?.value)||10;
+
+  function calc(gr, tr, dr){
+    if(fcf<=0) return null;
+    let pv=0, cf=fcf;
+    for(let i=1;i<=years;i++){cf*=(1+gr);pv+=cf/Math.pow(1+dr,i);}
+    const tv=cf*(1+tr)/(dr-tr);
+    pv+=tv/Math.pow(1+dr,years);
+    return pv/sharesOut;
+  }
+  const fv = calc(g1,gTerm,wacc_);
+  if(!fv) return;
+  const upside = (fv-price)/price;
+  const bull = calc(Math.min(g1*1.5,.4),gTerm+.01,wacc_*.9);
+  const bear = calc(Math.max(g1*.5,.01),gTerm-.01,wacc_*1.1);
+  const vc = upside>.15?'dcf-underval':upside<-.15?'dcf-overval':'dcf-fair';
+  const vt = upside>.15?`🟢 Undervalued — ${(upside*100).toFixed(1)}% upside`:upside<-.15?`🔴 Overvalued — ${Math.abs(upside*100).toFixed(1)}% downside`:`🟡 Fairly valued (±15%)`;
+  const vEl=document.querySelector('.dcf-verdict');
+  if(vEl){vEl.className='dcf-verdict '+vc;vEl.innerHTML=`${vt}<span style="margin-left:auto;font-size:.7rem;opacity:.7">MoS: ${(upside*100).toFixed(1)}%</span>`;}
+  const vals=document.querySelectorAll('.dcf-val');
+  if(vals[1]) vals[1].textContent=fmtNum(fv,2);
+  if(vals[2]) vals[2].textContent=bull?fmtNum(bull,2):'—';
+  if(vals[3]) vals[3].textContent=bear?fmtNum(bear,2):'—';
+}
+
+// ==================== PRICE CHART ====================
+function renderPriceChart(closes, highs, lows){
+  const svg = document.getElementById('price-chart-svg');
+  if(!svg||!closes||closes.length<2) return;
+  const W=800, H=180, pad={t:15,r:10,b:28,l:45};
+  const valid = closes.filter(v=>v!=null);
+  if(!valid.length) return;
+  const minV = Math.min(...valid), maxV = Math.max(...valid);
+  const range = maxV - minV || 1;
+  const n = closes.length;
+
+  function cx(i){ return pad.l + (i/(n-1))*(W-pad.l-pad.r); }
+  function cy(v){ return pad.t + (1-(v-minV)/range)*(H-pad.t-pad.b); }
+
+  // Build path
+  let path='', areaPath='';
+  let started=false;
+  for(let i=0;i<n;i++){
+    if(closes[i]==null) continue;
+    const x=cx(i), y=cy(closes[i]);
+    if(!started){ path=`M${x},${y}`; areaPath=`M${x},${H-pad.b} L${x},${y}`; started=true; }
+    else { path+=` L${x},${y}`; areaPath+=` L${x},${y}`; }
+  }
+  areaPath+=` L${cx(n-1)},${H-pad.b} Z`;
+
+  const first=valid[0], last=valid[valid.length-1];
+  const isUp = last >= first;
+  const lineColor = isUp ? 'var(--green)' : 'var(--red)';
+  const gradColor = isUp ? '#10b981' : '#ef4444';
+
+  svg.innerHTML = `
+    <defs>
+      <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${gradColor}" stop-opacity=".4"/>
+        <stop offset="100%" stop-color="${gradColor}" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <path d="${areaPath}" class="chart-area"/>
+    <path d="${path}" fill="none" stroke="${lineColor}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+    ${[0,.25,.5,.75,1].map(t=>{
+      const v=minV+t*range;
+      const y=cy(v);
+      return `<line x1="${pad.l}" y1="${y}" x2="${W-pad.r}" y2="${y}" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+              <text x="${pad.l-4}" y="${y+4}" fill="rgba(255,255,255,.3)" font-size="9" font-family="JetBrains Mono,monospace" text-anchor="end">${v>=1e9?(v/1e9).toFixed(0)+'':v.toFixed(0)}</text>`;
+    }).join('')}
+    ${[0,.25,.5,.75,1].map(t=>{
+      const i=Math.floor(t*(n-1));
+      const x=cx(i);
+      const label = i===0?'12M ago':i===Math.floor(n/2)?'6M ago':'Now';
+      return t===0||t===0.5||t===1?`<text x="${x}" y="${H-pad.b+14}" fill="rgba(255,255,255,.25)" font-size="9" font-family="JetBrains Mono,monospace" text-anchor="middle">${label}</text>`:'';
+    }).join('')}
+    <circle cx="${cx(n-1)}" cy="${cy(last)}" r="3" fill="${lineColor}" stroke="var(--bg2)" stroke-width="2"/>
+    <text x="${cx(n-1)+6}" y="${cy(last)+4}" fill="${lineColor}" font-size="10" font-family="JetBrains Mono,monospace">${last.toFixed(2)}</text>`;
 }
 
 // ==================== INIT ====================
