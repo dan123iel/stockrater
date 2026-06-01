@@ -1175,11 +1175,19 @@ function renderRatios(fd,ks,meta,closes,highs,lows,summary){
     fy1:  annualIS[0]  ? fdFromAnnual(annualIS[0],  annualBS[0]||{},  annualCF[0]||{})  : null,
     fy2:  annualIS[1]  ? fdFromAnnual(annualIS[1],  annualBS[1]||{},  annualCF[1]||{})  : null,
   };
+  const curYr = new Date().getFullYear();
+  const fy1Yr = annualIS[0]?.endDate ? new Date(annualIS[0].endDate*1000).getFullYear() : 0;
+  const fy2Yr = annualIS[1]?.endDate ? new Date(annualIS[1].endDate*1000).getFullYear() : 0;
+  // Skip incomplete current fiscal year — only show fully closed periods
+  const fy1Key = annualIS[fy1Yr && fy1Yr < curYr ? 0 : 1];
+  const fy2Key = annualIS[fy1Yr && fy1Yr < curYr ? 1 : 2];
+  _periodData.fy1 = fy1Key ? fdFromAnnual(fy1Key, annualBS[fy1Yr && fy1Yr < curYr ? 0:1]||{}, annualCF[fy1Yr && fy1Yr < curYr ? 0:1]||{}) : null;
+  _periodData.fy2 = fy2Key ? fdFromAnnual(fy2Key, annualBS[fy1Yr && fy1Yr < curYr ? 1:2]||{}, annualCF[fy1Yr && fy1Yr < curYr ? 1:2]||{}) : null;
   const labels = {
     ttm:  'TTM',
     q:    quarterIS[0] ? qLabel(quarterIS[0]) : 'Latest Q',
-    fy1:  annualIS[0]  ? periodLabel(annualIS[0])  : 'FY−1',
-    fy2:  annualIS[1]  ? periodLabel(annualIS[1])  : 'FY−2',
+    fy1:  fy1Key?.endDate ? String(new Date(fy1Key.endDate*1000).getFullYear()) : 'FY−1',
+    fy2:  fy2Key?.endDate ? String(new Date(fy2Key.endDate*1000).getFullYear()) : 'FY−2',
   };
 
   const sector = fd.sector||'';
@@ -1259,17 +1267,17 @@ function renderRatioTable(sector, labels, ks){
         <td style="font-family:var(--mono);font-weight:600">${displayed}</td>
         <td class="trend-cell">${arrow}</td>
         <td style="font-family:var(--mono);font-size:.72rem;color:var(--text3)">≥${b5}</td>
-        <td>
-          <div class="score-dual">
-            <div class="score-dual-row">
-              <span class="score-dual-label" title="vs Theory" style="color:${colT};font-weight:600">${sc}.0</span>
-              <div class="score-bar-wrap-sm" style="background:var(--bg4)"><div class="score-bar-fill" style="width:${barWT}%;background:${colT}"></div></div>
-              <span style="font-size:.6rem;color:var(--text3)">theory</span>
+        <td style="white-space:nowrap">
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="display:flex;align-items:center;gap:6px">
+              <span title="Theory score (your Excel benchmarks)" style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:${colT};color:#fff;font-size:.55rem;font-weight:700;flex-shrink:0">T</span>
+              <span style="font-family:var(--mono);font-weight:700;font-size:.8rem;color:${colT};min-width:22px">${sc}.0</span>
+              <div style="width:48px;height:3px;background:var(--bg4);border-radius:3px;overflow:hidden"><div style="height:100%;width:${barWT}%;background:${colT};border-radius:3px;transition:width .5s ease"></div></div>
             </div>
-            <div class="score-dual-row">
-              <span class="score-dual-label" title="vs Industry" style="color:${colI};font-weight:600">${scI}.0</span>
-              <div class="score-bar-wrap-sm" style="background:var(--bg4)"><div class="score-bar-fill" style="width:${barWI}%;background:${colI}"></div></div>
-              <span style="font-size:.6rem;color:var(--text3)">sector</span>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span title="Sector score (S&P 500 industry median)" style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:${colI};color:#fff;font-size:.55rem;font-weight:700;flex-shrink:0">S</span>
+              <span style="font-family:var(--mono);font-weight:700;font-size:.8rem;color:${colI};min-width:22px">${scI}.0</span>
+              <div style="width:48px;height:3px;background:var(--bg4);border-radius:3px;overflow:hidden"><div style="height:100%;width:${barWI}%;background:${colI};border-radius:3px;transition:width .5s ease"></div></div>
             </div>
           </div>
         </td>
@@ -1284,15 +1292,17 @@ function renderRatioTable(sector, labels, ks){
         <div class="period-tabs">${tabs}</div>
       </div>
       <div style="font-size:.65rem;color:var(--text3);margin-bottom:.75rem">
-        Each ratio is scored twice: <strong>Theory</strong> (your Excel benchmarks) and <strong>Sector</strong> (S&P 500 industry median). Trend arrow compares to prior period.
+        <span style="display:inline-flex;align-items:center;gap:4px;margin-right:12px"><span style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border-radius:50%;background:#059669;color:#fff;font-size:.5rem;font-weight:700">T</span> Theory (your benchmarks)</span>
+        <span style="display:inline-flex;align-items:center;gap:4px;margin-right:12px"><span style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border-radius:50%;background:#4f46e5;color:#fff;font-size:.5rem;font-weight:700">S</span> Sector median (S&P 500)</span>
+        <span style="color:var(--green)">↑</span> improving · <span style="color:var(--amber)">→</span> flat · <span style="color:var(--red)">↓</span> declining vs prior period
       </div>
     </div>
     <table class="rtable">
       <thead><tr>
         <th>Ratio</th><th>Value</th>
-        <th title="Trend vs prior period">Trend</th>
-        <th>Target (5★)</th>
-        <th>Score (Theory · Sector)</th>
+        <th title="Trend vs prior period" style="width:44px;text-align:center">Trend</th>
+        <th>Target ★5</th>
+        <th style="min-width:120px"><span title="T = Theory (Excel benchmarks), S = Sector (S&P 500 median)" style="cursor:help">Score <span style="font-size:.58rem;color:var(--text3)">T = theory  S = sector</span></span></th>
       </tr></thead>
       <tbody>${rows}</tbody>
     </table>`;
@@ -1311,11 +1321,14 @@ function switchPeriod(key){
   const quarterIS = summary?.incomeStatementHistoryQuarterly?.incomeStatementHistory||[];
   function periodLabel(s){ return s?.endDate ? new Date(s.endDate*1000).getFullYear()+'' : ''; }
   function qLabel(s){ if(!s?.endDate) return ''; const d=new Date(s.endDate*1000); return `Q${Math.ceil((d.getMonth()+1)/3)} ${d.getFullYear()}`; }
+  const curYear = new Date().getFullYear();
+  const fy1Year = annualIS[0]?.endDate ? new Date(annualIS[0].endDate*1000).getFullYear() : 0;
+  const fy2Year = annualIS[1]?.endDate ? new Date(annualIS[1].endDate*1000).getFullYear() : 0;
   const l = {
     ttm: 'TTM',
     q: quarterIS[0] ? qLabel(quarterIS[0]) : 'Latest Q',
-    fy1: annualIS[0] ? periodLabel(annualIS[0]) : 'FY−1',
-    fy2: annualIS[1] ? periodLabel(annualIS[1]) : 'FY−2',
+    fy1: fy1Year && fy1Year < curYear ? String(fy1Year) : (fy2Year ? String(fy2Year) : 'FY−1'),
+    fy2: fy2Year && fy2Year < curYear ? String(fy2Year) : (annualIS[2]?.endDate ? String(new Date(annualIS[2].endDate*1000).getFullYear()) : 'FY−2'),
   };
   renderRatioTable(sector, l, ks);
 }
@@ -2190,8 +2203,11 @@ function renderPeriodOverview(summary, fd, ks){
   const cols = [];
   cols.push({label:'TTM', fd});
   if(quarterIS[0]) cols.push({label: qLabel(quarterIS[0]), fd: fdFromAnnual(quarterIS[0], quarterBS[0]||{}, quarterCF[0]||{})});
-  if(annualIS[0])  cols.push({label: periodLabel(annualIS[0]),  fd: fdFromAnnual(annualIS[0], annualBS[0]||{}, annualCF[0]||{})});
-  if(annualIS[1])  cols.push({label: periodLabel(annualIS[1]),  fd: fdFromAnnual(annualIS[1], annualBS[1]||{}, annualCF[1]||{})});
+  // Only add complete fiscal years (not current year)
+  const nowY = new Date().getFullYear();
+  const completeAnnual = annualIS.filter(s=>s?.endDate && new Date(s.endDate*1000).getFullYear() < nowY);
+  if(completeAnnual[0]) cols.push({label: periodLabel(completeAnnual[0]), fd: fdFromAnnual(completeAnnual[0], annualBS[annualIS.indexOf(completeAnnual[0])]||{}, annualCF[annualIS.indexOf(completeAnnual[0])]||{})});
+  if(completeAnnual[1]) cols.push({label: periodLabel(completeAnnual[1]), fd: fdFromAnnual(completeAnnual[1], annualBS[annualIS.indexOf(completeAnnual[1])]||{}, annualCF[annualIS.indexOf(completeAnnual[1])]||{})});
 
   // Metrics to show
   const metrics = [
