@@ -427,56 +427,34 @@ code{background:var(--bg4);padding:2px 5px;border-radius:3px;font-size:.76em;fon
   <div id="rating-loading" style="display:none"><div class="loading"><div class="spinner-ring"></div><div class="loading-text">Loading from Yahoo Finance…</div></div></div>
   <div id="rating-error" style="display:none"></div>
   <div id="rating-content" style="display:none">
+
+    <!-- HERO -->
     <div class="company-hero" id="company-hero"></div>
 
-    <!-- A) FINANCIAL RATIOS -->
-    <div class="card">
-      <div class="card-title">A) Financial Ratios <span class="tag tag-live">live · Yahoo Finance</span></div>
-      <div id="key-metrics"></div>
-      <div id="ratio-table"></div>
-    </div>
-
-    <!-- B) QUALITATIVE -->
-    <div class="card">
-      <div class="card-title">B) Qualitative Assessment <span class="tag tag-auto">⚡ API auto-fill</span> <span class="tag tag-manual">manual override</span></div>
-      <div class="qual-group">
-        <div class="qual-group-header">Management Quality <span style="font-size:.6rem;color:var(--text3);margin-left:4px;font-weight:400">(hover labels for criteria)</span></div>
-        <div id="qual-mgmt"></div>
-      </div>
-      <div class="qual-group" style="margin-top:.85rem">
-        <div class="qual-group-header">Moat &amp; Competitive Position</div>
-        <div id="qual-moat"></div>
-      </div>
-      <div class="qual-group" style="margin-top:.85rem">
-        <div class="qual-group-header">ESG &amp; Risk</div>
-        <div id="qual-esg"></div>
-      </div>
-    </div>
-
-    <!-- C) SCORECARD -->
+    <!-- SCORECARD — directly below hero -->
     <div class="card" id="scorecard-card">
-      <div class="card-title">C) Scorecard</div>
+      <div class="card-title">Scorecard</div>
       <div class="scorecard-layout">
         <div class="gauge-wrap">
           <svg viewBox="0 0 110 110">
-            <circle cx="55" cy="55" r="46" fill="none" stroke="rgba(255,255,255,.04)" stroke-width="1"/>
-            <circle cx="55" cy="55" r="40" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="9"/>
+            <circle cx="55" cy="55" r="46" fill="none" stroke="rgba(0,0,0,.04)" stroke-width="1"/>
+            <circle cx="55" cy="55" r="40" fill="none" stroke="rgba(0,0,0,.05)" stroke-width="9"/>
             <circle cx="55" cy="55" r="40" fill="none" stroke="url(#gaugeGrad)" stroke-width="9"
               stroke-dasharray="251.3" stroke-dashoffset="251.3" stroke-linecap="round"
               transform="rotate(-90 55 55)" id="gauge-arc"
               style="transition:stroke-dashoffset .9s cubic-bezier(.4,0,.2,1),stroke .4s"/>
             <defs>
               <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#8b5cf6"/>
+                <stop offset="0%" stop-color="#4f46e5"/><stop offset="100%" stop-color="#6366f1"/>
               </linearGradient>
               <linearGradient id="gaugeGreen" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#34d399"/>
+                <stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#10b981"/>
               </linearGradient>
               <linearGradient id="gaugeRed" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#ef4444"/><stop offset="100%" stop-color="#f87171"/>
+                <stop offset="0%" stop-color="#dc2626"/><stop offset="100%" stop-color="#ef4444"/>
               </linearGradient>
               <linearGradient id="gaugeAmber" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#fbbf24"/>
+                <stop offset="0%" stop-color="#d97706"/><stop offset="100%" stop-color="#f59e0b"/>
               </linearGradient>
             </defs>
             <g id="gauge-ticks"></g>
@@ -497,33 +475,63 @@ code{background:var(--bg4);padding:2px 5px;border-radius:3px;font-size:.76em;fon
       <div style="display:flex;gap:7px;flex-wrap:wrap">
         <button class="btn btn-primary btn-sm" onclick="saveToPortfolio()">+ Portfolio</button>
         <button class="btn btn-sm" onclick="saveToWatchlist()">+ Watchlist</button>
-        <button class="btn btn-sm" style="background:var(--indigo-dim);color:var(--indigo-light);border-color:rgba(99,102,241,.25)" onclick="compareCurrent()">⚖️ Compare with Peers</button>
+        <button class="btn btn-sm" onclick="compareCurrent()">Compare</button>
+      </div>
+    </div>
+
+    <!-- PERIOD OVERVIEW — directly below scorecard -->
+    <div class="card" id="period-card" style="display:none">
+      <div class="card-title">Period Overview <span class="tag tag-live">annual · quarterly · TTM</span></div>
+      <div id="period-content"></div>
+    </div>
+
+    <!-- A) FINANCIAL RATIOS -->
+    <div class="card">
+      <div class="card-title">Financial Ratios <span class="tag tag-live">live · Yahoo Finance</span></div>
+      <div id="key-metrics"></div>
+      <div id="ratio-table"></div>
+    </div>
+
+    <!-- B) QUALITATIVE -->
+    <div class="card">
+      <div class="card-title">Qualitative Assessment <span class="tag tag-auto">API auto-fill</span> <span class="tag tag-manual">manual override</span></div>
+      <div class="qual-group">
+        <div class="qual-group-header">Management Quality <span style="font-size:.6rem;color:var(--text3);margin-left:4px;font-weight:400">(hover for guidance)</span></div>
+        <div id="qual-mgmt"></div>
+      </div>
+      <div class="qual-group" style="margin-top:.85rem">
+        <div class="qual-group-header">Moat &amp; Competitive Position</div>
+        <div id="qual-moat"></div>
+      </div>
+      <div class="qual-group" style="margin-top:.85rem">
+        <div class="qual-group-header">ESG &amp; Risk</div>
+        <div id="qual-esg"></div>
       </div>
     </div>
 
     <!-- D) INTRINSIC VALUE (DCF) -->
     <div class="card" id="dcf-card">
-      <div class="card-title">D) Intrinsic Value <span class="tag tag-live">DCF · Yahoo Finance</span></div>
+      <div class="card-title">Intrinsic Value <span class="tag tag-live">DCF · Yahoo Finance</span></div>
       <div id="dcf-content"></div>
     </div>
 
     <!-- E) PRICE CHART -->
     <div class="card">
-      <div class="card-title">E) Price Chart <span class="tag tag-live">12M · Yahoo Finance</span></div>
+      <div class="card-title">Price Chart <span class="tag tag-live">12M · Yahoo Finance</span></div>
       <div style="position:relative">
-        <svg id="price-chart-svg" viewBox="0 0 800 180" style="width:100%;overflow:visible"></svg>
+        <svg id="price-chart-svg" viewBox="0 0 800 220" style="width:100%;overflow:visible"></svg>
       </div>
     </div>
 
     <!-- F) MARGINS CHART -->
     <div class="card" id="margins-card" style="display:none">
-      <div class="card-title">F) Margin Profile <span class="tag tag-live">live · Yahoo Finance</span></div>
+      <div class="card-title">Margin Profile <span class="tag tag-live">live · Yahoo Finance</span></div>
       <div id="margins-chart-content"></div>
     </div>
 
     <!-- G) KEY FINANCIALS BAR CHART -->
     <div class="card" id="financials-card" style="display:none">
-      <div class="card-title">G) Key Financials <span class="tag tag-live">live · Yahoo Finance</span></div>
+      <div class="card-title">Key Financials <span class="tag tag-live">live · Yahoo Finance</span></div>
       <div id="financials-chart-content"></div>
     </div>
 
@@ -942,9 +950,36 @@ function showProgress(state){
 }
 
 // ==================== FETCH COMPANY ====================
+// Common name→ticker map for convenience
+const NAME_TO_TICKER = {
+  'NVIDIA':['NVDA'],'APPLE':['AAPL'],'MICROSOFT':['MSFT'],'GOOGLE':['GOOGL'],
+  'ALPHABET':['GOOGL'],'AMAZON':['AMZN'],'META':['META'],'TESLA':['TSLA'],
+  'NETFLIX':['NFLX'],'SAMSUNG':['005930.KS'],'BERKSHIRE':['BRK-B'],
+  'VISA':['V'],'MASTERCARD':['MA'],'JPMORGAN':['JPM'],'GOLDMAN':['GS'],
+  'BLACKROCK':['BLK'],'TAIWAN SEMICONDUCTOR':['TSM'],'TSMC':['TSM'],
+  'ASML':['ASML'],'SAP':['SAP'],'SIEMENS':['SIE.DE'],'VOLKSWAGEN':['VOW3.DE'],
+  'BMW':['BMW.DE'],'MERCEDES':['MBG.DE'],'ADIDAS':['ADS.DE'],
+  'SHOPIFY':['SHOP'],'SALESFORCE':['CRM'],'ORACLE':['ORCL'],
+  'INTEL':['INTC'],'AMD':['AMD'],'QUALCOMM':['QCOM'],'BROADCOM':['AVGO'],
+  'DISNEY':['DIS'],'COCA COLA':['KO'],'PEPSI':['PEP'],'JOHNSON':['JNJ'],
+  'PFIZER':['PFE'],'NOVARTIS':['NVS'],'ROCHE':['ROG.SW'],'NESTLE':['NESN.SW'],
+};
+function resolveTickerInput(raw){
+  const upper = raw.toUpperCase().trim();
+  if(NAME_TO_TICKER[upper]) return NAME_TO_TICKER[upper][0];
+  // partial match
+  for(const [name,tickers] of Object.entries(NAME_TO_TICKER)){
+    if(upper.includes(name) || name.includes(upper)) return tickers[0];
+  }
+  return upper;
+}
+
 async function fetchCompany(){
-  const ticker=document.getElementById('r-ticker').value.trim().toUpperCase();
-  if(!ticker) return;
+  const raw=document.getElementById('r-ticker').value.trim();
+  if(!raw) return;
+  const ticker=resolveTickerInput(raw);
+  // Show resolved ticker in input if it changed
+  if(ticker !== raw.toUpperCase()) document.getElementById('r-ticker').value=ticker;
   showProgress('start');
   showRatingLoading(true);
   document.getElementById('rating-error').style.display='none';
@@ -1017,6 +1052,10 @@ function renderCompanyHero(meta,fd,ks){
       <div class="price-change ${change>=0?'pos':'neg'}">
         <span>${change>=0?'▲':'▼'} ${Math.abs(change).toFixed(2)}</span>
         <span class="price-badge">${change>=0?'+':''}${pct.toFixed(2)}%</span>
+      </div>
+      <div style="display:flex;gap:6px;margin-top:10px;justify-content:flex-end">
+        <button class="btn btn-sm" onclick="saveToWatchlist()" title="Add to Watchlist">+ Watchlist</button>
+        <button class="btn btn-sm" onclick="compareCurrent()" title="Compare with peers">Compare</button>
       </div>
     </div>`;
 }
@@ -2425,7 +2464,7 @@ function recalcDCF(){
 function renderPriceChart(closes, highs, lows){
   const svg = document.getElementById('price-chart-svg');
   if(!svg||!closes||closes.length<2) return;
-  const W=800, H=180, pad={t:15,r:10,b:28,l:45};
+  const W=800, H=220, pad={t:15,r:15,b:30,l:52};
   const valid = closes.filter(v=>v!=null);
   if(!valid.length) return;
   const minV = Math.min(...valid), maxV = Math.max(...valid);
@@ -2451,29 +2490,44 @@ function renderPriceChart(closes, highs, lows){
   const lineColor = isUp ? 'var(--green)' : 'var(--red)';
   const gradColor = isUp ? '#10b981' : '#ef4444';
 
+  const yTicks = [0, 0.25, 0.5, 0.75, 1];
   svg.innerHTML = `
     <defs>
       <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="${gradColor}" stop-opacity=".4"/>
+        <stop offset="0%" stop-color="${gradColor}" stop-opacity=".25"/>
         <stop offset="100%" stop-color="${gradColor}" stop-opacity="0"/>
       </linearGradient>
     </defs>
+    <!-- Y-axis gridlines + labels -->
+    ${yTicks.map(t=>{
+      const v = minV + t*range;
+      const y = cy(v);
+      const label = v >= 1000 ? v.toFixed(0) : v.toFixed(2);
+      return `<line x1="${pad.l}" y1="${y}" x2="${W-pad.r}" y2="${y}" stroke="rgba(0,0,0,.06)" stroke-width="1" stroke-dasharray="3,3"/>
+              <text x="${pad.l-6}" y="${y+4}" fill="rgba(0,0,0,.35)" font-size="9" font-family="JetBrains Mono,monospace" text-anchor="end">${label}</text>`;
+    }).join('')}
+    <!-- Y-axis line -->
+    <line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${H-pad.b}" stroke="rgba(0,0,0,.1)" stroke-width="1"/>
+    <!-- X-axis line -->
+    <line x1="${pad.l}" y1="${H-pad.b}" x2="${W-pad.r}" y2="${H-pad.b}" stroke="rgba(0,0,0,.1)" stroke-width="1"/>
+    <!-- Area fill -->
     <path d="${areaPath}" class="chart-area"/>
-    <path d="${path}" fill="none" stroke="${lineColor}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
-    ${[0,.25,.5,.75,1].map(t=>{
-      const v=minV+t*range;
-      const y=cy(v);
-      return `<line x1="${pad.l}" y1="${y}" x2="${W-pad.r}" y2="${y}" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
-              <text x="${pad.l-4}" y="${y+4}" fill="rgba(255,255,255,.3)" font-size="9" font-family="JetBrains Mono,monospace" text-anchor="end">${v>=1e9?(v/1e9).toFixed(0)+'':v.toFixed(0)}</text>`;
+    <!-- Price line -->
+    <path d="${path}" fill="none" stroke="${lineColor}" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+    <!-- X-axis labels -->
+    ${[0, 0.25, 0.5, 0.75, 1].map(t=>{
+      const i = Math.floor(t*(n-1));
+      const x = cx(i);
+      const labels = ['12M ago','9M ago','6M ago','3M ago','Today'];
+      const idx = Math.round(t*4);
+      return `<text x="${x}" y="${H-pad.b+14}" fill="rgba(0,0,0,.3)" font-size="9" font-family="JetBrains Mono,monospace" text-anchor="middle">${labels[idx]||''}</text>`;
     }).join('')}
-    ${[0,.25,.5,.75,1].map(t=>{
-      const i=Math.floor(t*(n-1));
-      const x=cx(i);
-      const label = i===0?'12M ago':i===Math.floor(n/2)?'6M ago':'Now';
-      return t===0||t===0.5||t===1?`<text x="${x}" y="${H-pad.b+14}" fill="rgba(255,255,255,.25)" font-size="9" font-family="JetBrains Mono,monospace" text-anchor="middle">${label}</text>`:'';
-    }).join('')}
-    <circle cx="${cx(n-1)}" cy="${cy(last)}" r="3" fill="${lineColor}" stroke="var(--bg2)" stroke-width="2"/>
-    <text x="${cx(n-1)+6}" y="${cy(last)+4}" fill="${lineColor}" font-size="10" font-family="JetBrains Mono,monospace">${last.toFixed(2)}</text>`;
+    <!-- Current price dot + label -->
+    <circle cx="${cx(n-1)}" cy="${cy(last)}" r="4" fill="${lineColor}" stroke="white" stroke-width="2"/>
+    <text x="${cx(n-1)+8}" y="${cy(last)+4}" fill="${lineColor}" font-size="10" font-family="JetBrains Mono,monospace" font-weight="600">${last.toFixed(2)}</text>
+    <!-- Min/Max labels -->
+    <text x="${cx(closes.indexOf(Math.min(...valid)))}" y="${cy(Math.min(...valid))+14}" fill="rgba(220,38,38,.7)" font-size="8" font-family="JetBrains Mono,monospace" text-anchor="middle">${Math.min(...valid).toFixed(2)}</text>
+    <text x="${cx(closes.indexOf(Math.max(...valid)))}" y="${cy(Math.max(...valid))-6}" fill="rgba(5,150,105,.7)" font-size="8" font-family="JetBrains Mono,monospace" text-anchor="middle">${Math.max(...valid).toFixed(2)}</text>`;
 }
 
 // ==================== MARGINS CHART ====================
