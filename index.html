@@ -3,390 +3,565 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StockRater — Company Rating & Trading Tool</title>
+<title>StockRater — Company Rating & Trading</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#0d0f14;--bg2:#13161e;--bg3:#1a1e28;--bg4:#222736;
-  --border:#2a2f3f;--border2:#363d52;
-  --text:#e8eaf0;--text2:#8c92a8;--text3:#555d78;
-  --accent:#4f8ef7;--accent-dim:#1a2d52;
-  --green:#34c77b;--green-dim:#0e2e1e;
-  --red:#f75a5a;--red-dim:#2e0e0e;
-  --amber:#f0a020;--amber-dim:#2e1e05;
-  --purple:#a78bfa;--purple-dim:#1e1535;
-  --radius:10px;--radius-sm:6px;
-  --font-main:'Sora',sans-serif;--font-mono:'DM Mono',monospace;
+  --bg:#0a0b0f;--bg2:#0f1117;--bg3:#151821;--bg4:#1c202e;--bg5:#232839;
+  --glass:rgba(255,255,255,.03);--glass2:rgba(255,255,255,.06);
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.12);
+  --text:#f0f2f8;--text2:#9ba3bc;--text3:#5a6280;
+  --indigo:#6366f1;--indigo-light:#818cf8;--indigo-dim:rgba(99,102,241,.15);
+  --indigo-glow:rgba(99,102,241,.35);--violet:#8b5cf6;--cyan:#06b6d4;
+  --green:#10b981;--green-dim:rgba(16,185,129,.12);
+  --red:#ef4444;--red-dim:rgba(239,68,68,.12);
+  --amber:#f59e0b;--amber-dim:rgba(245,158,11,.12);
+  --radius:12px;--radius-sm:8px;--radius-lg:16px;
+  --font:'Inter',sans-serif;--mono:'JetBrains Mono',monospace;
+  --shadow:0 1px 3px rgba(0,0,0,.4),0 4px 16px rgba(0,0,0,.3);
 }
-html{font-size:15px}
-body{background:var(--bg);color:var(--text);font-family:var(--font-main);min-height:100vh}
+html{font-size:15px;scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;overflow-x:hidden}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% -10%,rgba(99,102,241,.15) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 100%,rgba(139,92,246,.1) 0%,transparent 60%);
+  pointer-events:none;animation:bgshift 20s ease-in-out infinite alternate;
+}
+@keyframes bgshift{0%{opacity:1}100%{opacity:.7}}
 
-.app{display:flex;min-height:100vh}
-.sidebar{width:220px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;transition:transform .25s}
-.main{margin-left:220px;flex:1;padding:2rem;max-width:960px}
-.logo{padding:1.5rem 1.25rem 1rem;border-bottom:1px solid var(--border);margin-bottom:.75rem}
-.logo-title{font-size:1.1rem;font-weight:600;letter-spacing:-.02em;color:var(--text)}
-.logo-sub{font-size:.7rem;color:var(--text3);margin-top:2px;font-family:var(--font-mono)}
-.nav-item{display:flex;align-items:center;gap:10px;padding:.65rem 1.25rem;cursor:pointer;font-size:.85rem;color:var(--text2);border-radius:0;transition:all .15s;border-left:2px solid transparent}
-.nav-item:hover{color:var(--text);background:var(--bg3)}
-.nav-item.active{color:var(--accent);background:var(--accent-dim);border-left-color:var(--accent);font-weight:500}
-.nav-icon{font-size:1rem;width:18px;text-align:center}
-.nav-section{font-size:.65rem;font-weight:500;letter-spacing:.1em;color:var(--text3);padding:.75rem 1.25rem .35rem;text-transform:uppercase}
-.sidebar-bottom{margin-top:auto;padding:1rem 1.25rem;border-top:1px solid var(--border)}
-.api-badge{font-size:.7rem;color:var(--text3);font-family:var(--font-mono);background:var(--bg3);padding:4px 8px;border-radius:var(--radius-sm);border:1px solid var(--border)}
+.app{display:flex;min-height:100vh;position:relative;z-index:1}
 
-.page{display:none}.page.active{display:block}
+/* SIDEBAR */
+.sidebar{
+  width:240px;flex-shrink:0;background:rgba(10,11,15,.88);
+  backdrop-filter:blur(20px);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;
+  transition:transform .25s cubic-bezier(.4,0,.2,1);
+}
+.logo{padding:1.5rem 1.5rem 1.1rem;border-bottom:1px solid var(--border);margin-bottom:.5rem}
+.logo-mark{display:flex;align-items:center;gap:10px;margin-bottom:5px}
+.logo-icon{width:30px;height:30px;background:linear-gradient(135deg,var(--indigo),var(--violet));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;color:#fff;box-shadow:0 0 16px var(--indigo-glow);flex-shrink:0}
+.logo-title{font-size:.95rem;font-weight:600;letter-spacing:-.02em}
+.logo-sub{font-size:.65rem;color:var(--text3);font-family:var(--mono);margin-left:40px;margin-top:-2px}
+.nav-section{font-size:.6rem;font-weight:500;letter-spacing:.12em;color:var(--text3);text-transform:uppercase;padding:.8rem 1.5rem .3rem}
+.nav-item{display:flex;align-items:center;gap:9px;padding:.58rem 1.1rem;margin:1px .65rem;cursor:pointer;font-size:.82rem;color:var(--text2);border-radius:var(--radius-sm);transition:all .15s;position:relative}
+.nav-item::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:2px;height:0;border-radius:2px;background:linear-gradient(180deg,var(--indigo),var(--violet));transition:height .2s}
+.nav-item:hover{color:var(--text);background:var(--glass2)}
+.nav-item.active{color:var(--indigo-light);background:var(--indigo-dim);font-weight:500}
+.nav-item.active::before{height:55%}
+.nav-icon{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;background:var(--glass);transition:background .15s}
+.nav-item.active .nav-icon{background:var(--indigo-dim)}
+.nav-badge{font-size:.6rem;font-family:var(--mono);background:var(--indigo-dim);color:var(--indigo-light);padding:2px 5px;border-radius:99px;margin-left:auto}
+.sidebar-bottom{margin-top:auto;padding:.85rem 1.25rem;border-top:1px solid var(--border)}
+.status-dot{display:inline-flex;align-items:center;gap:6px;font-size:.7rem;font-family:var(--mono);color:var(--text3)}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--text3);flex-shrink:0}
+.dot.active{background:var(--green);box-shadow:0 0 6px var(--green)}
+.dot.warn{background:var(--amber);box-shadow:0 0 6px var(--amber)}
+
+/* MAIN */
+.main{margin-left:240px;flex:1;padding:2.25rem 2.5rem;max-width:calc(980px + 240px);min-height:100vh}
+.page{display:none;animation:fadein .2s ease}
+.page.active{display:block}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .page-header{margin-bottom:1.75rem}
-.page-title{font-size:1.5rem;font-weight:600;letter-spacing:-.02em}
-.page-sub{font-size:.85rem;color:var(--text2);margin-top:4px}
+.page-eyebrow{font-size:.65rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--indigo-light);margin-bottom:5px;font-family:var(--mono)}
+.page-title{font-size:1.65rem;font-weight:700;letter-spacing:-.03em;line-height:1.2}
+.page-sub{font-size:.85rem;color:var(--text2);margin-top:5px;max-width:500px}
 
-.search-bar{display:flex;gap:8px;margin-bottom:1.5rem}
-.search-input{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:.65rem 1rem;color:var(--text);font-size:.9rem;font-family:var(--font-main);outline:none;transition:border .15s}
-.search-input:focus{border-color:var(--accent)}
+/* SEARCH BAR */
+.search-bar{display:flex;gap:8px;margin-bottom:1.5rem;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:5px 5px 5px .9rem;transition:border .15s,box-shadow .15s}
+.search-bar:focus-within{border-color:var(--indigo);box-shadow:0 0 0 3px var(--indigo-dim)}
+.search-input{flex:1;background:transparent;border:none;padding:.48rem 0;color:var(--text);font-size:.88rem;font-family:var(--font);outline:none}
 .search-input::placeholder{color:var(--text3)}
-.btn{padding:.6rem 1.2rem;border-radius:var(--radius);cursor:pointer;font-size:.85rem;font-family:var(--font-main);font-weight:500;border:1px solid var(--border);background:var(--bg3);color:var(--text);transition:all .15s;white-space:nowrap}
-.btn:hover{background:var(--bg4);border-color:var(--border2)}
-.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
-.btn-primary:hover{opacity:.88}
-.btn-sm{padding:.4rem .8rem;font-size:.78rem}
+
+/* BUTTONS */
+.btn{padding:.52rem 1rem;border-radius:var(--radius-sm);cursor:pointer;font-size:.81rem;font-family:var(--font);font-weight:500;border:1px solid var(--border);background:var(--bg3);color:var(--text);transition:all .15s;white-space:nowrap;display:inline-flex;align-items:center;gap:5px}
+.btn:hover{background:var(--bg4);border-color:var(--border2);transform:translateY(-1px)}
+.btn:active{transform:none}
+.btn-primary{background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border:none;box-shadow:0 2px 8px var(--indigo-glow)}
+.btn-primary:hover{filter:brightness(1.1);box-shadow:0 4px 14px var(--indigo-glow)}
+.btn-sm{padding:.35rem .75rem;font-size:.74rem}
 .btn-ghost{background:transparent;border-color:transparent;color:var(--text2)}
-.btn-ghost:hover{background:var(--bg3);color:var(--text);border-color:var(--border)}
+.btn-ghost:hover{background:var(--glass2);border-color:var(--border);color:var(--text)}
+.btn-icon{width:32px;height:32px;padding:0;justify-content:center}
 
-.api-tag{display:inline-flex;align-items:center;gap:5px;font-size:.72rem;padding:2px 8px;border-radius:99px;font-family:var(--font-mono)}
-.tag-free{background:var(--green-dim);color:var(--green)}
-.tag-live{background:var(--accent-dim);color:var(--accent)}
-.tag-cached{background:var(--amber-dim);color:var(--amber)}
+/* TAGS */
+.tag{display:inline-flex;align-items:center;gap:4px;font-size:.65rem;padding:2px 7px;border-radius:99px;font-family:var(--mono);font-weight:500}
+.tag::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor}
+.tag-live{background:rgba(16,185,129,.12);color:var(--green)}
+.tag-manual{background:rgba(245,158,11,.12);color:var(--amber)}
+.tag-required{background:var(--indigo-dim);color:var(--indigo-light)}
+.tag-auto{background:rgba(6,182,212,.12);color:var(--cyan)}
 
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1rem}
-.card-title{font-size:.72rem;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1rem}
+/* CARDS */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.35rem;margin-bottom:.85rem;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(99,102,241,.25),transparent);opacity:0;transition:opacity .3s}
+.card:hover::before{opacity:1}
+.card-title{font-size:.68rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1.1rem;display:flex;align-items:center;gap:8px}
 
-.company-hero{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.5rem}
-.company-avatar{width:52px;height:52px;border-radius:12px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:600;flex-shrink:0;font-family:var(--font-mono)}
-.company-info{flex:1}
-.company-name{font-size:1.25rem;font-weight:600;letter-spacing:-.02em}
-.company-meta{font-size:.8rem;color:var(--text2);margin-top:3px}
-.company-price{text-align:right}
-.price-big{font-size:1.5rem;font-weight:600;font-family:var(--font-mono)}
-.price-change{font-size:.8rem;margin-top:2px;font-family:var(--font-mono)}
-.pos{color:var(--green)}.neg{color:var(--red)}
+/* COMPANY HERO */
+.company-hero{display:flex;align-items:flex-start;gap:1.1rem;margin-bottom:1rem;padding:1.35rem;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);position:relative;overflow:hidden}
+.company-hero::after{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:radial-gradient(circle,var(--indigo-glow) 0%,transparent 70%);pointer-events:none}
+.company-avatar{width:52px;height:52px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:700;flex-shrink:0;font-family:var(--mono);position:relative;z-index:1}
+.company-info{flex:1;position:relative;z-index:1}
+.company-name{font-size:1.2rem;font-weight:700;letter-spacing:-.02em}
+.company-meta{font-size:.75rem;color:var(--text2);margin-top:4px;display:flex;gap:6px;flex-wrap:wrap}
+.meta-chip{background:var(--glass);border:1px solid var(--border);border-radius:99px;padding:2px 7px;font-size:.68rem;font-family:var(--mono)}
+.company-price{text-align:right;position:relative;z-index:1}
+.price-big{font-size:1.5rem;font-weight:700;font-family:var(--mono);letter-spacing:-.02em}
+.price-change{font-size:.75rem;margin-top:4px;font-family:var(--mono);display:flex;align-items:center;gap:4px;justify-content:flex-end}
+.price-badge{padding:2px 7px;border-radius:6px;font-size:.7rem;font-weight:500}
+.pos{color:var(--green)}.pos .price-badge{background:var(--green-dim)}
+.neg{color:var(--red)}.neg .price-badge{background:var(--red-dim)}
 
-.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:1rem}
-.metric{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.85rem .9rem}
-.metric-label{font-size:.72rem;color:var(--text3);margin-bottom:5px;font-family:var(--font-mono)}
-.metric-value{font-size:1.15rem;font-weight:500;font-family:var(--font-mono);color:var(--text)}
-.metric-sub{font-size:.7rem;color:var(--text3);margin-top:3px}
+/* METRICS GRID */
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:7px;margin-bottom:.85rem}
+.metric{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.8rem .9rem;transition:background .15s,border .15s;position:relative;overflow:hidden}
+.metric:hover{background:var(--bg4);border-color:var(--border2)}
+.metric::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(99,102,241,.07) 0%,transparent 60%);opacity:0;transition:opacity .2s;pointer-events:none}
+.metric:hover::after{opacity:1}
+.metric-label{font-size:.65rem;color:var(--text3);margin-bottom:4px;font-family:var(--mono);letter-spacing:.04em}
+.metric-value{font-size:1.05rem;font-weight:600;font-family:var(--mono)}
+.metric-sub{font-size:.65rem;color:var(--text3);margin-top:2px;font-family:var(--mono)}
 
-.rtable{width:100%;border-collapse:collapse;font-size:.82rem}
-.rtable th{font-size:.68rem;font-weight:500;color:var(--text3);text-align:left;padding:5px 6px;border-bottom:1px solid var(--border);font-family:var(--font-mono);letter-spacing:.05em}
-.rtable td{padding:6px 6px;border-bottom:1px solid var(--border);color:var(--text)}
+/* RATIO TABLE */
+.rtable{width:100%;border-collapse:collapse;font-size:.8rem}
+.rtable th{font-size:.63rem;font-weight:600;color:var(--text3);text-align:left;padding:5px 7px;border-bottom:1px solid var(--border);font-family:var(--mono);letter-spacing:.07em;text-transform:uppercase}
+.rtable td{padding:7px 7px;border-bottom:1px solid var(--border);color:var(--text)}
 .rtable tr:last-child td{border:none}
-.rtable tr:hover td{background:var(--bg3)}
-.score-bar-wrap{width:80px;height:5px;background:var(--bg4);border-radius:3px;overflow:hidden;display:inline-block;vertical-align:middle}
-.score-bar-fill{height:100%;border-radius:3px}
+.rtable tbody tr:hover td{background:var(--glass)}
+.ratio-group-header td{font-size:.63rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;padding-top:1rem;padding-bottom:.3rem;font-family:var(--mono);border-bottom:none}
+.score-bar-wrap{width:60px;height:3px;background:var(--bg4);border-radius:3px;overflow:hidden;display:inline-block;vertical-align:middle}
+.score-bar-fill{height:100%;border-radius:3px;transition:width .7s cubic-bezier(.4,0,.2,1)}
 
+/* QUALITATIVE */
+.qual-group{margin-bottom:.85rem}
+.qual-group-header{font-size:.65rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.55rem;font-family:var(--mono);display:flex;align-items:center;gap:8px}
+.qual-group-header::after{content:'';flex:1;height:1px;background:var(--border)}
 .qual-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border)}
 .qual-row:last-child{border:none}
-.qual-label{flex:1;font-size:.83rem}
-.star{cursor:pointer;font-size:1rem;color:var(--bg4);transition:color .1s;user-select:none}
+.qual-label{flex:1;font-size:.81rem;color:var(--text2)}
+.stars-wrap{display:flex;gap:3px}
+.star{cursor:pointer;font-size:.95rem;color:var(--bg5);transition:color .1s,transform .1s;user-select:none}
+.star:hover{transform:scale(1.2)}
 .star.on{color:var(--amber)}
-.qual-val{font-size:.83rem;font-weight:500;font-family:var(--font-mono);color:var(--accent);min-width:18px;text-align:right}
+.qual-val{font-size:.78rem;font-weight:600;font-family:var(--mono);color:var(--indigo-light);min-width:18px;text-align:right}
 
-.score-hero{display:flex;align-items:center;gap:1.25rem;margin-bottom:1.25rem}
-.gauge-wrap{position:relative;width:100px;height:100px;flex-shrink:0}
+/* TOOLTIP for qualitative criteria */
+.qual-label[data-tip]{position:relative;cursor:help}
+.qual-label[data-tip]:hover::after{
+  content:attr(data-tip);
+  position:absolute;left:0;top:calc(100% + 6px);
+  background:var(--bg4);border:1px solid var(--border2);
+  border-radius:8px;padding:7px 10px;
+  font-size:.7rem;font-family:var(--mono);color:var(--text2);
+  white-space:pre-line;pointer-events:none;z-index:99;
+  box-shadow:0 4px 20px rgba(0,0,0,.5);
+  min-width:240px;max-width:320px;line-height:1.5;
+}
+
+/* SCORECARD */
+.scorecard-layout{display:flex;gap:1.5rem;align-items:flex-start;margin-bottom:1.25rem}
+.gauge-wrap{position:relative;width:110px;height:110px;flex-shrink:0}
 .gauge-wrap svg{width:100%;height:100%}
-.gauge-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
-.gauge-num{font-size:1.4rem;font-weight:600;font-family:var(--font-mono)}
-.gauge-denom{font-size:.65rem;color:var(--text3);font-family:var(--font-mono)}
-.verdict-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:99px;font-size:.78rem;font-weight:500}
-.verdict-strong{background:var(--green-dim);color:var(--green)}
-.verdict-buy{background:var(--accent-dim);color:var(--accent)}
-.verdict-hold{background:var(--amber-dim);color:var(--amber)}
-.verdict-avoid{background:var(--red-dim);color:var(--red)}
-.score-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-size:.83rem}
+.gauge-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none}
+.gauge-num{font-size:1.5rem;font-weight:700;font-family:var(--mono);letter-spacing:-.03em}
+.gauge-denom{font-size:.6rem;color:var(--text3);font-family:var(--mono)}
+.scorecard-meta{flex:1}
+.verdict-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:99px;font-size:.76rem;font-weight:600;margin-bottom:9px}
+.verdict-strong{background:var(--green-dim);color:var(--green);border:1px solid rgba(16,185,129,.25)}
+.verdict-buy{background:var(--indigo-dim);color:var(--indigo-light);border:1px solid rgba(99,102,241,.25)}
+.verdict-hold{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(245,158,11,.25)}
+.verdict-avoid{background:var(--red-dim);color:var(--red);border:1px solid rgba(239,68,68,.25)}
+.score-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-size:.8rem}
 .score-row:last-child{border:none}
-.score-row.total{font-weight:600;border-top:1px solid var(--border2);padding-top:10px;margin-top:4px;font-size:.9rem}
+.score-row.total{font-weight:700;font-size:.88rem;border-top:1px solid var(--border2);padding-top:9px;margin-top:3px}
+.score-right{display:flex;align-items:center;gap:9px}
+.score-weight{font-size:.66rem;color:var(--text3);font-family:var(--mono)}
 
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
-.form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px}
-.field label{display:block;font-size:.72rem;color:var(--text3);margin-bottom:5px;font-family:var(--font-mono);letter-spacing:.04em}
-.field input,.field select{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.55rem .75rem;color:var(--text);font-size:.85rem;font-family:var(--font-mono);outline:none;transition:border .15s}
-.field input:focus,.field select:focus{border-color:var(--accent)}
+/* TRADING */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:9px}
+.form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:9px}
+.field label{display:block;font-size:.66rem;color:var(--text3);margin-bottom:4px;font-family:var(--mono);letter-spacing:.05em;text-transform:uppercase}
+.field input,.field select{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.5rem .8rem;color:var(--text);font-size:.83rem;font-family:var(--mono);outline:none;transition:border .15s,box-shadow .15s}
+.field input:focus,.field select:focus{border-color:var(--indigo);box-shadow:0 0 0 2px var(--indigo-dim)}
 .field select option{background:var(--bg2)}
-.tp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.tp-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem;text-align:center}
-.tp-title{font-size:.68rem;color:var(--text3);font-family:var(--font-mono);margin-bottom:.5rem}
-.tp-val{font-size:1.1rem;font-weight:500;font-family:var(--font-mono)}
-.tp-sub{font-size:.7rem;color:var(--text3);margin-top:4px;font-family:var(--font-mono)}
-.trend-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:var(--radius-sm);font-size:.82rem;font-weight:500;font-family:var(--font-mono)}
-.trend-go{background:var(--green-dim);color:var(--green);border:1px solid rgba(52,199,123,.2)}
-.trend-stop{background:var(--red-dim);color:var(--red);border:1px solid rgba(247,90,90,.2)}
 
+.tp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.tp-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem;text-align:center;position:relative;overflow:hidden;transition:all .2s}
+.tp-card::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--indigo),var(--violet));transform:scaleX(0);transform-origin:left;transition:transform .4s cubic-bezier(.4,0,.2,1)}
+.tp-card:hover::before{transform:scaleX(1)}
+.tp-card:hover{border-color:var(--border2);background:var(--bg4)}
+.tp-title{font-size:.65rem;color:var(--text3);font-family:var(--mono);margin-bottom:.55rem;letter-spacing:.04em}
+.tp-val{font-size:1.1rem;font-weight:600;font-family:var(--mono)}
+.tp-sub{font-size:.66rem;color:var(--text3);margin-top:4px;font-family:var(--mono)}
+.tp-progress{height:2px;background:var(--bg5);border-radius:2px;margin-top:.65rem;overflow:hidden}
+.tp-progress-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--indigo),var(--violet));transition:width .6s cubic-bezier(.4,0,.2,1)}
+.trend-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:var(--radius-sm);font-size:.8rem;font-weight:500;font-family:var(--mono);border:1px solid transparent}
+.trend-go{background:var(--green-dim);color:var(--green);border-color:rgba(16,185,129,.2)}
+.trend-stop{background:var(--red-dim);color:var(--red);border-color:rgba(239,68,68,.2)}
+
+/* LISTS */
 .company-list{list-style:none}
-.company-li{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.company-li{display:flex;align-items:center;gap:11px;padding:9px 7px;border-bottom:1px solid var(--border);border-radius:var(--radius-sm);transition:background .1s;margin:2px 0;cursor:pointer}
 .company-li:last-child{border:none}
-.company-li:hover .li-name{color:var(--accent)}
-.li-avatar{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:600;flex-shrink:0;font-family:var(--font-mono)}
-.li-name{font-size:.88rem;font-weight:500;transition:color .15s}
-.li-meta{font-size:.72rem;color:var(--text3);margin-top:1px;font-family:var(--font-mono)}
-.li-score{padding:3px 10px;border-radius:99px;font-size:.75rem;font-weight:500;font-family:var(--font-mono)}
+.company-li:hover{background:var(--glass)}
+.li-avatar{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;flex-shrink:0;font-family:var(--mono)}
+.li-name{font-size:.86rem;font-weight:500;transition:color .15s}
+.company-li:hover .li-name{color:var(--indigo-light)}
+.li-meta{font-size:.68rem;color:var(--text3);margin-top:1px;font-family:var(--mono)}
+.li-score{padding:2px 9px;border-radius:99px;font-size:.71rem;font-weight:600;font-family:var(--mono)}
 
+/* LOADING / ERROR */
 .loading{text-align:center;padding:2.5rem;color:var(--text3)}
-.spinner{display:inline-block;width:28px;height:28px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin-bottom:.75rem}
+.spinner-ring{display:inline-block;width:28px;height:28px;border:2px solid var(--bg4);border-top-color:var(--indigo);border-radius:50%;animation:spin .7s cubic-bezier(.4,0,.6,1) infinite;margin-bottom:.65rem}
 @keyframes spin{to{transform:rotate(360deg)}}
-.error-box{background:var(--red-dim);border:1px solid var(--red);border-radius:var(--radius);padding:1rem;font-size:.85rem;color:var(--red);margin-bottom:1rem}
-.info-box{background:var(--accent-dim);border:1px solid var(--accent);border-radius:var(--radius);padding:1rem;font-size:.85rem;color:var(--accent);margin-bottom:1rem;line-height:1.6}
+.loading-text{font-size:.8rem;color:var(--text3);font-family:var(--mono)}
+.error-box{background:var(--red-dim);border:1px solid rgba(239,68,68,.3);border-radius:var(--radius);padding:.9rem 1rem;font-size:.82rem;color:var(--red);margin-bottom:.85rem;display:flex;align-items:flex-start;gap:7px}
+.info-box{background:var(--indigo-dim);border:1px solid rgba(99,102,241,.25);border-radius:var(--radius);padding:.9rem 1rem;font-size:.82rem;color:var(--indigo-light);margin-bottom:.85rem;line-height:1.6}
 
-.hamburger{display:none;position:fixed;top:1rem;left:1rem;z-index:200;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 10px;cursor:pointer;color:var(--text);font-size:1.1rem}
-.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99}
-.section-label{font-size:.68rem;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin:1rem 0 .5rem;font-family:var(--font-mono)}
-.divider{height:1px;background:var(--border);margin:1rem 0}
-.wacc-info{display:flex;gap:1rem;flex-wrap:wrap;margin-top:.5rem}
-.wacc-chip{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:4px 10px;font-size:.75rem;font-family:var(--font-mono);color:var(--text2)}
-.wacc-chip span{color:var(--text);font-weight:500}
-.empty{text-align:center;padding:2.5rem 1rem;color:var(--text3);font-size:.85rem}
-.empty-icon{font-size:2rem;margin-bottom:.5rem}
+.section-label{font-size:.63rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin:1rem 0 .55rem;font-family:var(--mono);display:flex;align-items:center;gap:8px}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.divider{height:1px;background:var(--border);margin:.85rem 0}
+.empty{text-align:center;padding:2.5rem 1rem;color:var(--text3);font-size:.83rem}
+.empty-icon{font-size:2rem;margin-bottom:.65rem;filter:grayscale(1);opacity:.4}
+code{background:var(--bg3);padding:2px 6px;border-radius:4px;font-size:.78em;font-family:var(--mono);border:1px solid var(--border);color:var(--indigo-light)}
 
-@media(max-width:700px){
+/* PROGRESS BAR */
+.page-progress{position:fixed;top:0;left:0;height:2px;z-index:999;background:linear-gradient(90deg,var(--indigo),var(--violet),var(--cyan));width:0;box-shadow:0 0 8px var(--indigo-glow)}
+.page-progress.loading{animation:progress-fill .8s ease forwards}
+@keyframes progress-fill{0%{width:0}60%{width:70%}100%{width:90%}}
+.page-progress.done{width:100%;transition:width .1s ease,opacity .3s ease .1s;opacity:0}
+
+/* STAGGER */
+.stagger-in{animation:staggerin .3s ease forwards;opacity:0}
+@keyframes staggerin{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
+
+/* HAMBURGER */
+.hamburger{display:none;position:fixed;top:1rem;left:1rem;z-index:200;background:rgba(15,17,23,.9);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:var(--radius-sm);padding:7px 10px;cursor:pointer;color:var(--text);font-size:1rem}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:99}
+
+@media(max-width:800px){
   .hamburger{display:flex;align-items:center}
   .sidebar{transform:translateX(-100%)}
   .sidebar.open{transform:translateX(0)}
   .sidebar-overlay.open{display:block}
-  .main{margin-left:0;padding:1rem;padding-top:3.5rem}
+  .main{margin-left:0;padding:1rem;padding-top:3.75rem}
   .form-grid,.form-grid-3{grid-template-columns:1fr}
   .tp-grid{grid-template-columns:1fr 1fr}
   .metrics{grid-template-columns:1fr 1fr}
   .company-hero{flex-wrap:wrap}
   .company-price{width:100%;text-align:left}
+  .scorecard-layout{flex-direction:column;align-items:center}
 }
-@media(max-width:400px){.tp-grid,.metrics{grid-template-columns:1fr}}
+@media(max-width:440px){.tp-grid,.metrics{grid-template-columns:1fr}.page-title{font-size:1.35rem}}
 </style>
 </head>
 <body>
 
+<div class="page-progress" id="page-progress"></div>
 <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
-<div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
+<div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
 
 <div class="sidebar" id="sidebar">
   <div class="logo">
-    <div class="logo-title">StockRater</div>
-    <div class="logo-sub">v2.0 · Yahoo Finance</div>
+    <div class="logo-mark">
+      <div class="logo-icon">SR</div>
+      <div class="logo-title">StockRater</div>
+    </div>
+    <div class="logo-sub">v4.0 · Yahoo Finance</div>
   </div>
-  <div class="nav-section">Analyse</div>
+  <div class="nav-section">Analysis</div>
   <div class="nav-item active" onclick="showPage('rating')" id="nav-rating">
-    <span class="nav-icon">📊</span> Company Rating
+    <div class="nav-icon">📊</div><span>Company Rating</span>
   </div>
   <div class="nav-item" onclick="showPage('trading')" id="nav-trading">
-    <span class="nav-icon">⚡</span> Leverage Trading
+    <div class="nav-icon">⚡</div><span>Leverage Trading</span>
   </div>
   <div class="nav-section">Portfolio</div>
   <div class="nav-item" onclick="showPage('portfolio')" id="nav-portfolio">
-    <span class="nav-icon">💼</span> My Portfolio
+    <div class="nav-icon">💼</div><span>My Portfolio</span>
+    <span class="nav-badge" id="pf-count" style="display:none">0</span>
   </div>
   <div class="nav-item" onclick="showPage('watchlist')" id="nav-watchlist">
-    <span class="nav-icon">👁</span> Watchlist
+    <div class="nav-icon">👁</div><span>Watchlist</span>
+    <span class="nav-badge" id="wl-count" style="display:none">0</span>
   </div>
-  <div class="nav-section">Settings</div>
+  <div class="nav-item" onclick="showPage('compare')" id="nav-compare">
+    <div class="nav-icon">⚖️</div><span>Compare</span>
+  </div>
+  <div class="nav-section">System</div>
   <div class="nav-item" onclick="showPage('settings')" id="nav-settings">
-    <span class="nav-icon">⚙️</span> Settings
+    <div class="nav-icon">⚙️</div><span>Settings</span>
   </div>
   <div class="sidebar-bottom">
-    <div class="api-badge" id="api-status-badge">Yahoo Finance · free</div>
+    <div class="status-dot" id="api-status-badge">
+      <div class="dot warn"></div><span>No worker configured</span>
+    </div>
   </div>
 </div>
 
 <div class="main">
 
-  <!-- ===== RATING PAGE ===== -->
-  <div class="page active" id="page-rating">
-    <div class="page-header">
-      <div class="page-title">Company Rating</div>
-      <div class="page-sub">Search a ticker to auto-load financials and run a full scorecard</div>
+<!-- ===== RATING PAGE ===== -->
+<div class="page active" id="page-rating">
+  <div class="page-header">
+    <div class="page-eyebrow">Fundamental Analysis</div>
+    <div class="page-title">Company Rating</div>
+    <div class="page-sub">Enter a ticker to load live financials and generate a full scorecard</div>
+  </div>
+  <div id="proxy-warning-rating"></div>
+  <div class="search-bar">
+    <span style="color:var(--text3);align-self:center;flex-shrink:0;font-size:.85rem">↗</span>
+    <input class="search-input" id="r-ticker" placeholder="AAPL, MSFT, NVDA — press Enter" onkeydown="if(event.key==='Enter')fetchCompany()">
+    <button class="btn btn-primary" onclick="fetchCompany()">Analyse</button>
+    <button class="btn btn-ghost btn-icon" onclick="clearRating()">✕</button>
+  </div>
+  <div id="rating-loading" style="display:none"><div class="loading"><div class="spinner-ring"></div><div class="loading-text">Loading from Yahoo Finance…</div></div></div>
+  <div id="rating-error" style="display:none"></div>
+  <div id="rating-content" style="display:none">
+    <div class="company-hero" id="company-hero"></div>
+
+    <!-- A) FINANCIAL RATIOS -->
+    <div class="card">
+      <div class="card-title">A) Financial Ratios <span class="tag tag-live">live · Yahoo Finance</span></div>
+      <div id="key-metrics"></div>
+      <div id="ratio-table"></div>
     </div>
-    <div id="proxy-warning-rating"></div>
-    <div class="search-bar">
-      <input class="search-input" id="r-ticker" placeholder="Ticker symbol — e.g. AAPL, MSFT, NVDA" onkeydown="if(event.key==='Enter')fetchCompany()">
-      <button class="btn btn-primary" onclick="fetchCompany()">Load ↗</button>
-      <button class="btn" onclick="clearRating()">Clear</button>
-    </div>
-    <div id="rating-loading" style="display:none"><div class="loading"><div class="spinner"></div><br>Loading financials…</div></div>
-    <div id="rating-error" style="display:none"></div>
-    <div id="rating-content" style="display:none">
-      <div class="company-hero" id="company-hero"></div>
-      <div class="card">
-        <div class="card-title">A) Financial ratios <span class="api-tag tag-live" style="margin-left:4px">live · Yahoo Finance</span></div>
-        <div id="ratio-table"></div>
-      </div>
-      <div class="card">
-        <div class="card-title">B) Qualitative assessment <span class="api-tag tag-cached" style="margin-left:4px">manual</span></div>
-        <div class="section-label">Management quality</div>
+
+    <!-- B) QUALITATIVE -->
+    <div class="card">
+      <div class="card-title">B) Qualitative Assessment <span class="tag tag-auto">⚡ API auto-fill</span> <span class="tag tag-manual">manual override</span></div>
+      <div class="qual-group">
+        <div class="qual-group-header">Management Quality <span style="font-size:.6rem;color:var(--text3);margin-left:4px;font-weight:400">(hover labels for criteria)</span></div>
         <div id="qual-mgmt"></div>
-        <div class="section-label" style="margin-top:.75rem">Moat / competitive positioning</div>
+      </div>
+      <div class="qual-group" style="margin-top:.85rem">
+        <div class="qual-group-header">Moat &amp; Competitive Position</div>
         <div id="qual-moat"></div>
-        <div class="section-label" style="margin-top:.75rem">ESG & Risk</div>
+      </div>
+      <div class="qual-group" style="margin-top:.85rem">
+        <div class="qual-group-header">ESG &amp; Risk</div>
         <div id="qual-esg"></div>
       </div>
-      <div class="card" id="scorecard-card">
-        <div class="card-title">C) Scorecard</div>
-        <div class="score-hero">
-          <div class="gauge-wrap">
-            <svg viewBox="0 0 100 100">
-              <circle cx="50" cy="50" r="40" fill="none" stroke="#1a1e28" stroke-width="12"/>
-              <circle cx="50" cy="50" r="40" fill="none" stroke="#4f8ef7" stroke-width="12"
-                stroke-dasharray="251" stroke-dashoffset="251" stroke-linecap="round"
-                transform="rotate(-90 50 50)" id="gauge-arc" style="transition:stroke-dashoffset .6s,stroke .4s"/>
-            </svg>
-            <div class="gauge-center">
-              <div class="gauge-num" id="gauge-num">—</div>
-              <div class="gauge-denom">/ 5.0</div>
-            </div>
+    </div>
+
+    <!-- C) SCORECARD -->
+    <div class="card" id="scorecard-card">
+      <div class="card-title">C) Scorecard</div>
+      <div class="scorecard-layout">
+        <div class="gauge-wrap">
+          <svg viewBox="0 0 110 110">
+            <circle cx="55" cy="55" r="46" fill="none" stroke="rgba(255,255,255,.04)" stroke-width="1"/>
+            <circle cx="55" cy="55" r="40" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="9"/>
+            <circle cx="55" cy="55" r="40" fill="none" stroke="url(#gaugeGrad)" stroke-width="9"
+              stroke-dasharray="251.3" stroke-dashoffset="251.3" stroke-linecap="round"
+              transform="rotate(-90 55 55)" id="gauge-arc"
+              style="transition:stroke-dashoffset .9s cubic-bezier(.4,0,.2,1),stroke .4s"/>
+            <defs>
+              <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#8b5cf6"/>
+              </linearGradient>
+              <linearGradient id="gaugeGreen" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#34d399"/>
+              </linearGradient>
+              <linearGradient id="gaugeRed" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#ef4444"/><stop offset="100%" stop-color="#f87171"/>
+              </linearGradient>
+              <linearGradient id="gaugeAmber" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#fbbf24"/>
+              </linearGradient>
+            </defs>
+            <g id="gauge-ticks"></g>
+          </svg>
+          <div class="gauge-center">
+            <div class="gauge-num" id="gauge-num">—</div>
+            <div class="gauge-denom">/ 5.0</div>
           </div>
-          <div>
-            <div id="verdict-pill" class="verdict-pill verdict-hold" style="margin-bottom:8px">—</div>
-            <div id="sc-company" style="font-size:1rem;font-weight:500;margin-bottom:3px">—</div>
-            <div id="sc-wacc" style="font-size:.78rem;color:var(--text3)">WACC: —</div>
-          </div>
         </div>
-        <div id="scorecard-rows"></div>
-        <div class="divider"></div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn btn-primary btn-sm" onclick="saveToPortfolio()">+ Add to portfolio</button>
-          <button class="btn btn-sm" onclick="saveToWatchlist()">+ Watchlist</button>
+        <div class="scorecard-meta">
+          <div id="verdict-pill" class="verdict-pill verdict-hold" style="margin-bottom:9px">—</div>
+          <div id="sc-company" style="font-size:.95rem;font-weight:600;margin-bottom:3px">—</div>
+          <div id="sc-wacc" style="font-size:.72rem;color:var(--text3);font-family:var(--mono)">WACC: —</div>
         </div>
+      </div>
+      <div id="scorecard-rows"></div>
+      <div class="divider"></div>
+      <div style="display:flex;gap:7px;flex-wrap:wrap">
+        <button class="btn btn-primary btn-sm" onclick="saveToPortfolio()">+ Portfolio</button>
+        <button class="btn btn-sm" onclick="saveToWatchlist()">+ Watchlist</button>
       </div>
     </div>
   </div>
-
-  <!-- ===== TRADING PAGE ===== -->
-  <div class="page" id="page-trading">
-    <div class="page-header">
-      <div class="page-title">Leverage Trading</div>
-      <div class="page-sub">Position sizing, SL/TP calculation based on ATR and account risk</div>
-    </div>
-    <div id="proxy-warning-trading"></div>
-    <div class="search-bar">
-      <input class="search-input" id="t-ticker" placeholder="Ticker — e.g. GOOGL (auto-fills price & ATR)" onkeydown="if(event.key==='Enter')fetchTradeData()">
-      <button class="btn btn-primary" onclick="fetchTradeData()">Load ↗</button>
-    </div>
-    <div class="card">
-      <div class="card-title">I. Entry data</div>
-      <div class="form-grid">
-        <div class="field"><label>Company</label><input id="t-name" type="text" placeholder="Company name" value="Alphabet A"></div>
-        <div class="field"><label>ISIN / WKN</label><input id="t-isin" type="text" placeholder="ISIN oder WKN" value="A14Y6F"></div>
-      </div>
-      <div class="form-grid-3">
-        <div class="field"><label>Account balance (€)</label><input id="t-balance" type="number" value="209.75" step="0.01" oninput="calcTrade()"></div>
-        <div class="field"><label>Stock entry price (P_s)</label><input id="t-ps" type="number" value="270.6" step="0.01" oninput="calcTrade()"></div>
-        <div class="field"><label>ATH (highest high)</label><input id="t-ath" type="number" value="350" step="0.01" oninput="calcTrade()"></div>
-      </div>
-      <div class="form-grid-3">
-        <div class="field"><label>Leverage entry price (P_l)</label><input id="t-pl" type="number" value="5.38" step="0.01" oninput="calcTrade()"></div>
-        <div class="field"><label>ATR (14)</label><input id="t-atr" type="number" value="6.4" step="0.1" oninput="calcTrade()"></div>
-        <div class="field"><label>ATR multiplier</label><input id="t-atr-mult" type="number" value="2" step="0.1" oninput="calcTrade()"></div>
-      </div>
-      <div class="form-grid-3">
-        <div class="field"><label>Risk per trade (%)</label><input id="t-risk" type="number" value="0.2" step="0.01" oninput="calcTrade()"></div>
-        <div class="field"><label>SMA 200</label><input id="t-sma" type="number" value="226" step="0.01" oninput="calcTrade()"></div>
-        <div class="field"><label>Market filter (S&P 500)</label>
-          <select id="t-mf" onchange="calcTrade()">
-            <option value="Y">Y — above SMA</option>
-            <option value="N">N — below SMA</option>
-          </select>
-        </div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">II. Risk metrics</div>
-      <div class="metrics" id="trade-metrics"></div>
-      <div id="trade-trend" style="margin-top:.75rem"></div>
-    </div>
-    <div class="card">
-      <div class="card-title">III. Profit targets</div>
-      <div class="tp-grid" id="tp-grid"></div>
-    </div>
-    <div style="margin-top:1rem;display:flex;gap:8px">
-      <button class="btn btn-primary" onclick="saveTrade()">+ Save trade</button>
-    </div>
-  </div>
-
-  <!-- ===== PORTFOLIO PAGE ===== -->
-  <div class="page" id="page-portfolio">
-    <div class="page-header">
-      <div class="page-title">My Portfolio</div>
-      <div class="page-sub">Saved company ratings and active trades</div>
-    </div>
-    <div class="card">
-      <div class="card-title">Rated companies</div>
-      <ul class="company-list" id="portfolio-list"></ul>
-    </div>
-    <div class="card" style="margin-top:1rem">
-      <div class="card-title">Saved trades</div>
-      <ul class="company-list" id="trade-list"></ul>
-    </div>
-  </div>
-
-  <!-- ===== WATCHLIST PAGE ===== -->
-  <div class="page" id="page-watchlist">
-    <div class="page-header">
-      <div class="page-title">Watchlist</div>
-      <div class="page-sub">Companies on your radar — not yet rated</div>
-    </div>
-    <div class="card">
-      <ul class="company-list" id="watchlist-list"></ul>
-    </div>
-  </div>
-
-  <!-- ===== SETTINGS PAGE ===== -->
-  <div class="page" id="page-settings">
-    <div class="page-header">
-      <div class="page-title">Settings</div>
-      <div class="page-sub">Configure your Cloudflare Worker proxy</div>
-    </div>
-    <div class="info-box">
-      <strong>Kein API-Key mehr nötig!</strong> Die App nutzt jetzt Yahoo Finance (kostenlos, kein Account nötig).<br><br>
-      Yahoo Finance erfordert einen sogenannten <em>Crumb</em> für Fundamentaldaten — den holt dein Cloudflare Worker automatisch im Hintergrund.<br><br>
-      <strong>Ohne Worker:</strong> Nur Trading-Daten (Preis, SMA200, ATR) funktionieren. Fundamentaldaten für das Rating sind nicht verfügbar.<br>
-      <strong>Mit Worker:</strong> Alles funktioniert — Rating + Trading vollständig.
-    </div>
-    <div class="card">
-      <div class="card-title">Cloudflare Worker URL <span class="api-tag tag-cached" style="margin-left:4px">für Rating erforderlich</span></div>
-      <div style="font-size:.82rem;color:var(--text2);margin-bottom:1rem;line-height:1.6">
-        Trag hier deine Worker-URL ein (z.B. <code style="background:var(--bg3);padding:2px 6px;border-radius:4px;font-size:.78rem">https://fragrant-wave-6bd7.d-lenz-contact.workers.dev</code>).<br>
-        Der Worker muss den neuen Code für Yahoo Finance enthalten — siehe <code style="background:var(--bg3);padding:2px 6px;border-radius:4px;font-size:.78rem">worker.js</code> im GitHub Repo.
-      </div>
-      <div class="form-grid" style="align-items:flex-end">
-        <div class="field">
-          <label>Worker URL</label>
-          <input type="text" id="worker-url-input" placeholder="https://fragrant-wave-6bd7.d-lenz-contact.workers.dev">
-        </div>
-        <div>
-          <button class="btn btn-primary" onclick="saveWorkerUrl()">Save</button>
-        </div>
-      </div>
-      <div id="worker-url-status" style="margin-top:.75rem;font-size:.8rem;color:var(--text3)"></div>
-    </div>
-    <div class="card">
-      <div class="card-title">Data sources</div>
-      <div style="font-size:.82rem;color:var(--text2);line-height:1.8">
-        <div>📈 <strong>Real-time quote</strong> — Yahoo Finance /v8/finance/chart</div>
-        <div>📋 <strong>Fundamentaldaten</strong> — Yahoo Finance /v10/finance/quoteSummary (via Worker)</div>
-        <div>📉 <strong>SMA200 + ATR</strong> — Yahoo Finance /v8/finance/chart (1 Jahr History)</div>
-        <div>🏭 <strong>WACC / Beta</strong> — Damodaran-Benchmarks (eingebaut)</div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">Cache & storage</div>
-      <div style="font-size:.82rem;color:var(--text2);margin-bottom:.75rem">API-Antworten werden 1 Stunde gecacht.</div>
-      <button class="btn btn-sm" onclick="clearCache()">Clear cache</button>
-      <button class="btn btn-sm" style="margin-left:8px" onclick="clearAll()">Clear all data</button>
-    </div>
-  </div>
-
 </div>
 
+<!-- ===== TRADING PAGE ===== -->
+<div class="page" id="page-trading">
+  <div class="page-header">
+    <div class="page-eyebrow">Position Sizing</div>
+    <div class="page-title">Leverage Trading</div>
+    <div class="page-sub">ATR-based SL/TP and dynamic leverage sizing</div>
+  </div>
+  <div id="proxy-warning-trading"></div>
+  <div class="search-bar">
+    <span style="color:var(--text3);align-self:center;flex-shrink:0;font-size:.85rem">↗</span>
+    <input class="search-input" id="t-ticker" placeholder="Ticker — auto-fills price, SMA200 &amp; ATR" onkeydown="if(event.key==='Enter')fetchTradeData()">
+    <button class="btn btn-primary" onclick="fetchTradeData()">Load Data</button>
+  </div>
+  <div class="card">
+    <div class="card-title">Entry Parameters</div>
+    <div class="form-grid">
+      <div class="field"><label>Company</label><input id="t-name" type="text" placeholder="Company name" value="Alphabet A"></div>
+      <div class="field"><label>ISIN / WKN</label><input id="t-isin" type="text" placeholder="ISIN or WKN" value="A14Y6F"></div>
+    </div>
+    <div class="form-grid-3">
+      <div class="field"><label>Account balance (€)</label><input id="t-balance" type="number" value="209.75" step="0.01" oninput="calcTrade()"></div>
+      <div class="field"><label>Stock entry price (P_s)</label><input id="t-ps" type="number" value="270.6" step="0.01" oninput="calcTrade()"></div>
+      <div class="field"><label>ATH (52w high)</label><input id="t-ath" type="number" value="350" step="0.01" oninput="calcTrade()"></div>
+    </div>
+    <div class="form-grid-3">
+      <div class="field"><label>Leverage entry (P_l)</label><input id="t-pl" type="number" value="5.38" step="0.01" oninput="calcTrade()"></div>
+      <div class="field"><label>ATR 14</label><input id="t-atr" type="number" value="6.4" step="0.1" oninput="calcTrade()"></div>
+      <div class="field"><label>ATR multiplier</label><input id="t-atr-mult" type="number" value="2" step="0.1" oninput="calcTrade()"></div>
+    </div>
+    <div class="form-grid-3">
+      <div class="field"><label>Risk per trade (%)</label><input id="t-risk" type="number" value="0.2" step="0.01" oninput="calcTrade()"></div>
+      <div class="field"><label>SMA 200</label><input id="t-sma" type="number" value="226" step="0.01" oninput="calcTrade()"></div>
+      <div class="field"><label>Market filter (S&amp;P 500)</label>
+        <select id="t-mf" onchange="calcTrade()">
+          <option value="Y">Y — above SMA200</option>
+          <option value="N">N — below SMA200</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Risk Metrics</div>
+    <div class="metrics" id="trade-metrics"></div>
+    <div id="trade-trend" style="margin-top:.75rem"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Profit Targets</div>
+    <div class="tp-grid" id="tp-grid"></div>
+  </div>
+  <div style="margin-top:1rem;display:flex;gap:7px">
+    <button class="btn btn-primary" onclick="saveTrade()">+ Save trade</button>
+  </div>
+</div>
+
+<!-- ===== PORTFOLIO PAGE ===== -->
+<div class="page" id="page-portfolio">
+  <div class="page-header">
+    <div class="page-eyebrow">Overview</div>
+    <div class="page-title">My Portfolio</div>
+    <div class="page-sub">Saved company ratings and active trades</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Rated Companies</div>
+    <ul class="company-list" id="portfolio-list"></ul>
+  </div>
+  <div class="card" style="margin-top:.85rem">
+    <div class="card-title">Saved Trades</div>
+    <ul class="company-list" id="trade-list"></ul>
+  </div>
+</div>
+
+<!-- ===== WATCHLIST PAGE ===== -->
+<div class="page" id="page-watchlist">
+  <div class="page-header">
+    <div class="page-eyebrow">Radar</div>
+    <div class="page-title">Watchlist</div>
+    <div class="page-sub">Companies on your radar — not yet rated</div>
+  </div>
+  <div class="card">
+    <ul class="company-list" id="watchlist-list"></ul>
+  </div>
+</div>
+
+<!-- ===== SETTINGS PAGE ===== -->
+<div class="page" id="page-settings">
+  <div class="page-header">
+    <div class="page-eyebrow">Configuration</div>
+    <div class="page-title">Settings</div>
+    <div class="page-sub">Configure your Cloudflare Worker proxy for Yahoo Finance</div>
+  </div>
+  <div class="info-box">
+    <strong>No API key needed.</strong> StockRater uses Yahoo Finance — free, no account required.<br><br>
+    <strong>Without Worker:</strong> Trading data only (price, SMA200, ATR).<br>
+    <strong>With Worker:</strong> Full access — Rating + Trading complete.
+  </div>
+  <div class="card">
+    <div class="card-title">Cloudflare Worker URL <span class="tag tag-required">required for rating</span></div>
+    <div style="font-size:.8rem;color:var(--text2);margin-bottom:.85rem;line-height:1.6">
+      Enter your Worker URL, e.g. <code>https://your-worker.workers.dev</code>
+    </div>
+    <div class="form-grid" style="align-items:flex-end">
+      <div class="field"><label>Worker URL</label><input type="text" id="worker-url-input" placeholder="https://your-worker.workers.dev"></div>
+      <div><button class="btn btn-primary" onclick="saveWorkerUrl()">Save</button></div>
+    </div>
+    <div id="worker-url-status" style="margin-top:.65rem;font-size:.78rem;color:var(--text3)"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Cache &amp; Storage</div>
+    <div style="font-size:.8rem;color:var(--text2);margin-bottom:.75rem">API responses cached 1 hour. All data client-side only.</div>
+    <div style="display:flex;gap:7px">
+      <button class="btn btn-sm" onclick="clearCache()">Clear cache</button>
+      <button class="btn btn-sm" style="color:var(--red)" onclick="clearAll()">Clear all data</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== COMPARE PAGE ===== -->
+<div class="page" id="page-compare">
+  <div class="page-header">
+    <div class="page-eyebrow">Side-by-Side Analysis</div>
+    <div class="page-title">Company Comparison</div>
+    <div class="page-sub">Compare up to 3 companies — full scorecard, radar chart, ratio table</div>
+  </div>
+  <div id="proxy-warning-compare"></div>
+  <div class="card">
+    <div class="card-title">Load Companies</div>
+    <div id="compare-inputs" style="display:flex;gap:8px;flex-wrap:wrap">
+      <div class="search-bar" style="flex:1;min-width:180px;margin-bottom:0">
+        <span style="color:var(--text3);align-self:center;flex-shrink:0;font-size:.85rem">①</span>
+        <input class="search-input" id="cmp-t1" placeholder="Ticker 1 e.g. AAPL" onkeydown="if(event.key==='Enter')runCompare()">
+      </div>
+      <div class="search-bar" style="flex:1;min-width:180px;margin-bottom:0">
+        <span style="color:var(--text3);align-self:center;flex-shrink:0;font-size:.85rem">②</span>
+        <input class="search-input" id="cmp-t2" placeholder="Ticker 2 e.g. MSFT" onkeydown="if(event.key==='Enter')runCompare()">
+      </div>
+      <div class="search-bar" style="flex:1;min-width:180px;margin-bottom:0">
+        <span style="color:var(--text3);align-self:center;flex-shrink:0;font-size:.85rem">③</span>
+        <input class="search-input" id="cmp-t3" placeholder="Ticker 3 optional" onkeydown="if(event.key==='Enter')runCompare()">
+      </div>
+      <button class="btn btn-primary" onclick="runCompare()" style="align-self:stretch;white-space:nowrap">Compare</button>
+    </div>
+  </div>
+  <div id="cmp-loading" style="display:none"><div class="loading"><div class="spinner-ring"></div><div class="loading-text">Loading companies…</div></div></div>
+  <div id="cmp-error" style="display:none"></div>
+  <div id="cmp-result" style="display:none">
+    <div class="card">
+      <div class="card-title">Radar Chart <span style="font-size:.65rem;font-weight:400;letter-spacing:0;text-transform:none;color:var(--text3)">— 6 dimensions · avg score 1–5</span></div>
+      <div style="display:flex;justify-content:center;padding:.5rem 0">
+        <svg id="cmp-radar" viewBox="0 0 420 360" style="width:100%;max-width:420px;overflow:visible"></svg>
+      </div>
+      <div id="cmp-radar-legend" style="display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;margin-top:.5rem;font-size:.74rem;font-family:var(--mono);color:var(--text2)"></div>
+    </div>
+    <div class="card" style="overflow-x:auto">
+      <div class="card-title">Side-by-Side Comparison</div>
+      <table id="cmp-table" class="rtable" style="min-width:500px"></table>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
 <script>
-// ==================== CONFIG ====================
+// ==================== FULL WACC TABLE (Damodaran) ====================
 const WACC_TABLE = {
   "Advertising":{"beta":1.34,"wacc":0.0922},"Aerospace/Defense":{"beta":0.90,"wacc":0.0768},
   "Air Transport":{"beta":1.24,"wacc":0.0729},"Apparel":{"beta":0.99,"wacc":0.0744},
@@ -394,166 +569,240 @@ const WACC_TABLE = {
   "Bank (Money Center)":{"beta":0.88,"wacc":0.0564},"Banks (Regional)":{"beta":0.52,"wacc":0.0569},
   "Beverage (Alcoholic)":{"beta":0.61,"wacc":0.0655},"Beverage (Soft)":{"beta":0.57,"wacc":0.0659},
   "Broadcasting":{"beta":0.92,"wacc":0.0603},"Building Materials":{"beta":1.36,"wacc":0.0946},
+  "Business & Consumer Services":{"beta":1.00,"wacc":0.0827},
   "Chemical (Specialty)":{"beta":0.92,"wacc":0.0767},"Computer Services":{"beta":1.23,"wacc":0.0872},
+  "Computers/Peripherals":{"beta":1.14,"wacc":0.0929},
+  "Drugs (Biotechnology)":{"beta":1.25,"wacc":0.0937},"Drugs (Pharmaceutical)":{"beta":1.07,"wacc":0.0872},
+  "Electrical Equipment":{"beta":1.27,"wacc":0.0940},
   "Electronics (Consumer & Office)":{"beta":1.19,"wacc":0.0871},
+  "Electronics (General)":{"beta":1.06,"wacc":0.0855},
+  "Entertainment":{"beta":1.04,"wacc":0.0828},
   "Financial Svcs. (Non-bank & Insurance)":{"beta":0.64,"wacc":0.0617},
+  "Food Processing":{"beta":0.47,"wacc":0.0602},
   "Healthcare Products":{"beta":0.99,"wacc":0.0880},"Healthcare Support Services":{"beta":0.91,"wacc":0.0784},
+  "Heathcare Information and Technology":{"beta":1.22,"wacc":0.0910},
   "Hotel/Gaming":{"beta":1.09,"wacc":0.0830},"Household Products":{"beta":0.82,"wacc":0.0726},
-  "Insurance (General)":{"beta":0.78,"wacc":0.0693},"Investment Co.":{"beta":0.96,"wacc":0.0740},
-  "Machinery":{"beta":1.24,"wacc":0.0948},"Metals & Mining":{"beta":1.07,"wacc":0.0825},
-  "Oil/Gas (Integrated)":{"beta":1.07,"wacc":0.0811},"Pharmaceutical":{"beta":0.77,"wacc":0.0720},
-  "Power":{"beta":0.59,"wacc":0.0530},"Real Estate (General)":{"beta":0.72,"wacc":0.0614},
-  "Retail (General)":{"beta":1.08,"wacc":0.0820},"Retail (Grocery and Food)":{"beta":0.60,"wacc":0.0609},
-  "Semiconductor":{"beta":1.48,"wacc":0.1010},"Software (System & Application)":{"beta":1.18,"wacc":0.0940},
-  "Telecom. Services":{"beta":0.82,"wacc":0.0700},"Transportation":{"beta":1.03,"wacc":0.0826},
-  "Utilities (General)":{"beta":0.44,"wacc":0.0473}
+  "Insurance (General)":{"beta":0.78,"wacc":0.0693},
+  "Machinery":{"beta":1.07,"wacc":0.0948},"Metals & Mining":{"beta":1.07,"wacc":0.0825},
+  "Oil/Gas (Integrated)":{"beta":0.48,"wacc":0.0633},
+  "Oil/Gas (Production and Exploration)":{"beta":0.88,"wacc":0.0752},
+  "Packaging & Container":{"beta":0.98,"wacc":0.0720},
+  "Pharmaceutical":{"beta":0.77,"wacc":0.0720},
+  "Power":{"beta":0.59,"wacc":0.0530},
+  "Precious Metals":{"beta":1.23,"wacc":0.0909},
+  "R.E.I.T.":{"beta":0.95,"wacc":0.0662},
+  "Real Estate (General)":{"beta":0.72,"wacc":0.0614},
+  "Recreation":{"beta":1.33,"wacc":0.0797},
+  "Retail (General)":{"beta":1.08,"wacc":0.0879},
+  "Retail (Grocery and Food)":{"beta":0.60,"wacc":0.0609},
+  "Retail (Special Lines)":{"beta":1.22,"wacc":0.0864},
+  "Semiconductor":{"beta":1.49,"wacc":0.1076},
+  "Semiconductor Equip":{"beta":1.48,"wacc":0.1051},
+  "Software (Entertainment)":{"beta":1.18,"wacc":0.0958},
+  "Software (Internet)":{"beta":1.69,"wacc":0.1110},
+  "Software (System & Application)":{"beta":1.24,"wacc":0.0969},
+  "Steel":{"beta":1.06,"wacc":0.0817},
+  "Telecom (Wireless)":{"beta":0.77,"wacc":0.0692},
+  "Telecom. Services":{"beta":0.82,"wacc":0.0700},
+  "Telecom. Equipment":{"beta":1.00,"wacc":0.0839},
+  "Transportation":{"beta":1.03,"wacc":0.0826},
+  "Trucking":{"beta":1.10,"wacc":0.0839},
+  "Utilities (General)":{"beta":0.44,"wacc":0.0473},
+  "Utility (General)":{"beta":0.39,"wacc":0.0520},
+  "Utility (Water)":{"beta":0.68,"wacc":0.0615}
 };
 
+// ==================== RATIO BENCHMARKS (from your Excel) ====================
+// Each ratio: {label, fmt, inv(optional), groups per score 5→4→3→2→1}
 const RATIO_BENCH = {
-  currentRatio:{good:1.5,ok:1.0,bad:0.8,label:"Current ratio",fmt:"x"},
-  quickRatio:{good:1.0,ok:0.9,bad:0.7,label:"Quick ratio",fmt:"x"},
-  cashRatio:{good:0.3,ok:0.2,bad:0.1,label:"Cash ratio",fmt:"x"},
-  debtToEquity:{good:1.0,ok:1.4,bad:1.6,label:"Debt / equity",fmt:"x",inv:true},
-  grossMargin:{good:0.35,ok:0.2,bad:0.1,label:"Gross margin",fmt:"%"},
-  netMargin:{good:0.12,ok:0.06,bad:0.02,label:"Net margin",fmt:"%"},
-  fcfMargin:{good:0.12,ok:0.06,bad:0.02,label:"FCF margin",fmt:"%"},
-  evEbitda:{good:12,ok:22,bad:35,label:"EV / EBITDA",fmt:"x",inv:true}
+  // Liquidity
+  currentRatio: {label:"Current Ratio",cat:"Liquidity",fmt:"x",
+    s5:1.50,s4:1.25,s3:1.00,s2:0.90,s1:0.80},
+  quickRatio:   {label:"Quick Ratio (Acid Test)",cat:"Liquidity",fmt:"x",
+    s5:1.00,s4:0.95,s3:0.90,s2:0.80,s1:0.70},
+  cashRatio:    {label:"Cash Ratio",cat:"Liquidity",fmt:"%",scale:100,
+    s5:.30,s4:.25,s3:.20,s2:.15,s1:.10},
+  // Capital
+  equityToAssets:{label:"Equity to Assets",cat:"Capital",fmt:"%",scale:100,
+    s5:.40,s4:.30,s3:.25,s2:.20,s1:.15},
+  // Solvency
+  debtToEquity: {label:"Debt to Equity",cat:"Solvency",fmt:"%",scale:100,inv:true,
+    s5:1.00,s4:1.20,s3:1.40,s2:1.50,s1:1.60},
+  debtRatio:    {label:"Debt Ratio",cat:"Solvency",fmt:"%",scale:100,inv:true,
+    s5:.30,s4:.35,s3:.40,s2:.45,s1:.50},
+  // Profitability
+  roa:          {label:"ROA",cat:"Profitability",fmt:"%",scale:100,
+    s5:.10,s4:.09,s3:.07,s2:.05,s1:.03},
+  roe:          {label:"ROE",cat:"Profitability",fmt:"%",scale:100,
+    s5:.20,s4:.18,s3:.15,s2:.13,s1:.11},
+  grossMargin:  {label:"Gross Profit Margin",cat:"Profitability",fmt:"%",scale:100,
+    s5:.50,s4:.40,s3:.30,s2:.25,s1:.20},
+  operatingMargin:{label:"Operating Margin",cat:"Profitability",fmt:"%",scale:100,
+    s5:.25,s4:.20,s3:.18,s2:.16,s1:.13},
+  netMargin:    {label:"Net Profit Margin",cat:"Profitability",fmt:"%",scale:100,
+    s5:.10,s4:.09,s3:.07,s2:.05,s1:.03},
+  // Efficiency
+  assetTurnover:{label:"Asset Turnover",cat:"Efficiency",fmt:"x",
+    s5:1.0,s4:.9,s3:.8,s2:.7,s1:.6},
+  // Cash Flow
+  fcfMargin:    {label:"FCF to Sales",cat:"Cash Flow",fmt:"%",scale:100,
+    s5:.20,s4:.18,s3:.16,s2:.14,s1:.12},
+  cfToDebt:     {label:"CF to Debt Ratio",cat:"Cash Flow",fmt:"%",scale:100,
+    s5:.60,s4:.50,s3:.40,s2:.35,s1:.30},
 };
 
+// ==================== QUALITATIVE DEFINITIONS ====================
 const QUAL_DEF = {
   mgmt:[
-    {label:"Management & governance",key:"mgmt1",def:3},
-    {label:"Capital allocation",key:"mgmt2",def:3},
-    {label:"Track record",key:"mgmt3",def:3},
-    {label:"Skin in the game",key:"mgmt4",def:3},
-    {label:"Long-term orientation",key:"mgmt5",def:3}
+    {label:"Management & Governance",key:"mgmt1",def:3,
+      tip:"1: Criminal/fraud risk\n2: Governance failures, no transparency\n3: Adequate governance\n4: Good track record, transparent\n5: Insider >10%, >5y rational, transparent"},
+    {label:"Capital Allocation",key:"mgmt2",def:3,
+      tip:"1: Destroying value, ROIC negative\n2: ROIC 0–5%, wasteful\n3: ROIC 5–10%, acceptable\n4: ROIC 10–15%, good\n5: ROIC >15%, excellent"},
+    {label:"Track Record",key:"mgmt3",def:3,
+      tip:"1: Losses / dividend cuts >2x\n2: Volatile earnings, 1 dividend cut\n3: Stable, minor misses\n4: 5–10y growth trend\n5: >10y consistent Rev/EPS growth, no cuts"},
+    {label:"Skin in the Game",key:"mgmt4",def:3,
+      tip:"1: <0.1% insider ownership\n2: 0.1–1%\n3: 1–5%\n4: 5–10%\n5: >10% insider ownership"},
+    {label:"Long-Term Orientation",key:"mgmt5",def:3,
+      tip:"1: No R&D, quarterly focus\n2: R&D <3% of sales\n3: R&D 3–7%\n4: R&D 7–10%\n5: R&D/CapEx >10%, >10y strategy focus"}
   ],
   moat:[
-    {label:"Business model clarity",key:"moat1",def:3},
-    {label:"Competitive advantage (moat)",key:"moat2",def:3},
-    {label:"Innovation / reputation",key:"moat3",def:3}
+    {label:"Business Model Clarity",key:"moat1",def:3,
+      tip:"1: Unclear, diversified chaos\n2: Mixed, <50% from core\n3: Decent clarity\n4: Clear, >70% core revenue\n5: Very clear, >80% recurring >60%"},
+    {label:"Competitive Advantage (Moat)",key:"moat2",def:3,
+      tip:"1: No moat, commodity\n2: Weak, easy to replicate\n3: Some advantage, 5y durability\n4: Strong moat, 10y durability\n5: Market share >40%, moat >10y durable"},
+    {label:"Innovation / Reputation",key:"moat3",def:3,
+      tip:"1: Laggard, shrinking market share\n2: Follower, low R&D\n3: Average, some innovation\n4: High R&D, strong brand\n5: Industry leader, high R&D (>10%), iconic brand"}
   ],
   esg:[
-    {label:"Risk / ESG score",key:"esg1",def:3},
-    {label:"Ethics & compliance",key:"esg2",def:3},
-    {label:"Resilience (crises)",key:"esg3",def:3},
-    {label:"Redundancy & diversification",key:"esg4",def:3}
+    {label:"ESG Risk Score",key:"esg1",def:3,
+      tip:"1: ESG score <30, major controversies\n2: ESG 30–50, significant risks\n3: ESG 50–60, moderate\n4: ESG 60–80, good\n5: Diversified, low risk, ESG >80"},
+    {label:"Ethics & Compliance",key:"esg2",def:3,
+      tip:"1: Criminal investigations\n2: Major violations, fines >1% revenue\n3: Minor issues, resolved\n4: Few minor issues, ESG 60–80\n5: Clean record, proactive compliance"},
+    {label:"Crisis Resilience",key:"esg3",def:3,
+      tip:"1: Near-bankruptcy in last crisis\n2: Dividend cut in crisis\n3: FCF positive in 1 of 3 crises\n4: FCF positive in 2 of 3 crises\n5: Positive FCF in last 3 crises, no dividend cuts"},
+    {label:"Diversification",key:"esg4",def:3,
+      tip:"1: 1 product >80%, 1 region\n2: 1 product 60–80%\n3: 2–3 products, 2 regions\n4: Multiple products, 3–5 regions\n5: No product >40%, >5 regions"},
+    {label:"Psychology / Bias Check",key:"esg5",def:3,
+      tip:"1: Extreme deviation >50%\n2: High deviation 30–50%\n3: Moderate ±30%\n4: Slight deviation ±20%\n5: Neutral, no bias detected"}
   ]
 };
 
 // ==================== STATE ====================
-let qualScores = {};
-let currentRatioScore = 0;
-let currentCompany = null;
-let portfolio = JSON.parse(localStorage.getItem('sr_portfolio')||'[]');
-let watchlist = JSON.parse(localStorage.getItem('sr_watchlist')||'[]');
-let trades = JSON.parse(localStorage.getItem('sr_trades')||'[]');
-let cache = JSON.parse(localStorage.getItem('sr_cache')||'{}');
-// Invalidate cache entries that still contain old Yahoo {raw,fmt} format
+let qualScores={};
+let currentRatioScore=0;
+let currentCompany=null;
+let portfolio=JSON.parse(localStorage.getItem('sr_portfolio')||'[]');
+let watchlist=JSON.parse(localStorage.getItem('sr_watchlist')||'[]');
+let trades=JSON.parse(localStorage.getItem('sr_trades')||'[]');
+let cache=JSON.parse(localStorage.getItem('sr_cache')||'{}');
+
+// Invalidate stale cache
 (function(){
   let dirty=false;
   for(const k of Object.keys(cache)){
     const d=cache[k]?.data;
-    if(d && typeof d==='object'){
+    if(d&&typeof d==='object'){
       const fd=d.financialData||{};
-      if(fd.currentRatio && typeof fd.currentRatio==='object'){
-        delete cache[k]; dirty=true;
-      }
+      if(fd.currentRatio&&typeof fd.currentRatio==='object'){delete cache[k];dirty=true;}
     }
   }
   if(dirty) localStorage.setItem('sr_cache',JSON.stringify(cache));
 })();
 
-// ==================== WORKER / YAHOO ====================
+// ==================== WORKER ====================
 function getWorkerUrl(){return (localStorage.getItem('sr_workerurl')||'').replace(/\/+$/,'');}
 function saveWorkerUrl(){
-  const w = document.getElementById('worker-url-input').value.trim().replace(/\/+$/,'');
-  if(w && !w.startsWith('https://')){
-    showWorkerStatus('URL muss mit https:// beginnen','error');return;
-  }
+  const w=document.getElementById('worker-url-input').value.trim().replace(/\/+$/,'');
+  if(w&&!w.startsWith('https://')){showWorkerStatus('URL must start with https://','error');return;}
   if(w) localStorage.setItem('sr_workerurl',w);
   else localStorage.removeItem('sr_workerurl');
-  showWorkerStatus(w?'Worker URL gespeichert ✓ — Rating + Trading voll verfügbar':'Kein Worker — nur Trading-Daten verfügbar','ok');
-  updateApiBadge();
-  checkProxyWarnings();
+  showWorkerStatus(w?'Saved — Rating + Trading fully available':'No worker — trading data only','ok');
+  updateApiBadge();checkProxyWarnings();
 }
 function showWorkerStatus(msg,type){
   const el=document.getElementById('worker-url-status');
-  if(!el)return;
+  if(!el) return;
   el.style.color=type==='ok'?'var(--green)':type==='error'?'var(--red)':'var(--amber)';
   el.textContent=msg;
 }
 function updateApiBadge(){
   const w=getWorkerUrl();
   const el=document.getElementById('api-status-badge');
-  el.textContent = w ? 'Yahoo · Worker ✓' : 'Yahoo · kein Worker';
-  el.style.color = w ? 'var(--green)' : 'var(--amber)';
+  const dot=el.querySelector('.dot');const span=el.querySelector('span');
+  if(w){dot.className='dot active';span.textContent='Worker connected';}
+  else{dot.className='dot warn';span.textContent='No worker configured';}
 }
 function checkProxyWarnings(){
   const w=getWorkerUrl();
-  const warn=w?'':'<div class="info-box">⚠️ Kein Worker konfiguriert — Fundamentaldaten (Rating) nicht verfügbar. <button class="btn btn-sm" onclick="showPage(\'settings\')" style="margin-left:8px">Settings ↗</button></div>';
+  const warn=w?'':'<div class="info-box">⚠️ No worker configured — fundamentals unavailable for Rating. <button class="btn btn-sm" onclick="showPage(\'settings\')" style="margin-left:8px">Configure ↗</button></div>';
   document.getElementById('proxy-warning-rating').innerHTML=warn;
   document.getElementById('proxy-warning-trading').innerHTML='';
+  document.getElementById('proxy-warning-compare').innerHTML=warn;
 }
-
-// Yahoo Finance via Worker (quoteSummary — braucht Crumb, Worker holt ihn)
 async function yahooSummary(ticker){
   const w=getWorkerUrl();
-  if(!w) throw new Error('Kein Worker konfiguriert. Geh zu Settings und trag deine Cloudflare Worker URL ein.');
-  const url=`${w}/yahoo/summary/${ticker}`;
+  if(!w) throw new Error('No worker configured. Go to Settings and enter your Cloudflare Worker URL.');
   let res;
-  try{res=await fetch(url);}
-  catch(e){throw new Error('Netzwerkfehler — Worker nicht erreichbar. Prüfe die URL in Settings.');}
-  if(!res.ok) throw new Error(`Yahoo Fehler ${res.status} — Ticker nicht gefunden oder Worker-Problem.`);
+  try{res=await fetch(`${w}/yahoo/summary/${ticker}`);}
+  catch(e){throw new Error('Network error — worker unreachable. Check URL in Settings.');}
+  if(!res.ok) throw new Error(`Yahoo error ${res.status} — ticker not found or worker issue.`);
   const data=await res.json();
   if(data.error) throw new Error(`Yahoo: ${data.error}`);
   return data;
 }
-
-// Yahoo chart (kein Crumb nötig — geht direkt via Worker)
-async function yahooChart(ticker, range='1y'){
+async function yahooChart(ticker,range='1y'){
   const w=getWorkerUrl();
-  if(!w) throw new Error('Kein Worker konfiguriert.');
-  const url=`${w}/yahoo/chart/${ticker}?range=${range}`;
+  if(!w) throw new Error('No worker configured.');
   let res;
-  try{res=await fetch(url);}
-  catch(e){throw new Error('Netzwerkfehler.');}
-  if(!res.ok) throw new Error(`Yahoo Chart Fehler ${res.status}`);
-  const data=await res.json();
-  return data;
+  try{res=await fetch(`${w}/yahoo/chart/${ticker}?range=${range}`);}
+  catch(e){throw new Error('Network error.');}
+  if(!res.ok) throw new Error(`Yahoo chart error ${res.status}`);
+  return await res.json();
 }
 
-// ==================== RATING PAGE ====================
+// ==================== PROGRESS BAR ====================
+function showProgress(state){
+  const el=document.getElementById('page-progress');
+  el.className='page-progress';
+  if(state==='start') el.classList.add('loading');
+  else if(state==='done'){
+    el.classList.add('done');
+    setTimeout(()=>{el.className='page-progress';},600);
+  }
+}
+
+// ==================== FETCH COMPANY ====================
 async function fetchCompany(){
   const ticker=document.getElementById('r-ticker').value.trim().toUpperCase();
   if(!ticker) return;
+  showProgress('start');
   showRatingLoading(true);
   document.getElementById('rating-error').style.display='none';
   document.getElementById('rating-content').style.display='none';
   try{
-    const [summary, chart] = await Promise.all([
-      yahooSummary(ticker),
-      yahooChart(ticker,'1y')
-    ]);
+    const [summary,chart]=await Promise.all([yahooSummary(ticker),yahooChart(ticker,'1y')]);
     const fd=summary.financialData||{};
     const ks=summary.defaultKeyStatistics||{};
     const meta=chart.meta||{};
-    currentCompany={ticker, fd, ks, meta, summary};
-    renderCompanyHero(meta, fd, ks);
-    renderRatios(fd, ks, meta);
+    const closes=chart.closes||[];
+    const highs=chart.highs||[];
+    const lows=chart.lows||[];
+    currentCompany={ticker,fd,ks,meta,summary,closes,highs,lows};
+    renderCompanyHero(meta,fd,ks);
+    renderRatios(fd,ks,meta,closes,highs,lows);
     renderQual();
+    autoFillQual(fd, ks, closes, summary);
     updateScorecard();
     showRatingLoading(false);
     document.getElementById('rating-content').style.display='block';
+    showProgress('done');
   }catch(e){
     showRatingLoading(false);
     showRatingError(e.message);
+    showProgress('done');
   }
 }
-
-function showRatingLoading(on){
-  document.getElementById('rating-loading').style.display=on?'block':'none';
-}
+function showRatingLoading(on){document.getElementById('rating-loading').style.display=on?'block':'none';}
 function showRatingError(msg){
   const el=document.getElementById('rating-error');
   el.innerHTML=`<div class="error-box">⚠️ ${msg}</div>`;
@@ -566,47 +815,67 @@ function clearRating(){
   currentCompany=null;
 }
 
-function renderCompanyHero(meta, fd, ks){
+// ==================== COMPANY HERO ====================
+function renderCompanyHero(meta,fd,ks){
   const price=meta.regularMarketPrice||0;
   const prev=meta.chartPreviousClose||price;
   const change=price-prev;
   const pct=prev>0?(change/prev)*100:0;
   const name=meta.longName||meta.shortName||meta.symbol||'';
   const initials=name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()||meta.symbol?.slice(0,2)||'?';
-  const colors=['#4f8ef7','#34c77b','#a78bfa','#f0a020','#f75a5a'];
+  const colors=['#6366f1','#10b981','#8b5cf6','#f59e0b','#ef4444','#06b6d4'];
   const col=colors[(meta.symbol||'A').charCodeAt(0)%colors.length];
   const sector=fd.sector||'';
   document.getElementById('company-hero').innerHTML=`
-    <div class="company-avatar" style="color:${col};border-color:${col}33">${initials}</div>
+    <div class="company-avatar" style="color:${col};border:1px solid ${col}33;background:${col}18">${initials}</div>
     <div class="company-info">
       <div class="company-name">${name}</div>
-      <div class="company-meta">${meta.symbol||''} · ${meta.exchangeName||''} · ${sector}</div>
+      <div class="company-meta">
+        <span class="meta-chip">${meta.symbol||''}</span>
+        ${meta.exchangeName?`<span class="meta-chip">${meta.exchangeName}</span>`:''}
+        ${sector?`<span class="meta-chip">${sector}</span>`:''}
+        ${meta.currency?`<span class="meta-chip">${meta.currency}</span>`:''}
+      </div>
     </div>
     <div class="company-price">
-      <div class="price-big">${fmtNum(price,2)} ${meta.currency||'USD'}</div>
-      <div class="price-change ${change>=0?'pos':'neg'}">${change>=0?'+':''}${fmtNum(change,2)} (${fmtNum(pct,2)}%)</div>
+      <div class="price-big">${fmtNum(price,2)}</div>
+      <div class="price-change ${change>=0?'pos':'neg'}">
+        <span>${change>=0?'▲':'▼'} ${Math.abs(change).toFixed(2)}</span>
+        <span class="price-badge">${change>=0?'+':''}${pct.toFixed(2)}%</span>
+      </div>
     </div>`;
 }
 
-function scoreVal(val, bench){
+// ==================== SCORE CALCULATION ====================
+function scoreRatio(val,bench){
+  // 5-level scoring like your Excel
   if(bench.inv){
-    if(val<=bench.good) return 5;
-    if(val<=bench.ok) return 3.5;
-    if(val<=bench.bad) return 2;
+    if(val<=bench.s5) return 5;
+    if(val<=bench.s4) return 4;
+    if(val<=bench.s3) return 3;
+    if(val<=bench.s2) return 2;
     return 1;
   }
-  if(val>=bench.good) return 5;
-  if(val>=bench.ok) return 3.5;
-  if(val>=bench.bad) return 2;
+  if(val>=bench.s5) return 5;
+  if(val>=bench.s4) return 4;
+  if(val>=bench.s3) return 3;
+  if(val>=bench.s2) return 2;
   return 1;
 }
-
-function fmtVal(val, fmt){
+function scoreColor(sc){
+  if(sc>=4.5) return 'var(--green)';
+  if(sc>=3.5) return '#34d399';
+  if(sc>=2.5) return 'var(--indigo-light)';
+  if(sc>=1.5) return 'var(--amber)';
+  return 'var(--red)';
+}
+function fmtVal(val,bench){
   if(val===null||val===undefined||isNaN(val)||val===0) return '—';
-  if(fmt==='%') return (val*100).toFixed(1)+'%';
+  if(bench.scale) return (val*bench.scale).toFixed(1)+'%';
+  if(bench.fmt==='%') return (val*100).toFixed(1)+'%';
   return val.toFixed(2)+'x';
 }
-function fmtNum(n, dec=0){
+function fmtNum(n,dec=0){
   if(n===null||n===undefined||isNaN(n)) return '—';
   return Number(n).toFixed(dec);
 }
@@ -618,72 +887,118 @@ function fmtBig(n){
   return n.toLocaleString();
 }
 
-function renderRatios(fd, ks, meta){
+// ==================== RENDER RATIOS ====================
+function renderRatios(fd,ks,meta,closes,highs,lows){
+  const price=meta.regularMarketPrice||0;
   const totalCash=fd.totalCash||0;
   const totalDebt=fd.totalDebt||0;
   const totalRevenue=fd.totalRevenue||0;
   const freeCashflow=fd.freeCashflow||0;
   const ebitda=fd.ebitda||0;
   const ev=ks.enterpriseValue||0;
-  const marketCap=(meta.regularMarketPrice||0)*(ks.sharesOutstanding||0);
+  const marketCap=price*(ks.sharesOutstanding||0);
+  const totalAssets=fd.totalAssets||ks.totalAssets||0;
+  const totalEquity=fd.totalStockholderEquity||fd.stockholdersEquity||0;
+  const netIncome=fd.netIncomeToCommon||0;
+  const operatingCashflow=fd.operatingCashflow||0;
+  const operatingIncome=fd.operatingIncome||(totalRevenue*(fd.operatingMargins||0));
 
-  // Cash ratio approximation: cash / debt (wenn kein currentLiabilities verfügbar)
-  // Wir nutzen totalCash / totalDebt als Proxy — mit Hinweis
-  const cashRatioApprox = totalDebt>0 ? totalCash/totalDebt : (totalCash>0?1:0);
+  // Compute all ratio values
+  const cashRatioApprox=totalDebt>0?totalCash/totalDebt:(totalCash>0?1:0);
+  const equityToAssetsVal=totalAssets>0?totalEquity/totalAssets:0;
+  const debtToEquityVal=totalEquity>0?totalDebt/totalEquity:0;
+  const debtRatioVal=totalAssets>0?totalDebt/totalAssets:0;
+  const roaVal=totalAssets>0?netIncome/totalAssets:0;
+  const roeVal=totalEquity>0?netIncome/totalEquity:0;
+  const operatingMarginVal=fd.operatingMargins||0;
+  const assetTurnoverVal=totalAssets>0?totalRevenue/totalAssets:0;
+  const cfToDebtVal=totalDebt>0?operatingCashflow/totalDebt:0;
+  const fcfMarginVal=totalRevenue>0?freeCashflow/totalRevenue:0;
 
   const ratioVals={
     currentRatio: fd.currentRatio||0,
-    quickRatio: fd.quickRatio||0,
-    cashRatio: cashRatioApprox,
-    debtToEquity: fd.debtToEquity ? fd.debtToEquity/100 : 0,
-    grossMargin: fd.grossMargins||0,
-    netMargin: fd.profitMargins||0,
-    fcfMargin: totalRevenue>0 ? freeCashflow/totalRevenue : 0,
-    evEbitda: ebitda>0 ? ev/ebitda : 0
+    quickRatio:   fd.quickRatio||0,
+    cashRatio:    cashRatioApprox,
+    equityToAssets:equityToAssetsVal,
+    debtToEquity: debtToEquityVal,
+    debtRatio:    debtRatioVal,
+    roa:          roaVal,
+    roe:          roeVal,
+    grossMargin:  fd.grossMargins||0,
+    operatingMargin:operatingMarginVal,
+    netMargin:    fd.profitMargins||0,
+    assetTurnover:assetTurnoverVal,
+    fcfMargin:    fcfMarginVal,
+    cfToDebt:     cfToDebtVal,
   };
 
-  let total=0, cnt=0;
-  const rows=Object.entries(ratioVals).map(([k,val])=>{
+  // Key metrics section
+  document.getElementById('key-metrics').innerHTML=`
+    <div class="section-label">Key Metrics</div>
+    <div class="metrics">
+      <div class="metric"><div class="metric-label">MARKET CAP</div><div class="metric-value">${fmtBig(marketCap)}</div></div>
+      <div class="metric"><div class="metric-label">REVENUE TTM</div><div class="metric-value">${fmtBig(totalRevenue)}</div></div>
+      <div class="metric"><div class="metric-label">EBITDA</div><div class="metric-value">${fmtBig(ebitda)}</div></div>
+      <div class="metric"><div class="metric-label">FREE CASH FLOW</div><div class="metric-value">${fmtBig(freeCashflow)}</div></div>
+      <div class="metric"><div class="metric-label">FORWARD P/E</div><div class="metric-value">${fmtNum(ks.forwardPE,1)}x</div></div>
+      <div class="metric"><div class="metric-label">52W RANGE</div><div class="metric-value" style="font-size:.82rem">${fmtNum(meta.fiftyTwoWeekLow,0)} – ${fmtNum(meta.fiftyTwoWeekHigh,0)}</div></div>
+      <div class="metric"><div class="metric-label">TOTAL ASSETS</div><div class="metric-value">${fmtBig(totalAssets)}</div></div>
+      <div class="metric"><div class="metric-label">TOTAL EQUITY</div><div class="metric-value">${fmtBig(totalEquity)}</div></div>
+    </div>`;
+
+  // Build ratio table grouped by category
+  let total=0,cnt=0;
+  const cats={};
+  for(const [k,val] of Object.entries(ratioVals)){
     const bench=RATIO_BENCH[k];
-    if(!bench) return '';
-    const sc=scoreVal(val,bench);
+    if(!bench) continue;
+    const sc=scoreRatio(val,bench);
     total+=sc; cnt++;
-    const col=sc>=4.5?'#34c77b':sc>=3?'#f0a020':'#f75a5a';
-    const barW=(sc/5)*100;
-    const note=k==='cashRatio'?' *':'';
-    return `<tr>
-      <td style="color:var(--text2)">${bench.label}${note}</td>
-      <td style="font-family:var(--font-mono);font-weight:500;color:var(--text)">${fmtVal(val,bench.fmt)}</td>
-      <td style="font-family:var(--font-mono);color:${col}">${sc.toFixed(1)}</td>
-      <td><div class="score-bar-wrap"><div class="score-bar-fill" style="width:${barW}%;background:${col}"></div></div></td>
-    </tr>`;
-  }).join('');
+    if(!cats[bench.cat]) cats[bench.cat]=[];
+    cats[bench.cat].push({k,val,bench,sc});
+  }
 
-  const pe=ks.forwardPE||ks.trailingEps?(meta.regularMarketPrice/(ks.trailingEps||1)):0;
-  const section=`<div class="section-label">Key metrics</div>
-  <div class="metrics">
-    <div class="metric"><div class="metric-label">Market cap</div><div class="metric-value">${fmtBig(marketCap)}</div></div>
-    <div class="metric"><div class="metric-label">Revenue (TTM)</div><div class="metric-value">${fmtBig(totalRevenue)}</div></div>
-    <div class="metric"><div class="metric-label">EBITDA</div><div class="metric-value">${fmtBig(ebitda)}</div></div>
-    <div class="metric"><div class="metric-label">FCF</div><div class="metric-value">${fmtBig(freeCashflow)}</div></div>
-    <div class="metric"><div class="metric-label">Forward P/E</div><div class="metric-value">${fmtNum(ks.forwardPE,1)}x</div></div>
-    <div class="metric"><div class="metric-label">52w range</div><div class="metric-value" style="font-size:.85rem">${fmtNum(meta.fiftyTwoWeekLow,0)}–${fmtNum(meta.fiftyTwoWeekHigh,0)}</div></div>
-  </div>
-  <div class="section-label" style="margin-top:.5rem">Ratio scoring</div>
-  <table class="rtable"><thead><tr><th>Ratio</th><th>Value</th><th>Score</th><th>Bar</th></tr></thead>
-  <tbody>${rows}</tbody></table>
-  <div style="font-size:.7rem;color:var(--text3);margin-top:.5rem">* Cash ratio = Cash / Total Debt (Näherungswert)</div>`;
+  let rows='';
+  for(const [cat,items] of Object.entries(cats)){
+    rows+=`<tr class="ratio-group-header"><td colspan="5">${cat}</td></tr>`;
+    for(const {k,val,bench,sc} of items){
+      const col=scoreColor(sc);
+      const barW=(sc/5)*100;
+      const displayed=fmtVal(val,bench);
+      // benchmark hint: show the score-5 threshold
+      const b5=bench.scale?(bench.s5*bench.scale).toFixed(0)+'%':bench.s5+(bench.fmt==='%'?'%':'x');
+      rows+=`<tr>
+        <td style="color:var(--text2)">${bench.label}</td>
+        <td style="font-family:var(--mono);font-weight:600">${displayed}</td>
+        <td style="font-family:var(--mono);font-size:.75rem;color:var(--text3)">≥${b5}</td>
+        <td style="font-family:var(--mono);font-weight:600;color:${col};font-size:.78rem">${sc}.0</td>
+        <td><div class="score-bar-wrap"><div class="score-bar-fill" style="width:${barW}%;background:${col}"></div></div></td>
+      </tr>`;
+    }
+  }
 
-  document.getElementById('ratio-table').innerHTML=section;
+  document.getElementById('ratio-table').innerHTML=`
+    <div class="section-label" style="margin-top:.75rem">Ratio Scoring <span style="font-size:.6rem;font-weight:400;letter-spacing:0;text-transform:none;color:var(--text3)">— 5-level benchmarks from your framework</span></div>
+    <table class="rtable">
+      <thead><tr><th>Ratio</th><th>Value</th><th>Target (5★)</th><th>Score</th><th>Bar</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+
   currentRatioScore=cnt>0?total/cnt:0;
 
-  const sector=currentCompany?.fd?.sector||currentCompany?.summary?.quoteType?.sector||'';
+  // WACC lookup
+  const sector=fd.sector||'';
   let waccInfo={beta:1,wacc:0.09};
   for(const [ind,dat] of Object.entries(WACC_TABLE)){
-    if(sector.toLowerCase().includes(ind.toLowerCase().split(' ')[0])){waccInfo=dat;break;}
+    if(sector.toLowerCase().includes(ind.toLowerCase().split(' ')[0])||
+       ind.toLowerCase().includes(sector.toLowerCase().split(' ')[0])){
+      waccInfo=dat;break;
+    }
   }
-  document.getElementById('sc-wacc').textContent=`WACC: ${(waccInfo.wacc*100).toFixed(1)}% · Beta: ${waccInfo.beta} · ${sector||'Unknown sector'}`;
-  document.getElementById('sc-company').textContent=currentCompany?.meta?.longName||currentCompany?.meta?.shortName||'';
+  document.getElementById('sc-wacc').textContent=
+    `WACC ${(waccInfo.wacc*100).toFixed(1)}%  ·  β ${waccInfo.beta}  ·  ${sector||'Unknown sector'}`;
+  document.getElementById('sc-company').textContent=
+    currentCompany?.meta?.longName||currentCompany?.meta?.shortName||'';
 }
 
 // ==================== QUALITATIVE ====================
@@ -695,8 +1010,11 @@ function renderQual(){
       qualScores[item.key]=item.def;
       const row=document.createElement('div');
       row.className='qual-row';
-      row.innerHTML=`<span class="qual-label">${item.label}</span>
-        <div id="stars-${item.key}" style="display:flex;gap:3px"></div>
+      row.innerHTML=`
+        <span class="qual-label" ${item.tip?`data-tip="${item.tip.replace(/"/g,"'")}"`:''}>
+          ${item.label}${item.tip?' ⓘ':''}
+        </span>
+        <div class="stars-wrap" id="stars-${item.key}"></div>
         <span class="qual-val" id="qv-${item.key}">${item.def}</span>`;
       el.appendChild(row);
       renderStars(item.key,item.def);
@@ -712,7 +1030,12 @@ function renderStars(key,val){
     s.className='star'+(i<=val?' on':'');
     s.textContent='★';
     const v=i;
-    s.onclick=()=>{qualScores[key]=v;document.getElementById('qv-'+key).textContent=v;renderStars(key,v);updateScorecard();};
+    s.onclick=()=>{
+      qualScores[key]=v;
+      document.getElementById('qv-'+key).textContent=v;
+      renderStars(key,v);
+      updateScorecard();
+    };
     el.appendChild(s);
   }
 }
@@ -725,53 +1048,84 @@ function getQualSubs(){
 }
 
 // ==================== SCORECARD ====================
+// Weights: Ratios 70%, Mgmt 10%, Moat 5%, ESG 5% = 90% → normalize to 100%
+// Actually from your Excel: Ratios 70%, Mgmt 10%, Moat 5%, ESG 5% → total 90%
+// We keep your exact weights, total = weighted sum / 0.9 to normalize to 5.0
 function updateScorecard(){
   const rs=currentRatioScore||0;
   const {mgmt,moat,esg}=getQualSubs();
-  const total=rs*0.70+mgmt*0.10+moat*0.10+esg*0.10;
+  const total=rs*0.70+mgmt*0.10+moat*0.05+esg*0.05;
+  // normalize to 5.0 scale (weights sum to 0.9)
+  const normalized=total/0.90;
+
   const arc=document.getElementById('gauge-arc');
   const circ=2*Math.PI*40;
   arc.style.strokeDasharray=circ;
-  arc.style.strokeDashoffset=circ-(total/5)*circ;
-  const col=total>=4?'#34c77b':total>=3?'#4f8ef7':total>=2?'#f0a020':'#f75a5a';
-  arc.style.stroke=col;
-  document.getElementById('gauge-num').textContent=total.toFixed(2);
-  document.getElementById('gauge-num').style.color=col;
+  arc.style.strokeDashoffset=circ-(normalized/5)*circ;
+  const gradId=normalized>=4?'gaugeGreen':normalized>=3?'gaugeGrad':normalized>=2?'gaugeAmber':'gaugeRed';
+  arc.setAttribute('stroke',`url(#${gradId})`);
+  const numEl=document.getElementById('gauge-num');
+  numEl.textContent=normalized.toFixed(2);
+  numEl.style.color=scoreColor(normalized);
+
   let verdict,vClass;
-  if(total>=4.5){verdict='Strong buy';vClass='verdict-strong';}
-  else if(total>=3.5){verdict='Buy';vClass='verdict-buy';}
-  else if(total>=2.5){verdict='Hold';vClass='verdict-hold';}
+  if(normalized>=4.5){verdict='Strong Buy';vClass='verdict-strong';}
+  else if(normalized>=3.5){verdict='Buy';vClass='verdict-buy';}
+  else if(normalized>=2.5){verdict='Hold';vClass='verdict-hold';}
   else{verdict='Avoid';vClass='verdict-avoid';}
   const vEl=document.getElementById('verdict-pill');
   vEl.className='verdict-pill '+vClass;
   vEl.textContent=verdict;
+
   const rows=[
-    {label:'A) Financial ratios',score:rs,weight:'70%'},
-    {label:'B) Management quality',score:mgmt,weight:'10%'},
-    {label:'C) Competitive moat',score:moat,weight:'10%'},
-    {label:'D) ESG & risk',score:esg,weight:'10%'}
+    {label:'1. Financial Ratios',score:rs,weight:'70%'},
+    {label:'2. Management Quality',score:mgmt,weight:'10%'},
+    {label:'3. Moat / Competitive',score:moat,weight:'5%'},
+    {label:'4. ESG & Risk',score:esg,weight:'5%'}
   ];
+  const col=scoreColor(normalized);
   document.getElementById('scorecard-rows').innerHTML=rows.map(r=>{
-    const c=r.score>=4?'#34c77b':r.score>=3?'#4f8ef7':r.score>=2?'#f0a020':'#f75a5a';
+    const c=scoreColor(r.score);
     const bar=(r.score/5)*100;
     return `<div class="score-row">
       <span style="color:var(--text2)">${r.label}</span>
-      <span style="display:flex;align-items:center;gap:10px">
-        <span style="font-size:.75rem;color:var(--text3);font-family:var(--font-mono)">${r.weight}</span>
-        <div class="score-bar-wrap" style="width:60px"><div class="score-bar-fill" style="width:${bar}%;background:${c}"></div></div>
-        <span style="font-family:var(--font-mono);font-weight:500;color:${c};min-width:28px">${r.score.toFixed(2)}</span>
+      <span class="score-right">
+        <span class="score-weight">${r.weight}</span>
+        <div class="score-bar-wrap" style="width:55px"><div class="score-bar-fill" style="width:${bar}%;background:${c}"></div></div>
+        <span style="font-family:var(--mono);font-weight:600;color:${c};min-width:30px;text-align:right">${r.score.toFixed(2)}</span>
       </span>
     </div>`;
   }).join('')+`<div class="score-row total">
-    <span>Total score</span>
-    <span style="font-family:var(--font-mono);color:${col}">${total.toFixed(2)} / 5.00</span>
+    <span>Total Score</span>
+    <span style="font-family:var(--mono);font-weight:700;color:${col}">${normalized.toFixed(2)} / 5.00</span>
   </div>`;
 }
+
+// Draw gauge ticks (Manim-style)
+(function drawGaugeTicks(){
+  const g=document.getElementById('gauge-ticks');
+  if(!g) return;
+  const cx=55,cy=55,r=40;
+  for(let i=0;i<=20;i++){
+    const angle=-90+(i/20)*360;
+    const rad=angle*(Math.PI/180);
+    const tl=i%4===0?5:2.5;
+    const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1',cx+(r-1)*Math.cos(rad));
+    line.setAttribute('y1',cy+(r-1)*Math.sin(rad));
+    line.setAttribute('x2',cx+(r-1-tl)*Math.cos(rad));
+    line.setAttribute('y2',cy+(r-1-tl)*Math.sin(rad));
+    line.setAttribute('stroke-width',i%4===0?'1.5':'.5');
+    line.setAttribute('opacity',i%4===0?'.2':'.1');
+    g.appendChild(line);
+  }
+})();
 
 // ==================== TRADING ====================
 async function fetchTradeData(){
   const ticker=document.getElementById('t-ticker').value.trim().toUpperCase();
   if(!ticker) return;
+  showProgress('start');
   try{
     const chart=await yahooChart(ticker,'1y');
     const meta=chart.meta||{};
@@ -781,33 +1135,26 @@ async function fetchTradeData(){
     document.getElementById('t-name').value=meta.longName||meta.shortName||ticker;
     document.getElementById('t-ps').value=fmtNum(meta.regularMarketPrice,2);
     document.getElementById('t-ath').value=fmtNum(meta.fiftyTwoWeekHigh,2);
-    // SMA200
     if(closes.length>=200){
-      const sma=closes.slice(-200).reduce((a,b)=>a+b,0)/200;
-      document.getElementById('t-sma').value=sma.toFixed(2);
+      document.getElementById('t-sma').value=(closes.slice(-200).reduce((a,b)=>a+b,0)/200).toFixed(2);
     } else if(closes.length>0){
-      const sma=closes.reduce((a,b)=>a+b,0)/closes.length;
-      document.getElementById('t-sma').value=sma.toFixed(2);
+      document.getElementById('t-sma').value=(closes.reduce((a,b)=>a+b,0)/closes.length).toFixed(2);
     }
-    // ATR14
     if(highs.length>=14&&lows.length>=14){
-      const atr=highs.slice(-14).reduce((s,h,i)=>s+h-lows[lows.length-14+i],0)/14;
-      document.getElementById('t-atr').value=atr.toFixed(2);
+      document.getElementById('t-atr').value=(highs.slice(-14).reduce((s,h,i)=>s+h-lows[lows.length-14+i],0)/14).toFixed(2);
     }
-    // Market filter
     const price=meta.regularMarketPrice||0;
     const smaVal=+document.getElementById('t-sma').value;
     if(price&&smaVal) document.getElementById('t-mf').value=price>smaVal?'Y':'N';
-    calcTrade();
+    calcTrade();showProgress('done');
   }catch(e){
+    showProgress('done');
     const box=document.createElement('div');
-    box.className='error-box';
-    box.textContent='⚠️ '+e.message;
+    box.className='error-box';box.innerHTML='⚠️ '+e.message;
     document.querySelector('#page-trading .search-bar').after(box);
     setTimeout(()=>box.remove(),4000);
   }
 }
-
 function calcTrade(){
   const balance=+gv('t-balance'),ps=+gv('t-ps'),ath=+gv('t-ath'),pl=+gv('t-pl'),
     atr=+gv('t-atr'),atrM=+gv('t-atr-mult'),risk=+gv('t-risk'),sma=+gv('t-sma'),mf=gv('t-mf');
@@ -818,34 +1165,39 @@ function calcTrade(){
   const tp1=pl*1.5,tp2=pl*2.0;
   const q1=Math.floor(qty*.25),q2=Math.floor(qty*.5),q3=qty-q1-q2;
   document.getElementById('trade-metrics').innerHTML=`
-    <div class="metric"><div class="metric-label">Dynamic leverage</div><div class="metric-value">${dynLev.toFixed(1)}x</div></div>
-    <div class="metric"><div class="metric-label">Position size (qty)</div><div class="metric-value">${qty}</div></div>
-    <div class="metric"><div class="metric-label">SL stock price</div><div class="metric-value">${sl_stock.toFixed(2)}</div></div>
-    <div class="metric"><div class="metric-label">SL leverage</div><div class="metric-value">${(pl*0.2).toFixed(2)}</div></div>
-    <div class="metric"><div class="metric-label">Capital at risk</div><div class="metric-value">${(balance*risk).toFixed(2)} €</div></div>
-    <div class="metric"><div class="metric-label">Total position</div><div class="metric-value">${(qty*pl).toFixed(2)} €</div></div>`;
-  document.getElementById('trade-trend').innerHTML=`<div style="display:flex;align-items:center;gap:10px">
-    <span class="trend-badge ${trend?'trend-go':'trend-stop'}">${trend?'✅ GO':'🚫 STOP — trend not confirmed'}</span>
-    <span style="font-size:.75rem;color:var(--text3);font-family:var(--font-mono)">P_s ${ps>sma?'above':'below'} SMA200 (${sma})</span>
-  </div>`;
+    <div class="metric"><div class="metric-label">DYN. LEVERAGE</div><div class="metric-value">${dynLev.toFixed(1)}x</div></div>
+    <div class="metric"><div class="metric-label">POSITION QTY</div><div class="metric-value">${qty}</div></div>
+    <div class="metric"><div class="metric-label">SL STOCK PRICE</div><div class="metric-value">${sl_stock.toFixed(2)}</div></div>
+    <div class="metric"><div class="metric-label">SL LEVERAGE</div><div class="metric-value">${(pl*0.2).toFixed(2)}</div></div>
+    <div class="metric"><div class="metric-label">CAPITAL AT RISK</div><div class="metric-value">${(balance*risk).toFixed(2)} €</div></div>
+    <div class="metric"><div class="metric-label">TOTAL POSITION</div><div class="metric-value">${(qty*pl).toFixed(2)} €</div></div>`;
+  document.getElementById('trade-trend').innerHTML=`
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="trend-badge ${trend?'trend-go':'trend-stop'}">${trend?'✅ GO':'🚫 STOP — trend not confirmed'}</span>
+      <span style="font-size:.7rem;color:var(--text3);font-family:var(--mono)">P_s ${ps>sma?'above':'below'} SMA200 (${sma})</span>
+    </div>`;
+  const maxTP=tp2*1.5;
   document.getElementById('tp-grid').innerHTML=`
     <div class="tp-card">
-      <div class="tp-title">TP 1 (+50%) — sell 25%</div>
+      <div class="tp-title">TP 1 · +50% · sell 25%</div>
       <div class="tp-val pos">${tp1.toFixed(2)} €</div>
-      <div class="tp-sub">Qty: ${q1} · Value: €${(q1*tp1).toFixed(0)}</div>
+      <div class="tp-sub">Qty ${q1} · €${(q1*tp1).toFixed(0)}</div>
       <div class="tp-sub">SL: ${(pl*0.2).toFixed(2)} €</div>
+      <div class="tp-progress"><div class="tp-progress-fill" style="width:${(tp1/maxTP*100).toFixed(0)}%"></div></div>
     </div>
     <div class="tp-card">
-      <div class="tp-title">TP 2 (+100%) — sell 50%</div>
+      <div class="tp-title">TP 2 · +100% · sell 50%</div>
       <div class="tp-val pos">${tp2.toFixed(2)} €</div>
-      <div class="tp-sub">Qty: ${q2} · Value: €${(q2*tp2).toFixed(0)}</div>
+      <div class="tp-sub">Qty ${q2} · €${(q2*tp2).toFixed(0)}</div>
       <div class="tp-sub">SL: Trail ATR</div>
+      <div class="tp-progress"><div class="tp-progress-fill" style="width:${(tp2/maxTP*100).toFixed(0)}%"></div></div>
     </div>
     <div class="tp-card">
-      <div class="tp-title">TP 3 — rest</div>
-      <div class="tp-val" style="color:var(--purple)">Trail</div>
-      <div class="tp-sub">Qty: ${q3}</div>
+      <div class="tp-title">TP 3 · Trail · rest</div>
+      <div class="tp-val" style="color:var(--violet)">Trail</div>
+      <div class="tp-sub">Qty ${q3}</div>
       <div class="tp-sub">ATR trailing stop</div>
+      <div class="tp-progress"><div class="tp-progress-fill" style="width:100%"></div></div>
     </div>`;
 }
 
@@ -853,91 +1205,80 @@ function calcTrade(){
 function saveToPortfolio(){
   if(!currentCompany){alert('Please load a company first.');return;}
   const {mgmt,moat,esg}=getQualSubs();
-  const total=currentRatioScore*0.70+mgmt*0.10+moat*0.10+esg*0.10;
-  const verdict=total>=4.5?'Strong buy':total>=3.5?'Buy':total>=2.5?'Hold':'Avoid';
+  const total=currentRatioScore*0.70+mgmt*0.10+moat*0.05+esg*0.05;
+  const normalized=total/0.90;
+  const verdict=normalized>=4.5?'Strong Buy':normalized>=3.5?'Buy':normalized>=2.5?'Hold':'Avoid';
   const name=currentCompany.meta?.longName||currentCompany.meta?.shortName||currentCompany.ticker;
-  const entry={
-    ticker:currentCompany.ticker, name,
-    sector:currentCompany.fd?.sector||'',
-    price:currentCompany.meta?.regularMarketPrice||0,
-    score:total, verdict, ts:Date.now()
-  };
+  const entry={ticker:currentCompany.ticker,name,sector:currentCompany.fd?.sector||'',
+    price:currentCompany.meta?.regularMarketPrice||0,score:normalized,verdict,ts:Date.now()};
   portfolio=portfolio.filter(p=>p.ticker!==entry.ticker);
   portfolio.unshift(entry);
   localStorage.setItem('sr_portfolio',JSON.stringify(portfolio));
-  renderPortfolio();
-  alert(`${entry.name} added to portfolio (Score: ${total.toFixed(2)})`);
+  renderPortfolio();updateBadges();
+  alert(`${entry.name} added to portfolio (Score: ${normalized.toFixed(2)})`);
 }
 function saveToWatchlist(){
   if(!currentCompany){alert('Please load a company first.');return;}
   const name=currentCompany.meta?.longName||currentCompany.meta?.shortName||currentCompany.ticker;
-  const entry={
-    ticker:currentCompany.ticker, name,
-    price:currentCompany.meta?.regularMarketPrice||0,
-    sector:currentCompany.fd?.sector||'', ts:Date.now()
-  };
+  const entry={ticker:currentCompany.ticker,name,price:currentCompany.meta?.regularMarketPrice||0,
+    sector:currentCompany.fd?.sector||'',ts:Date.now()};
   watchlist=watchlist.filter(w=>w.ticker!==entry.ticker);
   watchlist.unshift(entry);
   localStorage.setItem('sr_watchlist',JSON.stringify(watchlist));
-  renderWatchlist();
+  renderWatchlist();updateBadges();
   alert(`${entry.name} added to watchlist.`);
 }
 function saveTrade(){
-  const entry={
-    name:gv('t-name'),isin:gv('t-isin'),ticker:gv('t-ticker'),
-    ps:+gv('t-ps'),pl:+gv('t-pl'),balance:+gv('t-balance'),ts:Date.now()
-  };
+  const entry={name:gv('t-name'),isin:gv('t-isin'),ticker:gv('t-ticker'),
+    ps:+gv('t-ps'),pl:+gv('t-pl'),balance:+gv('t-balance'),ts:Date.now()};
   trades.unshift(entry);
   localStorage.setItem('sr_trades',JSON.stringify(trades));
   renderTrades();
-  alert(`Trade für ${entry.name} gespeichert.`);
+  alert(`Trade for ${entry.name} saved.`);
 }
-
 function renderPortfolio(){
   const el=document.getElementById('portfolio-list');
-  if(!portfolio.length){el.innerHTML='<li class="empty"><div class="empty-icon">📊</div>Noch keine Ratings. Rating-Tab nutzen.</li>';return;}
+  if(!portfolio.length){el.innerHTML='<li class="empty"><div class="empty-icon">📊</div>No ratings yet.</li>';return;}
   el.innerHTML=portfolio.map((c,i)=>{
-    const col=c.score>=4?'#34c77b':c.score>=3?'#4f8ef7':c.score>=2?'#f0a020':'#f75a5a';
-    const bg=c.score>=4?'#0e2e1e':c.score>=3?'#1a2d52':c.score>=2?'#2e1e05':'#2e0e0e';
-    const init=(c.ticker||'?').slice(0,2);
-    return `<li class="company-li">
-      <div class="li-avatar" style="background:${bg};color:${col}">${init}</div>
-      <div style="flex:1">
-        <div class="li-name">${c.name||c.ticker}</div>
-        <div class="li-meta">${c.ticker} · ${c.sector} · $${fmtNum(c.price,2)}</div>
-      </div>
+    const col=scoreColor(c.score);
+    const bg=c.score>=4.5?'var(--green-dim)':c.score>=3.5?'var(--indigo-dim)':c.score>=2.5?'var(--amber-dim)':'var(--red-dim)';
+    return `<li class="company-li stagger-in" style="animation-delay:${i*35}ms">
+      <div class="li-avatar" style="background:${bg};color:${col}">${(c.ticker||'?').slice(0,2)}</div>
+      <div style="flex:1"><div class="li-name">${c.name||c.ticker}</div>
+      <div class="li-meta">${c.ticker} · ${c.sector} · $${fmtNum(c.price,2)}</div></div>
       <span class="li-score" style="background:${bg};color:${col}">${c.score.toFixed(2)} — ${c.verdict}</span>
-      <button class="btn btn-ghost btn-sm" onclick="removePf(${i})">✕</button>
+      <button class="btn btn-ghost btn-sm btn-icon" onclick="removePf(${i})">✕</button>
     </li>`;
   }).join('');
 }
 function renderTrades(){
   const el=document.getElementById('trade-list');
-  if(!trades.length){el.innerHTML='<li class="empty"><div class="empty-icon">⚡</div>Noch keine Trades gespeichert.</li>';return;}
-  el.innerHTML=trades.map((t,i)=>`<li class="company-li">
-    <div class="li-avatar" style="background:var(--accent-dim);color:var(--accent)">${(t.ticker||t.name||'?').slice(0,2).toUpperCase()}</div>
-    <div style="flex:1">
-      <div class="li-name">${t.name||t.ticker}</div>
-      <div class="li-meta">${t.isin||''} · P_s: ${t.ps} · P_l: ${t.pl}</div>
-    </div>
-    <button class="btn btn-ghost btn-sm" onclick="removeTrade(${i})">✕</button>
+  if(!trades.length){el.innerHTML='<li class="empty"><div class="empty-icon">⚡</div>No trades saved.</li>';return;}
+  el.innerHTML=trades.map((t,i)=>`<li class="company-li stagger-in" style="animation-delay:${i*35}ms">
+    <div class="li-avatar" style="background:var(--indigo-dim);color:var(--indigo-light)">${(t.ticker||t.name||'?').slice(0,2).toUpperCase()}</div>
+    <div style="flex:1"><div class="li-name">${t.name||t.ticker}</div>
+    <div class="li-meta">${t.isin||''} · P_s: ${t.ps} · P_l: ${t.pl}</div></div>
+    <button class="btn btn-ghost btn-sm btn-icon" onclick="removeTrade(${i})">✕</button>
   </li>`).join('');
 }
 function renderWatchlist(){
   const el=document.getElementById('watchlist-list');
-  if(!watchlist.length){el.innerHTML='<li class="empty"><div class="empty-icon">👁</div>Watchlist ist leer.</li>';return;}
-  el.innerHTML=watchlist.map((w,i)=>`<li class="company-li">
-    <div class="li-avatar" style="background:var(--purple-dim);color:var(--purple)">${(w.ticker||'?').slice(0,2)}</div>
-    <div style="flex:1">
-      <div class="li-name">${w.name||w.ticker}</div>
-      <div class="li-meta">${w.ticker} · ${w.sector} · $${fmtNum(w.price,2)}</div>
-    </div>
-    <button class="btn btn-ghost btn-sm" onclick="removeWl(${i})">✕</button>
+  if(!watchlist.length){el.innerHTML='<li class="empty"><div class="empty-icon">👁</div>Watchlist is empty.</li>';return;}
+  el.innerHTML=watchlist.map((w,i)=>`<li class="company-li stagger-in" style="animation-delay:${i*35}ms">
+    <div class="li-avatar" style="background:rgba(139,92,246,.15);color:var(--violet)">${(w.ticker||'?').slice(0,2)}</div>
+    <div style="flex:1"><div class="li-name">${w.name||w.ticker}</div>
+    <div class="li-meta">${w.ticker} · ${w.sector} · $${fmtNum(w.price,2)}</div></div>
+    <button class="btn btn-ghost btn-sm btn-icon" onclick="removeWl(${i})">✕</button>
   </li>`).join('');
 }
-function removePf(i){portfolio.splice(i,1);localStorage.setItem('sr_portfolio',JSON.stringify(portfolio));renderPortfolio();}
+function removePf(i){portfolio.splice(i,1);localStorage.setItem('sr_portfolio',JSON.stringify(portfolio));renderPortfolio();updateBadges();}
 function removeTrade(i){trades.splice(i,1);localStorage.setItem('sr_trades',JSON.stringify(trades));renderTrades();}
-function removeWl(i){watchlist.splice(i,1);localStorage.setItem('sr_watchlist',JSON.stringify(watchlist));renderWatchlist();}
+function removeWl(i){watchlist.splice(i,1);localStorage.setItem('sr_watchlist',JSON.stringify(watchlist));renderWatchlist();updateBadges();}
+function updateBadges(){
+  const pfc=document.getElementById('pf-count');const wlc=document.getElementById('wl-count');
+  if(portfolio.length){pfc.textContent=portfolio.length;pfc.style.display='';}else pfc.style.display='none';
+  if(watchlist.length){wlc.textContent=watchlist.length;wlc.style.display='';}else wlc.style.display='none';
+}
 
 // ==================== NAV ====================
 function showPage(p){
@@ -945,29 +1286,498 @@ function showPage(p){
   document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
   document.getElementById('page-'+p).classList.add('active');
   document.getElementById('nav-'+p).classList.add('active');
-  if(window.innerWidth<=700) closeSidebar();
+  if(window.innerWidth<=800) closeSidebar();
 }
-function toggleSidebar(){
-  document.getElementById('sidebar').classList.toggle('open');
-  document.getElementById('overlay').classList.toggle('open');
-}
-function closeSidebar(){
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('overlay').classList.remove('open');
-}
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('open');}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('open');}
 function gv(id){return document.getElementById(id)?.value||'';}
 function clearCache(){cache={};localStorage.setItem('sr_cache','{}');alert('Cache cleared.');}
 function clearAll(){if(confirm('Delete all data?')){localStorage.clear();location.reload();}}
 
+// Metric spotlight hover
+document.addEventListener('mousemove',e=>{
+  const el=e.target.closest('.metric');
+  if(!el) return;
+  const r=el.getBoundingClientRect();
+  el.style.setProperty('--mx',`${((e.clientX-r.left)/r.width*100).toFixed(1)}%`);
+  el.style.setProperty('--my',`${((e.clientY-r.top)/r.height*100).toFixed(1)}%`);
+});
+
+// ==================== AUTO-FILL QUALITATIVE ====================
+function autoFillQual(fd, ks, closes, summary){
+  // --- mgmt4: Skin in the Game (Insider Ownership %) ---
+  const insiderPct = ks.heldPercentInsiders || 0;
+  let mgmt4 = 3;
+  if(insiderPct >= 0.10) mgmt4 = 5;
+  else if(insiderPct >= 0.05) mgmt4 = 4;
+  else if(insiderPct >= 0.01) mgmt4 = 3;
+  else if(insiderPct >= 0.001) mgmt4 = 2;
+  else mgmt4 = 1;
+
+  // --- mgmt5: Long-Term Orientation (R&D % of Revenue) ---
+  const rd = fd.researchDevelopment || 0;
+  const rev = fd.totalRevenue || 1;
+  const rdPct = rd / rev;
+  let mgmt5 = 3;
+  if(rdPct >= 0.10) mgmt5 = 5;
+  else if(rdPct >= 0.07) mgmt5 = 4;
+  else if(rdPct >= 0.03) mgmt5 = 3;
+  else if(rdPct > 0) mgmt5 = 2;
+  else mgmt5 = 1; // no R&D disclosed
+
+  // --- mgmt2: Capital Allocation (ROIC proxy: Net Income / (Assets - Current Liabilities)) ---
+  const netInc = fd.netIncomeToCommon || 0;
+  const totalAssets = fd.totalAssets || ks.totalAssets || 0;
+  const currentLiabilities = fd.totalCurrentLiabilities || 0;
+  const investedCapital = totalAssets - currentLiabilities;
+  const roic = investedCapital > 0 ? netInc / investedCapital : 0;
+  let mgmt2 = 3;
+  if(roic >= 0.15) mgmt2 = 5;
+  else if(roic >= 0.10) mgmt2 = 4;
+  else if(roic >= 0.05) mgmt2 = 3;
+  else if(roic >= 0) mgmt2 = 2;
+  else mgmt2 = 1;
+
+  // --- mgmt3: Track Record (EPS growth + Revenue growth from chart history) ---
+  // Use earningsGrowth (TTM) and revenueGrowth as proxy
+  const epsGrowth = fd.earningsGrowth || ks.earningsGrowth || 0;
+  const revGrowth  = fd.revenueGrowth  || 0;
+  const avgGrowth  = (epsGrowth + revGrowth) / 2;
+  let mgmt3 = 3;
+  if(avgGrowth >= 0.15) mgmt3 = 5;
+  else if(avgGrowth >= 0.08) mgmt3 = 4;
+  else if(avgGrowth >= 0.02) mgmt3 = 3;
+  else if(avgGrowth >= -0.05) mgmt3 = 2;
+  else mgmt3 = 1;
+
+  // --- moat2: Competitive Advantage — Gross Margin Trend (proxy: gross margin level) ---
+  const grossM = fd.grossMargins || 0;
+  let moat2 = 3;
+  if(grossM >= 0.60) moat2 = 5;
+  else if(grossM >= 0.45) moat2 = 4;
+  else if(grossM >= 0.30) moat2 = 3;
+  else if(grossM >= 0.20) moat2 = 2;
+  else moat2 = 1;
+
+  // --- esg1: ESG Risk Score from Yahoo ---
+  const esgScores = summary.esgScores || {};
+  const esgTotal  = esgScores.totalEsg || esgScores.esgPerformance || null;
+  let esg1 = null; // null = skip auto-fill if not available
+  if(esgTotal !== null && esgTotal !== undefined){
+    // Yahoo ESG: lower = better risk score. Typically 0–50 range.
+    if(esgTotal <= 10) esg1 = 5;
+    else if(esgTotal <= 20) esg1 = 4;
+    else if(esgTotal <= 30) esg1 = 3;
+    else if(esgTotal <= 40) esg1 = 2;
+    else esg1 = 1;
+  }
+
+  // Apply auto values
+  const autoMap = {mgmt2, mgmt3, mgmt4, mgmt5, moat2};
+  if(esg1 !== null) autoMap.esg1 = esg1;
+
+  for(const [key, val] of Object.entries(autoMap)){
+    qualScores[key] = val;
+    const vEl = document.getElementById('qv-' + key);
+    if(vEl) vEl.textContent = val;
+    renderStarsAuto(key, val);
+    markAutoFilled(key, val, key === 'mgmt4' ? (insiderPct*100).toFixed(1)+'% insider'
+      : key === 'mgmt5' ? (rdPct*100).toFixed(1)+'% R&D/Rev'
+      : key === 'mgmt2' ? (roic*100).toFixed(1)+'% ROIC'
+      : key === 'mgmt3' ? (avgGrowth*100).toFixed(1)+'% avg growth'
+      : key === 'moat2' ? (grossM*100).toFixed(1)+'% gross margin'
+      : esgTotal !== null ? 'ESG '+esgTotal : '');
+  }
+}
+function renderStarsAuto(key, val){
+  const el = document.getElementById('stars-' + key);
+  if(!el) return;
+  el.innerHTML = '';
+  for(let i = 1; i <= 5; i++){
+    const s = document.createElement('span');
+    s.className = 'star' + (i <= val ? ' on' : '');
+    s.textContent = '★';
+    const v = i;
+    s.onclick = () => {
+      qualScores[key] = v;
+      document.getElementById('qv-' + key).textContent = v;
+      renderStarsAuto(key, v);
+      // remove auto badge when user overrides
+      const badge = el.parentElement.querySelector('.auto-badge');
+      if(badge) badge.remove();
+      updateScorecard();
+    };
+    el.appendChild(s);
+  }
+}
+function markAutoFilled(key, val, hint){
+  const starsEl = document.getElementById('stars-' + key);
+  if(!starsEl) return;
+  // remove existing badge
+  const existing = starsEl.parentElement.querySelector('.auto-badge');
+  if(existing) existing.remove();
+  const badge = document.createElement('span');
+  badge.className = 'tag tag-auto auto-badge';
+  badge.style.cssText = 'font-size:.58rem;padding:1px 5px;margin-left:4px;cursor:default';
+  badge.title = 'Auto-filled from Yahoo Finance: ' + hint;
+  badge.textContent = '⚡ auto';
+  starsEl.parentElement.insertBefore(badge, starsEl.nextSibling);
+}
+
+// ==================== COMPARISON ENGINE ====================
+const CMP_COLORS = ['#6366f1','#10b981','#f59e0b'];
+const CMP_RADAR_DIMS = [
+  {key:'ratios',  label:'Financials'},
+  {key:'mgmt',    label:'Management'},
+  {key:'moat',    label:'Moat'},
+  {key:'esg',     label:'ESG'},
+  {key:'growth',  label:'Growth'},
+  {key:'margin',  label:'Margins'},
+];
+
+async function runCompare(){
+  const t1 = (document.getElementById('cmp-t1').value||'').trim().toUpperCase();
+  const t2 = (document.getElementById('cmp-t2').value||'').trim().toUpperCase();
+  const t3 = (document.getElementById('cmp-t3').value||'').trim().toUpperCase();
+  const tickers = [t1, t2, t3].filter(Boolean);
+  if(tickers.length < 2){
+    document.getElementById('cmp-error').innerHTML='<div class="error-box">⚠️ Please enter at least 2 tickers.</div>';
+    document.getElementById('cmp-error').style.display='block';
+    return;
+  }
+  document.getElementById('cmp-error').style.display='none';
+  document.getElementById('cmp-result').style.display='none';
+  document.getElementById('cmp-loading').style.display='block';
+  showProgress('start');
+  try{
+    const results = await Promise.all(tickers.map(async t => {
+      const [summary, chart] = await Promise.all([yahooSummary(t), yahooChart(t, '1y')]);
+      return buildCmpData(t, summary, chart);
+    }));
+    document.getElementById('cmp-loading').style.display='none';
+    renderRadar(results);
+    renderCmpTable(results);
+    document.getElementById('cmp-result').style.display='block';
+    showProgress('done');
+  }catch(e){
+    document.getElementById('cmp-loading').style.display='none';
+    document.getElementById('cmp-error').innerHTML=`<div class="error-box">⚠️ ${e.message}</div>`;
+    document.getElementById('cmp-error').style.display='block';
+    showProgress('done');
+  }
+}
+
+function buildCmpData(ticker, summary, chart){
+  const fd  = summary.financialData || {};
+  const ks  = summary.defaultKeyStatistics || {};
+  const meta= chart.meta || {};
+  const esgScores = summary.esgScores || {};
+
+  // Financial ratios avg score
+  const ratioVals = calcRatioVals(fd, ks, meta, chart.closes||[]);
+  let rTotal=0, rCnt=0;
+  for(const [k,v] of Object.entries(ratioVals)){
+    const b = RATIO_BENCH[k]; if(!b) continue;
+    rTotal += scoreRatio(v, b); rCnt++;
+  }
+  const ratiosScore = rCnt > 0 ? rTotal/rCnt : 3;
+
+  // Management dimension
+  const insiderPct = ks.heldPercentInsiders || 0;
+  const rdPct = (fd.researchDevelopment||0) / (fd.totalRevenue||1);
+  const netInc = fd.netIncomeToCommon || 0;
+  const ta = fd.totalAssets || ks.totalAssets || 0;
+  const cl = fd.totalCurrentLiabilities || 0;
+  const roic = (ta-cl)>0 ? netInc/(ta-cl) : 0;
+  const epsG = fd.earningsGrowth || ks.earningsGrowth || 0;
+  const revG = fd.revenueGrowth || 0;
+
+  const skinScore  = insiderPct>=0.10?5:insiderPct>=0.05?4:insiderPct>=0.01?3:insiderPct>=0.001?2:1;
+  const rdScore    = rdPct>=0.10?5:rdPct>=0.07?4:rdPct>=0.03?3:rdPct>0?2:1;
+  const roicScore  = roic>=0.15?5:roic>=0.10?4:roic>=0.05?3:roic>=0?2:1;
+  const mgmtScore  = (skinScore + rdScore + roicScore) / 3;
+
+  // Growth dimension
+  const avgGrowth = (epsG + revG) / 2;
+  const growthScore = avgGrowth>=0.15?5:avgGrowth>=0.08?4:avgGrowth>=0.02?3:avgGrowth>=-0.05?2:1;
+
+  // Margins dimension
+  const gm = fd.grossMargins || 0;
+  const om = fd.operatingMargins || 0;
+  const nm = fd.profitMargins || 0;
+  const marginScore = ((gm>=0.50?5:gm>=0.40?4:gm>=0.30?3:gm>=0.20?2:1)
+                     + (om>=0.25?5:om>=0.20?4:om>=0.15?3:om>=0.10?2:1)
+                     + (nm>=0.10?5:nm>=0.07?4:nm>=0.05?3:nm>=0.02?2:1)) / 3;
+
+  // Moat (gross margin proxy)
+  const moatScore = gm>=0.60?5:gm>=0.45?4:gm>=0.30?3:gm>=0.20?2:1;
+
+  // ESG
+  const esgTotal = esgScores.totalEsg || esgScores.esgPerformance;
+  const esgScore = esgTotal!=null
+    ? (esgTotal<=10?5:esgTotal<=20?4:esgTotal<=30?3:esgTotal<=40?2:1)
+    : 3;
+
+  // Weighted total (same weights as scorecard)
+  const total = ratiosScore*0.70 + mgmtScore*0.10 + moatScore*0.05 + esgScore*0.05;
+  const normalized = total / 0.90;
+
+  const price = meta.regularMarketPrice || 0;
+  const prev  = meta.chartPreviousClose || price;
+  const chgPct= prev>0 ? (price-prev)/prev*100 : 0;
+
+  return {
+    ticker,
+    name: meta.longName || meta.shortName || ticker,
+    sector: fd.sector || '',
+    price, chgPct,
+    marketCap: price * (ks.sharesOutstanding||0),
+    revenue: fd.totalRevenue || 0,
+    score: normalized,
+    dims: {
+      ratios: ratiosScore,
+      mgmt:   mgmtScore,
+      moat:   moatScore,
+      esg:    esgScore,
+      growth: growthScore,
+      margin: marginScore,
+    },
+    ratios: {
+      currentRatio: fd.currentRatio||0,
+      quickRatio:   fd.quickRatio||0,
+      grossMargin:  gm,
+      operatingMargin: om,
+      netMargin:    nm,
+      roe:          ta>0?netInc/((ta-cl)||1):0,
+      roic,
+      insiderPct,
+      rdPct,
+      epsGrowth: epsG,
+      revenueGrowth: revG,
+      esgTotal: esgTotal ?? '—',
+    },
+    fd, ks, meta
+  };
+}
+
+function calcRatioVals(fd, ks, meta, closes){
+  const price = meta.regularMarketPrice || 0;
+  const totalCash = fd.totalCash || 0;
+  const totalDebt = fd.totalDebt || 0;
+  const totalRevenue = fd.totalRevenue || 0;
+  const freeCashflow = fd.freeCashflow || 0;
+  const totalAssets = fd.totalAssets || ks.totalAssets || 0;
+  const totalEquity = fd.totalStockholderEquity || fd.stockholdersEquity || 0;
+  const netIncome = fd.netIncomeToCommon || 0;
+  const operatingCashflow = fd.operatingCashflow || 0;
+  return {
+    currentRatio: fd.currentRatio||0,
+    quickRatio:   fd.quickRatio||0,
+    cashRatio:    totalDebt>0?totalCash/totalDebt:(totalCash>0?1:0),
+    equityToAssets: totalAssets>0?totalEquity/totalAssets:0,
+    debtToEquity:   totalEquity>0?totalDebt/totalEquity:0,
+    debtRatio:      totalAssets>0?totalDebt/totalAssets:0,
+    roa:            totalAssets>0?netIncome/totalAssets:0,
+    roe:            totalEquity>0?netIncome/totalEquity:0,
+    grossMargin:    fd.grossMargins||0,
+    operatingMargin:fd.operatingMargins||0,
+    netMargin:      fd.profitMargins||0,
+    assetTurnover:  totalAssets>0?totalRevenue/totalAssets:0,
+    fcfMargin:      totalRevenue>0?freeCashflow/totalRevenue:0,
+    cfToDebt:       totalDebt>0?operatingCashflow/totalDebt:0,
+  };
+}
+
+// SVG Radar Chart
+function renderRadar(results){
+  const svg = document.getElementById('cmp-radar');
+  svg.innerHTML = '';
+  const cx=210, cy=175, R=130, dims=CMP_RADAR_DIMS, n=dims.length;
+  const step = (2*Math.PI)/n;
+
+  // Grid rings
+  for(let ring=1; ring<=5; ring++){
+    const r = (ring/5)*R;
+    const pts = dims.map((_,i)=>{
+      const a = i*step - Math.PI/2;
+      return `${cx+r*Math.cos(a)},${cy+r*Math.sin(a)}`;
+    }).join(' ');
+    const poly = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+    poly.setAttribute('points', pts);
+    poly.setAttribute('fill', 'none');
+    poly.setAttribute('stroke', ring===5?'rgba(255,255,255,.12)':'rgba(255,255,255,.05)');
+    poly.setAttribute('stroke-width','1');
+    svg.appendChild(poly);
+    // ring label (score)
+    const labelAngle = -Math.PI/2;
+    const lx = cx + r*Math.cos(labelAngle) - 2;
+    const ly = cy + r*Math.sin(labelAngle) - 3;
+    const lt = document.createElementNS('http://www.w3.org/2000/svg','text');
+    lt.setAttribute('x', lx); lt.setAttribute('y', ly);
+    lt.setAttribute('fill','rgba(255,255,255,.18)');
+    lt.setAttribute('font-size','8');
+    lt.setAttribute('font-family','JetBrains Mono,monospace');
+    lt.setAttribute('text-anchor','middle');
+    lt.textContent = ring;
+    svg.appendChild(lt);
+  }
+
+  // Axis lines + labels
+  dims.forEach((d, i)=>{
+    const a = i*step - Math.PI/2;
+    const x2 = cx + R*Math.cos(a), y2 = cy + R*Math.sin(a);
+    const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1',cx); line.setAttribute('y1',cy);
+    line.setAttribute('x2',x2); line.setAttribute('y2',y2);
+    line.setAttribute('stroke','rgba(255,255,255,.1)');
+    line.setAttribute('stroke-width','1');
+    svg.appendChild(line);
+    // label
+    const lx = cx + (R+18)*Math.cos(a);
+    const ly = cy + (R+18)*Math.sin(a);
+    const label = document.createElementNS('http://www.w3.org/2000/svg','text');
+    label.setAttribute('x', lx); label.setAttribute('y', ly+4);
+    label.setAttribute('fill','rgba(255,255,255,.5)');
+    label.setAttribute('font-size','10');
+    label.setAttribute('font-family','Inter,sans-serif');
+    label.setAttribute('text-anchor','middle');
+    label.textContent = d.label;
+    svg.appendChild(label);
+  });
+
+  // Data polygons per company
+  results.forEach((r, ri)=>{
+    const color = CMP_COLORS[ri];
+    const pts = dims.map((d, i)=>{
+      const val = r.dims[d.key] || 0;
+      const frac = val/5;
+      const a = i*step - Math.PI/2;
+      return `${cx+frac*R*Math.cos(a)},${cy+frac*R*Math.sin(a)}`;
+    }).join(' ');
+    const poly = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+    poly.setAttribute('points', pts);
+    poly.setAttribute('fill', color+'28');
+    poly.setAttribute('stroke', color);
+    poly.setAttribute('stroke-width','2');
+    poly.setAttribute('stroke-linejoin','round');
+    svg.appendChild(poly);
+    // dots
+    dims.forEach((d, i)=>{
+      const val = r.dims[d.key] || 0;
+      const frac = val/5;
+      const a = i*step - Math.PI/2;
+      const dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      dot.setAttribute('cx', cx+frac*R*Math.cos(a));
+      dot.setAttribute('cy', cy+frac*R*Math.sin(a));
+      dot.setAttribute('r','4');
+      dot.setAttribute('fill', color);
+      dot.setAttribute('stroke','var(--bg2)');
+      dot.setAttribute('stroke-width','1.5');
+      svg.appendChild(dot);
+    });
+  });
+
+  // Legend
+  document.getElementById('cmp-radar-legend').innerHTML = results.map((r, i)=>`
+    <span style="display:flex;align-items:center;gap:5px">
+      <span style="width:10px;height:10px;border-radius:50%;background:${CMP_COLORS[i]};display:inline-block;flex-shrink:0"></span>
+      <span style="color:${CMP_COLORS[i]};font-weight:600">${r.ticker}</span>
+      <span style="color:var(--text3)">${r.name}</span>
+    </span>`).join('');
+}
+
+function renderCmpTable(results){
+  const n = results.length;
+  // Find winner (max value) per numeric row
+  function winCols(vals){
+    const max = Math.max(...vals.map(v=>typeof v==='number'?v:-Infinity));
+    return vals.map(v=>v===max&&typeof v==='number');
+  }
+  function fmtPct(v){return typeof v==='number'?(v*100).toFixed(1)+'%':'—';}
+  function fmtX(v){return typeof v==='number'?v.toFixed(2)+'x':'—';}
+  function fmtBigLocal(v){return typeof v==='number'?fmtBig(v):'—';}
+  function fmtScore(v){return v.toFixed(2);}
+
+  const sections = [
+    {title:'Overview', rows:[
+      {label:'Ticker',    vals: results.map(r=>r.ticker), fmt:v=>v, text:true},
+      {label:'Company',   vals: results.map(r=>r.name),   fmt:v=>v, text:true},
+      {label:'Sector',    vals: results.map(r=>r.sector),  fmt:v=>v, text:true},
+      {label:'Price',     vals: results.map(r=>r.price),   fmt:v=>v===0?'—':'$'+v.toFixed(2), higherBetter:true},
+      {label:'Market Cap',vals: results.map(r=>r.marketCap),fmt:fmtBigLocal, higherBetter:true},
+      {label:'Revenue TTM',vals:results.map(r=>r.revenue),fmt:fmtBigLocal, higherBetter:true},
+    ]},
+    {title:'Scorecard Dimensions', rows:[
+      {label:'Total Score',    vals:results.map(r=>r.score),         fmt:fmtScore, higherBetter:true, bold:true},
+      {label:'  Financials',   vals:results.map(r=>r.dims.ratios),   fmt:fmtScore, higherBetter:true},
+      {label:'  Management',   vals:results.map(r=>r.dims.mgmt),     fmt:fmtScore, higherBetter:true},
+      {label:'  Moat',         vals:results.map(r=>r.dims.moat),     fmt:fmtScore, higherBetter:true},
+      {label:'  ESG',          vals:results.map(r=>r.dims.esg),      fmt:fmtScore, higherBetter:true},
+      {label:'  Growth',       vals:results.map(r=>r.dims.growth),   fmt:fmtScore, higherBetter:true},
+      {label:'  Margins',      vals:results.map(r=>r.dims.margin),   fmt:fmtScore, higherBetter:true},
+    ]},
+    {title:'Profitability', rows:[
+      {label:'Gross Margin',     vals:results.map(r=>r.ratios.grossMargin),    fmt:fmtPct, higherBetter:true},
+      {label:'Operating Margin', vals:results.map(r=>r.ratios.operatingMargin),fmt:fmtPct, higherBetter:true},
+      {label:'Net Margin',       vals:results.map(r=>r.ratios.netMargin),      fmt:fmtPct, higherBetter:true},
+      {label:'ROIC',             vals:results.map(r=>r.ratios.roic),           fmt:fmtPct, higherBetter:true},
+      {label:'ROE',              vals:results.map(r=>r.ratios.roe),            fmt:fmtPct, higherBetter:true},
+    ]},
+    {title:'Liquidity & Solvency', rows:[
+      {label:'Current Ratio', vals:results.map(r=>r.ratios.currentRatio), fmt:fmtX, higherBetter:true},
+      {label:'Quick Ratio',   vals:results.map(r=>r.ratios.quickRatio),   fmt:fmtX, higherBetter:true},
+    ]},
+    {title:'Growth & Quality', rows:[
+      {label:'EPS Growth TTM',  vals:results.map(r=>r.ratios.epsGrowth),     fmt:fmtPct, higherBetter:true},
+      {label:'Revenue Growth',  vals:results.map(r=>r.ratios.revenueGrowth), fmt:fmtPct, higherBetter:true},
+      {label:'R&D % Revenue',   vals:results.map(r=>r.ratios.rdPct),         fmt:fmtPct, higherBetter:true},
+      {label:'Insider Ownership',vals:results.map(r=>r.ratios.insiderPct),   fmt:fmtPct, higherBetter:true},
+      {label:'ESG Risk Score',  vals:results.map(r=>typeof r.ratios.esgTotal==='number'?r.ratios.esgTotal:null),
+        fmt:v=>v===null?'—':v.toFixed(1), higherBetter:false, note:'lower=better'},
+    ]},
+  ];
+
+  const colors = CMP_COLORS.slice(0, n);
+  let html = `<thead><tr><th style="min-width:160px">Metric</th>`;
+  results.forEach((r,i)=>`${html}<th style="color:${colors[i]};text-align:right">${r.ticker}</th>`);
+  results.forEach((r,i)=>{ html += `<th style="color:${colors[i]};text-align:right">${r.ticker}</th>`; });
+  html += '</tr></thead><tbody>';
+
+  sections.forEach(sec=>{
+    html += `<tr class="ratio-group-header"><td colspan="${n+1}">${sec.title}</td></tr>`;
+    sec.rows.forEach(row=>{
+      const vals = row.vals;
+      const numericVals = vals.map(v=>typeof v==='number'?v:null);
+      const isText = row.text;
+      let winners = new Array(n).fill(false);
+      if(!isText && row.higherBetter !== undefined){
+        const valid = numericVals.filter(v=>v!==null);
+        if(valid.length > 0){
+          const best = row.higherBetter ? Math.max(...valid) : Math.min(...valid);
+          winners = numericVals.map(v=>v!==null&&v===best);
+        }
+      }
+      const labelStyle = row.bold ? 'font-weight:700;color:var(--text)' : 'color:var(--text2)';
+      html += `<tr><td style="${labelStyle}">${row.label}${row.note?` <span style="font-size:.65rem;color:var(--text3)">(${row.note})</span>`:''}</td>`;
+      vals.forEach((v,i)=>{
+        const formatted = row.fmt(v);
+        const win = winners[i];
+        const col = win ? (row.higherBetter===false ? 'var(--cyan)' : 'var(--green)') : 'var(--text)';
+        const bg  = win ? (row.higherBetter===false ? 'rgba(6,182,212,.1)' : 'var(--green-dim)') : '';
+        html += `<td style="text-align:right;font-family:var(--mono);font-weight:${win?'700':'400'};color:${col};background:${bg}">${formatted}${win&&!isText?' ✓':''}</td>`;
+      });
+      html += '</tr>';
+    });
+  });
+  html += '</tbody>';
+  document.getElementById('cmp-table').innerHTML = html;
+}
+
 // ==================== INIT ====================
 const storedWorker=getWorkerUrl();
 if(storedWorker) document.getElementById('worker-url-input').value=storedWorker;
-updateApiBadge();
-checkProxyWarnings();
-renderPortfolio();
-renderTrades();
-renderWatchlist();
-calcTrade();
+updateApiBadge();checkProxyWarnings();
+renderPortfolio();renderTrades();renderWatchlist();updateBadges();calcTrade();
 </script>
 </body>
 </html>
