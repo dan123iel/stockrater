@@ -45,8 +45,11 @@ async function handleSummary(ticker) {
       'financialData',
       'defaultKeyStatistics',
       'balanceSheetHistory',
+      'balanceSheetHistoryQuarterly',
       'incomeStatementHistory',
+      'incomeStatementHistoryQuarterly',
       'cashflowStatementHistory',
+      'cashflowStatementHistoryQuarterly',
       'earningsTrend',
       'esgScores',
     ].join(',');
