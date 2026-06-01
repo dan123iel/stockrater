@@ -487,6 +487,18 @@ code{background:var(--bg4);padding:2px 5px;border-radius:3px;font-size:.76em;fon
         <svg id="price-chart-svg" viewBox="0 0 800 180" style="width:100%;overflow:visible"></svg>
       </div>
     </div>
+
+    <!-- F) MARGINS CHART -->
+    <div class="card" id="margins-card" style="display:none">
+      <div class="card-title">F) Margin Profile <span class="tag tag-live">live · Yahoo Finance</span></div>
+      <div id="margins-chart-content"></div>
+    </div>
+
+    <!-- G) KEY FINANCIALS BAR CHART -->
+    <div class="card" id="financials-card" style="display:none">
+      <div class="card-title">G) Key Financials <span class="tag tag-live">live · Yahoo Finance</span></div>
+      <div id="financials-chart-content"></div>
+    </div>
   </div>
 </div>
 
@@ -880,6 +892,8 @@ async function fetchCompany(){
     updateScorecard();
     renderDCF(fd, ks, meta, getWaccInfo(fd));
     renderPriceChart(closes, highs, lows);
+    renderMarginsChart(fd);
+    renderFinancialsChart(fd, ks, meta);
     showRatingLoading(false);
     document.getElementById('rating-content').style.display='block';
     showProgress('done');
@@ -1211,6 +1225,7 @@ function updateScorecard(){
     line.setAttribute('y1',cy+(r-1)*Math.sin(rad));
     line.setAttribute('x2',cx+(r-1-tl)*Math.cos(rad));
     line.setAttribute('y2',cy+(r-1-tl)*Math.sin(rad));
+    line.setAttribute('stroke','var(--text)');
     line.setAttribute('stroke-width',i%4===0?'1.5':'.5');
     line.setAttribute('opacity',i%4===0?'.2':'.1');
     g.appendChild(line);
@@ -1334,22 +1349,22 @@ function saveTrade(){
 }
 function renderPortfolio(){
   const el=document.getElementById('portfolio-list');
-  if(!portfolio.length){el.innerHTML='<li class="empty"><div class="empty-icon">📊</div>No ratings yet.</li>';return;}
+  if(!portfolio.length){el.innerHTML='<li class="empty"><div class="empty-icon" style="opacity:.25">—</div>No ratings yet.</li>';return;}
   el.innerHTML=portfolio.map((c,i)=>{
     const col=scoreColor(c.score);
     const bg=c.score>=4.5?'var(--green-dim)':c.score>=3.5?'var(--indigo-dim)':c.score>=2.5?'var(--amber-dim)':'var(--red-dim)';
-    return `<li class="company-li stagger-in" style="animation-delay:${i*35}ms">
+    return `<li class="company-li stagger-in" style="animation-delay:${i*35}ms;cursor:pointer" onclick="analyseFromList('${c.ticker}')">
       <div class="li-avatar" style="background:${bg};color:${col}">${(c.ticker||'?').slice(0,2)}</div>
       <div style="flex:1"><div class="li-name">${c.name||c.ticker}</div>
-      <div class="li-meta">${c.ticker} · ${c.sector} · $${fmtNum(c.price,2)}</div></div>
+      <div class="li-meta">${c.ticker}${c.sector?' · '+c.sector:''}${c.price?' · $'+fmtNum(c.price,2):''}</div></div>
       <span class="li-score" style="background:${bg};color:${col}">${c.score.toFixed(2)} — ${c.verdict}</span>
-      <button class="btn btn-ghost btn-sm btn-icon" onclick="removePf(${i})">✕</button>
+      <button class="btn btn-ghost btn-sm btn-icon" onclick="event.stopPropagation();removePf(${i})">✕</button>
     </li>`;
   }).join('');
 }
 function renderTrades(){
   const el=document.getElementById('trade-list');
-  if(!trades.length){el.innerHTML='<li class="empty"><div class="empty-icon">⚡</div>No trades saved.</li>';return;}
+  if(!trades.length){el.innerHTML='<li class="empty"><div class="empty-icon" style="opacity:.25">—</div>No trades saved.</li>';return;}
   el.innerHTML=trades.map((t,i)=>`<li class="company-li stagger-in" style="animation-delay:${i*35}ms">
     <div class="li-avatar" style="background:var(--indigo-dim);color:var(--indigo-light)">${(t.ticker||t.name||'?').slice(0,2).toUpperCase()}</div>
     <div style="flex:1"><div class="li-name">${t.name||t.ticker}</div>
@@ -1359,11 +1374,12 @@ function renderTrades(){
 }
 function renderWatchlist(){
   const el=document.getElementById('watchlist-list');
-  if(!watchlist.length){el.innerHTML='<li class="empty"><div class="empty-icon">👁</div>Watchlist is empty.</li>';return;}
+  if(!watchlist.length){el.innerHTML='<li class="empty"><div class="empty-icon" style="opacity:.25">○</div>Watchlist is empty.</li>';return;}
   el.innerHTML=watchlist.map((w,i)=>`<li class="company-li stagger-in" style="animation-delay:${i*35}ms">
-    <div class="li-avatar" style="background:rgba(139,92,246,.15);color:var(--violet)">${(w.ticker||'?').slice(0,2)}</div>
+    <div class="li-avatar">${(w.ticker||'?').slice(0,2)}</div>
     <div style="flex:1"><div class="li-name">${w.name||w.ticker}</div>
-    <div class="li-meta">${w.ticker} · ${w.sector} · $${fmtNum(w.price,2)}</div></div>
+    <div class="li-meta">${w.ticker}${w.sector?' · '+w.sector:''}${w.price?' · $'+fmtNum(w.price,2):''}</div></div>
+    <button class="btn btn-sm" onclick="analyseFromList('${w.ticker}')" style="margin-right:6px">Analyse</button>
     <button class="btn btn-ghost btn-sm btn-icon" onclick="removeWl(${i})">✕</button>
   </li>`).join('');
 }
@@ -1374,6 +1390,14 @@ function updateBadges(){
   const pfc=document.getElementById('pf-count');const wlc=document.getElementById('wl-count');
   if(portfolio.length){pfc.textContent=portfolio.length;pfc.style.display='';}else pfc.style.display='none';
   if(watchlist.length){wlc.textContent=watchlist.length;wlc.style.display='';}else wlc.style.display='none';
+}
+
+// ==================== ANALYSE FROM LIST ====================
+function analyseFromList(ticker){
+  if(!ticker) return;
+  showPage('rating');
+  document.getElementById('r-ticker').value = ticker;
+  fetchCompany();
 }
 
 // ==================== NAV ====================
@@ -2106,6 +2130,107 @@ function renderPriceChart(closes, highs, lows){
     }).join('')}
     <circle cx="${cx(n-1)}" cy="${cy(last)}" r="3" fill="${lineColor}" stroke="var(--bg2)" stroke-width="2"/>
     <text x="${cx(n-1)+6}" y="${cy(last)+4}" fill="${lineColor}" font-size="10" font-family="JetBrains Mono,monospace">${last.toFixed(2)}</text>`;
+}
+
+// ==================== MARGINS CHART ====================
+function renderMarginsChart(fd){
+  const card = document.getElementById('margins-card');
+  const el = document.getElementById('margins-chart-content');
+  const gross = fd.grossMargins||0;
+  const operating = fd.operatingMargins||0;
+  const net = fd.profitMargins||0;
+  if(!gross && !operating && !net){card.style.display='none';return;}
+  card.style.display='block';
+
+  const margins = [
+    {label:'Gross Margin', value:gross, color:'#059669'},
+    {label:'Operating Margin', value:operating, color:'#4f46e5'},
+    {label:'Net Margin', value:net, color:'#0284c7'},
+  ];
+
+  el.innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:14px">
+      ${margins.map(m=>`
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <span style="font-size:.8rem;color:var(--text2)">${m.label}</span>
+            <span style="font-size:.9rem;font-weight:600;font-family:var(--mono);color:${m.color}">${(m.value*100).toFixed(1)}%</span>
+          </div>
+          <div style="height:6px;background:var(--bg3);border-radius:6px;overflow:hidden">
+            <div style="height:100%;width:${Math.min(m.value*100,100).toFixed(1)}%;background:${m.color};border-radius:6px;transition:width .6s ease"></div>
+          </div>
+        </div>`).join('')}
+    </div>
+    <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;text-align:center">
+      <div>
+        <div style="font-size:.62rem;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Revenue TTM</div>
+        <div style="font-size:1.1rem;font-weight:600;font-family:var(--mono)">${fmtBig(fd.totalRevenue||0)}</div>
+      </div>
+      <div>
+        <div style="font-size:.62rem;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">EBITDA</div>
+        <div style="font-size:1.1rem;font-weight:600;font-family:var(--mono)">${fmtBig(fd.ebitda||0)}</div>
+      </div>
+      <div>
+        <div style="font-size:.62rem;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Free Cash Flow</div>
+        <div style="font-size:1.1rem;font-weight:600;font-family:var(--mono);color:${(fd.freeCashflow||0)>=0?'var(--green)':'var(--red)'}">${fmtBig(fd.freeCashflow||0)}</div>
+      </div>
+    </div>`;
+}
+
+// ==================== FINANCIALS BAR CHART ====================
+function renderFinancialsChart(fd, ks, meta){
+  const card = document.getElementById('financials-card');
+  const el = document.getElementById('financials-chart-content');
+  const price = meta.regularMarketPrice||0;
+  const shares = ks.sharesOutstanding||0;
+  const marketCap = price*shares;
+  const ev = ks.enterpriseValue||0;
+  const revenue = fd.totalRevenue||0;
+  const fcf = fd.freeCashflow||0;
+  const ebitda = fd.ebitda||0;
+  const netIncome = fd.netIncomeToCommon||0;
+  const forwardPE = ks.forwardPE||0;
+  const epsG = fd.earningsGrowth||0;
+  const revG = fd.revenueGrowth||0;
+
+  if(!revenue){card.style.display='none';return;}
+  card.style.display='block';
+
+  // Valuation multiples
+  const evRev = revenue>0 ? ev/revenue : 0;
+  const evEbitda = ebitda>0 ? ev/ebitda : 0;
+  const fcfYield = marketCap>0 && fcf>0 ? (fcf/marketCap)*100 : 0;
+
+  const bars = [
+    {label:'Revenue', value:revenue, color:'#4f46e5', fmt:fmtBig},
+    {label:'EBITDA', value:ebitda, color:'#0284c7', fmt:fmtBig},
+    {label:'Free Cash Flow', value:fcf, color:fcf>=0?'#059669':'#dc2626', fmt:fmtBig},
+    {label:'Net Income', value:netIncome, color:netIncome>=0?'#059669':'#dc2626', fmt:fmtBig},
+  ].filter(b=>b.value!==0);
+
+  const maxVal = Math.max(...bars.map(b=>Math.abs(b.value)));
+
+  el.innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:1.25rem">
+      ${bars.map(b=>`
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+            <span style="font-size:.8rem;color:var(--text2)">${b.label}</span>
+            <span style="font-size:.9rem;font-weight:600;font-family:var(--mono);color:${b.color}">${b.fmt(b.value)}</span>
+          </div>
+          <div style="height:5px;background:var(--bg3);border-radius:5px;overflow:hidden">
+            <div style="height:100%;width:${(Math.abs(b.value)/maxVal*100).toFixed(1)}%;background:${b.color};border-radius:5px;transition:width .6s ease"></div>
+          </div>
+        </div>`).join('')}
+    </div>
+    <div style="padding-top:1rem;border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:1rem;text-align:center">
+      ${forwardPE>0?`<div><div style="font-size:.62rem;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Forward P/E</div><div style="font-size:1rem;font-weight:600;font-family:var(--mono)">${forwardPE.toFixed(1)}x</div></div>`:''}
+      ${evRev>0?`<div><div style="font-size:.62rem;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">EV/Revenue</div><div style="font-size:1rem;font-weight:600;font-family:var(--mono)">${evRev.toFixed(1)}x</div></div>`:''}
+      ${evEbitda>0?`<div><div style="font-size:.62rem;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">EV/EBITDA</div><div style="font-size:1rem;font-weight:600;font-family:var(--mono)">${evEbitda.toFixed(1)}x</div></div>`:''}
+      ${fcfYield>0?`<div><div style="font-size:.62rem;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">FCF Yield</div><div style="font-size:1rem;font-weight:600;font-family:var(--mono);color:var(--green)">${fcfYield.toFixed(1)}%</div></div>`:''}
+      ${epsG?`<div><div style="font-size:.62rem;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">EPS Growth</div><div style="font-size:1rem;font-weight:600;font-family:var(--mono);color:${epsG>=0?'var(--green)':'var(--red)'}">${epsG>=0?'+':''}${(epsG*100).toFixed(1)}%</div></div>`:''}
+      ${revG?`<div><div style="font-size:.62rem;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Rev Growth</div><div style="font-size:1rem;font-weight:600;font-family:var(--mono);color:${revG>=0?'var(--green)':'var(--red)'}">${revG>=0?'+':''}${(revG*100).toFixed(1)}%</div></div>`:''}
+    </div>`;
 }
 
 // ==================== INIT ====================
