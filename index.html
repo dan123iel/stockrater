@@ -339,6 +339,33 @@ code{background:var(--bg4);padding:2px 5px;border-radius:3px;font-size:.76em;fon
   .tp-grid,.metrics{grid-template-columns:1fr}
   .page-title{font-size:1.35rem}
 }
+
+/* ── PERIOD TABS ── */
+.period-tabs{display:flex;gap:4px;margin-bottom:1rem}
+.period-tab{padding:.3rem .75rem;border-radius:4px;font-size:.75rem;font-family:var(--mono);cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text2);transition:all .12s}
+.period-tab:hover{background:var(--bg2);color:var(--text)}
+.period-tab.active{background:var(--text);color:var(--bg);border-color:var(--text)}
+
+/* ── TREND ARROWS ── */
+.trend-up{color:#059669;font-weight:700;font-size:.85rem}
+.trend-flat{color:var(--amber);font-weight:600;font-size:.85rem}
+.trend-down{color:#dc2626;font-weight:700;font-size:.85rem}
+
+/* ── DUAL SCORE ── */
+.score-dual{display:flex;flex-direction:column;gap:3px}
+.score-dual-row{display:flex;align-items:center;gap:5px;font-size:.68rem}
+.score-dual-label{color:var(--text3);font-family:var(--mono);min-width:16px}
+.score-bar-wrap-sm{width:40px;height:2px;background:var(--bg4);border-radius:2px;overflow:hidden;display:inline-block;vertical-align:middle}
+
+/* ── PERIOD OVERVIEW TABLE ── */
+.period-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.period-table th{font-size:.65rem;font-weight:600;color:var(--text3);text-align:right;padding:6px 10px;border-bottom:1px solid var(--border);font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.period-table th:first-child{text-align:left}
+.period-table td{padding:9px 10px;border-bottom:1px solid var(--border);color:var(--text);text-align:right;font-family:var(--mono);font-size:.82rem}
+.period-table td:first-child{text-align:left;color:var(--text2);font-family:var(--font);font-size:.82rem}
+.period-table tr:last-child td{border:none}
+.period-table tbody tr:hover td{background:var(--bg2)}
+.period-table .trend-cell{font-size:.8rem;font-weight:700;text-align:center}
 </style>
 </head>
 <body>
@@ -498,6 +525,12 @@ code{background:var(--bg4);padding:2px 5px;border-radius:3px;font-size:.76em;fon
     <div class="card" id="financials-card" style="display:none">
       <div class="card-title">G) Key Financials <span class="tag tag-live">live · Yahoo Finance</span></div>
       <div id="financials-chart-content"></div>
+    </div>
+
+    <!-- H) PERIOD OVERVIEW -->
+    <div class="card" id="period-card" style="display:none">
+      <div class="card-title">H) Period Overview <span class="tag tag-live">annual · quarterly · TTM</span></div>
+      <div id="period-content"></div>
     </div>
   </div>
 </div>
@@ -716,6 +749,46 @@ const WACC_TABLE = {
   "Utility (Water)":{"beta":0.68,"wacc":0.0615}
 };
 
+// ==================== INDUSTRY BENCHMARKS (S&P 500 sector medians) ====================
+// Source: Damodaran sector averages, adjusted for mid-2024
+const INDUSTRY_BENCHMARKS = {
+  'Technology':    {currentRatio:2.0,quickRatio:1.8,cashRatio:0.50,equityToAssets:0.55,debtToEquity:0.30,debtRatio:0.22,roa:0.12,roe:0.22,grossMargin:0.52,operatingMargin:0.22,netMargin:0.15,assetTurnover:0.65,fcfMargin:0.20,cfToDebt:0.80},
+  'Healthcare':    {currentRatio:1.8,quickRatio:1.4,cashRatio:0.35,equityToAssets:0.50,debtToEquity:0.45,debtRatio:0.28,roa:0.08,roe:0.16,grossMargin:0.55,operatingMargin:0.15,netMargin:0.10,assetTurnover:0.55,fcfMargin:0.14,cfToDebt:0.50},
+  'Financial Services':{currentRatio:1.2,quickRatio:1.0,cashRatio:0.20,equityToAssets:0.12,debtToEquity:2.00,debtRatio:0.60,roa:0.01,roe:0.10,grossMargin:0.70,operatingMargin:0.25,netMargin:0.18,assetTurnover:0.08,fcfMargin:0.20,cfToDebt:0.15},
+  'Consumer Cyclical':{currentRatio:1.4,quickRatio:0.9,cashRatio:0.18,equityToAssets:0.35,debtToEquity:0.80,debtRatio:0.35,roa:0.06,roe:0.14,grossMargin:0.32,operatingMargin:0.08,netMargin:0.05,assetTurnover:1.10,fcfMargin:0.05,cfToDebt:0.30},
+  'Consumer Defensive':{currentRatio:1.3,quickRatio:0.8,cashRatio:0.12,equityToAssets:0.35,debtToEquity:0.75,debtRatio:0.32,roa:0.07,roe:0.18,grossMargin:0.35,operatingMargin:0.10,netMargin:0.06,assetTurnover:0.95,fcfMargin:0.08,cfToDebt:0.35},
+  'Energy':        {currentRatio:1.2,quickRatio:0.9,cashRatio:0.12,equityToAssets:0.42,debtToEquity:0.55,debtRatio:0.30,roa:0.07,roe:0.14,grossMargin:0.30,operatingMargin:0.12,netMargin:0.08,assetTurnover:0.50,fcfMargin:0.10,cfToDebt:0.40},
+  'Industrials':   {currentRatio:1.5,quickRatio:1.0,cashRatio:0.18,equityToAssets:0.40,debtToEquity:0.60,debtRatio:0.30,roa:0.06,roe:0.14,grossMargin:0.28,operatingMargin:0.10,netMargin:0.07,assetTurnover:0.75,fcfMargin:0.07,cfToDebt:0.35},
+  'Utilities':     {currentRatio:0.9,quickRatio:0.7,cashRatio:0.05,equityToAssets:0.35,debtToEquity:1.20,debtRatio:0.45,roa:0.03,roe:0.09,grossMargin:0.40,operatingMargin:0.20,netMargin:0.12,assetTurnover:0.22,fcfMargin:0.05,cfToDebt:0.15},
+  'Real Estate':   {currentRatio:0.8,quickRatio:0.6,cashRatio:0.06,equityToAssets:0.38,debtToEquity:1.00,debtRatio:0.40,roa:0.03,roe:0.07,grossMargin:0.55,operatingMargin:0.30,netMargin:0.18,assetTurnover:0.18,fcfMargin:0.15,cfToDebt:0.20},
+  'Communication Services':{currentRatio:1.2,quickRatio:1.0,cashRatio:0.22,equityToAssets:0.42,debtToEquity:0.70,debtRatio:0.32,roa:0.06,roe:0.14,grossMargin:0.48,operatingMargin:0.18,netMargin:0.12,assetTurnover:0.45,fcfMargin:0.15,cfToDebt:0.45},
+  'Basic Materials':{currentRatio:1.6,quickRatio:1.0,cashRatio:0.15,equityToAssets:0.45,debtToEquity:0.50,debtRatio:0.28,roa:0.06,roe:0.12,grossMargin:0.25,operatingMargin:0.12,netMargin:0.08,assetTurnover:0.65,fcfMargin:0.08,cfToDebt:0.35},
+  '_default':      {currentRatio:1.5,quickRatio:1.1,cashRatio:0.20,equityToAssets:0.40,debtToEquity:0.65,debtRatio:0.32,roa:0.06,roe:0.13,grossMargin:0.38,operatingMargin:0.13,netMargin:0.08,assetTurnover:0.70,fcfMargin:0.10,cfToDebt:0.40},
+};
+
+function getIndustryBench(sector){
+  if(!sector) return INDUSTRY_BENCHMARKS['_default'];
+  for(const [k,v] of Object.entries(INDUSTRY_BENCHMARKS)){
+    if(k==='_default') continue;
+    if(sector.toLowerCase().includes(k.toLowerCase().split(' ')[0])||k.toLowerCase().includes(sector.toLowerCase().split(' ')[0]))
+      return v;
+  }
+  return INDUSTRY_BENCHMARKS['_default'];
+}
+
+function scoreRatioVsIndustry(val, key, sector){
+  const bench = getIndustryBench(sector);
+  const median = bench[key];
+  if(!median||!val) return 3;
+  const INVERTED = ['debtToEquity','debtRatio'];
+  const ratio = INVERTED.includes(key) ? median/val : val/median;
+  if(ratio>=1.5) return 5;
+  if(ratio>=1.15) return 4;
+  if(ratio>=0.85) return 3;
+  if(ratio>=0.60) return 2;
+  return 1;
+}
+
 // ==================== RATIO BENCHMARKS (from your Excel) ====================
 // Each ratio: {label, fmt, inv(optional), groups per score 5→4→3→2→1}
 const RATIO_BENCH = {
@@ -759,25 +832,25 @@ const RATIO_BENCH = {
 const QUAL_DEF = {
   mgmt:[
     {label:"Capital Allocation",key:"mgmt2",def:3,auto:true,
-      tip:"Auto: ROIC = Net Income / Invested Capital\n1: ROIC <0%\n2: ROIC 0–5%\n3: ROIC 5–10%\n4: ROIC 10–15%\n5: ROIC >15%"},
+      tip:"WHAT: How efficiently management reinvests capital (ROIC = Net Income / Invested Capital).\nWHY: The single best predictor of long-term value creation. Buffett calls it the most important metric.\nHOW TO RATE:\n★★★★★ ROIC >15% — exceptional, creates significant economic value\n★★★★  ROIC 10–15% — good, above cost of capital\n★★★   ROIC 5–10% — acceptable, marginal value creation\n★★    ROIC 0–5% — poor, destroys or barely covers cost of capital\n★     ROIC negative — destroying shareholder value\nCOMPARED TO: S&P 500 median ROIC ~11%. Tech sector median ~18%.\nNOTE: Auto-filled from Yahoo Finance financialData."},
     {label:"Track Record",key:"mgmt3",def:3,auto:true,
-      tip:"Auto: Avg EPS + Revenue Growth TTM\n1: <-5%\n2: -5–2%\n3: 2–8%\n4: 8–15%\n5: >15%"},
+      tip:"WHAT: Consistency and growth of earnings and revenue over time.\nWHY: Past execution predicts future reliability. Look for 5–10y compounding, not single-year spikes.\nHOW TO RATE:\n★★★★★ EPS + Revenue growth avg >15% TTM, consistent history\n★★★★  Growth 8–15%, minor volatility\n★★★   Growth 2–8%, stable\n★★    Growth -5–2%, stagnating or volatile\n★     Negative growth, dividend cuts, or restated earnings\nCOMPARED TO: S&P 500 avg revenue growth ~7%, EPS growth ~9%.\nNOTE: Auto-filled from Yahoo Finance earningsGrowth + revenueGrowth (TTM)."},
     {label:"Skin in the Game",key:"mgmt4",def:3,auto:true,
-      tip:"Auto: Insider Ownership %\n1: <0.1%\n2: 0.1–1%\n3: 1–5%\n4: 5–10%\n5: >10%"},
+      tip:"WHAT: Percentage of shares owned by insiders (CEO, CFO, board).\nWHY: Aligns management incentives with shareholders. High insider ownership = management thinks like owners.\nHOW TO RATE:\n★★★★★ >10% insider ownership — strong alignment (founder-led or deep conviction)\n★★★★  5–10% — meaningful stake, good alignment\n★★★   1–5% — moderate stake, typical for large caps\n★★    0.1–1% — minimal, common at mega-caps\n★     <0.1% — no meaningful alignment\nCOMPARED TO: S&P 500 average ~1.5%. Founder-led companies typically >5%.\nNOTE: Auto-filled from Yahoo heldPercentInsiders."},
     {label:"Long-Term Orientation",key:"mgmt5",def:3,auto:true,
-      tip:"Auto: R&D % of Revenue\n1: No R&D\n2: R&D <3%\n3: R&D 3–7%\n4: R&D 7–10%\n5: R&D >10%"}
+      tip:"WHAT: R&D investment as % of revenue — proxy for long-term thinking vs short-term profit extraction.\nWHY: Companies that invest consistently in R&D build durable advantages. Look for sustained investment, not just current year.\nHOW TO RATE:\n★★★★★ R&D >10% of revenue — heavy reinvestment (e.g. pharma, tech)\n★★★★  R&D 7–10% — strong commitment\n★★★   R&D 3–7% — moderate, depends on sector\n★★    R&D >0 but <3% — limited investment\n★     No R&D reported — pure extraction model\nCOMPARED TO: Tech sector median ~12%, Healthcare ~15%, Industrials ~3%.\nNOTE: Auto-filled. R&D not always disclosed by Yahoo — may default to 1★."}
   ],
   moat:[
     {label:"Competitive Advantage (Moat)",key:"moat2",def:3,auto:true,
-      tip:"Auto: Gross Margin proxy\n1: <20%\n2: 20–30%\n3: 30–45%\n4: 45–60%\n5: >60%"},
+      tip:"WHAT: Durability of the business advantage — can competitors replicate it within 10 years?\nWHY: The moat determines whether high returns persist. Without a moat, high ROIC attracts competition and erodes.\nHOW TO RATE (use Gross Margin as proxy, verify manually):\n★★★★★ Gross margin >60%, dominant market position, structural barriers (network effects, patents, brand)\n★★★★  Gross margin 45–60%, clear competitive advantage lasting >10y\n★★★   Gross margin 30–45%, some advantage, moderate durability\n★★    Gross margin 20–30%, easily replicable, commodity-like\n★     Gross margin <20%, no discernible moat\nCOMPARED TO: S&P 500 median gross margin ~38%. Wide-moat companies typically >50%.\nNOTE: Auto-filled from grossMargins. Override manually if you know the business model well."},
     {label:"Innovation / Reputation",key:"moat3",def:3,auto:true,
-      tip:"Auto: R&D % of Revenue (same as Long-Term Orientation)\n1: No R&D\n2: <3%\n3: 3–7%\n4: 7–10%\n5: >10%"}
+      tip:"WHAT: Brand strength, innovation pipeline, and ability to attract talent and customers.\nWHY: Intangible assets are the hardest to replicate and often the most durable source of value. Apple's brand, LVMH's reputation, Google's talent density.\nHOW TO RATE:\n★★★★★ Industry leader, iconic brand, R&D >10%, sets direction for competitors\n★★★★  Strong brand in niche, R&D 7–10%, innovation pipeline visible\n★★★   Average brand, R&D 3–7%, keeps pace with competition\n★★    Follower, low R&D, no significant brand premium\n★     No innovation, no brand power, price-driven competition\nCOMPARED TO: Patent citations, brand value rankings, employee NPS are qualitative signals.\nNOTE: Auto-filled from R&D%. Adjust if brand value differs from R&D investment."}
   ],
   esg:[
     {label:"ESG Risk Score",key:"esg1",def:3,auto:true,
-      tip:"Auto: Yahoo ESG Score (wenn verfügbar, sonst 3★)\n1: Score >40\n2: 30–40\n3: 20–30\n4: 10–20\n5: <10 (niedrig = besser)"},
+      tip:"WHAT: Combined exposure to environmental, social, and governance risks.\nWHY: ESG risks can become financial risks: regulatory fines, customer boycotts, talent loss, stranded assets.\nHOW TO RATE (Yahoo ESG Score — lower = lower risk):\n★★★★★ ESG score <10 — minimal risk, best-in-class\n★★★★  ESG score 10–20 — low risk\n★★★   ESG score 20–30 — moderate risk\n★★    ESG score 30–40 — elevated risk\n★     ESG score >40 — significant risk, potential financial impact\nCOMPARED TO: Sustainalytics industry averages. S&P 500 median ~21.\nNOTE: Auto-filled if Yahoo provides ESG data. Many tickers return no data — defaults to 3★."},
     {label:"Crisis Resilience",key:"esg3",def:3,auto:true,
-      tip:"Auto: FCF Margin proxy\n1: FCF negativ\n2: FCF 0–5%\n3: FCF 5–10%\n4: FCF 10–15%\n5: FCF >15%"}
+      tip:"WHAT: Ability to generate positive free cash flow through economic crises (2008, 2020, 2022).\nWHY: For long-term investors, resilience matters more than growth. Companies that survive crises intact compound far better over 20 years.\nHOW TO RATE (FCF Margin as proxy — check 2020/2022 history manually):\n★★★★★ FCF margin >15%, FCF positive in all last 3 crises, no dividend cuts\n★★★★  FCF margin 10–15%, weathered 2 of 3 crises without cuts\n★★★   FCF margin 5–10%, some stress but recovered\n★★    FCF margin 0–5%, volatile, dividend cuts in downturns\n★     FCF negative, near-distress in crises\nCOMPARED TO: S&P 500 median FCF margin ~9%. Counter-cyclical businesses naturally score higher.\nNOTE: Auto-filled from TTM FCF margin. Manually adjust if you reviewed multi-year history."}
   ]
 };
 
@@ -886,7 +959,7 @@ async function fetchCompany(){
     const lows=chart.lows||[];
     currentCompany={ticker,fd,ks,meta,summary,closes,highs,lows};
     renderCompanyHero(meta,fd,ks);
-    renderRatios(fd,ks,meta,closes,highs,lows);
+    renderRatios(fd,ks,meta,closes,highs,lows,summary);
     renderQual();
     autoFillQual(fd, ks, closes, summary);
     updateScorecard();
@@ -894,6 +967,7 @@ async function fetchCompany(){
     renderPriceChart(closes, highs, lows);
     renderMarginsChart(fd);
     renderFinancialsChart(fd, ks, meta);
+    renderPeriodOverview(summary, fd, ks);
     showRatingLoading(false);
     document.getElementById('rating-content').style.display='block';
     showProgress('done');
@@ -989,54 +1063,126 @@ function fmtBig(n){
 }
 
 // ==================== RENDER RATIOS ====================
-function renderRatios(fd,ks,meta,closes,highs,lows){
-  const price=meta.regularMarketPrice||0;
+// Build ratio values from a financial data object (fd) + ks
+function buildRatioVals(fd, ks){
   const totalCash=fd.totalCash||0;
   const totalDebt=fd.totalDebt||0;
   const totalRevenue=fd.totalRevenue||0;
   const freeCashflow=fd.freeCashflow||0;
-  const ebitda=fd.ebitda||0;
-  const ev=ks.enterpriseValue||0;
-  const marketCap=price*(ks.sharesOutstanding||0);
-  // totalAssets: try balance sheet first, fallback to derive from bookValue * shares
-  const sharesOut=ks.sharesOutstanding||0;
-  const bookValue=ks.bookValue||0;
-  const totalEquity=fd.totalStockholderEquity||fd.stockholdersEquity||(bookValue>0&&sharesOut>0?bookValue*sharesOut:0);
-  // totalAssets: derive from ROA if balance sheet missing (ROA = netIncome/totalAssets)
   const netIncome=fd.netIncomeToCommon||0;
   const roaDirect=fd.returnOnAssets||0;
-  const totalAssets=fd.totalAssets||ks.totalAssets||(roaDirect>0&&netIncome>0?netIncome/roaDirect:0);
+  const sharesOut=(ks||{}).sharesOutstanding||0;
+  const bookValue=(ks||{}).bookValue||0;
+  const totalEquity=fd.totalStockholderEquity||fd.stockholdersEquity||(bookValue>0&&sharesOut>0?bookValue*sharesOut:0);
+  const totalAssets=fd.totalAssets||(roaDirect>0&&netIncome>0?netIncome/roaDirect:0);
   const operatingCashflow=fd.operatingCashflow||0;
-  const operatingIncome=fd.operatingIncome||(totalRevenue*(fd.operatingMargins||0));
-
-  // Compute all ratio values — use Yahoo direct ratios where balance sheet is unavailable
   const cashRatioApprox=totalDebt>0?totalCash/totalDebt:(totalCash>0?1:0);
-  const equityToAssetsVal=totalAssets>0&&totalEquity>0?totalEquity/totalAssets:0;
-  const debtToEquityVal=fd.debtToEquity>0?fd.debtToEquity/100:(totalEquity>0?totalDebt/totalEquity:0);
-  const debtRatioVal=totalAssets>0?totalDebt/totalAssets:0;
-  const roaVal=fd.returnOnAssets||0;
-  const roeVal=fd.returnOnEquity||0;
-  const operatingMarginVal=fd.operatingMargins||0;
-  const assetTurnoverVal=totalAssets>0?totalRevenue/totalAssets:0;
-  const cfToDebtVal=totalDebt>0?operatingCashflow/totalDebt:0;
-  const fcfMarginVal=totalRevenue>0?freeCashflow/totalRevenue:0;
-
-  const ratioVals={
+  return {
     currentRatio: fd.currentRatio||0,
     quickRatio:   fd.quickRatio||0,
     cashRatio:    cashRatioApprox,
-    equityToAssets:equityToAssetsVal,
-    debtToEquity: debtToEquityVal,
-    debtRatio:    debtRatioVal,
-    roa:          roaVal,
-    roe:          roeVal,
-    grossMargin:  fd.grossMargins||0,
-    operatingMargin:operatingMarginVal,
-    netMargin:    fd.profitMargins||0,
-    assetTurnover:assetTurnoverVal,
-    fcfMargin:    fcfMarginVal,
-    cfToDebt:     cfToDebtVal,
+    equityToAssets: totalAssets>0&&totalEquity>0?totalEquity/totalAssets:0,
+    debtToEquity:   fd.debtToEquity>0?fd.debtToEquity/100:(totalEquity>0?totalDebt/totalEquity:0),
+    debtRatio:      totalAssets>0?totalDebt/totalAssets:0,
+    roa:            fd.returnOnAssets||0,
+    roe:            fd.returnOnEquity||0,
+    grossMargin:    fd.grossMargins||0,
+    operatingMargin:fd.operatingMargins||0,
+    netMargin:      fd.profitMargins||0,
+    assetTurnover:  totalAssets>0?totalRevenue/totalAssets:0,
+    fcfMargin:      totalRevenue>0?freeCashflow/totalRevenue:0,
+    cfToDebt:       totalDebt>0?operatingCashflow/totalDebt:0,
   };
+}
+
+// Build a lightweight fd-like object from an annual statement row
+function fdFromAnnual(is, bs, cf){
+  const rev = is.totalRevenue||0;
+  const ni  = is.netIncome||0;
+  const gp  = is.grossProfit||0;
+  const op  = is.operatingIncome||0;
+  const ta  = bs.totalAssets||0;
+  const te  = bs.totalStockholderEquity||0;
+  const td  = (bs.shortLongTermDebt||0)+(bs.longTermDebt||0);
+  const cl  = bs.totalCurrentLiabilities||0;
+  const ca  = bs.totalCurrentAssets||0;
+  const cash= bs.cash||0;
+  const ocf = cf.totalCashFromOperatingActivities||0;
+  const capex=cf.capitalExpenditures||0;
+  return {
+    totalRevenue: rev,
+    netIncomeToCommon: ni,
+    totalAssets: ta,
+    totalStockholderEquity: te,
+    totalDebt: td,
+    totalCurrentLiabilities: cl,
+    totalCurrentAssets: ca,
+    totalCash: cash,
+    operatingCashflow: ocf,
+    freeCashflow: ocf+capex,
+    grossMargins: rev>0?gp/rev:0,
+    operatingMargins: rev>0?op/rev:0,
+    profitMargins: rev>0?ni/rev:0,
+    currentRatio: cl>0?ca/cl:0,
+    quickRatio: cl>0?(ca-(bs.inventory||0))/cl:0,
+    returnOnAssets: ta>0?ni/ta:0,
+    returnOnEquity: te>0?ni/te:0,
+  };
+}
+
+// Trend arrow: compare current vs prior ratio value
+function trendArrow(curr, prev, inverted){
+  if(!curr||!prev||prev===0) return '<span style="color:var(--text3)">—</span>';
+  const chg = inverted ? (prev-curr)/Math.abs(prev) : (curr-prev)/Math.abs(prev);
+  if(chg>0.05) return '<span class="trend-up">↑</span>';
+  if(chg<-0.05) return '<span class="trend-down">↓</span>';
+  return '<span class="trend-flat">→</span>';
+}
+
+// Global period state
+let _currentPeriod = 'ttm';
+let _periodData = {};
+
+function renderRatios(fd,ks,meta,closes,highs,lows,summary){
+  const price=meta.regularMarketPrice||0;
+  const ebitda=fd.ebitda||0;
+  const ev=ks.enterpriseValue||0;
+  const marketCap=price*(ks.sharesOutstanding||0);
+  const sharesOut=ks.sharesOutstanding||0;
+  const bookValue=ks.bookValue||0;
+  const totalEquity=fd.totalStockholderEquity||fd.stockholdersEquity||(bookValue>0&&sharesOut>0?bookValue*sharesOut:0);
+  const netIncome=fd.netIncomeToCommon||0;
+  const roaDirect=fd.returnOnAssets||0;
+  const totalAssets=fd.totalAssets||ks.totalAssets||(roaDirect>0&&netIncome>0?netIncome/roaDirect:0);
+  const totalRevenue=fd.totalRevenue||0;
+  const freeCashflow=fd.freeCashflow||0;
+
+  // Build period datasets
+  const annualIS  = summary?.incomeStatementHistory?.incomeStatementHistory  || [];
+  const annualBS  = summary?.balanceSheetHistory?.balanceSheetStatements     || [];
+  const annualCF  = summary?.cashflowStatementHistory?.cashflowStatements    || [];
+  const quarterIS = summary?.incomeStatementHistoryQuarterly?.incomeStatementHistory || [];
+  const quarterBS = summary?.balanceSheetHistoryQuarterly?.balanceSheetStatements    || [];
+  const quarterCF = summary?.cashflowStatementHistoryQuarterly?.cashflowStatements   || [];
+
+  // Period labels: extract year from endDate (unix timestamp)
+  function periodLabel(stmt){ return stmt?.endDate ? new Date(stmt.endDate*1000).getFullYear()+'': ''; }
+  function qLabel(stmt){ if(!stmt?.endDate) return ''; const d=new Date(stmt.endDate*1000); return `Q${Math.ceil((d.getMonth()+1)/3)} ${d.getFullYear()}`; }
+
+  _periodData = {
+    ttm:  fd,
+    q:    quarterIS[0] ? fdFromAnnual(quarterIS[0], quarterBS[0]||{}, quarterCF[0]||{}) : null,
+    fy1:  annualIS[0]  ? fdFromAnnual(annualIS[0],  annualBS[0]||{},  annualCF[0]||{})  : null,
+    fy2:  annualIS[1]  ? fdFromAnnual(annualIS[1],  annualBS[1]||{},  annualCF[1]||{})  : null,
+  };
+  const labels = {
+    ttm:  'TTM',
+    q:    quarterIS[0] ? qLabel(quarterIS[0]) : 'Latest Q',
+    fy1:  annualIS[0]  ? periodLabel(annualIS[0])  : 'FY−1',
+    fy2:  annualIS[1]  ? periodLabel(annualIS[1])  : 'FY−2',
+  };
+
+  const sector = fd.sector||'';
 
   // Key metrics section
   document.getElementById('key-metrics').innerHTML=`
@@ -1048,16 +1194,47 @@ function renderRatios(fd,ks,meta,closes,highs,lows){
       <div class="metric"><div class="metric-label">FREE CASH FLOW</div><div class="metric-value">${fmtBig(freeCashflow)}</div></div>
       <div class="metric"><div class="metric-label">FORWARD P/E</div><div class="metric-value">${fmtNum(ks.forwardPE,1)}x</div></div>
       <div class="metric"><div class="metric-label">52W RANGE</div><div class="metric-value" style="font-size:.82rem">${fmtNum(meta.fiftyTwoWeekLow,0)} – ${fmtNum(meta.fiftyTwoWeekHigh,0)}</div></div>
-      <div class="metric"><div class="metric-label">TOTAL ASSETS</div><div class="metric-value">${fmtBig(totalAssets)||'—'}</div><div class="metric-sub">${totalAssets&&!fd.totalAssets?'derived':'direct'}</div></div>
-      <div class="metric"><div class="metric-label">TOTAL EQUITY</div><div class="metric-value">${fmtBig(totalEquity)||'—'}</div><div class="metric-sub">${totalEquity&&!fd.totalStockholderEquity?'book×shares':'direct'}</div></div>
+      <div class="metric"><div class="metric-label">TOTAL ASSETS</div><div class="metric-value">${fmtBig(totalAssets)||'—'}</div></div>
+      <div class="metric"><div class="metric-label">TOTAL EQUITY</div><div class="metric-value">${fmtBig(totalEquity)||'—'}</div></div>
     </div>`;
 
-  // Build ratio table grouped by category
+  // Render ratio table for current period
+  renderRatioTable(sector, labels, ks);
+
+  currentRatioScore = calcRatioScore(buildRatioVals(fd, ks));
+
+  // WACC lookup
+  const waccInfo=getWaccInfo(fd);
+  document.getElementById('sc-wacc').textContent=
+    `WACC ${(waccInfo.wacc*100).toFixed(1)}%  ·  β ${waccInfo.beta}  ·  ${sector||'Unknown sector'}`;
+  document.getElementById('sc-company').textContent=
+    currentCompany?.meta?.longName||currentCompany?.meta?.shortName||'';
+}
+
+function calcRatioScore(ratioVals){
+  let total=0,cnt=0;
+  for(const [k,val] of Object.entries(ratioVals)){
+    const bench=RATIO_BENCH[k]; if(!bench) continue;
+    total+=scoreRatio(val,bench); cnt++;
+  }
+  return cnt>0?total/cnt:0;
+}
+
+function renderRatioTable(sector, labels, ks){
+  const fd = _periodData[_currentPeriod] || _periodData.ttm;
+  const fdPrev = _currentPeriod==='ttm' ? _periodData.fy1 : (_currentPeriod==='q' ? _periodData.ttm : _periodData.fy2);
+  const ratioVals = buildRatioVals(fd, ks);
+  const prevVals  = fdPrev ? buildRatioVals(fdPrev, ks) : null;
+
+  // Period tabs
+  const tabs = Object.entries(labels).map(([key,label])=>
+    `<button class="period-tab${_currentPeriod===key?' active':''}" onclick="switchPeriod('${key}')">${label}</button>`
+  ).join('');
+
   let total=0,cnt=0;
   const cats={};
   for(const [k,val] of Object.entries(ratioVals)){
-    const bench=RATIO_BENCH[k];
-    if(!bench) continue;
+    const bench=RATIO_BENCH[k]; if(!bench) continue;
     const sc=scoreRatio(val,bench);
     total+=sc; cnt++;
     if(!cats[bench.cat]) cats[bench.cat]=[];
@@ -1066,38 +1243,81 @@ function renderRatios(fd,ks,meta,closes,highs,lows){
 
   let rows='';
   for(const [cat,items] of Object.entries(cats)){
-    rows+=`<tr class="ratio-group-header"><td colspan="5">${cat}</td></tr>`;
+    rows+=`<tr class="ratio-group-header"><td colspan="7">${cat}</td></tr>`;
     for(const {k,val,bench,sc} of items){
-      const col=scoreColor(sc);
-      const barW=(sc/5)*100;
+      const colT=scoreColor(sc);
+      const barWT=(sc/5)*100;
       const displayed=fmtVal(val,bench);
-      // benchmark hint: show the score-5 threshold
       const b5=bench.scale?(bench.s5*bench.scale).toFixed(0)+'%':bench.s5+(bench.fmt==='%'?'%':'x');
+      const scI=scoreRatioVsIndustry(val,k,sector);
+      const colI=scoreColor(scI);
+      const barWI=(scI/5)*100;
+      const prevVal = prevVals ? prevVals[k] : null;
+      const arrow = trendArrow(val, prevVal, bench.inv);
       rows+=`<tr>
         <td style="color:var(--text2)">${bench.label}</td>
         <td style="font-family:var(--mono);font-weight:600">${displayed}</td>
-        <td style="font-family:var(--mono);font-size:.75rem;color:var(--text3)">≥${b5}</td>
-        <td style="font-family:var(--mono);font-weight:600;color:${col};font-size:.78rem">${sc}.0</td>
-        <td><div class="score-bar-wrap"><div class="score-bar-fill" style="width:${barW}%;background:${col}"></div></div></td>
+        <td class="trend-cell">${arrow}</td>
+        <td style="font-family:var(--mono);font-size:.72rem;color:var(--text3)">≥${b5}</td>
+        <td>
+          <div class="score-dual">
+            <div class="score-dual-row">
+              <span class="score-dual-label" title="vs Theory" style="color:${colT};font-weight:600">${sc}.0</span>
+              <div class="score-bar-wrap-sm" style="background:var(--bg4)"><div class="score-bar-fill" style="width:${barWT}%;background:${colT}"></div></div>
+              <span style="font-size:.6rem;color:var(--text3)">theory</span>
+            </div>
+            <div class="score-dual-row">
+              <span class="score-dual-label" title="vs Industry" style="color:${colI};font-weight:600">${scI}.0</span>
+              <div class="score-bar-wrap-sm" style="background:var(--bg4)"><div class="score-bar-fill" style="width:${barWI}%;background:${colI}"></div></div>
+              <span style="font-size:.6rem;color:var(--text3)">sector</span>
+            </div>
+          </div>
+        </td>
       </tr>`;
     }
   }
 
   document.getElementById('ratio-table').innerHTML=`
-    <div class="section-label" style="margin-top:.75rem">Ratio Scoring <span style="font-size:.6rem;font-weight:400;letter-spacing:0;text-transform:none;color:var(--text3)">— 5-level benchmarks from your framework</span></div>
+    <div style="margin-top:.75rem;margin-bottom:.5rem">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:.75rem">
+        <span class="section-label" style="margin:0;flex:none">Ratio Scoring</span>
+        <div class="period-tabs">${tabs}</div>
+      </div>
+      <div style="font-size:.65rem;color:var(--text3);margin-bottom:.75rem">
+        Each ratio is scored twice: <strong>Theory</strong> (your Excel benchmarks) and <strong>Sector</strong> (S&P 500 industry median). Trend arrow compares to prior period.
+      </div>
+    </div>
     <table class="rtable">
-      <thead><tr><th>Ratio</th><th>Value</th><th>Target (5★)</th><th>Score</th><th>Bar</th></tr></thead>
+      <thead><tr>
+        <th>Ratio</th><th>Value</th>
+        <th title="Trend vs prior period">Trend</th>
+        <th>Target (5★)</th>
+        <th>Score (Theory · Sector)</th>
+      </tr></thead>
       <tbody>${rows}</tbody>
     </table>`;
 
-  currentRatioScore=cnt>0?total/cnt:0;
+  currentRatioScore = cnt>0?total/cnt:0;
+}
 
-  // WACC lookup
-  const waccInfo=getWaccInfo(fd);
-  document.getElementById('sc-wacc').textContent=
-    `WACC ${(waccInfo.wacc*100).toFixed(1)}%  ·  β ${waccInfo.beta}  ·  ${fd.sector||'Unknown sector'}`;
-  document.getElementById('sc-company').textContent=
-    currentCompany?.meta?.longName||currentCompany?.meta?.shortName||'';
+function switchPeriod(key){
+  _currentPeriod = key;
+  const sector = currentCompany?.fd?.sector||'';
+  const ks = currentCompany?.ks||{};
+  const labels = {}; // rebuild labels from stored data
+  // Simple label rebuild
+  const summary = currentCompany?.summary||{};
+  const annualIS = summary?.incomeStatementHistory?.incomeStatementHistory||[];
+  const quarterIS = summary?.incomeStatementHistoryQuarterly?.incomeStatementHistory||[];
+  function periodLabel(s){ return s?.endDate ? new Date(s.endDate*1000).getFullYear()+'' : ''; }
+  function qLabel(s){ if(!s?.endDate) return ''; const d=new Date(s.endDate*1000); return `Q${Math.ceil((d.getMonth()+1)/3)} ${d.getFullYear()}`; }
+  const l = {
+    ttm: 'TTM',
+    q: quarterIS[0] ? qLabel(quarterIS[0]) : 'Latest Q',
+    fy1: annualIS[0] ? periodLabel(annualIS[0]) : 'FY−1',
+    fy2: annualIS[1] ? periodLabel(annualIS[1]) : 'FY−2',
+  };
+  renderRatioTable(sector, l, ks);
 }
 function getWaccInfo(fd){
   const sector=fd.sector||'';
@@ -1945,6 +2165,84 @@ function renderCmpTable(results){
   });
   html += '</tbody>';
   document.getElementById('cmp-table').innerHTML = html;
+}
+
+// ==================== PERIOD OVERVIEW ====================
+function renderPeriodOverview(summary, fd, ks){
+  const card = document.getElementById('period-card');
+  const el = document.getElementById('period-content');
+  if(!summary||!card) return;
+
+  const annualIS = summary?.incomeStatementHistory?.incomeStatementHistory||[];
+  const annualBS = summary?.balanceSheetHistory?.balanceSheetStatements||[];
+  const annualCF = summary?.cashflowStatementHistory?.cashflowStatements||[];
+  const quarterIS = summary?.incomeStatementHistoryQuarterly?.incomeStatementHistory||[];
+  const quarterBS = summary?.balanceSheetHistoryQuarterly?.balanceSheetStatements||[];
+  const quarterCF = summary?.cashflowStatementHistoryQuarterly?.cashflowStatements||[];
+
+  if(!annualIS.length && !quarterIS.length){ card.style.display='none'; return; }
+  card.style.display='block';
+
+  function periodLabel(s){ return s?.endDate ? new Date(s.endDate*1000).getFullYear()+'' : '?'; }
+  function qLabel(s){ if(!s?.endDate) return '?'; const d=new Date(s.endDate*1000); return `Q${Math.ceil((d.getMonth()+1)/3)} '${String(d.getFullYear()).slice(2)}`; }
+
+  // Build columns: TTM, Latest Q, FY1, FY2
+  const cols = [];
+  cols.push({label:'TTM', fd});
+  if(quarterIS[0]) cols.push({label: qLabel(quarterIS[0]), fd: fdFromAnnual(quarterIS[0], quarterBS[0]||{}, quarterCF[0]||{})});
+  if(annualIS[0])  cols.push({label: periodLabel(annualIS[0]),  fd: fdFromAnnual(annualIS[0], annualBS[0]||{}, annualCF[0]||{})});
+  if(annualIS[1])  cols.push({label: periodLabel(annualIS[1]),  fd: fdFromAnnual(annualIS[1], annualBS[1]||{}, annualCF[1]||{})});
+
+  // Metrics to show
+  const metrics = [
+    {label:'Revenue',     key:'totalRevenue',     fmt:fmtBig,   higherBetter:true},
+    {label:'Gross Profit',key:'grossProfit',       fmt:fmtBig,   higherBetter:true},
+    {label:'Operating Income',key:'operatingIncome',fmt:fmtBig,  higherBetter:true},
+    {label:'Net Income',  key:'netIncomeToCommon', fmt:fmtBig,   higherBetter:true},
+    {label:'Free Cash Flow',key:'freeCashflow',    fmt:fmtBig,   higherBetter:true},
+    {label:'Total Assets',key:'totalAssets',       fmt:fmtBig,   higherBetter:true},
+    {label:'Total Equity',key:'totalStockholderEquity',fmt:fmtBig,higherBetter:true},
+    {label:'Total Debt',  key:'totalDebt',         fmt:fmtBig,   higherBetter:false},
+    {label:'Gross Margin',key:'grossMargins',      fmt:v=>v?(v*100).toFixed(1)+'%':'—', higherBetter:true},
+    {label:'Operating Margin',key:'operatingMargins',fmt:v=>v?(v*100).toFixed(1)+'%':'—',higherBetter:true},
+    {label:'Net Margin',  key:'profitMargins',     fmt:v=>v?(v*100).toFixed(1)+'%':'—', higherBetter:true},
+    {label:'ROA',         key:'returnOnAssets',    fmt:v=>v?(v*100).toFixed(1)+'%':'—', higherBetter:true},
+    {label:'ROE',         key:'returnOnEquity',    fmt:v=>v?(v*100).toFixed(1)+'%':'—', higherBetter:true},
+  ];
+
+  function trendCell(curr, prev, hb){
+    if(!curr||!prev||prev===0) return '<td class="trend-cell" style="color:var(--text3)">—</td>';
+    const chg = hb ? (curr-prev)/Math.abs(prev) : (prev-curr)/Math.abs(prev);
+    if(chg>0.08) return `<td class="trend-cell trend-up">↑↑</td>`;
+    if(chg>0.02) return `<td class="trend-cell trend-up" style="opacity:.7">↑</td>`;
+    if(chg<-0.08) return `<td class="trend-cell trend-down">↓↓</td>`;
+    if(chg<-0.02) return `<td class="trend-cell trend-down" style="opacity:.7">↓</td>`;
+    return `<td class="trend-cell trend-flat">→</td>`;
+  }
+
+  // Header
+  let html = `<table class="period-table"><thead><tr><th>Metric</th>`;
+  cols.forEach(c=>{ html += `<th>${c.label}</th>`; });
+  html += `<th style="text-align:center">Trend</th></tr></thead><tbody>`;
+
+  metrics.forEach(m=>{
+    const vals = cols.map(c=>c.fd[m.key]||null);
+    // Trend: compare first column (TTM) vs last available annual
+    const trendFrom = vals.length>=3 ? vals[vals.length-1] : (vals.length>=2 ? vals[1] : null);
+    const trendTo   = vals[0];
+    html += `<tr><td>${m.label}</td>`;
+    vals.forEach(v=>{ html += `<td>${v!==null?m.fmt(v):'—'}</td>`; });
+    html += trendCell(trendTo, trendFrom, m.higherBetter);
+    html += `</tr>`;
+  });
+
+  html += `</tbody></table>
+  <div style="margin-top:.75rem;font-size:.68rem;color:var(--text3)">
+    Trend arrow compares TTM to oldest available annual period. ↑↑ = >8% growth, ↑ = 2–8%, → = flat, ↓ = -2–8%, ↓↓ = >8% decline.
+    <span style="color:var(--green)">Green = improving</span> · <span style="color:var(--amber)">Yellow = flat</span> · <span style="color:var(--red)">Red = declining</span>.
+  </div>`;
+
+  el.innerHTML = html;
 }
 
 // ==================== COMPARE WITH PEERS ====================
