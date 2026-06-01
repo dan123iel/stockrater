@@ -22,9 +22,9 @@
   --border:rgba(0,0,0,.07);
   --border2:rgba(0,0,0,.13);
   /* ── Typography ── */
-  --text:#0f1117;
-  --text2:#6b7280;
-  --text3:#9ca3af;
+  --text:#111827;
+  --text2:#374151;
+  --text3:#6b7280;
   /* ── Legacy accent aliases (kept for JS scoreColor refs) ── */
   --indigo:#4f46e5;
   --indigo-light:#6366f1;
@@ -48,7 +48,7 @@
   --sidebar:216px;
 }
 html{font-size:15px;scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;font-size:15px}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;font-size:16px}
 
 /* ── Layout ── */
 .app{display:flex;min-height:100vh}
@@ -64,19 +64,19 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .logo{padding:1.75rem 1.5rem 1.5rem}
 .logo-mark{display:flex;align-items:center;gap:8px;margin-bottom:3px}
 .logo-icon{display:none}
-.logo-title{font-size:.875rem;font-weight:600;letter-spacing:-.02em;color:var(--text)}
+.logo-title{font-size:1rem;font-weight:700;letter-spacing:-.02em;color:var(--text)}
 .logo-sub{font-size:.62rem;color:var(--text3);font-family:var(--mono);margin-top:2px}
 .nav-section{display:none}
 .nav-item{
   display:flex;align-items:center;gap:9px;
-  padding:.5rem 1.5rem;cursor:pointer;
-  font-size:.8rem;color:var(--text3);
-  transition:color .15s;
+  padding:.55rem 1.5rem;cursor:pointer;
+  font-size:.875rem;color:var(--text2);
+  transition:all .12s;
   border-left:2px solid transparent;
 }
 .nav-item:hover{color:var(--text);background:var(--bg3)}
-.nav-item.active{color:var(--text);border-left-color:#0f1117;font-weight:500}
-.nav-icon{font-size:.8rem;flex-shrink:0;opacity:.5;width:16px;text-align:center}
+.nav-item.active{color:var(--text);border-left-color:var(--text);font-weight:600}
+.nav-icon{display:none}
 .nav-item.active .nav-icon{opacity:1}
 .nav-badge{font-size:.58rem;font-family:var(--mono);background:var(--bg4);color:var(--text2);padding:1px 5px;border-radius:99px;margin-left:auto}
 .sidebar-bottom{margin-top:auto;padding:1.25rem 1.5rem;border-top:1px solid var(--border);background:#fafafa}
@@ -86,14 +86,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .dot.warn{background:var(--amber)}
 
 /* ── MAIN ── */
-.main{margin-left:var(--sidebar);flex:1;padding:3rem 3.5rem;max-width:calc(880px + var(--sidebar));min-height:100vh}
+.main{margin-left:var(--sidebar);flex:1;padding:2.5rem 3rem;min-height:100vh}
 .page{display:none;animation:fadein .18s ease}
 .page.active{display:block}
 @keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 .page-header{margin-bottom:2.5rem}
-.page-eyebrow{font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:8px;font-family:var(--mono)}
-.page-title{font-size:1.75rem;font-weight:400;letter-spacing:-.04em;line-height:1.2;color:var(--text)}
-.page-sub{font-size:.825rem;color:var(--text3);margin-top:6px;max-width:480px;line-height:1.55}
+.page-eyebrow{font-size:.7rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:8px;font-family:var(--mono)}
+.page-title{font-size:1.75rem;font-weight:600;letter-spacing:-.03em;line-height:1.2;color:var(--text)}
+.page-sub{font-size:.9rem;color:var(--text2);margin-top:6px;max-width:600px;line-height:1.55}
 
 /* ── SEARCH BAR ── */
 .search-bar{
@@ -103,14 +103,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
   transition:border-color .15s;
 }
 .search-bar:focus-within{border-color:var(--border2)}
-.search-input{flex:1;background:transparent;border:none;padding:.45rem 0;color:var(--text);font-size:.875rem;font-family:var(--font);outline:none}
+.search-input{flex:1;background:transparent;border:none;padding:.5rem 0;color:var(--text);font-size:1rem;font-family:var(--font);outline:none}
 .search-input::placeholder{color:var(--text3)}
 
 /* ── BUTTONS ── */
 .btn{
-  padding:.48rem .9rem;border-radius:var(--radius-sm);cursor:pointer;
-  font-size:.78rem;font-family:var(--font);font-weight:500;
-  border:1px solid var(--border);background:var(--bg3);color:var(--text2);
+  padding:.55rem 1.1rem;border-radius:var(--radius-sm);cursor:pointer;
+  font-size:.875rem;font-family:var(--font);font-weight:500;
+  border:1px solid var(--border);background:var(--bg3);color:var(--text);
   transition:all .15s;white-space:nowrap;display:inline-flex;align-items:center;gap:5px;
 }
 .btn:hover{background:var(--bg4);border-color:var(--border2);color:var(--text)}
@@ -123,7 +123,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .btn-icon{width:30px;height:30px;padding:0;justify-content:center}
 
 /* ── TAGS ── */
-.tag{display:inline-flex;align-items:center;gap:3px;font-size:.6rem;padding:2px 6px;border-radius:99px;font-family:var(--mono);font-weight:500;letter-spacing:.02em}
+.tag{display:inline-flex;align-items:center;gap:3px;font-size:.7rem;padding:2px 7px;border-radius:99px;font-family:var(--mono);font-weight:500;letter-spacing:.01em}
 .tag::before{content:"";width:4px;height:4px;border-radius:50%;background:currentColor}
 .tag-live{background:var(--green-dim);color:var(--green)}
 .tag-manual{background:var(--amber-dim);color:var(--amber)}
@@ -137,8 +137,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
   box-shadow:0 1px 3px rgba(0,0,0,.06);
 }
 .card-title{
-  font-size:.62rem;font-weight:500;color:var(--text3);
-  text-transform:uppercase;letter-spacing:.1em;
+  font-size:.7rem;font-weight:600;color:var(--text2);
+  text-transform:uppercase;letter-spacing:.08em;
   margin-bottom:1.35rem;display:flex;align-items:center;gap:8px;
 }
 
@@ -156,11 +156,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
   background:var(--bg4);color:var(--text2);border:1px solid var(--border);
 }
 .company-info{flex:1}
-.company-name{font-size:1.5rem;font-weight:400;letter-spacing:-.04em;line-height:1.2;color:var(--text)}
+.company-name{font-size:1.6rem;font-weight:600;letter-spacing:-.03em;line-height:1.2;color:var(--text)}
 .company-meta{font-size:.68rem;color:var(--text3);margin-top:6px;display:flex;gap:5px;flex-wrap:wrap}
 .meta-chip{background:transparent;border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-size:.64rem;font-family:var(--mono)}
 .company-price{text-align:right}
-.price-big{font-size:2.25rem;font-weight:300;font-family:var(--mono);letter-spacing:-.04em;color:var(--text)}
+.price-big{font-size:2.5rem;font-weight:500;font-family:var(--mono);letter-spacing:-.03em;color:var(--text)}
 .price-change{font-size:.7rem;margin-top:4px;font-family:var(--mono);display:flex;align-items:center;gap:4px;justify-content:flex-end}
 .price-badge{padding:1px 6px;border-radius:3px;font-size:.65rem;font-weight:500}
 .pos{color:var(--green)}.pos .price-badge{background:var(--green-dim)}
@@ -170,14 +170,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(115px,1fr));gap:0;margin-bottom:1.5rem;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
 .metric{background:var(--bg);padding:1rem 1.1rem;transition:background .15s;border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
 .metric:hover{background:var(--bg2)}
-.metric-label{font-size:.58rem;color:var(--text3);margin-bottom:5px;font-family:var(--mono);letter-spacing:.07em;text-transform:uppercase}
-.metric-value{font-size:1.05rem;font-weight:400;font-family:var(--mono);color:var(--text)}
+.metric-label{font-size:.65rem;color:var(--text2);margin-bottom:6px;font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.metric-value{font-size:1.15rem;font-weight:600;font-family:var(--mono);color:var(--text)}
 .metric-sub{font-size:.58rem;color:var(--text3);margin-top:3px;font-family:var(--mono)}
 
 /* ── RATIO TABLE ── */
-.rtable{width:100%;border-collapse:collapse;font-size:.78rem}
+.rtable{width:100%;border-collapse:collapse;font-size:.875rem}
 .rtable th{font-size:.58rem;font-weight:500;color:var(--text3);text-align:left;padding:6px 8px;border-bottom:1px solid var(--border);font-family:var(--mono);letter-spacing:.08em;text-transform:uppercase}
-.rtable td{padding:9px 8px;border-bottom:1px solid var(--border);color:var(--text)}
+.rtable td{padding:10px 8px;border-bottom:1px solid var(--border);color:var(--text);font-size:.875rem}
 .rtable tr:last-child td{border:none}
 .rtable tbody tr:hover td{background:var(--bg2)}
 .ratio-group-header td{font-size:.58rem;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;padding-top:1.4rem;padding-bottom:.4rem;font-family:var(--mono);border-bottom:none;background:transparent}
@@ -186,11 +186,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 
 /* ── QUALITATIVE ── */
 .qual-group{margin-bottom:1.1rem}
-.qual-group-header{font-size:.58rem;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.7rem;font-family:var(--mono);display:flex;align-items:center;gap:8px}
+.qual-group-header{font-size:.68rem;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.75rem;font-family:var(--mono);display:flex;align-items:center;gap:8px}
 .qual-group-header::after{content:"";flex:1;height:1px;background:var(--border)}
 .qual-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
 .qual-row:last-child{border:none}
-.qual-label{flex:1;font-size:.78rem;color:var(--text2)}
+.qual-label{flex:1;font-size:.875rem;color:var(--text)}
 .stars-wrap{display:flex;gap:3px}
 .star{cursor:pointer;font-size:.8rem;color:var(--bg5);transition:color .1s;user-select:none}
 .star:hover{color:var(--text3)}
@@ -215,15 +215,15 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .gauge-wrap{position:relative;width:90px;height:90px;flex-shrink:0}
 .gauge-wrap svg{width:100%;height:100%}
 .gauge-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none}
-.gauge-num{font-size:1.3rem;font-weight:300;font-family:var(--mono);letter-spacing:-.03em;color:var(--text)}
+.gauge-num{font-size:1.4rem;font-weight:600;font-family:var(--mono);letter-spacing:-.03em;color:var(--text)}
 .gauge-denom{font-size:.55rem;color:var(--text3);font-family:var(--mono)}
 .scorecard-meta{flex:1}
-.verdict-pill{display:inline-flex;align-items:center;padding:3px 9px;border-radius:3px;font-size:.68rem;font-weight:500;margin-bottom:10px;letter-spacing:.03em}
+.verdict-pill{display:inline-flex;align-items:center;padding:4px 11px;border-radius:4px;font-size:.8rem;font-weight:600;margin-bottom:10px;letter-spacing:.02em}
 .verdict-strong{background:var(--green-dim);color:var(--green)}
 .verdict-buy{background:var(--bg4);color:var(--text2)}
 .verdict-hold{background:var(--amber-dim);color:var(--amber)}
 .verdict-avoid{background:var(--red-dim);color:var(--red)}
-.score-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:.78rem}
+.score-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);font-size:.875rem}
 .score-row:last-child{border:none}
 .score-row.total{font-weight:600;font-size:.83rem;border-top:1px solid var(--border2);padding-top:10px;margin-top:4px}
 .score-right{display:flex;align-items:center;gap:10px}
@@ -248,7 +248,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 }
 .tp-card:hover{border-color:var(--border2)}
 .tp-title{font-size:.6rem;color:var(--text3);font-family:var(--mono);margin-bottom:.6rem;letter-spacing:.05em;text-transform:uppercase}
-.tp-val{font-size:1.25rem;font-weight:300;font-family:var(--mono);color:var(--text)}
+.tp-val{font-size:1.35rem;font-weight:600;font-family:var(--mono);color:var(--text)}
 .tp-sub{font-size:.6rem;color:var(--text3);margin-top:5px;font-family:var(--mono)}
 .tp-progress{height:1px;background:var(--border);border-radius:1px;margin-top:.75rem;overflow:hidden}
 .tp-progress-fill{height:100%;background:var(--text3);transition:width .5s ease}
@@ -270,12 +270,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .loading{text-align:center;padding:3rem;color:var(--text3)}
 .spinner-ring{display:inline-block;width:22px;height:22px;border:1.5px solid var(--border);border-top-color:var(--text);border-radius:50%;animation:spin .6s linear infinite;margin-bottom:.75rem}
 @keyframes spin{to{transform:rotate(360deg)}}
-.loading-text{font-size:.75rem;color:var(--text3);font-family:var(--mono)}
+.loading-text{font-size:.875rem;color:var(--text2);font-family:var(--mono)}
 .error-box{background:var(--red-dim);border:1px solid rgba(239,68,68,.18);border-radius:var(--radius-sm);padding:.85rem 1rem;font-size:.78rem;color:var(--red);margin-bottom:1rem;display:flex;align-items:flex-start;gap:8px}
 .info-box{background:#f0f4ff;border:1px solid #c7d2fe;border-radius:var(--radius-sm);padding:.85rem 1rem;font-size:.78rem;color:#3730a3;margin-bottom:1rem;line-height:1.6}
 
 /* ── UTILITIES ── */
-.section-label{font-size:.58rem;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin:1.35rem 0 .7rem;font-family:var(--mono);display:flex;align-items:center;gap:8px}
+.section-label{font-size:.68rem;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.08em;margin:1.5rem 0 .75rem;font-family:var(--mono);display:flex;align-items:center;gap:8px}
 .section-label::after{content:"";flex:1;height:1px;background:var(--border)}
 .divider{height:1px;background:var(--border);margin:1.1rem 0}
 .empty{text-align:center;padding:3rem 1rem;color:var(--text3);font-size:.8rem}
@@ -296,7 +296,7 @@ code{background:var(--bg4);padding:2px 5px;border-radius:3px;font-size:.76em;fon
 .dcf-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:0;margin-bottom:1.25rem;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
 .dcf-metric{background:var(--bg);padding:1rem 1.1rem;text-align:center;border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
 .dcf-label{font-size:.58rem;color:var(--text3);font-family:var(--mono);letter-spacing:.07em;text-transform:uppercase;margin-bottom:5px}
-.dcf-val{font-size:1.15rem;font-weight:300;font-family:var(--mono);color:var(--text)}
+.dcf-val{font-size:1.2rem;font-weight:600;font-family:var(--mono);color:var(--text)}
 .dcf-sub{font-size:.6rem;color:var(--text3);margin-top:3px;font-family:var(--mono)}
 .dcf-verdict{display:flex;align-items:center;gap:10px;padding:.75rem 1rem;border-radius:var(--radius-sm);margin-bottom:1rem;font-size:.78rem;font-weight:500}
 .dcf-underval{background:var(--green-dim);color:var(--green)}
@@ -355,24 +355,24 @@ code{background:var(--bg4);padding:2px 5px;border-radius:3px;font-size:.76em;fon
     <div class="logo-sub">v5.0 · Yahoo Finance</div>
   </div>
   <div class="nav-item active" onclick="showPage('rating')" id="nav-rating">
-    <div class="nav-icon">↗</div><span>Analysis</span>
+    <span>Analysis</span>
   </div>
   <div class="nav-item" onclick="showPage('compare')" id="nav-compare">
-    <div class="nav-icon">⇌</div><span>Compare</span>
+    <span>Compare</span>
   </div>
   <div class="nav-item" onclick="showPage('trading')" id="nav-trading">
-    <div class="nav-icon">◈</div><span>Risk Engine</span>
+    <span>Risk Engine</span>
   </div>
   <div class="nav-item" onclick="showPage('portfolio')" id="nav-portfolio">
-    <div class="nav-icon">▦</div><span>Portfolio</span>
+    <span>Portfolio</span>
     <span class="nav-badge" id="pf-count" style="display:none">0</span>
   </div>
   <div class="nav-item" onclick="showPage('watchlist')" id="nav-watchlist">
-    <div class="nav-icon">◎</div><span>Watchlist</span>
+    <span>Watchlist</span>
     <span class="nav-badge" id="wl-count" style="display:none">0</span>
   </div>
   <div class="nav-item" onclick="showPage('settings')" id="nav-settings">
-    <div class="nav-icon">⊙</div><span>Settings</span>
+    <span>Settings</span>
   </div>
   <div class="sidebar-bottom">
     <div class="status-dot" id="api-status-badge">
