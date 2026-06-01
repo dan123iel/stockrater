@@ -654,36 +654,26 @@ const RATIO_BENCH = {
 // ==================== QUALITATIVE DEFINITIONS ====================
 const QUAL_DEF = {
   mgmt:[
-    {label:"Management & Governance",key:"mgmt1",def:3,
-      tip:"1: Criminal/fraud risk\n2: Governance failures, no transparency\n3: Adequate governance\n4: Good track record, transparent\n5: Insider >10%, >5y rational, transparent"},
-    {label:"Capital Allocation",key:"mgmt2",def:3,
-      tip:"1: Destroying value, ROIC negative\n2: ROIC 0–5%, wasteful\n3: ROIC 5–10%, acceptable\n4: ROIC 10–15%, good\n5: ROIC >15%, excellent"},
-    {label:"Track Record",key:"mgmt3",def:3,
-      tip:"1: Losses / dividend cuts >2x\n2: Volatile earnings, 1 dividend cut\n3: Stable, minor misses\n4: 5–10y growth trend\n5: >10y consistent Rev/EPS growth, no cuts"},
-    {label:"Skin in the Game",key:"mgmt4",def:3,
-      tip:"1: <0.1% insider ownership\n2: 0.1–1%\n3: 1–5%\n4: 5–10%\n5: >10% insider ownership"},
-    {label:"Long-Term Orientation",key:"mgmt5",def:3,
-      tip:"1: No R&D, quarterly focus\n2: R&D <3% of sales\n3: R&D 3–7%\n4: R&D 7–10%\n5: R&D/CapEx >10%, >10y strategy focus"}
+    {label:"Capital Allocation",key:"mgmt2",def:3,auto:true,
+      tip:"Auto: ROIC = Net Income / Invested Capital\n1: ROIC <0%\n2: ROIC 0–5%\n3: ROIC 5–10%\n4: ROIC 10–15%\n5: ROIC >15%"},
+    {label:"Track Record",key:"mgmt3",def:3,auto:true,
+      tip:"Auto: Avg EPS + Revenue Growth TTM\n1: <-5%\n2: -5–2%\n3: 2–8%\n4: 8–15%\n5: >15%"},
+    {label:"Skin in the Game",key:"mgmt4",def:3,auto:true,
+      tip:"Auto: Insider Ownership %\n1: <0.1%\n2: 0.1–1%\n3: 1–5%\n4: 5–10%\n5: >10%"},
+    {label:"Long-Term Orientation",key:"mgmt5",def:3,auto:true,
+      tip:"Auto: R&D % of Revenue\n1: No R&D\n2: R&D <3%\n3: R&D 3–7%\n4: R&D 7–10%\n5: R&D >10%"}
   ],
   moat:[
-    {label:"Business Model Clarity",key:"moat1",def:3,
-      tip:"1: Unclear, diversified chaos\n2: Mixed, <50% from core\n3: Decent clarity\n4: Clear, >70% core revenue\n5: Very clear, >80% recurring >60%"},
-    {label:"Competitive Advantage (Moat)",key:"moat2",def:3,
-      tip:"1: No moat, commodity\n2: Weak, easy to replicate\n3: Some advantage, 5y durability\n4: Strong moat, 10y durability\n5: Market share >40%, moat >10y durable"},
-    {label:"Innovation / Reputation",key:"moat3",def:3,
-      tip:"1: Laggard, shrinking market share\n2: Follower, low R&D\n3: Average, some innovation\n4: High R&D, strong brand\n5: Industry leader, high R&D (>10%), iconic brand"}
+    {label:"Competitive Advantage (Moat)",key:"moat2",def:3,auto:true,
+      tip:"Auto: Gross Margin proxy\n1: <20%\n2: 20–30%\n3: 30–45%\n4: 45–60%\n5: >60%"},
+    {label:"Innovation / Reputation",key:"moat3",def:3,auto:true,
+      tip:"Auto: R&D % of Revenue (same as Long-Term Orientation)\n1: No R&D\n2: <3%\n3: 3–7%\n4: 7–10%\n5: >10%"}
   ],
   esg:[
-    {label:"ESG Risk Score",key:"esg1",def:3,
-      tip:"1: ESG score <30, major controversies\n2: ESG 30–50, significant risks\n3: ESG 50–60, moderate\n4: ESG 60–80, good\n5: Diversified, low risk, ESG >80"},
-    {label:"Ethics & Compliance",key:"esg2",def:3,
-      tip:"1: Criminal investigations\n2: Major violations, fines >1% revenue\n3: Minor issues, resolved\n4: Few minor issues, ESG 60–80\n5: Clean record, proactive compliance"},
-    {label:"Crisis Resilience",key:"esg3",def:3,
-      tip:"1: Near-bankruptcy in last crisis\n2: Dividend cut in crisis\n3: FCF positive in 1 of 3 crises\n4: FCF positive in 2 of 3 crises\n5: Positive FCF in last 3 crises, no dividend cuts"},
-    {label:"Diversification",key:"esg4",def:3,
-      tip:"1: 1 product >80%, 1 region\n2: 1 product 60–80%\n3: 2–3 products, 2 regions\n4: Multiple products, 3–5 regions\n5: No product >40%, >5 regions"},
-    {label:"Psychology / Bias Check",key:"esg5",def:3,
-      tip:"1: Extreme deviation >50%\n2: High deviation 30–50%\n3: Moderate ±30%\n4: Slight deviation ±20%\n5: Neutral, no bias detected"}
+    {label:"ESG Risk Score",key:"esg1",def:3,auto:true,
+      tip:"Auto: Yahoo ESG Score (wenn verfügbar, sonst 3★)\n1: Score >40\n2: 30–40\n3: 20–30\n4: 10–20\n5: <10 (niedrig = besser)"},
+    {label:"Crisis Resilience",key:"esg3",def:3,auto:true,
+      tip:"Auto: FCF Margin proxy\n1: FCF negativ\n2: FCF 0–5%\n3: FCF 5–10%\n4: FCF 10–15%\n5: FCF >15%"}
   ]
 };
 
@@ -696,14 +686,17 @@ let watchlist=JSON.parse(localStorage.getItem('sr_watchlist')||'[]');
 let trades=JSON.parse(localStorage.getItem('sr_trades')||'[]');
 let cache=JSON.parse(localStorage.getItem('sr_cache')||'{}');
 
-// Invalidate stale cache
+// Invalidate stale cache (v4.1 — clear all old entries missing returnOnAssets)
 (function(){
   let dirty=false;
   for(const k of Object.keys(cache)){
     const d=cache[k]?.data;
     if(d&&typeof d==='object'){
       const fd=d.financialData||{};
-      if(fd.currentRatio&&typeof fd.currentRatio==='object'){delete cache[k];dirty=true;}
+      // clear if old format (no returnOnAssets) or raw object wrappers
+      if(!fd.returnOnAssets||fd.currentRatio&&typeof fd.currentRatio==='object'){
+        delete cache[k];dirty=true;
+      }
     }
   }
   if(dirty) localStorage.setItem('sr_cache',JSON.stringify(cache));
@@ -1359,7 +1352,7 @@ function autoFillQual(fd, ks, closes, summary){
   else if(avgGrowth >= -0.05) mgmt3 = 2;
   else mgmt3 = 1;
 
-  // --- moat2: Competitive Advantage — Gross Margin Trend (proxy: gross margin level) ---
+  // --- moat2: Competitive Advantage — Gross Margin proxy ---
   const grossM = fd.grossMargins || 0;
   let moat2 = 3;
   if(grossM >= 0.60) moat2 = 5;
@@ -1368,12 +1361,14 @@ function autoFillQual(fd, ks, closes, summary){
   else if(grossM >= 0.20) moat2 = 2;
   else moat2 = 1;
 
+  // --- moat3: Innovation / Reputation — same R&D proxy ---
+  const moat3 = rdScore;
+
   // --- esg1: ESG Risk Score from Yahoo ---
   const esgScores = summary.esgScores || {};
   const esgTotal  = esgScores.totalEsg || esgScores.esgPerformance || null;
-  let esg1 = null; // null = skip auto-fill if not available
+  let esg1 = null;
   if(esgTotal !== null && esgTotal !== undefined){
-    // Yahoo ESG: lower = better risk score. Typically 0–50 range.
     if(esgTotal <= 10) esg1 = 5;
     else if(esgTotal <= 20) esg1 = 4;
     else if(esgTotal <= 30) esg1 = 3;
@@ -1381,21 +1376,37 @@ function autoFillQual(fd, ks, closes, summary){
     else esg1 = 1;
   }
 
-  // Apply auto values
-  const autoMap = {mgmt2, mgmt3, mgmt4, mgmt5, moat2};
+  // --- esg3: Crisis Resilience — FCF Margin proxy ---
+  const fcfM = (fd.freeCashflow||0) / (fd.totalRevenue||1);
+  let esg3 = 3;
+  if(fcfM >= 0.15) esg3 = 5;
+  else if(fcfM >= 0.10) esg3 = 4;
+  else if(fcfM >= 0.05) esg3 = 3;
+  else if(fcfM > 0) esg3 = 2;
+  else esg3 = 1;
+
+  // Apply all auto values
+  const autoMap = {mgmt2, mgmt3, mgmt4, mgmt5, moat2, moat3, esg3};
   if(esg1 !== null) autoMap.esg1 = esg1;
+  else autoMap.esg1 = 3; // default neutral if Yahoo ESG unavailable
+
+  const hints = {
+    mgmt2: (roic*100).toFixed(1)+'% ROIC',
+    mgmt3: (avgGrowth*100).toFixed(1)+'% avg growth',
+    mgmt4: (insiderPct*100).toFixed(1)+'% insider',
+    mgmt5: (rdPct*100).toFixed(1)+'% R&D/Rev',
+    moat2: (grossM*100).toFixed(1)+'% gross margin',
+    moat3: (rdPct*100).toFixed(1)+'% R&D/Rev',
+    esg1:  esgTotal !== null ? 'ESG '+esgTotal : 'default 3★',
+    esg3:  (fcfM*100).toFixed(1)+'% FCF margin',
+  };
 
   for(const [key, val] of Object.entries(autoMap)){
     qualScores[key] = val;
     const vEl = document.getElementById('qv-' + key);
     if(vEl) vEl.textContent = val;
     renderStarsAuto(key, val);
-    markAutoFilled(key, val, key === 'mgmt4' ? (insiderPct*100).toFixed(1)+'% insider'
-      : key === 'mgmt5' ? (rdPct*100).toFixed(1)+'% R&D/Rev'
-      : key === 'mgmt2' ? (roic*100).toFixed(1)+'% ROIC'
-      : key === 'mgmt3' ? (avgGrowth*100).toFixed(1)+'% avg growth'
-      : key === 'moat2' ? (grossM*100).toFixed(1)+'% gross margin'
-      : esgTotal !== null ? 'ESG '+esgTotal : '');
+    markAutoFilled(key, val, hints[key] || '');
   }
 }
 function renderStarsAuto(key, val){
