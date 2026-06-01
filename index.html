@@ -1320,7 +1320,9 @@ function autoFillQual(fd, ks, closes, summary){
   else mgmt4 = 1;
 
   // --- mgmt5: Long-Term Orientation (R&D % of Revenue) ---
-  const rd = fd.researchDevelopment || 0;
+  // rd may come as {} (empty Yahoo wrapper) — use typeof check
+  const rdRaw = fd.researchDevelopment;
+  const rd = (typeof rdRaw === 'number' && rdRaw > 0) ? rdRaw : 0;
   const rev = fd.totalRevenue || 1;
   const rdPct = rd / rev;
   let mgmt5 = 3;
@@ -1328,11 +1330,13 @@ function autoFillQual(fd, ks, closes, summary){
   else if(rdPct >= 0.07) mgmt5 = 4;
   else if(rdPct >= 0.03) mgmt5 = 3;
   else if(rdPct > 0) mgmt5 = 2;
-  else mgmt5 = 1; // no R&D disclosed
+  else mgmt5 = 1;
 
-  // --- mgmt2: Capital Allocation (ROIC proxy: Net Income / (Assets - Current Liabilities)) ---
+  // --- mgmt2: Capital Allocation (ROIC = returnOnAssets as proxy, or derive) ---
   const netInc = fd.netIncomeToCommon || 0;
-  const totalAssets = fd.totalAssets || ks.totalAssets || 0;
+  // derive totalAssets from ROA if not directly available
+  const roaD = fd.returnOnAssets || 0;
+  const totalAssets = fd.totalAssets || ks.totalAssets || (roaD > 0 && netInc > 0 ? netInc / roaD : 0);
   const currentLiabilities = fd.totalCurrentLiabilities || 0;
   const investedCapital = totalAssets - currentLiabilities;
   const roic = investedCapital > 0 ? netInc / investedCapital : 0;
@@ -1566,24 +1570,27 @@ function buildCmpData(ticker, summary, chart){
 }
 
 function calcRatioVals(fd, ks, meta, closes){
-  const price = meta.regularMarketPrice || 0;
   const totalCash = fd.totalCash || 0;
   const totalDebt = fd.totalDebt || 0;
   const totalRevenue = fd.totalRevenue || 0;
   const freeCashflow = fd.freeCashflow || 0;
-  const totalAssets = fd.totalAssets || ks.totalAssets || 0;
-  const totalEquity = fd.totalStockholderEquity || fd.stockholdersEquity || 0;
   const netIncome = fd.netIncomeToCommon || 0;
   const operatingCashflow = fd.operatingCashflow || 0;
+  // derive totalAssets/totalEquity if balance sheet missing
+  const roaD = fd.returnOnAssets || 0;
+  const totalAssets = fd.totalAssets || ks.totalAssets || (roaD>0&&netIncome>0 ? netIncome/roaD : 0);
+  const bookValue = ks.bookValue || 0;
+  const sharesOut = ks.sharesOutstanding || 0;
+  const totalEquity = fd.totalStockholderEquity || fd.stockholdersEquity || (bookValue>0&&sharesOut>0 ? bookValue*sharesOut : 0);
   return {
     currentRatio: fd.currentRatio||0,
     quickRatio:   fd.quickRatio||0,
     cashRatio:    totalDebt>0?totalCash/totalDebt:(totalCash>0?1:0),
-    equityToAssets: totalAssets>0?totalEquity/totalAssets:0,
-    debtToEquity:   totalEquity>0?totalDebt/totalEquity:0,
+    equityToAssets: totalAssets>0&&totalEquity>0?totalEquity/totalAssets:0,
+    debtToEquity:   fd.debtToEquity>0?fd.debtToEquity/100:(totalEquity>0?totalDebt/totalEquity:0),
     debtRatio:      totalAssets>0?totalDebt/totalAssets:0,
-    roa:            totalAssets>0?netIncome/totalAssets:0,
-    roe:            totalEquity>0?netIncome/totalEquity:0,
+    roa:            fd.returnOnAssets||0,
+    roe:            fd.returnOnEquity||0,
     grossMargin:    fd.grossMargins||0,
     operatingMargin:fd.operatingMargins||0,
     netMargin:      fd.profitMargins||0,
