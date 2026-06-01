@@ -1095,38 +1095,54 @@ function buildRatioVals(fd, ks){
   };
 }
 
-// Build a lightweight fd-like object from an annual statement row
-function fdFromAnnual(is, bs, cf){
-  const rev = is.totalRevenue||0;
-  const ni  = is.netIncome||0;
-  const gp  = is.grossProfit||0;
-  const op  = is.operatingIncome||0;
-  const ta  = bs.totalAssets||0;
-  const te  = bs.totalStockholderEquity||0;
-  const td  = (bs.shortLongTermDebt||0)+(bs.longTermDebt||0);
-  const cl  = bs.totalCurrentLiabilities||0;
-  const ca  = bs.totalCurrentAssets||0;
-  const cash= bs.cash||0;
-  const ocf = cf.totalCashFromOperatingActivities||0;
-  const capex=cf.capitalExpenditures||0;
+// Build a lightweight fd-like object from annual/quarterly statement rows
+// Yahoo often returns 0 for fields it doesn't provide — treat 0 as missing for derived values
+function nonzero(v){ return (v && v !== 0) ? v : null; }
+
+function fdFromAnnual(is, bs, cf, fdTtm){
+  const rev  = nonzero(is.totalRevenue);
+  const ni   = nonzero(is.netIncome);
+  // Yahoo annual grossProfit is often 0 — use grossProfits (alternate field) or derive from margin
+  const gpRaw = nonzero(is.grossProfit) || nonzero(is.grossProfits);
+  const opRaw = nonzero(is.operatingIncome) || nonzero(is.ebit);
+  const ta   = nonzero(bs.totalAssets);
+  const te   = nonzero(bs.totalStockholderEquity);
+  const td   = nonzero((bs.shortLongTermDebt||0)+(bs.longTermDebt||0)) || nonzero(bs.totalDebt);
+  const cl   = nonzero(bs.totalCurrentLiabilities);
+  const ca   = nonzero(bs.totalCurrentAssets);
+  const cash = nonzero(bs.cash);
+  const ocf  = nonzero(cf.totalCashFromOperatingActivities) || nonzero(cf.operatingCashflow);
+  const capex= cf.capitalExpenditures || 0; // usually negative
+  const fcf  = ocf ? ocf + capex : null;
+
+  // Derive margins: use raw values if available, else compute from revenue
+  const grossM  = gpRaw && rev ? gpRaw/rev : null;
+  const opM     = opRaw && rev ? opRaw/rev : null;
+  const netM    = ni    && rev ? ni/rev    : null;
+  const roa     = ni && ta ? ni/ta : null;
+  const roe     = ni && te ? ni/te : null;
+
   return {
-    totalRevenue: rev,
-    netIncomeToCommon: ni,
-    totalAssets: ta,
+    totalRevenue:           rev,
+    grossProfit:            gpRaw,
+    operatingIncome:        opRaw,
+    netIncomeToCommon:      ni,
+    totalAssets:            ta,
     totalStockholderEquity: te,
-    totalDebt: td,
-    totalCurrentLiabilities: cl,
-    totalCurrentAssets: ca,
-    totalCash: cash,
-    operatingCashflow: ocf,
-    freeCashflow: ocf+capex,
-    grossMargins: rev>0?gp/rev:0,
-    operatingMargins: rev>0?op/rev:0,
-    profitMargins: rev>0?ni/rev:0,
-    currentRatio: cl>0?ca/cl:0,
-    quickRatio: cl>0?(ca-(bs.inventory||0))/cl:0,
-    returnOnAssets: ta>0?ni/ta:0,
-    returnOnEquity: te>0?ni/te:0,
+    totalDebt:              td,
+    totalCurrentLiabilities:cl,
+    totalCurrentAssets:     ca,
+    totalCash:              cash,
+    operatingCashflow:      ocf,
+    freeCashflow:           fcf,
+    grossMargins:           grossM,
+    operatingMargins:       opM,
+    profitMargins:          netM,
+    currentRatio:           (cl && ca) ? ca/cl : null,
+    quickRatio:             (cl && ca) ? (ca-(bs.inventory||0))/cl : null,
+    returnOnAssets:         roa,
+    returnOnEquity:         roe,
+    ebitda:                 nonzero(is.ebitda),
   };
 }
 
@@ -2201,7 +2217,14 @@ function renderPeriodOverview(summary, fd, ks){
 
   // Build columns: TTM, Latest Q, FY1, FY2
   const cols = [];
-  cols.push({label:'TTM', fd});
+  // Normalize TTM fd: Yahoo uses 'grossProfits' not 'grossProfit' in financialData
+  const fdTTM = Object.assign({}, fd, {
+    grossProfit: fd.grossProfit || fd.grossProfits || (fd.grossMargins&&fd.totalRevenue ? fd.grossMargins*fd.totalRevenue : null),
+    operatingIncome: fd.operatingIncome || (fd.operatingMargins&&fd.totalRevenue ? fd.operatingMargins*fd.totalRevenue : null),
+    totalAssets: fd.totalAssets || (fd.returnOnAssets&&fd.netIncomeToCommon ? fd.netIncomeToCommon/fd.returnOnAssets : null),
+    totalStockholderEquity: fd.totalStockholderEquity || (fd.returnOnEquity&&fd.netIncomeToCommon ? fd.netIncomeToCommon/fd.returnOnEquity : null),
+  });
+  cols.push({label:'TTM', fd: fdTTM});
   if(quarterIS[0]) cols.push({label: qLabel(quarterIS[0]), fd: fdFromAnnual(quarterIS[0], quarterBS[0]||{}, quarterCF[0]||{})});
   // Only add complete fiscal years (not current year)
   const nowY = new Date().getFullYear();
@@ -2210,20 +2233,22 @@ function renderPeriodOverview(summary, fd, ks){
   if(completeAnnual[1]) cols.push({label: periodLabel(completeAnnual[1]), fd: fdFromAnnual(completeAnnual[1], annualBS[annualIS.indexOf(completeAnnual[1])]||{}, annualCF[annualIS.indexOf(completeAnnual[1])]||{})});
 
   // Metrics to show
+  const pct = v => (v!=null&&v!==0) ? (v*100).toFixed(1)+'%' : null;
+  const big = v => (v!=null&&v!==0) ? fmtBig(v) : null;
   const metrics = [
-    {label:'Revenue',     key:'totalRevenue',     fmt:fmtBig,   higherBetter:true},
-    {label:'Gross Profit',key:'grossProfit',       fmt:fmtBig,   higherBetter:true},
-    {label:'Operating Income',key:'operatingIncome',fmt:fmtBig,  higherBetter:true},
-    {label:'Net Income',  key:'netIncomeToCommon', fmt:fmtBig,   higherBetter:true},
-    {label:'Free Cash Flow',key:'freeCashflow',    fmt:fmtBig,   higherBetter:true},
-    {label:'Total Assets',key:'totalAssets',       fmt:fmtBig,   higherBetter:true},
-    {label:'Total Equity',key:'totalStockholderEquity',fmt:fmtBig,higherBetter:true},
-    {label:'Total Debt',  key:'totalDebt',         fmt:fmtBig,   higherBetter:false},
-    {label:'Gross Margin',key:'grossMargins',      fmt:v=>v?(v*100).toFixed(1)+'%':'—', higherBetter:true},
-    {label:'Operating Margin',key:'operatingMargins',fmt:v=>v?(v*100).toFixed(1)+'%':'—',higherBetter:true},
-    {label:'Net Margin',  key:'profitMargins',     fmt:v=>v?(v*100).toFixed(1)+'%':'—', higherBetter:true},
-    {label:'ROA',         key:'returnOnAssets',    fmt:v=>v?(v*100).toFixed(1)+'%':'—', higherBetter:true},
-    {label:'ROE',         key:'returnOnEquity',    fmt:v=>v?(v*100).toFixed(1)+'%':'—', higherBetter:true},
+    {label:'Revenue',         key:'totalRevenue',              fmt:big,  higherBetter:true},
+    {label:'Gross Profit',    key:'grossProfit',               fmt:big,  higherBetter:true},
+    {label:'Operating Income',key:'operatingIncome',           fmt:big,  higherBetter:true},
+    {label:'Net Income',      key:'netIncomeToCommon',         fmt:big,  higherBetter:true},
+    {label:'Free Cash Flow',  key:'freeCashflow',              fmt:big,  higherBetter:true},
+    {label:'Total Assets',    key:'totalAssets',               fmt:big,  higherBetter:true},
+    {label:'Total Equity',    key:'totalStockholderEquity',    fmt:big,  higherBetter:true},
+    {label:'Total Debt',      key:'totalDebt',                 fmt:big,  higherBetter:false},
+    {label:'Gross Margin',    key:'grossMargins',              fmt:pct,  higherBetter:true},
+    {label:'Operating Margin',key:'operatingMargins',          fmt:pct,  higherBetter:true},
+    {label:'Net Margin',      key:'profitMargins',             fmt:pct,  higherBetter:true},
+    {label:'ROA',             key:'returnOnAssets',            fmt:pct,  higherBetter:true},
+    {label:'ROE',             key:'returnOnEquity',            fmt:pct,  higherBetter:true},
   ];
 
   function trendCell(curr, prev, hb){
@@ -2247,8 +2272,13 @@ function renderPeriodOverview(summary, fd, ks){
     const trendFrom = vals.length>=3 ? vals[vals.length-1] : (vals.length>=2 ? vals[1] : null);
     const trendTo   = vals[0];
     html += `<tr><td>${m.label}</td>`;
-    vals.forEach(v=>{ html += `<td>${v!==null?m.fmt(v):'—'}</td>`; });
-    html += trendCell(trendTo, trendFrom, m.higherBetter);
+    vals.forEach(v=>{
+      const formatted = v!=null ? m.fmt(v) : null;
+      html += `<td style="${formatted?'':'color:var(--text3)'}">${formatted||'—'}</td>`;
+    });
+    const trendFrom2 = vals.filter(v=>v!=null).slice(-1)[0];
+    const trendTo2   = vals[0];
+    html += trendCell(trendTo2, trendFrom2, m.higherBetter);
     html += `</tr>`;
   });
 
