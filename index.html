@@ -2664,7 +2664,7 @@ function renderPriceChart(closes, highs, lows, rangeKey){
   const svg = document.getElementById('price-chart-svg');
   if(!svg||!closes||closes.length<2) return;
   const W=800, H=220, pad={t:15,r:15,b:30,l:52};
-  svg._chartData = {closes, highs, lows, pad};
+  svg._chartData = {closes, highs, lows, pad, timestamps: window._currentChartTimestamps||[], rangeKey};
   const valid = closes.filter(v=>v!=null);
   if(!valid.length) return;
   const minV = Math.min(...valid), maxV = Math.max(...valid);
