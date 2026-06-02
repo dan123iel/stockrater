@@ -1208,9 +1208,10 @@ function renderCompanyHero(meta,fd,ks){
     try{ domain=new URL(fd.website).hostname.replace(/^www\./,''); }catch(e){ domain=fd.website.replace(/^https?:\/\//,'').replace(/^www\./,'').split('/')[0]; }
   }
   if(!domain && meta.symbol) domain=meta.symbol.toLowerCase()+'.com';
-  // ISIN / WKN from ks
-  const isin=ks.isin||null;
-  const wkn=ks.wkn||null;
+  // ISIN / WKN from ks or local lookup
+  const ids = TICKER_IDENTIFIERS[meta.symbol||''] || {};
+  const isin = ks.isin || ids.isin || null;
+  const wkn  = ks.wkn  || ids.wkn  || null;
   document.getElementById('company-hero').innerHTML=`
     <div class="company-avatar" id="co-avatar" style="width:60px;height:60px;color:${col};border:1px solid ${col}33;background:${col}18;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center">
       ${domain?`<img src="https://logo.clearbit.com/${domain}"
