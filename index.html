@@ -367,6 +367,10 @@ code{background:var(--bg4);padding:2px 5px;border-radius:3px;font-size:.76em;fon
 .period-table tr:last-child td{border:none}
 .period-table tbody tr:hover td{background:var(--bg2)}
 .period-table .trend-cell{font-size:.8rem;font-weight:700;text-align:center}
+/* ── CHART RANGE TABS ── */
+.chart-range-btn{padding:.28rem .6rem;border-radius:4px;font-size:.72rem;font-family:var(--mono);cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text3);transition:all .12s;font-weight:500}
+.chart-range-btn:hover{background:var(--bg2);color:var(--text)}
+.chart-range-btn.active{background:var(--text);color:var(--bg);border-color:var(--text)}
 </style>
 </head>
 <body>
@@ -508,10 +512,26 @@ code{background:var(--bg4);padding:2px 5px;border-radius:3px;font-size:.76em;fon
 
     <!-- E) PRICE CHART -->
     <div class="card">
-      <div class="card-title">Price Chart <span class="tag tag-live">12M · Yahoo Finance</span></div>
-      <div style="position:relative">
-        <svg id="price-chart-svg" viewBox="0 0 800 220" style="width:100%;overflow:visible"></svg>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:1rem">
+        <div class="card-title" style="margin:0">Price Chart</div>
+        <div id="chart-range-tabs" style="display:flex;gap:3px">
+          <button class="chart-range-btn" onclick="loadChartRange('1d')" data-range="1d">1D</button>
+          <button class="chart-range-btn" onclick="loadChartRange('5d')" data-range="5d">1W</button>
+          <button class="chart-range-btn" onclick="loadChartRange('1mo')" data-range="1mo">1M</button>
+          <button class="chart-range-btn" onclick="loadChartRange('6mo')" data-range="6mo">6M</button>
+          <button class="chart-range-btn" onclick="loadChartRange('ytd')" data-range="ytd">YTD</button>
+          <button class="chart-range-btn active" onclick="loadChartRange('1y')" data-range="1y">1Y</button>
+          <button class="chart-range-btn" onclick="loadChartRange('max')" data-range="max">Max</button>
+        </div>
       </div>
+      <div style="position:relative" id="chart-wrap">
+        <svg id="price-chart-svg" viewBox="0 0 800 220" style="width:100%;overflow:visible;display:block"></svg>
+        <div id="chart-crosshair" style="display:none;position:absolute;top:0;left:0;pointer-events:none">
+          <div id="chart-vline" style="position:absolute;top:0;width:1px;background:rgba(0,0,0,.2);transition:left .04s"></div>
+          <div id="chart-tooltip" style="position:absolute;background:var(--text);color:var(--bg);padding:4px 9px;border-radius:5px;font-size:.75rem;font-family:var(--mono);font-weight:600;white-space:nowrap;transform:translateX(-50%);top:-28px;pointer-events:none"></div>
+        </div>
+      </div>
+      <div id="chart-loading" style="display:none;text-align:center;padding:.5rem;font-size:.75rem;color:var(--text3);font-family:var(--mono)">Loading…</div>
     </div>
 
     <!-- F) MARGINS CHART -->
@@ -976,7 +996,8 @@ async function fetchCompany(){
     autoFillQual(fd, ks, closes, summary);
     updateScorecard();
     renderDCF(fd, ks, meta, getWaccInfo(fd));
-    renderPriceChart(closes, highs, lows);
+    renderPriceChart(closes, highs, lows, '1y');
+    initChartCrosshair();
     renderMarginsChart(fd);
     renderFinancialsChart(fd, ks, meta);
     renderPeriodOverview(summary, fd, ks);
@@ -2436,10 +2457,82 @@ function recalcDCF(){
 }
 
 // ==================== PRICE CHART ====================
-function renderPriceChart(closes, highs, lows){
+// ── CHART RANGE LOADER ──
+let _chartTicker = '';
+async function loadChartRange(range){
+  if(!currentCompany) return;
+  _chartTicker = currentCompany.ticker;
+  // Update active tab
+  document.querySelectorAll('.chart-range-btn').forEach(b=>{
+    b.classList.toggle('active', b.dataset.range===range);
+  });
+  document.getElementById('chart-loading').style.display='block';
+  document.getElementById('price-chart-svg').style.opacity='.4';
+  try{
+    const chart = await yahooChart(_chartTicker, range);
+    const closes = chart.closes||[];
+    const highs = chart.highs||[];
+    const lows = chart.lows||[];
+    renderPriceChart(closes, highs, lows, range);
+  }catch(e){
+    console.error('Chart load error:', e);
+  }
+  document.getElementById('chart-loading').style.display='none';
+  document.getElementById('price-chart-svg').style.opacity='1';
+}
+
+// ── CROSSHAIR ──
+function initChartCrosshair(){
+  const wrap = document.getElementById('chart-wrap');
+  const svg  = document.getElementById('price-chart-svg');
+  const ch   = document.getElementById('chart-crosshair');
+  const vline= document.getElementById('chart-vline');
+  const tip  = document.getElementById('chart-tooltip');
+  if(!wrap||!svg) return;
+
+  // Store chart data for lookup
+  svg._chartData = svg._chartData || {};
+
+  wrap.addEventListener('mousemove', e=>{
+    const rect = svg.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const W = rect.width, H = rect.height;
+    const data = svg._chartData;
+    if(!data.closes||!data.closes.length) return;
+
+    ch.style.display='block';
+    ch.style.width = W+'px';
+    ch.style.height= H+'px';
+
+    // Clamp x within chart area
+    const pad = data.pad || {l:52,r:15,t:15,b:30};
+    const chartW = W - pad.l - pad.r;
+    const relX = Math.max(0, Math.min(x - pad.l, chartW));
+    const idx = Math.round((relX / chartW) * (data.closes.length-1));
+    const price = data.closes[idx];
+    const px = pad.l + (idx/(data.closes.length-1)) * chartW;
+
+    vline.style.left = px+'px';
+    vline.style.top  = pad.t+'px';
+    vline.style.height= (H-pad.t-pad.b)+'px';
+
+    if(price!=null){
+      tip.textContent = price.toFixed(2);
+      tip.style.left = px+'px';
+      tip.style.top  = '0px';
+    }
+  });
+  wrap.addEventListener('mouseleave', ()=>{ ch.style.display='none'; });
+}
+
+function renderPriceChart(closes, highs, lows, range){
   const svg = document.getElementById('price-chart-svg');
   if(!svg||!closes||closes.length<2) return;
   const W=800, H=220, pad={t:15,r:15,b:30,l:52};
+  // Store data reference for crosshair
+  const svgEl = document.getElementById('price-chart-svg');
+  if(svgEl) svgEl._chartData = {closes, highs, lows, pad};
   const valid = closes.filter(v=>v!=null);
   if(!valid.length) return;
   const minV = Math.min(...valid), maxV = Math.max(...valid);
@@ -2490,13 +2583,24 @@ function renderPriceChart(closes, highs, lows){
     <!-- Price line -->
     <path d="${path}" fill="none" stroke="${lineColor}" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
     <!-- X-axis labels -->
-    ${[0, 0.25, 0.5, 0.75, 1].map(t=>{
-      const i = Math.floor(t*(n-1));
-      const x = cx(i);
-      const labels = ['12M ago','9M ago','6M ago','3M ago','Today'];
-      const idx = Math.round(t*4);
-      return `<text x="${x}" y="${H-pad.b+14}" fill="rgba(0,0,0,.3)" font-size="9" font-family="JetBrains Mono,monospace" text-anchor="middle">${labels[idx]||''}</text>`;
-    }).join('')}
+    ${(()=>{
+      const rangeLabels = {
+        '1d':['Open','','Now'],
+        '5d':['5D ago','','Today'],
+        '1mo':['1M ago','2W ago','Today'],
+        '6mo':['6M ago','3M ago','Today'],
+        'ytd':['Jan','','Today'],
+        '1y':['12M ago','6M ago','Today'],
+        'max':['Start','Mid','Today'],
+      };
+      const labs = (rangeLabels[range])||['Start','Mid','Today'];
+      return [0, 0.5, 1].map(t=>{
+        const i = Math.floor(t*(n-1));
+        const x = cx(i);
+        const li = Math.round(t*2);
+        return `<text x="${x}" y="${H-pad.b+14}" fill="rgba(0,0,0,.3)" font-size="9" font-family="JetBrains Mono,monospace" text-anchor="middle">${labs[li]||''}</text>`;
+      }).join('');
+    })()}
     <!-- Current price dot + label -->
     <circle cx="${cx(n-1)}" cy="${cy(last)}" r="4" fill="${lineColor}" stroke="white" stroke-width="2"/>
     <text x="${cx(n-1)+8}" y="${cy(last)+4}" fill="${lineColor}" font-size="10" font-family="JetBrains Mono,monospace" font-weight="600">${last.toFixed(2)}</text>
