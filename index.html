@@ -405,7 +405,7 @@ code{background:var(--bg4);padding:2px 5px;border-radius:3px;font-size:.76em;fon
   <div class="nav-item" onclick="showPage('settings')" id="nav-settings">
     <span>Settings</span>
   </div>
-  <div class="sidebar-bottom" style="border:none;padding:.75rem 1.5rem"></div>
+  <div class="sidebar-bottom" style="border:none;padding:.75rem 1.5rem"><div id="api-status-badge" style="display:none"><div class="dot"></div><span></span></div></div>
 </div>
 
 <div class="main">
@@ -901,18 +901,20 @@ function showWorkerStatus(msg,type){
   el.textContent=msg;
 }
 function updateApiBadge(){
-  const w=getWorkerUrl();
   const el=document.getElementById('api-status-badge');
+  if(!el) return;
   const dot=el.querySelector('.dot');const span=el.querySelector('span');
+  if(!dot||!span) return;
+  const w=getWorkerUrl();
   if(w){dot.className='dot active';span.textContent='Worker connected';}
-  else{dot.className='dot warn';span.textContent='No worker configured';}
+  else{dot.className='dot warn';span.textContent='No worker';}
 }
 function checkProxyWarnings(){
   const w=getWorkerUrl();
   const warn=w?'':'<div class="info-box">⚠️ No worker configured — fundamentals unavailable for Rating. <button class="btn btn-sm" onclick="showPage(\'settings\')" style="margin-left:8px">Configure ↗</button></div>';
-  document.getElementById('proxy-warning-rating').innerHTML=warn;
-  document.getElementById('proxy-warning-trading').innerHTML='';
-  document.getElementById('proxy-warning-compare').innerHTML=warn;
+  const _r=document.getElementById('proxy-warning-rating');if(_r)_r.innerHTML=warn;
+  const _t=document.getElementById('proxy-warning-trading');if(_t)_t.innerHTML='';
+  const _c=document.getElementById('proxy-warning-compare');if(_c)_c.innerHTML=warn;
 }
 async function yahooSummary(ticker){
   const w=getWorkerUrl();
@@ -2690,8 +2692,6 @@ function renderFinancialsChart(fd, ks, meta){
 }
 
 // ==================== INIT ====================
-const storedWorker=getWorkerUrl();
-if(storedWorker) document.getElementById('worker-url-input').value=storedWorker;
 updateApiBadge();checkProxyWarnings();
 renderPortfolio();renderTrades();renderWatchlist();updateBadges();calcTrade();
 </script>
