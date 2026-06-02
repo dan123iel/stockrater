@@ -1652,7 +1652,7 @@ function updateScorecard(){
   const circ=2*Math.PI*40;
   arc.style.strokeDasharray=circ;
   arc.style.strokeDashoffset=circ-(normalized/5)*circ;
-  const gradId=normalized>=4?'gaugeGreen':normalized>=3?'gaugeGrad':normalized>=2?'gaugeAmber':'gaugeRed';
+  const gradId=normalized>=3.5?'gaugeGreen':normalized>=2.5?'gaugeAmber':'gaugeRed';
   arc.setAttribute('stroke',`url(#${gradId})`);
   const numEl=document.getElementById('gauge-num');
   numEl.textContent=normalized.toFixed(2);
