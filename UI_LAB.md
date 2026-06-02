@@ -1,8 +1,39 @@
-# vistaclara — UI Lab Documentation
+# UI Lab — Design System & Experimentation Environment
 
 > **Status:** Pre-implementation reference document  
-> **Purpose:** Structured specification for the UI Lab — a dedicated testing environment where all design elements, layout variants, and interaction patterns can be explored before being applied to the production app.  
+> **Scope:** Project-agnostic. Serves as the design system foundation for all projects — vistaclara (Trading) and future projects draw from here.  
+> **Location:** Lives in its own directory, NOT inside any product project.  
 > **Background:** White `#ffffff` — fixed. No exceptions.
+
+---
+
+## Proposed Directory Structure
+
+```
+~/Library/Mobile Documents/com~apple~CloudDocs/
+└── 7 Projekte/
+    ├── UI-Lab/                    ← this project (standalone)
+    │   ├── index.html             ← Lab interface
+    │   ├── UI_LAB.md              ← this document
+    │   ├── src/
+    │   │   ├── css/               ← design token library
+    │   │   │   ├── variables.css
+    │   │   │   ├── reset.css
+    │   │   │   └── lab.css
+    │   │   └── js/
+    │   │       └── lab.js         ← controls, token overrides
+    │   └── README.md
+    │
+    └── Trading/
+        └── files/                 ← vistaclara (consumes UI Lab tokens)
+            └── src/css/
+                └── variables.css  ← imports or copies from UI Lab
+```
+
+**How products consume the UI Lab:**
+- Copy `variables.css` token values into the product
+- Reference `UI_LAB.md` when building components
+- UI Lab is the source of truth — products are downstream
 
 ---
 
