@@ -1151,8 +1151,23 @@ function renderCompanyHero(meta,fd,ks){
   const colors=['#6366f1','#10b981','#8b5cf6','#f59e0b','#ef4444','#06b6d4'];
   const col=colors[(meta.symbol||'A').charCodeAt(0)%colors.length];
   const sector=fd.sector||'';
+  // Domain heuristic for Clearbit logo
+  let domain='';
+  if(fd.website){
+    try{ domain=new URL(fd.website).hostname.replace(/^www\./,''); }catch(e){ domain=fd.website.replace(/^https?:\/\//,'').replace(/^www\./,'').split('/')[0]; }
+  }
+  if(!domain && meta.symbol) domain=meta.symbol.toLowerCase()+'.com';
+  // ISIN / WKN from ks
+  const isin=ks.isin||null;
+  const wkn=ks.wkn||null;
   document.getElementById('company-hero').innerHTML=`
-    <div class="company-avatar" style="color:${col};border:1px solid ${col}33;background:${col}18">${initials}</div>
+    <div class="company-avatar" id="co-avatar" style="width:60px;height:60px;color:${col};border:1px solid ${col}33;background:${col}18;overflow:hidden;position:relative">
+      <img src="https://logo.clearbit.com/${domain}"
+           style="width:100%;height:100%;object-fit:contain;border-radius:4px"
+           onerror="this.style.display='none';document.getElementById('co-initials').style.display='flex'"
+           onload="document.getElementById('co-initials').style.display='none'">
+      <span id="co-initials" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;position:absolute;top:0;left:0;font-size:.85rem;font-weight:600;font-family:var(--mono)">${initials}</span>
+    </div>
     <div class="company-info">
       <div class="company-name">${name}</div>
       <div class="company-meta">
@@ -1160,6 +1175,8 @@ function renderCompanyHero(meta,fd,ks){
         ${meta.exchangeName?`<span class="meta-chip">${meta.exchangeName}</span>`:''}
         ${sector?`<span class="meta-chip">${sector}</span>`:''}
         ${meta.currency?`<span class="meta-chip">${meta.currency}</span>`:''}
+        ${isin?`<span class="meta-chip">${isin}</span>`:''}
+        ${wkn?`<span class="meta-chip">${wkn}</span>`:''}
       </div>
     </div>
     <div class="company-price">
