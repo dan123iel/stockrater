@@ -452,8 +452,8 @@ code{background:var(--bg4);padding:2px 5px;border-radius:3px;font-size:.76em;fon
     <!-- SCORECARD — directly below hero -->
     <div class="card" id="scorecard-card">
       <div class="card-title">Scorecard <span style="font-size:.65rem;font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3)">Score 1–5 · 5 = best</span></div>
-      <div class="scorecard-layout">
-        <div class="gauge-wrap" style="width:130px;height:130px">
+      <div style="display:flex;gap:1.5rem;align-items:flex-start">
+        <div class="gauge-wrap" style="width:130px;height:130px;flex-shrink:0">
           <svg viewBox="0 0 110 110">
             <circle cx="55" cy="55" r="46" fill="none" stroke="rgba(0,0,0,.04)" stroke-width="1"/>
             <circle cx="55" cy="55" r="40" fill="none" stroke="rgba(0,0,0,.06)" stroke-width="11"/>
@@ -463,7 +463,7 @@ code{background:var(--bg4);padding:2px 5px;border-radius:3px;font-size:.76em;fon
               style="transition:stroke-dashoffset .9s cubic-bezier(.4,0,.2,1),stroke .4s"/>
             <defs>
               <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#8b5cf6"/>
+                <stop offset="0%" stop-color="#d97706"/><stop offset="100%" stop-color="#f59e0b"/>
               </linearGradient>
               <linearGradient id="gaugeGreen" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#10b981"/>
@@ -482,10 +482,15 @@ code{background:var(--bg4);padding:2px 5px;border-radius:3px;font-size:.76em;fon
             <div class="gauge-denom">/ 5.0</div>
           </div>
         </div>
-        <div class="scorecard-meta">
-          <div id="verdict-pill" class="verdict-pill verdict-hold" style="margin-bottom:9px">—</div>
-          <div id="sc-company" style="font-size:1.1rem;font-weight:600;margin-bottom:4px;letter-spacing:-.02em">—</div>
-          <div id="sc-wacc" style="font-size:.72rem;color:var(--text3);font-family:var(--mono)">WACC: —</div>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+            <div id="verdict-pill" class="verdict-pill verdict-hold">—</div>
+          </div>
+          <div id="sc-company" style="font-size:1.1rem;font-weight:600;margin-bottom:3px;letter-spacing:-.02em">—</div>
+          <div id="sc-wacc" style="font-size:.72rem;color:var(--text3);font-family:var(--mono);margin-bottom:10px">WACC: —</div>
+          <div id="scorecard-rows"></div>
+        </div>
+      </div>
         </div>
       </div>
       <div id="scorecard-rows"></div>
