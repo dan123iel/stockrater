@@ -1123,15 +1123,13 @@ function removeFromHistory(idx){
 }
 
 function selectFromHistory(ticker){
-  const inp = document.getElementById('r-ticker');
-  const dd = document.getElementById('search-dropdown');
-  dd.style.display='none';
-  inp.value = '';
-  inp.blur();
+  document.getElementById('search-dropdown').style.display='none';
+  document.getElementById('r-ticker').value='';
+  document.getElementById('r-ticker').blur();
   fetchCompany(ticker);
 }
 
-function hideDropdown(){ setTimeout(()=>{ const dd=document.getElementById('search-dropdown'); if(dd) dd.style.display='none'; },200); }
+function hideDropdown(){ setTimeout(()=>{ const dd=document.getElementById('search-dropdown'); if(dd) dd.style.display='none'; },150); }
 
 async function fetchCompany(forceTicker){
   const raw = forceTicker || document.getElementById('r-ticker').value.trim();
