@@ -2777,7 +2777,8 @@ function renderPriceChart(closes, highs, lows, rangeKey){
   var xLabs=xLabMap[rangeKey]||['Start','Mid','Today'];
   [0,.5,1].forEach(function(t,li){ var i=Math.floor(t*(n-1)); addTxt(cx(i),H-pad.b+14,xLabs[li],'rgba(0,0,0,.3)',9,'middle'); });
   addEl('circle',{cx:cx(n-1),cy:cy(last),r:4,fill:lineColor,stroke:'white','stroke-width':2});
-  addTxt(cx(n-1)+10,cy(last)+4,last.toFixed(2),lineColor,10,'start','600');
+  const currency = currentCompany?.meta?.currency||'';
+  addTxt(cx(n-1)+10,cy(last)+4,last.toFixed(2)+(currency?' '+currency:''),lineColor,10,'start','600');
   var minIdx=closes.indexOf(Math.min.apply(null,valid));
   var maxIdx=closes.indexOf(Math.max.apply(null,valid));
   if(minIdx>=0) addTxt(cx(minIdx),cy(Math.min.apply(null,valid))+14,Math.min.apply(null,valid).toFixed(2),'rgba(220,38,38,.6)',8,'middle');
