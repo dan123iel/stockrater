@@ -1,0 +1,2242 @@
+// ==================== FULL WACC TABLE (Damodaran) ====================
+const WACC_TABLE = {
+  "Advertising":{"beta":1.34,"wacc":0.0922},"Aerospace/Defense":{"beta":0.90,"wacc":0.0768},
+  "Air Transport":{"beta":1.24,"wacc":0.0729},"Apparel":{"beta":0.99,"wacc":0.0744},
+  "Auto & Truck":{"beta":1.62,"wacc":0.1034},"Auto Parts":{"beta":1.23,"wacc":0.0809},
+  "Bank (Money Center)":{"beta":0.88,"wacc":0.0564},"Banks (Regional)":{"beta":0.52,"wacc":0.0569},
+  "Beverage (Alcoholic)":{"beta":0.61,"wacc":0.0655},"Beverage (Soft)":{"beta":0.57,"wacc":0.0659},
+  "Broadcasting":{"beta":0.92,"wacc":0.0603},"Building Materials":{"beta":1.36,"wacc":0.0946},
+  "Business & Consumer Services":{"beta":1.00,"wacc":0.0827},
+  "Chemical (Specialty)":{"beta":0.92,"wacc":0.0767},"Computer Services":{"beta":1.23,"wacc":0.0872},
+  "Computers/Peripherals":{"beta":1.14,"wacc":0.0929},
+  "Drugs (Biotechnology)":{"beta":1.25,"wacc":0.0937},"Drugs (Pharmaceutical)":{"beta":1.07,"wacc":0.0872},
+  "Electrical Equipment":{"beta":1.27,"wacc":0.0940},
+  "Electronics (Consumer & Office)":{"beta":1.19,"wacc":0.0871},
+  "Electronics (General)":{"beta":1.06,"wacc":0.0855},
+  "Entertainment":{"beta":1.04,"wacc":0.0828},
+  "Financial Svcs. (Non-bank & Insurance)":{"beta":0.64,"wacc":0.0617},
+  "Food Processing":{"beta":0.47,"wacc":0.0602},
+  "Healthcare Products":{"beta":0.99,"wacc":0.0880},"Healthcare Support Services":{"beta":0.91,"wacc":0.0784},
+  "Heathcare Information and Technology":{"beta":1.22,"wacc":0.0910},
+  "Hotel/Gaming":{"beta":1.09,"wacc":0.0830},"Household Products":{"beta":0.82,"wacc":0.0726},
+  "Insurance (General)":{"beta":0.78,"wacc":0.0693},
+  "Machinery":{"beta":1.07,"wacc":0.0948},"Metals & Mining":{"beta":1.07,"wacc":0.0825},
+  "Oil/Gas (Integrated)":{"beta":0.48,"wacc":0.0633},
+  "Oil/Gas (Production and Exploration)":{"beta":0.88,"wacc":0.0752},
+  "Packaging & Container":{"beta":0.98,"wacc":0.0720},
+  "Pharmaceutical":{"beta":0.77,"wacc":0.0720},
+  "Power":{"beta":0.59,"wacc":0.0530},
+  "Precious Metals":{"beta":1.23,"wacc":0.0909},
+  "R.E.I.T.":{"beta":0.95,"wacc":0.0662},
+  "Real Estate (General)":{"beta":0.72,"wacc":0.0614},
+  "Recreation":{"beta":1.33,"wacc":0.0797},
+  "Retail (General)":{"beta":1.08,"wacc":0.0879},
+  "Retail (Grocery and Food)":{"beta":0.60,"wacc":0.0609},
+  "Retail (Special Lines)":{"beta":1.22,"wacc":0.0864},
+  "Semiconductor":{"beta":1.49,"wacc":0.1076},
+  "Semiconductor Equip":{"beta":1.48,"wacc":0.1051},
+  "Software (Entertainment)":{"beta":1.18,"wacc":0.0958},
+  "Software (Internet)":{"beta":1.69,"wacc":0.1110},
+  "Software (System & Application)":{"beta":1.24,"wacc":0.0969},
+  "Steel":{"beta":1.06,"wacc":0.0817},
+  "Telecom (Wireless)":{"beta":0.77,"wacc":0.0692},
+  "Telecom. Services":{"beta":0.82,"wacc":0.0700},
+  "Telecom. Equipment":{"beta":1.00,"wacc":0.0839},
+  "Transportation":{"beta":1.03,"wacc":0.0826},
+  "Trucking":{"beta":1.10,"wacc":0.0839},
+  "Utilities (General)":{"beta":0.44,"wacc":0.0473},
+  "Utility (General)":{"beta":0.39,"wacc":0.0520},
+  "Utility (Water)":{"beta":0.68,"wacc":0.0615}
+};
+
+// ==================== INDUSTRY BENCHMARKS (S&P 500 sector medians) ====================
+// Source: Damodaran sector averages, adjusted for mid-2024
+const INDUSTRY_BENCHMARKS = {
+  'Technology':    {currentRatio:2.0,quickRatio:1.8,cashRatio:0.50,equityToAssets:0.55,debtToEquity:0.30,debtRatio:0.22,roa:0.12,roe:0.22,grossMargin:0.52,operatingMargin:0.22,netMargin:0.15,assetTurnover:0.65,fcfMargin:0.20,cfToDebt:0.80},
+  'Healthcare':    {currentRatio:1.8,quickRatio:1.4,cashRatio:0.35,equityToAssets:0.50,debtToEquity:0.45,debtRatio:0.28,roa:0.08,roe:0.16,grossMargin:0.55,operatingMargin:0.15,netMargin:0.10,assetTurnover:0.55,fcfMargin:0.14,cfToDebt:0.50},
+  'Financial Services':{currentRatio:1.2,quickRatio:1.0,cashRatio:0.20,equityToAssets:0.12,debtToEquity:2.00,debtRatio:0.60,roa:0.01,roe:0.10,grossMargin:0.70,operatingMargin:0.25,netMargin:0.18,assetTurnover:0.08,fcfMargin:0.20,cfToDebt:0.15},
+  'Consumer Cyclical':{currentRatio:1.4,quickRatio:0.9,cashRatio:0.18,equityToAssets:0.35,debtToEquity:0.80,debtRatio:0.35,roa:0.06,roe:0.14,grossMargin:0.32,operatingMargin:0.08,netMargin:0.05,assetTurnover:1.10,fcfMargin:0.05,cfToDebt:0.30},
+  'Consumer Defensive':{currentRatio:1.3,quickRatio:0.8,cashRatio:0.12,equityToAssets:0.35,debtToEquity:0.75,debtRatio:0.32,roa:0.07,roe:0.18,grossMargin:0.35,operatingMargin:0.10,netMargin:0.06,assetTurnover:0.95,fcfMargin:0.08,cfToDebt:0.35},
+  'Energy':        {currentRatio:1.2,quickRatio:0.9,cashRatio:0.12,equityToAssets:0.42,debtToEquity:0.55,debtRatio:0.30,roa:0.07,roe:0.14,grossMargin:0.30,operatingMargin:0.12,netMargin:0.08,assetTurnover:0.50,fcfMargin:0.10,cfToDebt:0.40},
+  'Industrials':   {currentRatio:1.5,quickRatio:1.0,cashRatio:0.18,equityToAssets:0.40,debtToEquity:0.60,debtRatio:0.30,roa:0.06,roe:0.14,grossMargin:0.28,operatingMargin:0.10,netMargin:0.07,assetTurnover:0.75,fcfMargin:0.07,cfToDebt:0.35},
+  'Utilities':     {currentRatio:0.9,quickRatio:0.7,cashRatio:0.05,equityToAssets:0.35,debtToEquity:1.20,debtRatio:0.45,roa:0.03,roe:0.09,grossMargin:0.40,operatingMargin:0.20,netMargin:0.12,assetTurnover:0.22,fcfMargin:0.05,cfToDebt:0.15},
+  'Real Estate':   {currentRatio:0.8,quickRatio:0.6,cashRatio:0.06,equityToAssets:0.38,debtToEquity:1.00,debtRatio:0.40,roa:0.03,roe:0.07,grossMargin:0.55,operatingMargin:0.30,netMargin:0.18,assetTurnover:0.18,fcfMargin:0.15,cfToDebt:0.20},
+  'Communication Services':{currentRatio:1.2,quickRatio:1.0,cashRatio:0.22,equityToAssets:0.42,debtToEquity:0.70,debtRatio:0.32,roa:0.06,roe:0.14,grossMargin:0.48,operatingMargin:0.18,netMargin:0.12,assetTurnover:0.45,fcfMargin:0.15,cfToDebt:0.45},
+  'Basic Materials':{currentRatio:1.6,quickRatio:1.0,cashRatio:0.15,equityToAssets:0.45,debtToEquity:0.50,debtRatio:0.28,roa:0.06,roe:0.12,grossMargin:0.25,operatingMargin:0.12,netMargin:0.08,assetTurnover:0.65,fcfMargin:0.08,cfToDebt:0.35},
+  '_default':      {currentRatio:1.5,quickRatio:1.1,cashRatio:0.20,equityToAssets:0.40,debtToEquity:0.65,debtRatio:0.32,roa:0.06,roe:0.13,grossMargin:0.38,operatingMargin:0.13,netMargin:0.08,assetTurnover:0.70,fcfMargin:0.10,cfToDebt:0.40},
+};
+
+function getIndustryBench(sector){
+  if(!sector) return INDUSTRY_BENCHMARKS['_default'];
+  for(const [k,v] of Object.entries(INDUSTRY_BENCHMARKS)){
+    if(k==='_default') continue;
+    if(sector.toLowerCase().includes(k.toLowerCase().split(' ')[0])||k.toLowerCase().includes(sector.toLowerCase().split(' ')[0]))
+      return v;
+  }
+  return INDUSTRY_BENCHMARKS['_default'];
+}
+
+function scoreRatioVsIndustry(val, key, sector){
+  const bench = getIndustryBench(sector);
+  const median = bench[key];
+  if(!median||!val) return 3;
+  const INVERTED = ['debtToEquity','debtRatio'];
+  const ratio = INVERTED.includes(key) ? median/val : val/median;
+  if(ratio>=1.5) return 5;
+  if(ratio>=1.15) return 4;
+  if(ratio>=0.85) return 3;
+  if(ratio>=0.60) return 2;
+  return 1;
+}
+
+// ==================== RATIO BENCHMARKS (from your Excel) ====================
+// Each ratio: {label, fmt, inv(optional), groups per score 5→4→3→2→1}
+const RATIO_BENCH = {
+  // Liquidity
+  currentRatio: {label:"Current Ratio",cat:"Liquidity",fmt:"x",
+    s5:1.50,s4:1.25,s3:1.00,s2:0.90,s1:0.80},
+  quickRatio:   {label:"Quick Ratio (Acid Test)",cat:"Liquidity",fmt:"x",
+    s5:1.00,s4:0.95,s3:0.90,s2:0.80,s1:0.70},
+  cashRatio:    {label:"Cash Ratio",cat:"Liquidity",fmt:"%",scale:100,
+    s5:.30,s4:.25,s3:.20,s2:.15,s1:.10},
+  // Capital
+  equityToAssets:{label:"Equity to Assets",cat:"Capital",fmt:"%",scale:100,
+    s5:.40,s4:.30,s3:.25,s2:.20,s1:.15},
+  // Solvency
+  debtToEquity: {label:"Debt to Equity",cat:"Solvency",fmt:"%",scale:100,inv:true,
+    s5:1.00,s4:1.20,s3:1.40,s2:1.50,s1:1.60},
+  debtRatio:    {label:"Debt Ratio",cat:"Solvency",fmt:"%",scale:100,inv:true,
+    s5:.30,s4:.35,s3:.40,s2:.45,s1:.50},
+  // Profitability
+  roa:          {label:"ROA",cat:"Profitability",fmt:"%",scale:100,
+    s5:.10,s4:.09,s3:.07,s2:.05,s1:.03},
+  roe:          {label:"ROE",cat:"Profitability",fmt:"%",scale:100,
+    s5:.20,s4:.18,s3:.15,s2:.13,s1:.11},
+  grossMargin:  {label:"Gross Profit Margin",cat:"Profitability",fmt:"%",scale:100,
+    s5:.50,s4:.40,s3:.30,s2:.25,s1:.20},
+  operatingMargin:{label:"Operating Margin",cat:"Profitability",fmt:"%",scale:100,
+    s5:.25,s4:.20,s3:.18,s2:.16,s1:.13},
+  netMargin:    {label:"Net Profit Margin",cat:"Profitability",fmt:"%",scale:100,
+    s5:.10,s4:.09,s3:.07,s2:.05,s1:.03},
+  // Efficiency
+  assetTurnover:{label:"Asset Turnover",cat:"Efficiency",fmt:"x",
+    s5:1.0,s4:.9,s3:.8,s2:.7,s1:.6},
+  // Cash Flow
+  fcfMargin:    {label:"FCF to Sales",cat:"Cash Flow",fmt:"%",scale:100,
+    s5:.20,s4:.18,s3:.16,s2:.14,s1:.12},
+  cfToDebt:     {label:"CF to Debt Ratio",cat:"Cash Flow",fmt:"%",scale:100,
+    s5:.60,s4:.50,s3:.40,s2:.35,s1:.30},
+};
+
+// ==================== QUALITATIVE DEFINITIONS ====================
+const QUAL_DEF = {
+  mgmt:[
+    {label:"Capital Allocation",key:"mgmt2",def:3,auto:true,
+      tip:"WHAT: How efficiently management reinvests capital (ROIC = Net Income / Invested Capital).\nWHY: The single best predictor of long-term value creation. Buffett calls it the most important metric.\nHOW TO RATE:\n★★★★★ ROIC >15% — exceptional, creates significant economic value\n★★★★  ROIC 10–15% — good, above cost of capital\n★★★   ROIC 5–10% — acceptable, marginal value creation\n★★    ROIC 0–5% — poor, destroys or barely covers cost of capital\n★     ROIC negative — destroying shareholder value\nCOMPARED TO: S&P 500 median ROIC ~11%. Tech sector median ~18%.\nNOTE: Auto-filled from Yahoo Finance financialData."},
+    {label:"Track Record",key:"mgmt3",def:3,auto:true,
+      tip:"WHAT: Consistency and growth of earnings and revenue over time.\nWHY: Past execution predicts future reliability. Look for 5–10y compounding, not single-year spikes.\nHOW TO RATE:\n★★★★★ EPS + Revenue growth avg >15% TTM, consistent history\n★★★★  Growth 8–15%, minor volatility\n★★★   Growth 2–8%, stable\n★★    Growth -5–2%, stagnating or volatile\n★     Negative growth, dividend cuts, or restated earnings\nCOMPARED TO: S&P 500 avg revenue growth ~7%, EPS growth ~9%.\nNOTE: Auto-filled from Yahoo Finance earningsGrowth + revenueGrowth (TTM)."},
+    {label:"Skin in the Game",key:"mgmt4",def:3,auto:true,
+      tip:"WHAT: Percentage of shares owned by insiders (CEO, CFO, board).\nWHY: Aligns management incentives with shareholders. High insider ownership = management thinks like owners.\nHOW TO RATE:\n★★★★★ >10% insider ownership — strong alignment (founder-led or deep conviction)\n★★★★  5–10% — meaningful stake, good alignment\n★★★   1–5% — moderate stake, typical for large caps\n★★    0.1–1% — minimal, common at mega-caps\n★     <0.1% — no meaningful alignment\nCOMPARED TO: S&P 500 average ~1.5%. Founder-led companies typically >5%.\nNOTE: Auto-filled from Yahoo heldPercentInsiders."},
+    {label:"Long-Term Orientation",key:"mgmt5",def:3,auto:true,
+      tip:"WHAT: R&D investment as % of revenue — proxy for long-term thinking vs short-term profit extraction.\nWHY: Companies that invest consistently in R&D build durable advantages. Look for sustained investment, not just current year.\nHOW TO RATE:\n★★★★★ R&D >10% of revenue — heavy reinvestment (e.g. pharma, tech)\n★★★★  R&D 7–10% — strong commitment\n★★★   R&D 3–7% — moderate, depends on sector\n★★    R&D >0 but <3% — limited investment\n★     No R&D reported — pure extraction model\nCOMPARED TO: Tech sector median ~12%, Healthcare ~15%, Industrials ~3%.\nNOTE: Auto-filled. R&D not always disclosed by Yahoo — may default to 1★."}
+  ],
+  moat:[
+    {label:"Competitive Advantage (Moat)",key:"moat2",def:3,auto:true,
+      tip:"WHAT: Durability of the business advantage — can competitors replicate it within 10 years?\nWHY: The moat determines whether high returns persist. Without a moat, high ROIC attracts competition and erodes.\nHOW TO RATE (use Gross Margin as proxy, verify manually):\n★★★★★ Gross margin >60%, dominant market position, structural barriers (network effects, patents, brand)\n★★★★  Gross margin 45–60%, clear competitive advantage lasting >10y\n★★★   Gross margin 30–45%, some advantage, moderate durability\n★★    Gross margin 20–30%, easily replicable, commodity-like\n★     Gross margin <20%, no discernible moat\nCOMPARED TO: S&P 500 median gross margin ~38%. Wide-moat companies typically >50%.\nNOTE: Auto-filled from grossMargins. Override manually if you know the business model well."},
+    {label:"Innovation / Reputation",key:"moat3",def:3,auto:true,
+      tip:"WHAT: Brand strength, innovation pipeline, and ability to attract talent and customers.\nWHY: Intangible assets are the hardest to replicate and often the most durable source of value. Apple's brand, LVMH's reputation, Google's talent density.\nHOW TO RATE:\n★★★★★ Industry leader, iconic brand, R&D >10%, sets direction for competitors\n★★★★  Strong brand in niche, R&D 7–10%, innovation pipeline visible\n★★★   Average brand, R&D 3–7%, keeps pace with competition\n★★    Follower, low R&D, no significant brand premium\n★     No innovation, no brand power, price-driven competition\nCOMPARED TO: Patent citations, brand value rankings, employee NPS are qualitative signals.\nNOTE: Auto-filled from R&D%. Adjust if brand value differs from R&D investment."}
+  ],
+  esg:[
+    {label:"ESG Risk Score",key:"esg1",def:3,auto:true,
+      tip:"WHAT: Combined exposure to environmental, social, and governance risks.\nWHY: ESG risks can become financial risks: regulatory fines, customer boycotts, talent loss, stranded assets.\nHOW TO RATE (Yahoo ESG Score — lower = lower risk):\n★★★★★ ESG score <10 — minimal risk, best-in-class\n★★★★  ESG score 10–20 — low risk\n★★★   ESG score 20–30 — moderate risk\n★★    ESG score 30–40 — elevated risk\n★     ESG score >40 — significant risk, potential financial impact\nCOMPARED TO: Sustainalytics industry averages. S&P 500 median ~21.\nNOTE: Auto-filled if Yahoo provides ESG data. Many tickers return no data — defaults to 3★."},
+    {label:"Crisis Resilience",key:"esg3",def:3,auto:true,
+      tip:"WHAT: Ability to generate positive free cash flow through economic crises (2008, 2020, 2022).\nWHY: For long-term investors, resilience matters more than growth. Companies that survive crises intact compound far better over 20 years.\nHOW TO RATE (FCF Margin as proxy — check 2020/2022 history manually):\n★★★★★ FCF margin >15%, FCF positive in all last 3 crises, no dividend cuts\n★★★★  FCF margin 10–15%, weathered 2 of 3 crises without cuts\n★★★   FCF margin 5–10%, some stress but recovered\n★★    FCF margin 0–5%, volatile, dividend cuts in downturns\n★     FCF negative, near-distress in crises\nCOMPARED TO: S&P 500 median FCF margin ~9%. Counter-cyclical businesses naturally score higher.\nNOTE: Auto-filled from TTM FCF margin. Manually adjust if you reviewed multi-year history."}
+  ]
+};
+
+// ==================== STATE ====================
+let qualScores={};
+let currentRatioScore=0;
+let currentCompany=null;
+let portfolio=JSON.parse(localStorage.getItem('sr_portfolio')||'[]');
+let watchlist=JSON.parse(localStorage.getItem('sr_watchlist')||'[]');
+let trades=JSON.parse(localStorage.getItem('sr_trades')||'[]');
+let cache=JSON.parse(localStorage.getItem('sr_cache')||'{}');
+
+// Invalidate stale cache (v4.1 — clear all old entries missing returnOnAssets)
+(function(){
+  let dirty=false;
+  for(const k of Object.keys(cache)){
+    const d=cache[k]?.data;
+    if(d&&typeof d==='object'){
+      const fd=d.financialData||{};
+      // clear if old format (no returnOnAssets) or raw object wrappers
+      if(!fd.returnOnAssets||fd.currentRatio&&typeof fd.currentRatio==='object'){
+        delete cache[k];dirty=true;
+      }
+    }
+  }
+  if(dirty) localStorage.setItem('sr_cache',JSON.stringify(cache));
+})();
+
+// ==================== WORKER ====================
+function getWorkerUrl(){return (localStorage.getItem('sr_workerurl')||'https://fragrant-wave-6bd7.d-lenz-contact.workers.dev').replace(/\/+$/,'');}
+function saveWorkerUrl(){
+  const w=document.getElementById('worker-url-input').value.trim().replace(/\/+$/,'');
+  if(w&&!w.startsWith('https://')){showWorkerStatus('URL must start with https://','error');return;}
+  if(w) localStorage.setItem('sr_workerurl',w);
+  else localStorage.removeItem('sr_workerurl');
+  showWorkerStatus(w?'Saved — Rating + Trading fully available':'No worker — trading data only','ok');
+  updateApiBadge();checkProxyWarnings();
+}
+function showWorkerStatus(msg,type){
+  const el=document.getElementById('worker-url-status');
+  if(!el) return;
+  el.style.color=type==='ok'?'var(--green)':type==='error'?'var(--red)':'var(--amber)';
+  el.textContent=msg;
+}
+function updateApiBadge(){
+  const el=document.getElementById('api-status-badge');
+  if(!el) return;
+  const dot=el.querySelector('.dot');const span=el.querySelector('span');
+  if(!dot||!span) return;
+  const w=getWorkerUrl();
+  if(w){dot.className='dot active';span.textContent='Worker connected';}
+  else{dot.className='dot warn';span.textContent='No worker';}
+}
+function checkProxyWarnings(){
+  const w=getWorkerUrl();
+  const warn=w?'':'<div class="info-box">⚠️ No worker configured — fundamentals unavailable for Rating. <button class="btn btn-sm" onclick="showPage(\'settings\')" style="margin-left:8px">Configure ↗</button></div>';
+  const _r=document.getElementById('proxy-warning-rating');if(_r)_r.innerHTML=warn;
+  const _t=document.getElementById('proxy-warning-trading');if(_t)_t.innerHTML='';
+  const _c=document.getElementById('proxy-warning-compare');if(_c)_c.innerHTML=warn;
+}
+async function yahooSummary(ticker){
+  const w=getWorkerUrl();
+  if(!w) throw new Error('No worker configured. Go to Settings and enter your Cloudflare Worker URL.');
+  let res;
+  try{res=await fetch(`${w}/yahoo/summary/${ticker}`);}
+  catch(e){throw new Error('Network error — worker unreachable. Check URL in Settings.');}
+  if(!res.ok) throw new Error(`Yahoo error ${res.status} — ticker not found or worker issue.`);
+  const data=await res.json();
+  if(data.error) throw new Error(`Yahoo: ${data.error}`);
+  return data;
+}
+async function yahooChart(ticker,range='1y'){
+  const w=getWorkerUrl();
+  if(!w) throw new Error('No worker configured.');
+  let res;
+  try{res=await fetch(`${w}/yahoo/chart/${ticker}?range=${range}`);}
+  catch(e){throw new Error('Network error.');}
+  if(!res.ok) throw new Error(`Yahoo chart error ${res.status}`);
+  return await res.json();
+}
+
+// ==================== PROGRESS BAR ====================
+function showProgress(state){
+  const el=document.getElementById('page-progress');
+  el.className='page-progress';
+  if(state==='start') el.classList.add('loading');
+  else if(state==='done'){
+    el.classList.add('done');
+    setTimeout(()=>{el.className='page-progress';},600);
+  }
+}
+
+// ==================== FETCH COMPANY ====================
+// Name → Ticker + ISIN/WKN lookup
+const NAME_TO_TICKER = {
+  // US Tech
+  'NVIDIA':['NVDA'],'APPLE':['AAPL'],'MICROSOFT':['MSFT'],'GOOGLE':['GOOGL'],
+  'ALPHABET':['GOOGL'],'AMAZON':['AMZN'],'META':['META'],'TESLA':['TSLA'],
+  'NETFLIX':['NFLX'],'BERKSHIRE':['BRK-B'],'BERKSHIRE HATHAWAY':['BRK-B'],
+  'VISA':['V'],'MASTERCARD':['MA'],'JPMORGAN':['JPM'],'JP MORGAN':['JPM'],
+  'GOLDMAN':['GS'],'GOLDMAN SACHS':['GS'],'BLACKROCK':['BLK'],
+  'TAIWAN SEMICONDUCTOR':['TSM'],'TSMC':['TSM'],
+  'SHOPIFY':['SHOP'],'SALESFORCE':['CRM'],'ORACLE':['ORCL'],
+  'INTEL':['INTC'],'AMD':['AMD'],'QUALCOMM':['QCOM'],'BROADCOM':['AVGO'],
+  'DISNEY':['DIS'],'COCA COLA':['KO'],'COCACOLA':['KO'],
+  'PEPSI':['PEP'],'PEPSICO':['PEP'],
+  'JOHNSON':['JNJ'],'JOHNSON & JOHNSON':['JNJ'],
+  'PFIZER':['PFE'],'EXXON':['XOM'],'CHEVRON':['CVX'],
+  'CITIGROUP':['C'],'CITI':['C'],'BANK OF AMERICA':['BAC'],
+  'WELLS FARGO':['WFC'],'MORGAN STANLEY':['MS'],'PAYPAL':['PYPL'],
+  'UBER':['UBER'],'AIRBNB':['ABNB'],'SPOTIFY':['SPOT'],
+  'PALANTIR':['PLTR'],'SNOWFLAKE':['SNOW'],'CROWDSTRIKE':['CRWD'],
+  'ROCKET LAB':['RKLB'],'SPACEX':['RKLB'],
+  // European
+  'ASML':['ASML'],'SAP':['SAP'],'SIEMENS':['SIE.DE'],
+  'VOLKSWAGEN':['VOW3.DE'],'VW':['VOW3.DE'],
+  'BMW':['BMW.DE'],'MERCEDES':['MBG.DE'],'DAIMLER':['MBG.DE'],
+  'ADIDAS':['ADS.DE'],'BASF':['BAS.DE'],'BAYER':['BAYN.DE'],
+  'ALLIANZ':['ALV.DE'],'DEUTSCHE BANK':['DBK.DE'],'COMMERZBANK':['CBK.DE'],
+  'INFINEON':['IFX.DE'],'MUNICH RE':['MUV2.DE'],'MUENCHENER':['MUV2.DE'],
+  'NOVARTIS':['NVS'],'ROCHE':['ROG.SW'],'NESTLE':['NESN.SW'],
+  'LVMH':['MC.PA'],'AIRBUS':['AIR.PA'],'TOTALENERGIES':['TTE.PA'],
+  'UNILEVER':['ULVR.L'],'SHELL':['SHEL.L'],'BP':['BP.L'],
+  'HSBC':['HSBA.L'],'ASTRAZENECA':['AZN.L'],
+  // ISIN → Ticker
+  'US67066G1040':['NVDA'],'US0378331005':['AAPL'],'US5949181045':['MSFT'],
+  'US02079K3059':['GOOGL'],'US0231351067':['AMZN'],'US30303M1027':['META'],
+  'US88160R1014':['TSLA'],'US38141G1040':['GS'],'US46625H1005':['JPM'],
+  'US9311421039':['WMT'],'US1912161007':['KO'],'US7134481081':['PFE'],
+  'US4592001014':['IBM'],'US4581401001':['INTC'],'US00206R1023':['T'],
+  'DE0007164600':['SAP'],'DE0007236101':['SIE.DE'],'DE0008404005':['ALV.DE'],
+  'DE0005140008':['DBK.DE'],'NL0010273215':['ASML'],
+  // WKN → Ticker
+  '716460':['SAP'],'723610':['SIE.DE'],'840400':['ALV.DE'],
+  '514000':['DBK.DE'],'A1J37A':['ASML'],'918422':['NVDA'],
+};
+
+// Ticker → {isin, wkn} lookup (Yahoo Finance doesn't provide these)
+const TICKER_IDENTIFIERS = {
+  'AAPL': {isin:'US0378331005', wkn:'865985'},
+  'MSFT': {isin:'US5949181045', wkn:'870747'},
+  'GOOGL':{isin:'US02079K3059', wkn:'A14Y6F'},
+  'GOOG': {isin:'US02079K1079', wkn:'A14Y6F'},
+  'AMZN': {isin:'US0231351067', wkn:'906866'},
+  'META': {isin:'US30303M1027', wkn:'A1JWVX'},
+  'TSLA': {isin:'US88160R1014', wkn:'A1CX3T'},
+  'NVDA': {isin:'US67066G1040', wkn:'918422'},
+  'AMD':  {isin:'US0079031078', wkn:'863186'},
+  'INTC': {isin:'US4581401001', wkn:'855681'},
+  'QCOM': {isin:'US7475251036', wkn:'883121'},
+  'AVGO': {isin:'US11135F1012', wkn:'A2JG9Z'},
+  'NFLX': {isin:'US64110L1061', wkn:'552484'},
+  'ORCL': {isin:'US68389X1054', wkn:'871460'},
+  'CRM':  {isin:'US79466L3024', wkn:'A0B87V'},
+  'JPM':  {isin:'US46625H1005', wkn:'850628'},
+  'BAC':  {isin:'US0605051046', wkn:'858388'},
+  'GS':   {isin:'US38141G1040', wkn:'920332'},
+  'MS':   {isin:'US6174464486', wkn:'885836'},
+  'V':    {isin:'US92826C8394', wkn:'A0NC7B'},
+  'MA':   {isin:'US57636Q1040', wkn:'A0F602'},
+  'PYPL': {isin:'US70450Y1038', wkn:'A14R7U'},
+  'WMT':  {isin:'US9311421039', wkn:'860853'},
+  'KO':   {isin:'US1912161007', wkn:'850663'},
+  'PEP':  {isin:'US7134481081', wkn:'851995'},
+  'JNJ':  {isin:'US4781601046', wkn:'853260'},
+  'PFE':  {isin:'US7134481081', wkn:'852009'},
+  'XOM':  {isin:'US30231G1022', wkn:'852549'},
+  'CVX':  {isin:'US1667641005', wkn:'871706'},
+  'DIS':  {isin:'US2546871060', wkn:'855686'},
+  'UBER': {isin:'US90353T1007', wkn:'A2PHHG'},
+  'SPOT': {isin:'LU1778762911', wkn:'A2JEGN'},
+  'SHOP': {isin:'CA82509L1076', wkn:'A14TJP'},
+  'PLTR': {isin:'US69608A1088', wkn:'A2QA4J'},
+  'SNOW': {isin:'US8334451098', wkn:'A2QB38'},
+  'CRWD': {isin:'US22788C1053', wkn:'A2PK2R'},
+  'SAP':  {isin:'DE0007164600', wkn:'716460'},
+  'SIE.DE':{isin:'DE0007236101',wkn:'723610'},
+  'ALV.DE':{isin:'DE0008404005',wkn:'840400'},
+  'DBK.DE':{isin:'DE0005140008',wkn:'514000'},
+  'BMW.DE':{isin:'DE0005190003',wkn:'519000'},
+  'MBG.DE':{isin:'DE0007100000',wkn:'710000'},
+  'VOW3.DE':{isin:'DE0007664039',wkn:'766403'},
+  'ADS.DE':{isin:'DE000A1EWWW0',wkn:'A1EWWW'},
+  'BAS.DE':{isin:'DE000BASF111',wkn:'BASF11'},
+  'BAYN.DE':{isin:'DE000BAY0017',wkn:'BAY001'},
+  'IFX.DE':{isin:'DE0006231004',wkn:'623100'},
+  'MUV2.DE':{isin:'DE0008430026',wkn:'843002'},
+  'CBK.DE':{isin:'DE000CBK1001',wkn:'CBK100'},
+  'ASML': {isin:'NL0010273215', wkn:'A1J37A'},
+  'NVS':  {isin:'US66987V1098', wkn:'904278'},
+  'TSM':  {isin:'US8740391003', wkn:'909800'},
+  'BABA': {isin:'US01609W1027', wkn:'A117ME'},
+  'BRK-B':{isin:'US0846707026', wkn:'900567'},
+};
+
+// ISIN pattern: 2 letters + 10 alphanumeric
+const ISIN_RE = /^[A-Z]{2}[A-Z0-9]{10}$/;
+// WKN pattern: 6 alphanumeric chars
+const WKN_RE = /^[A-Z0-9]{6}$/;
+
+async function resolveTickerInput(raw){
+  const upper = raw.toUpperCase().trim();
+  // Direct ticker or known name/ISIN/WKN
+  if(NAME_TO_TICKER[upper]) return NAME_TO_TICKER[upper][0];
+  // Partial name match
+  for(const [name,tickers] of Object.entries(NAME_TO_TICKER)){
+    if(name.length>3 && (upper.includes(name) || name.includes(upper))) return tickers[0];
+  }
+  // If it looks like a ticker already (short, uppercase), return as-is
+  if(/^[A-Z0-9.\-^]{1,6}$/.test(upper)) return upper;
+  // Otherwise treat as ticker directly (search endpoint not available)
+  return upper;
+}
+
+// Search history (max 10)
+let searchHistory = JSON.parse(localStorage.getItem('sr_search_history')||'[]');
+function addToHistory(ticker, name){
+  searchHistory = searchHistory.filter(h=>h.ticker!==ticker);
+  searchHistory.unshift({ticker, name: name||ticker});
+  if(searchHistory.length>10) searchHistory.pop();
+  localStorage.setItem('sr_search_history', JSON.stringify(searchHistory));
+  renderSearchDropdown('');
+}
+
+function renderSearchDropdown(query){
+  const dd = document.getElementById('search-dropdown');
+  if(!dd) return;
+  const items = query
+    ? searchHistory.filter(h=>h.ticker.includes(query.toUpperCase())||h.name.toUpperCase().includes(query.toUpperCase()))
+    : searchHistory;
+  if(!items.length){ dd.style.display='none'; return; }
+  dd.innerHTML = items.map((h,i)=>`
+    <div class="search-dd-item" style="display:flex;align-items:center;justify-content:space-between" onmousedown="event.preventDefault();selectFromHistory('${h.ticker}')">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-family:var(--mono);font-weight:700;font-size:.82rem">${h.ticker}</span>
+        <span style="color:var(--text2);font-size:.8rem">${h.name}</span>
+      </div>
+      <span onmousedown="event.stopPropagation();event.preventDefault();removeFromHistory(${i})" style="color:var(--text3);font-size:.8rem;padding:2px 6px;cursor:pointer;border-radius:3px;line-height:1" title="Remove">✕</span>
+    </div>`).join('');
+  dd.style.display='block';
+}
+
+function removeFromHistory(idx){
+  searchHistory.splice(idx,1);
+  localStorage.setItem('sr_search_history', JSON.stringify(searchHistory));
+  renderSearchDropdown('');
+}
+
+function selectFromHistory(ticker){
+  document.getElementById('search-dropdown').style.display='none';
+  document.getElementById('r-ticker').value='';
+  document.getElementById('r-ticker').blur();
+  fetchCompany(ticker);
+}
+
+function hideDropdown(){ setTimeout(()=>{ const dd=document.getElementById('search-dropdown'); if(dd) dd.style.display='none'; },150); }
+
+async function fetchCompany(forceTicker){
+  const raw = forceTicker || document.getElementById('r-ticker').value.trim();
+  if(!raw) return;
+  document.getElementById('search-dropdown').style.display='none';
+  const resolved = await resolveTickerInput(raw);
+  // Handle search results dropdown
+  if(resolved && typeof resolved==='object' && resolved.search){
+    const dd = document.getElementById('search-dropdown');
+    if(dd){
+      dd.innerHTML = resolved.quotes.map(q=>`
+        <div class="search-dd-item" onclick="selectFromHistory('${q.symbol}')">
+          <span style="font-family:var(--mono);font-weight:600;font-size:.82rem">${q.symbol}</span>
+          <span style="color:var(--text2);font-size:.8rem;margin-left:8px">${q.name}</span>
+          <span style="color:var(--text3);font-size:.72rem;margin-left:auto;font-family:var(--mono)">${q.exchange||''}</span>
+        </div>`).join('');
+      dd.style.display='block';
+    }
+    return;
+  }
+  const ticker = typeof resolved==='string' ? resolved : raw.toUpperCase();
+  document.getElementById('r-ticker').value = '';
+  showProgress('start');
+  showRatingLoading(true);
+  document.getElementById('rating-error').style.display='none';
+  document.getElementById('rating-content').style.display='none';
+  try{
+    const [summary,chart]=await Promise.all([yahooSummary(ticker),yahooChart(ticker,'1y')]);
+    const fd=summary.financialData||{};
+    const ks=summary.defaultKeyStatistics||{};
+    const meta=chart.meta||{};
+    const closes=chart.closes||[];
+    const highs=chart.highs||[];
+    const lows=chart.lows||[];
+    window._currentChartTimestamps = chart.timestamps||[];
+    currentCompany={ticker,fd,ks,meta,summary,closes,highs,lows};
+    renderCompanyHero(meta,fd,ks);
+    addToHistory(ticker, meta.longName||meta.shortName||ticker);
+    renderMarketContext(meta, fd, ks, closes);
+    renderRatios(fd,ks,meta,closes,highs,lows,summary);
+    renderQual();
+    autoFillQual(fd, ks, closes, summary);
+    updateScorecard();
+    renderDCF(fd, ks, meta, getWaccInfo(fd));
+    renderPriceChart(closes, highs, lows, '1y');
+    initChartCrosshair();
+    renderMarginsChart(fd);
+    renderFinancialsChart(fd, ks, meta);
+    renderPeriodOverview(summary, fd, ks);
+    showRatingLoading(false);
+    document.getElementById('rating-content').style.display='block';
+    showProgress('done');
+  }catch(e){
+    showRatingLoading(false);
+    showRatingError(e.message);
+    showProgress('done');
+  }
+}
+function showRatingLoading(on){document.getElementById('rating-loading').style.display=on?'block':'none';}
+function showRatingError(msg){
+  const el=document.getElementById('rating-error');
+  el.innerHTML=`<div class="error-box">⚠️ ${msg}</div>`;
+  el.style.display='block';
+}
+function clearRating(){
+  document.getElementById('r-ticker').value='';
+  document.getElementById('rating-content').style.display='none';
+  document.getElementById('rating-error').style.display='none';
+  currentCompany=null;
+}
+
+// ==================== COMPANY HERO ====================
+function renderCompanyHero(meta,fd,ks){
+  const price=meta.regularMarketPrice||0;
+  const prev=meta.chartPreviousClose||price;
+  const change=price-prev;
+  const pct=prev>0?(change/prev)*100:0;
+  const name=meta.longName||meta.shortName||meta.symbol||'';
+  const initials=name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()||meta.symbol?.slice(0,2)||'?';
+  const colors=['#6366f1','#10b981','#8b5cf6','#f59e0b','#ef4444','#06b6d4'];
+  const col=colors[(meta.symbol||'A').charCodeAt(0)%colors.length];
+  const sector=fd.sector||'';
+  // Domain heuristic for Clearbit logo
+  let domain='';
+  if(fd.website){
+    try{ domain=new URL(fd.website).hostname.replace(/^www\./,''); }catch(e){ domain=fd.website.replace(/^https?:\/\//,'').replace(/^www\./,'').split('/')[0]; }
+  }
+  if(!domain && meta.symbol) domain=meta.symbol.toLowerCase()+'.com';
+  // ISIN / WKN from ks or local lookup
+  const ids = TICKER_IDENTIFIERS[meta.symbol||''] || {};
+  const isin = ks.isin || ids.isin || null;
+  const wkn  = ks.wkn  || ids.wkn  || null;
+  document.getElementById('company-hero').innerHTML=`
+    <div class="company-avatar" id="co-avatar" style="width:48px;height:48px;color:${col};border:1px solid ${col}33;background:${col}18;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center">
+      <span style="font-size:.8rem;font-weight:600;font-family:var(--mono);z-index:1">${initials}</span>
+    </div>
+    <div class="company-info">
+      <div class="company-name">${name}</div>
+      <div class="company-meta">
+        <span class="meta-chip">${meta.symbol||''}</span>
+        ${meta.exchangeName?`<span class="meta-chip">${meta.exchangeName}</span>`:''}
+        ${sector?`<span class="meta-chip">${sector}</span>`:''}
+        ${meta.currency?`<span class="meta-chip">${meta.currency}</span>`:''}
+        ${isin?`<span class="meta-chip">${isin}</span>`:''}
+        ${wkn?`<span class="meta-chip">${wkn}</span>`:''}
+      </div>
+    </div>
+    <div class="company-price">
+      <div style="display:flex;align-items:baseline;gap:8px"><div class="price-big">${fmtNum(price,2)}</div><div style="font-size:1rem;font-weight:400;color:var(--text2);font-family:var(--mono)">${meta.currency||''}</div></div>
+      <div class="price-change ${change>=0?'pos':'neg'}">
+        <span>${change>=0?'▲':'▼'} ${Math.abs(change).toFixed(2)}</span>
+        <span class="price-badge">${change>=0?'+':''}${pct.toFixed(2)}%</span>
+      </div>
+      <div style="display:flex;gap:6px;margin-top:10px;justify-content:flex-end">
+        <button class="btn btn-sm" onclick="saveToWatchlist()" title="Add to Watchlist">+ Watchlist</button>
+        <button class="btn btn-sm" onclick="compareCurrent()" title="Compare with peers">Compare</button>
+      </div>
+    </div>`;
+}
+
+// ==================== SCORE CALCULATION ====================
+function scoreRatio(val,bench){
+  // 5-level scoring like your Excel
+  if(bench.inv){
+    if(val<=bench.s5) return 5;
+    if(val<=bench.s4) return 4;
+    if(val<=bench.s3) return 3;
+    if(val<=bench.s2) return 2;
+    return 1;
+  }
+  if(val>=bench.s5) return 5;
+  if(val>=bench.s4) return 4;
+  if(val>=bench.s3) return 3;
+  if(val>=bench.s2) return 2;
+  return 1;
+}
+function scoreColor(sc){
+  if(sc>=3.5) return '#059669';   // grün
+  if(sc>=2.5) return '#d97706';   // gelb
+  return '#dc2626';               // rot
+}
+function fmtVal(val,bench){
+  if(val===null||val===undefined||isNaN(val)||val===0) return '—';
+  if(bench.scale) return (val*bench.scale).toFixed(1)+'%';
+  if(bench.fmt==='%') return (val*100).toFixed(1)+'%';
+  return val.toFixed(2)+'x';
+}
+function fmtNum(n,dec=0){
+  if(n===null||n===undefined||isNaN(n)) return '—';
+  return Number(n).toFixed(dec);
+}
+function fmtBig(n){
+  if(!n||isNaN(n)) return '—';
+  if(Math.abs(n)>=1e12) return (n/1e12).toFixed(2)+'T';
+  if(Math.abs(n)>=1e9) return (n/1e9).toFixed(2)+'B';
+  if(Math.abs(n)>=1e6) return (n/1e6).toFixed(2)+'M';
+  return n.toLocaleString();
+}
+
+// ==================== RENDER RATIOS ====================
+// Build ratio values from a financial data object (fd) + ks
+function buildRatioVals(fd, ks){
+  const totalCash=fd.totalCash||0;
+  const totalDebt=fd.totalDebt||0;
+  const totalRevenue=fd.totalRevenue||0;
+  const freeCashflow=fd.freeCashflow||0;
+  const netIncome=fd.netIncomeToCommon||0;
+  const roaDirect=fd.returnOnAssets||0;
+  const sharesOut=(ks||{}).sharesOutstanding||0;
+  const bookValue=(ks||{}).bookValue||0;
+  const totalEquity=fd.totalStockholderEquity||fd.stockholdersEquity||(bookValue>0&&sharesOut>0?bookValue*sharesOut:0);
+  const totalAssets=fd.totalAssets||(roaDirect>0&&netIncome>0?netIncome/roaDirect:0);
+  const operatingCashflow=fd.operatingCashflow||0;
+  const cashRatioApprox=totalDebt>0?totalCash/totalDebt:(totalCash>0?1:0);
+  return {
+    currentRatio: fd.currentRatio||0,
+    quickRatio:   fd.quickRatio||0,
+    cashRatio:    cashRatioApprox,
+    equityToAssets: totalAssets>0&&totalEquity>0?totalEquity/totalAssets:0,
+    debtToEquity:   fd.debtToEquity>0?fd.debtToEquity/100:(totalEquity>0?totalDebt/totalEquity:0),
+    debtRatio:      totalAssets>0?totalDebt/totalAssets:0,
+    roa:            fd.returnOnAssets||0,
+    roe:            fd.returnOnEquity||0,
+    grossMargin:    fd.grossMargins||0,
+    operatingMargin:fd.operatingMargins||0,
+    netMargin:      fd.profitMargins||0,
+    assetTurnover:  totalAssets>0?totalRevenue/totalAssets:0,
+    fcfMargin:      totalRevenue>0?freeCashflow/totalRevenue:0,
+    cfToDebt:       totalDebt>0?operatingCashflow/totalDebt:0,
+  };
+}
+
+// Build a lightweight fd-like object from annual/quarterly statement rows
+// Yahoo often returns 0 for fields it doesn't provide — treat 0 as missing for derived values
+function nonzero(v){ return (v && v !== 0) ? v : null; }
+
+function fdFromAnnual(is, bs, cf, fdTtm){
+  const rev  = nonzero(is.totalRevenue);
+  const ni   = nonzero(is.netIncome);
+  // Yahoo annual grossProfit is often 0 — use grossProfits (alternate field) or derive from margin
+  const gpRaw = nonzero(is.grossProfit) || nonzero(is.grossProfits);
+  const opRaw = nonzero(is.operatingIncome) || nonzero(is.ebit);
+  const ta   = nonzero(bs.totalAssets);
+  const te   = nonzero(bs.totalStockholderEquity);
+  const td   = nonzero((bs.shortLongTermDebt||0)+(bs.longTermDebt||0)) || nonzero(bs.totalDebt);
+  const cl   = nonzero(bs.totalCurrentLiabilities);
+  const ca   = nonzero(bs.totalCurrentAssets);
+  const cash = nonzero(bs.cash);
+  const ocf  = nonzero(cf.totalCashFromOperatingActivities) || nonzero(cf.operatingCashflow);
+  const capex= cf.capitalExpenditures || 0; // usually negative
+  const fcf  = ocf ? ocf + capex : null;
+
+  // Derive margins: use raw values if available, else compute from revenue
+  const grossM  = gpRaw && rev ? gpRaw/rev : null;
+  const opM     = opRaw && rev ? opRaw/rev : null;
+  const netM    = ni    && rev ? ni/rev    : null;
+  const roa     = ni && ta ? ni/ta : null;
+  const roe     = ni && te ? ni/te : null;
+
+  return {
+    totalRevenue:           rev,
+    grossProfit:            gpRaw,
+    operatingIncome:        opRaw,
+    netIncomeToCommon:      ni,
+    totalAssets:            ta,
+    totalStockholderEquity: te,
+    totalDebt:              td,
+    totalCurrentLiabilities:cl,
+    totalCurrentAssets:     ca,
+    totalCash:              cash,
+    operatingCashflow:      ocf,
+    freeCashflow:           fcf,
+    grossMargins:           grossM,
+    operatingMargins:       opM,
+    profitMargins:          netM,
+    currentRatio:           (cl && ca) ? ca/cl : null,
+    quickRatio:             (cl && ca) ? (ca-(bs.inventory||0))/cl : null,
+    returnOnAssets:         roa,
+    returnOnEquity:         roe,
+    ebitda:                 nonzero(is.ebitda),
+  };
+}
+
+// Trend arrow: compare current vs prior ratio value
+function trendArrow(curr, prev, inverted){
+  if(!curr||!prev||prev===0) return '<span style="color:var(--text3)">—</span>';
+  const chg = inverted ? (prev-curr)/Math.abs(prev) : (curr-prev)/Math.abs(prev);
+  if(chg>0.05) return '<span class="trend-up">↑</span>';
+  if(chg<-0.05) return '<span class="trend-down">↓</span>';
+  return '<span class="trend-flat">→</span>';
+}
+
+// Global period state
+let _currentPeriod = 'ttm';
+let _periodData = {};
+
+function renderRatios(fd,ks,meta,closes,highs,lows,summary){
+  const price=meta.regularMarketPrice||0;
+  const ebitda=fd.ebitda||0;
+  const ev=ks.enterpriseValue||0;
+  const marketCap=price*(ks.sharesOutstanding||0);
+  const sharesOut=ks.sharesOutstanding||0;
+  const bookValue=ks.bookValue||0;
+  const totalEquity=fd.totalStockholderEquity||fd.stockholdersEquity||(bookValue>0&&sharesOut>0?bookValue*sharesOut:0);
+  const netIncome=fd.netIncomeToCommon||0;
+  const roaDirect=fd.returnOnAssets||0;
+  const totalAssets=fd.totalAssets||ks.totalAssets||(roaDirect>0&&netIncome>0?netIncome/roaDirect:0);
+  const totalRevenue=fd.totalRevenue||0;
+  const freeCashflow=fd.freeCashflow||0;
+
+  // Build period datasets
+  const annualIS  = summary?.incomeStatementHistory?.incomeStatementHistory  || [];
+  const annualBS  = summary?.balanceSheetHistory?.balanceSheetStatements     || [];
+  const annualCF  = summary?.cashflowStatementHistory?.cashflowStatements    || [];
+  const quarterIS = summary?.incomeStatementHistoryQuarterly?.incomeStatementHistory || [];
+  const quarterBS = summary?.balanceSheetHistoryQuarterly?.balanceSheetStatements    || [];
+  const quarterCF = summary?.cashflowStatementHistoryQuarterly?.cashflowStatements   || [];
+
+  // Period labels: extract year from endDate (unix timestamp)
+  function periodLabel(stmt){ return stmt?.endDate ? new Date(stmt.endDate*1000).getFullYear()+'': ''; }
+  function qLabel(stmt){ if(!stmt?.endDate) return ''; const d=new Date(stmt.endDate*1000); return `Q${Math.ceil((d.getMonth()+1)/3)} ${d.getFullYear()}`; }
+
+  _periodData = {
+    ttm:  fd,
+    q:    quarterIS[0] ? fdFromAnnual(quarterIS[0], quarterBS[0]||{}, quarterCF[0]||{}) : null,
+    fy1:  annualIS[0]  ? fdFromAnnual(annualIS[0],  annualBS[0]||{},  annualCF[0]||{})  : null,
+    fy2:  annualIS[1]  ? fdFromAnnual(annualIS[1],  annualBS[1]||{},  annualCF[1]||{})  : null,
+  };
+  const curYr = new Date().getFullYear();
+  const fy1Yr = annualIS[0]?.endDate ? new Date(annualIS[0].endDate*1000).getFullYear() : 0;
+  const fy2Yr = annualIS[1]?.endDate ? new Date(annualIS[1].endDate*1000).getFullYear() : 0;
+  // Skip incomplete current fiscal year — only show fully closed periods
+  const fy1Key = annualIS[fy1Yr && fy1Yr < curYr ? 0 : 1];
+  const fy2Key = annualIS[fy1Yr && fy1Yr < curYr ? 1 : 2];
+  _periodData.fy1 = fy1Key ? fdFromAnnual(fy1Key, annualBS[fy1Yr && fy1Yr < curYr ? 0:1]||{}, annualCF[fy1Yr && fy1Yr < curYr ? 0:1]||{}) : null;
+  _periodData.fy2 = fy2Key ? fdFromAnnual(fy2Key, annualBS[fy1Yr && fy1Yr < curYr ? 1:2]||{}, annualCF[fy1Yr && fy1Yr < curYr ? 1:2]||{}) : null;
+  const labels = {
+    ttm:  'TTM',
+    q:    quarterIS[0] ? qLabel(quarterIS[0]) : 'Latest Q',
+    fy1:  fy1Key?.endDate ? String(new Date(fy1Key.endDate*1000).getFullYear()) : 'FY−1',
+    fy2:  fy2Key?.endDate ? String(new Date(fy2Key.endDate*1000).getFullYear()) : 'FY−2',
+  };
+
+  const sector = fd.sector||'';
+
+  // Key metrics section
+  document.getElementById('key-metrics').innerHTML=`
+    <div class="section-label">Key Metrics</div>
+    <div class="metrics">
+      <div class="metric"><div class="metric-label">MARKET CAP</div><div class="metric-value">${fmtBig(marketCap)}</div><div class="metric-sub">${meta.currency||'USD'}</div></div>
+      <div class="metric"><div class="metric-label">REVENUE TTM</div><div class="metric-value">${fmtBig(totalRevenue)}</div><div class="metric-sub">${meta.currency||'USD'} · TTM</div></div>
+      <div class="metric"><div class="metric-label">EBITDA</div><div class="metric-value">${fmtBig(ebitda)}</div><div class="metric-sub">${meta.currency||'USD'}</div></div>
+      <div class="metric"><div class="metric-label">FREE CASH FLOW</div><div class="metric-value">${fmtBig(freeCashflow)}</div><div class="metric-sub">${meta.currency||'USD'}</div></div>
+      <div class="metric"><div class="metric-label">FORWARD P/E</div><div class="metric-value">${fmtNum(ks.forwardPE,1)}x</div><div class="metric-sub">Ratio</div></div>
+      <div class="metric"><div class="metric-label">52W RANGE</div><div class="metric-value" style="font-size:.82rem">${fmtNum(meta.fiftyTwoWeekLow,0)} – ${fmtNum(meta.fiftyTwoWeekHigh,0)}</div><div class="metric-sub">${meta.currency||'USD'}</div></div>
+      <div class="metric"><div class="metric-label">TOTAL ASSETS</div><div class="metric-value">${fmtBig(totalAssets)||'—'}</div><div class="metric-sub">${meta.currency||'USD'}</div></div>
+      <div class="metric"><div class="metric-label">TOTAL EQUITY</div><div class="metric-value">${fmtBig(totalEquity)||'—'}</div><div class="metric-sub">${meta.currency||'USD'}</div></div>
+    </div>`;
+
+  // Render ratio table for current period
+  renderRatioTable(sector, labels, ks);
+
+  currentRatioScore = calcRatioScore(buildRatioVals(fd, ks));
+
+  // WACC lookup
+  const waccInfo=getWaccInfo(fd);
+  document.getElementById('sc-wacc').textContent=
+    `WACC ${(waccInfo.wacc*100).toFixed(1)}%  ·  β ${waccInfo.beta}  ·  ${sector||'Unknown sector'}`;
+}
+
+function calcRatioScore(ratioVals){
+  let total=0,cnt=0;
+  for(const [k,val] of Object.entries(ratioVals)){
+    const bench=RATIO_BENCH[k]; if(!bench) continue;
+    total+=scoreRatio(val,bench); cnt++;
+  }
+  return cnt>0?total/cnt:0;
+}
+
+function renderRatioTable(sector, labels, ks){
+  const fd = _periodData[_currentPeriod] || _periodData.ttm;
+  const fdPrev = _currentPeriod==='ttm' ? _periodData.fy1 : (_currentPeriod==='q' ? _periodData.ttm : _periodData.fy2);
+  const ratioVals = buildRatioVals(fd, ks);
+  const prevVals  = fdPrev ? buildRatioVals(fdPrev, ks) : null;
+
+  // Period tabs
+  const tabs = Object.entries(labels).map(([key,label])=>
+    `<button class="period-tab${_currentPeriod===key?' active':''}" onclick="switchPeriod('${key}')">${label}</button>`
+  ).join('');
+
+  let total=0,cnt=0;
+  const cats={};
+  for(const [k,val] of Object.entries(ratioVals)){
+    const bench=RATIO_BENCH[k]; if(!bench) continue;
+    const sc=scoreRatio(val,bench);
+    total+=sc; cnt++;
+    if(!cats[bench.cat]) cats[bench.cat]=[];
+    cats[bench.cat].push({k,val,bench,sc});
+  }
+
+  let rows='';
+  for(const [cat,items] of Object.entries(cats)){
+    rows+=`<tr class="ratio-group-header"><td colspan="7">${cat}</td></tr>`;
+    for(const {k,val,bench,sc} of items){
+      const colT=scoreColor(sc);
+      const barWT=(sc/5)*100;
+      const displayed=fmtVal(val,bench);
+      const b5=bench.scale?(bench.s5*bench.scale).toFixed(0)+'%':bench.s5+(bench.fmt==='%'?'%':'x');
+      const scI=scoreRatioVsIndustry(val,k,sector);
+      const colI=scoreColor(scI);
+      const barWI=(scI/5)*100;
+      const prevVal = prevVals ? prevVals[k] : null;
+      const arrow = trendArrow(val, prevVal, bench.inv);
+      const markerW = 8; // % Breite des Marker-Abschnitts
+      const tFill = Math.max(0, barWT - markerW);
+      const sFill = Math.max(0, barWI - markerW);
+      rows+=`<tr>
+        <td style="color:var(--text2)">${bench.label} ${arrow}</td>
+        <td style="font-family:var(--mono);font-weight:600">${displayed}</td>
+        <td style="font-family:var(--mono);font-size:.72rem;color:var(--text3)">≥${b5}</td>
+        <td style="width:40%;padding:8px 8px 8px 0">
+          <div style="position:relative;padding:14px 0 14px 0">
+            <!-- T label oben -->
+            <div style="position:absolute;top:0;left:${barWT}%;transform:translateX(-50%);font-size:.55rem;font-family:var(--mono);font-weight:700;background:#fff;border:1.5px solid #aaa;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;color:#333;z-index:2"
+                 title="Theory score">T</div>
+            <!-- T bar -->
+            <div style="height:5px;background:var(--bg4);border-radius:3px;overflow:visible;position:relative;margin-bottom:4px">
+              <div style="position:absolute;left:0;top:0;height:100%;width:${tFill}%;background:${colT};border-radius:3px 0 0 3px"></div>
+              <div style="position:absolute;left:${tFill}%;top:0;height:100%;width:${markerW}%;background:${colT};opacity:.5;border-radius:0 3px 3px 0"></div>
+            </div>
+            <!-- S bar -->
+            <div style="height:5px;background:var(--bg4);border-radius:3px;overflow:visible;position:relative">
+              <div style="position:absolute;left:0;top:0;height:100%;width:${sFill}%;background:${colI};border-radius:3px 0 0 3px"></div>
+              <div style="position:absolute;left:${sFill}%;top:0;height:100%;width:${markerW}%;background:${colI};opacity:.5;border-radius:0 3px 3px 0"></div>
+            </div>
+            <!-- S label unten -->
+            <div style="position:absolute;bottom:0;left:${barWI}%;transform:translateX(-50%);font-size:.55rem;font-family:var(--mono);font-weight:700;background:#fff;border:1.5px solid #aaa;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;color:#333;z-index:2"
+                 title="Sector score">S</div>
+          </div>
+          <div style="display:flex;justify-content:flex-end;gap:8px;font-family:var(--mono);font-size:.72rem;font-weight:700;margin-top:2px">
+            <span style="color:${colT}">T ${sc}.0</span>
+            <span style="color:var(--text3)">·</span>
+            <span style="color:${colI}">S ${scI}.0</span>
+          </div>
+        </td>
+      </tr>`;
+    }
+  }
+
+  document.getElementById('ratio-table').innerHTML=`
+    <div style="margin-top:.75rem;margin-bottom:.5rem">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:.75rem">
+        <span class="section-label" style="margin:0;flex:none">Ratio Scoring</span>
+        <div class="period-tabs">${tabs}</div>
+      </div>
+      <div style="font-size:.65rem;color:var(--text3);margin-bottom:.75rem">
+        <span style="display:inline-flex;align-items:center;gap:4px;margin-right:12px"><span style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border-radius:50%;background:#059669;color:#fff;font-size:.5rem;font-weight:700">T</span> Theory (your benchmarks)</span>
+        <span style="display:inline-flex;align-items:center;gap:4px;margin-right:12px"><span style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border-radius:50%;background:#7c3aed;color:#fff;font-size:.5rem;font-weight:700">S</span> Sector median (S&P 500)</span>
+        <span style="color:var(--green)">↑</span> improving · <span style="color:var(--amber)">→</span> flat · <span style="color:var(--red)">↓</span> declining vs prior period
+      </div>
+    </div>
+    <table class="rtable">
+      <thead><tr>
+        <th>Ratio</th><th>Value</th>
+        <th>Target ★5</th>
+        <th style="min-width:120px"><span title="T = Theory (Excel benchmarks), S = Sector (S&P 500 median)" style="cursor:help">Score <span style="font-size:.58rem;color:var(--text3)">T = theory  S = sector</span></span></th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+
+  currentRatioScore = cnt>0?total/cnt:0;
+}
+
+function switchPeriod(key){
+  _currentPeriod = key;
+  const sector = currentCompany?.fd?.sector||'';
+  const ks = currentCompany?.ks||{};
+  const labels = {}; // rebuild labels from stored data
+  // Simple label rebuild
+  const summary = currentCompany?.summary||{};
+  const annualIS = summary?.incomeStatementHistory?.incomeStatementHistory||[];
+  const quarterIS = summary?.incomeStatementHistoryQuarterly?.incomeStatementHistory||[];
+  function periodLabel(s){ return s?.endDate ? new Date(s.endDate*1000).getFullYear()+'' : ''; }
+  function qLabel(s){ if(!s?.endDate) return ''; const d=new Date(s.endDate*1000); return `Q${Math.ceil((d.getMonth()+1)/3)} ${d.getFullYear()}`; }
+  const curYear = new Date().getFullYear();
+  const fy1Year = annualIS[0]?.endDate ? new Date(annualIS[0].endDate*1000).getFullYear() : 0;
+  const fy2Year = annualIS[1]?.endDate ? new Date(annualIS[1].endDate*1000).getFullYear() : 0;
+  const l = {
+    ttm: 'TTM',
+    q: quarterIS[0] ? qLabel(quarterIS[0]) : 'Latest Q',
+    fy1: fy1Year && fy1Year < curYear ? String(fy1Year) : (fy2Year ? String(fy2Year) : 'FY−1'),
+    fy2: fy2Year && fy2Year < curYear ? String(fy2Year) : (annualIS[2]?.endDate ? String(new Date(annualIS[2].endDate*1000).getFullYear()) : 'FY−2'),
+  };
+  renderRatioTable(sector, l, ks);
+}
+function getWaccInfo(fd){
+  const sector=fd.sector||'';
+  let waccInfo={beta:1,wacc:0.09};
+  for(const [ind,dat] of Object.entries(WACC_TABLE)){
+    if(sector.toLowerCase().includes(ind.toLowerCase().split(' ')[0])||
+       ind.toLowerCase().includes(sector.toLowerCase().split(' ')[0])){
+      waccInfo=dat;break;
+    }
+  }
+  return waccInfo;
+}
+
+// ==================== QUALITATIVE ====================
+function renderQual(){
+  ['mgmt','moat','esg'].forEach(sec=>{
+    const el=document.getElementById('qual-'+sec);
+    el.innerHTML='';
+    QUAL_DEF[sec].forEach(item=>{
+      qualScores[item.key]=item.def;
+      const row=document.createElement('div');
+      row.className='qual-row';
+      row.innerHTML=`
+        <span class="qual-label" ${item.tip?`data-tip="${item.tip.replace(/"/g,"'")}"`:''}>
+          ${item.label}${item.tip?' ⓘ':''}
+        </span>
+        <div class="stars-wrap" id="stars-${item.key}"></div>
+        <span class="qual-val" id="qv-${item.key}">${item.def}</span>`;
+      el.appendChild(row);
+      renderStars(item.key,item.def);
+    });
+  });
+}
+function renderStars(key,val){
+  const el=document.getElementById('stars-'+key);
+  if(!el) return;
+  el.innerHTML='';
+  for(let i=1;i<=5;i++){
+    const s=document.createElement('span');
+    s.className='star'+(i<=val?' on':'');
+    s.textContent='★';
+    const v=i;
+    s.onclick=()=>{
+      qualScores[key]=v;
+      document.getElementById('qv-'+key).textContent=v;
+      renderStars(key,v);
+      updateScorecard();
+    };
+    el.appendChild(s);
+  }
+}
+function avg(arr){return arr.reduce((a,b)=>a+b,0)/arr.length;}
+function getQualSubs(){
+  const mgmt=avg(QUAL_DEF.mgmt.map(i=>qualScores[i.key]||3));
+  const moat=avg(QUAL_DEF.moat.map(i=>qualScores[i.key]||3));
+  const esg=avg(QUAL_DEF.esg.map(i=>qualScores[i.key]||3));
+  return{mgmt,moat,esg};
+}
+
+// ==================== SCORECARD ====================
+// Weights: Ratios 70%, Mgmt 10%, Moat 5%, ESG 5% = 90% → normalize to 100%
+// Actually from your Excel: Ratios 70%, Mgmt 10%, Moat 5%, ESG 5% → total 90%
+// We keep your exact weights, total = weighted sum / 0.9 to normalize to 5.0
+function updateScorecard(){
+  const rs=currentRatioScore||0;
+  const {mgmt,moat,esg}=getQualSubs();
+  const total=rs*0.70+mgmt*0.10+moat*0.05+esg*0.05;
+  // normalize to 5.0 scale (weights sum to 0.9)
+  const normalized=total/0.90;
+
+  const arc=document.getElementById('gauge-arc');
+  const circ=2*Math.PI*40;
+  arc.style.strokeDasharray=circ;
+  arc.style.strokeDashoffset=circ-(normalized/5)*circ;
+  const gradId=normalized>=3.5?'gaugeGreen':normalized>=2.5?'gaugeAmber':'gaugeRed';
+  arc.setAttribute('stroke',`url(#${gradId})`);
+  const numEl=document.getElementById('gauge-num');
+  numEl.textContent=normalized.toFixed(2);
+  numEl.style.color=scoreColor(normalized);
+
+  let verdict,vClass;
+  if(normalized>=4.5){verdict='Strong Buy';vClass='verdict-strong';}
+  else if(normalized>=3.5){verdict='Buy';vClass='verdict-buy';}
+  else if(normalized>=2.5){verdict='Hold';vClass='verdict-hold';}
+  else{verdict='Avoid';vClass='verdict-avoid';}
+  const vEl=document.getElementById('verdict-pill');
+  vEl.className='verdict-pill '+vClass;
+  vEl.textContent=verdict;
+
+  const rows=[
+    {label:'1. Financial Ratios',score:rs,weight:'70%'},
+    {label:'2. Management Quality',score:mgmt,weight:'10%'},
+    {label:'3. Moat / Competitive',score:moat,weight:'5%'},
+    {label:'4. ESG & Risk',score:esg,weight:'5%'}
+  ];
+  const col=scoreColor(normalized);
+  document.getElementById('scorecard-rows').innerHTML=rows.map(r=>{
+    const c=scoreColor(r.score);
+    const bar=(r.score/5)*100;
+    return `<div class="score-row" style="padding-left:0">
+      <span style="color:var(--text);font-weight:500">${r.label}</span>
+      <span class="score-right">
+        <span class="score-weight">${r.weight}</span>
+        <div style="width:120px;height:4px;background:var(--bg3);border-radius:4px;overflow:hidden">
+          <div style="height:100%;width:${bar}%;background:${c};border-radius:4px;transition:width .6s ease"></div>
+        </div>
+        <span style="font-family:var(--mono);font-weight:700;color:${c};min-width:32px;text-align:right;font-size:.9rem">${r.score.toFixed(1)}</span>
+      </span>
+    </div>`;
+  }).join('');
+}
+
+// Draw gauge ticks (Manim-style)
+(function drawGaugeTicks(){
+  const g=document.getElementById('gauge-ticks');
+  if(!g) return;
+  const cx=55,cy=55,r=40;
+  for(let i=0;i<=20;i++){
+    const angle=-90+(i/20)*360;
+    const rad=angle*(Math.PI/180);
+    const tl=i%4===0?5:2.5;
+    const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1',cx+(r-1)*Math.cos(rad));
+    line.setAttribute('y1',cy+(r-1)*Math.sin(rad));
+    line.setAttribute('x2',cx+(r-1-tl)*Math.cos(rad));
+    line.setAttribute('y2',cy+(r-1-tl)*Math.sin(rad));
+    line.setAttribute('stroke','var(--text)');
+    line.setAttribute('stroke-width',i%4===0?'1.5':'.5');
+    line.setAttribute('opacity',i%4===0?'.2':'.1');
+    g.appendChild(line);
+  }
+})();
+
+// ==================== TRADING ====================
+async function fetchTradeData(){
+  const ticker=document.getElementById('t-ticker').value.trim().toUpperCase();
+  if(!ticker) return;
+  showProgress('start');
+  try{
+    const chart=await yahooChart(ticker,'1y');
+    const meta=chart.meta||{};
+    const closes=chart.closes||[];
+    const highs=chart.highs||[];
+    const lows=chart.lows||[];
+    document.getElementById('t-name').value=meta.longName||meta.shortName||ticker;
+    document.getElementById('t-ps').value=fmtNum(meta.regularMarketPrice,2);
+    document.getElementById('t-ath').value=fmtNum(meta.fiftyTwoWeekHigh,2);
+    if(closes.length>=200){
+      document.getElementById('t-sma').value=(closes.slice(-200).reduce((a,b)=>a+b,0)/200).toFixed(2);
+    } else if(closes.length>0){
+      document.getElementById('t-sma').value=(closes.reduce((a,b)=>a+b,0)/closes.length).toFixed(2);
+    }
+    if(highs.length>=14&&lows.length>=14){
+      document.getElementById('t-atr').value=(highs.slice(-14).reduce((s,h,i)=>s+h-lows[lows.length-14+i],0)/14).toFixed(2);
+    }
+    const price=meta.regularMarketPrice||0;
+    const smaVal=+document.getElementById('t-sma').value;
+    if(price&&smaVal) document.getElementById('t-mf').value=price>smaVal?'Y':'N';
+    calcTrade();showProgress('done');
+  }catch(e){
+    showProgress('done');
+    const box=document.createElement('div');
+    box.className='error-box';box.innerHTML='⚠️ '+e.message;
+    document.querySelector('#page-trading .search-bar').after(box);
+    setTimeout(()=>box.remove(),4000);
+  }
+}
+function calcTrade(){
+  const balance=+gv('t-balance'),ps=+gv('t-ps'),ath=+gv('t-ath'),pl=+gv('t-pl'),
+    atr=+gv('t-atr'),atrM=+gv('t-atr-mult'),risk=+gv('t-risk'),sma=+gv('t-sma'),mf=gv('t-mf');
+  const trend=ps>sma&&mf==='Y';
+  const sl_stock=ps-atr*atrM;
+  const dynLev=atr*atrM>0?(pl*ps)/(atr*atrM):0;
+  const qty=pl>0?Math.floor((balance*risk)/pl):0;
+  const tp1=pl*1.5,tp2=pl*2.0;
+  const q1=Math.floor(qty*.25),q2=Math.floor(qty*.5),q3=qty-q1-q2;
+  document.getElementById('trade-metrics').innerHTML=`
+    <div class="metric"><div class="metric-label">DYN. LEVERAGE</div><div class="metric-value">${dynLev.toFixed(1)}x</div></div>
+    <div class="metric"><div class="metric-label">POSITION QTY</div><div class="metric-value">${qty}</div></div>
+    <div class="metric"><div class="metric-label">SL STOCK PRICE</div><div class="metric-value">${sl_stock.toFixed(2)}</div></div>
+    <div class="metric"><div class="metric-label">SL LEVERAGE</div><div class="metric-value">${(pl*0.2).toFixed(2)}</div></div>
+    <div class="metric"><div class="metric-label">CAPITAL AT RISK</div><div class="metric-value">${(balance*risk).toFixed(2)} €</div></div>
+    <div class="metric"><div class="metric-label">TOTAL POSITION</div><div class="metric-value">${(qty*pl).toFixed(2)} €</div></div>`;
+  document.getElementById('trade-trend').innerHTML=`
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="trend-badge ${trend?'trend-go':'trend-stop'}">${trend?'✅ GO':'🚫 STOP — trend not confirmed'}</span>
+      <span style="font-size:.7rem;color:var(--text3);font-family:var(--mono)">P_s ${ps>sma?'above':'below'} SMA200 (${sma})</span>
+    </div>`;
+  const maxTP=tp2*1.5;
+  document.getElementById('tp-grid').innerHTML=`
+    <div class="tp-card">
+      <div class="tp-title">TP 1 · +50% · sell 25%</div>
+      <div class="tp-val pos">${tp1.toFixed(2)} €</div>
+      <div class="tp-sub">Qty ${q1} · €${(q1*tp1).toFixed(0)}</div>
+      <div class="tp-sub">SL: ${(pl*0.2).toFixed(2)} €</div>
+      <div class="tp-progress"><div class="tp-progress-fill" style="width:${(tp1/maxTP*100).toFixed(0)}%"></div></div>
+    </div>
+    <div class="tp-card">
+      <div class="tp-title">TP 2 · +100% · sell 50%</div>
+      <div class="tp-val pos">${tp2.toFixed(2)} €</div>
+      <div class="tp-sub">Qty ${q2} · €${(q2*tp2).toFixed(0)}</div>
+      <div class="tp-sub">SL: Trail ATR</div>
+      <div class="tp-progress"><div class="tp-progress-fill" style="width:${(tp2/maxTP*100).toFixed(0)}%"></div></div>
+    </div>
+    <div class="tp-card">
+      <div class="tp-title">TP 3 · Trail · rest</div>
+      <div class="tp-val" style="color:var(--violet)">Trail</div>
+      <div class="tp-sub">Qty ${q3}</div>
+      <div class="tp-sub">ATR trailing stop</div>
+      <div class="tp-progress"><div class="tp-progress-fill" style="width:100%"></div></div>
+    </div>`;
+}
+
+// ==================== PORTFOLIO ====================
+function saveToPortfolio(){
+  if(!currentCompany){alert('Please load a company first.');return;}
+  const {mgmt,moat,esg}=getQualSubs();
+  const total=currentRatioScore*0.70+mgmt*0.10+moat*0.05+esg*0.05;
+  const normalized=total/0.90;
+  const verdict=normalized>=4.5?'Strong Buy':normalized>=3.5?'Buy':normalized>=2.5?'Hold':'Avoid';
+  const name=currentCompany.meta?.longName||currentCompany.meta?.shortName||currentCompany.ticker;
+  const entry={ticker:currentCompany.ticker,name,sector:currentCompany.fd?.sector||'',
+    price:currentCompany.meta?.regularMarketPrice||0,score:normalized,verdict,ts:Date.now()};
+  portfolio=portfolio.filter(p=>p.ticker!==entry.ticker);
+  portfolio.unshift(entry);
+  localStorage.setItem('sr_portfolio',JSON.stringify(portfolio));
+  renderPortfolio();updateBadges();
+  alert(`${entry.name} added to portfolio (Score: ${normalized.toFixed(2)})`);
+}
+function saveToWatchlist(){
+  if(!currentCompany){alert('Please load a company first.');return;}
+  const name=currentCompany.meta?.longName||currentCompany.meta?.shortName||currentCompany.ticker;
+  const entry={ticker:currentCompany.ticker,name,price:currentCompany.meta?.regularMarketPrice||0,
+    sector:currentCompany.fd?.sector||'',ts:Date.now()};
+  watchlist=watchlist.filter(w=>w.ticker!==entry.ticker);
+  watchlist.unshift(entry);
+  localStorage.setItem('sr_watchlist',JSON.stringify(watchlist));
+  renderWatchlist();updateBadges();
+  alert(`${entry.name} added to watchlist.`);
+}
+function saveTrade(){
+  const entry={name:gv('t-name'),isin:gv('t-isin'),ticker:gv('t-ticker'),
+    ps:+gv('t-ps'),pl:+gv('t-pl'),balance:+gv('t-balance'),ts:Date.now()};
+  trades.unshift(entry);
+  localStorage.setItem('sr_trades',JSON.stringify(trades));
+  renderTrades();
+  alert(`Trade for ${entry.name} saved.`);
+}
+function renderPortfolio(){
+  const el=document.getElementById('portfolio-list');
+  if(!portfolio.length){el.innerHTML='<li class="empty"><div class="empty-icon" style="opacity:.25">—</div>No ratings yet.</li>';return;}
+  el.innerHTML=portfolio.map((c,i)=>{
+    const col=scoreColor(c.score);
+    const bg=c.score>=4.5?'var(--green-dim)':c.score>=3.5?'var(--indigo-dim)':c.score>=2.5?'var(--amber-dim)':'var(--red-dim)';
+    return `<li class="company-li stagger-in" style="animation-delay:${i*35}ms;cursor:pointer" onclick="analyseFromList('${c.ticker}')">
+      <div class="li-avatar" style="background:${bg};color:${col}">${(c.ticker||'?').slice(0,2)}</div>
+      <div style="flex:1"><div class="li-name">${c.name||c.ticker}</div>
+      <div class="li-meta">${c.ticker}${c.sector?' · '+c.sector:''}${c.price?' · $'+fmtNum(c.price,2):''}</div></div>
+      <span class="li-score" style="background:${bg};color:${col}">${c.score.toFixed(2)} — ${c.verdict}</span>
+      <button class="btn btn-ghost btn-sm btn-icon" onclick="event.stopPropagation();removePf(${i})">✕</button>
+    </li>`;
+  }).join('');
+}
+function renderTrades(){
+  const el=document.getElementById('trade-list');
+  if(!trades.length){el.innerHTML='<li class="empty"><div class="empty-icon" style="opacity:.25">—</div>No trades saved.</li>';return;}
+  el.innerHTML=trades.map((t,i)=>`<li class="company-li stagger-in" style="animation-delay:${i*35}ms">
+    <div class="li-avatar" style="background:var(--indigo-dim);color:var(--indigo-light)">${(t.ticker||t.name||'?').slice(0,2).toUpperCase()}</div>
+    <div style="flex:1"><div class="li-name">${t.name||t.ticker}</div>
+    <div class="li-meta">${t.isin||''} · P_s: ${t.ps} · P_l: ${t.pl}</div></div>
+    <button class="btn btn-ghost btn-sm btn-icon" onclick="removeTrade(${i})">✕</button>
+  </li>`).join('');
+}
+function renderWatchlist(){
+  const el=document.getElementById('watchlist-list');
+  if(!watchlist.length){el.innerHTML='<li class="empty"><div class="empty-icon" style="opacity:.25">○</div>Watchlist is empty.</li>';return;}
+  el.innerHTML=watchlist.map((w,i)=>`<li class="company-li stagger-in" style="animation-delay:${i*35}ms">
+    <div class="li-avatar">${(w.ticker||'?').slice(0,2)}</div>
+    <div style="flex:1"><div class="li-name">${w.name||w.ticker}</div>
+    <div class="li-meta">${w.ticker}${w.sector?' · '+w.sector:''}${w.price?' · $'+fmtNum(w.price,2):''}</div></div>
+    <button class="btn btn-sm" onclick="analyseFromList('${w.ticker}')" style="margin-right:6px">Analyse</button>
+    <button class="btn btn-ghost btn-sm btn-icon" onclick="removeWl(${i})">✕</button>
+  </li>`).join('');
+}
+function removePf(i){portfolio.splice(i,1);localStorage.setItem('sr_portfolio',JSON.stringify(portfolio));renderPortfolio();updateBadges();}
+function removeTrade(i){trades.splice(i,1);localStorage.setItem('sr_trades',JSON.stringify(trades));renderTrades();}
+function removeWl(i){watchlist.splice(i,1);localStorage.setItem('sr_watchlist',JSON.stringify(watchlist));renderWatchlist();updateBadges();}
+function updateBadges(){
+  const pfc=document.getElementById('pf-count');const wlc=document.getElementById('wl-count');
+  if(portfolio.length){pfc.textContent=portfolio.length;pfc.style.display='';}else pfc.style.display='none';
+  if(watchlist.length){wlc.textContent=watchlist.length;wlc.style.display='';}else wlc.style.display='none';
+}
+
+// ==================== ANALYSE FROM LIST ====================
+function analyseFromList(ticker){
+  if(!ticker) return;
+  showPage('rating');
+  document.getElementById('r-ticker').value = ticker;
+  fetchCompany();
+}
+
+// ==================== NAV ====================
+function showPage(p){
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  document.getElementById('nav-'+p).classList.add('active');
+  if(window.innerWidth<=800) closeSidebar();
+}
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('open');}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('open');}
+function gv(id){return document.getElementById(id)?.value||'';}
+function clearCache(){cache={};localStorage.setItem('sr_cache','{}');alert('Cache cleared.');}
+function clearAll(){if(confirm('Delete all data?')){localStorage.clear();location.reload();}}
+
+// Metric spotlight hover
+document.addEventListener('mousemove',e=>{
+  const el=e.target.closest('.metric');
+  if(!el) return;
+  const r=el.getBoundingClientRect();
+  el.style.setProperty('--mx',`${((e.clientX-r.left)/r.width*100).toFixed(1)}%`);
+  el.style.setProperty('--my',`${((e.clientY-r.top)/r.height*100).toFixed(1)}%`);
+});
+
+// ==================== AUTO-FILL QUALITATIVE ====================
+function autoFillQual(fd, ks, closes, summary){
+  // --- mgmt4: Skin in the Game (Insider Ownership %) ---
+  const insiderPct = ks.heldPercentInsiders || 0;
+  let mgmt4 = 3;
+  if(insiderPct >= 0.10) mgmt4 = 5;
+  else if(insiderPct >= 0.05) mgmt4 = 4;
+  else if(insiderPct >= 0.01) mgmt4 = 3;
+  else if(insiderPct >= 0.001) mgmt4 = 2;
+  else mgmt4 = 1;
+
+  // --- mgmt5: Long-Term Orientation (R&D % of Revenue) ---
+  // rd may come as {} (empty Yahoo wrapper) — use typeof check
+  const rdRaw = fd.researchDevelopment;
+  const rd = (typeof rdRaw === 'number' && rdRaw > 0) ? rdRaw : 0;
+  const rev = fd.totalRevenue || 1;
+  const rdPct = rd / rev;
+  let mgmt5 = 3;
+  if(rdPct >= 0.10) mgmt5 = 5;
+  else if(rdPct >= 0.07) mgmt5 = 4;
+  else if(rdPct >= 0.03) mgmt5 = 3;
+  else if(rdPct > 0) mgmt5 = 2;
+  else mgmt5 = 1;
+
+  // --- mgmt2: Capital Allocation (ROIC = returnOnAssets as proxy, or derive) ---
+  const netInc = fd.netIncomeToCommon || 0;
+  // derive totalAssets from ROA if not directly available
+  const roaD = fd.returnOnAssets || 0;
+  const totalAssets = fd.totalAssets || ks.totalAssets || (roaD > 0 && netInc > 0 ? netInc / roaD : 0);
+  const currentLiabilities = fd.totalCurrentLiabilities || 0;
+  const investedCapital = totalAssets - currentLiabilities;
+  const roic = investedCapital > 0 ? netInc / investedCapital : 0;
+  let mgmt2 = 3;
+  if(roic >= 0.15) mgmt2 = 5;
+  else if(roic >= 0.10) mgmt2 = 4;
+  else if(roic >= 0.05) mgmt2 = 3;
+  else if(roic >= 0) mgmt2 = 2;
+  else mgmt2 = 1;
+
+  // --- mgmt3: Track Record (EPS growth + Revenue growth from chart history) ---
+  // Use earningsGrowth (TTM) and revenueGrowth as proxy
+  const epsGrowth = fd.earningsGrowth || ks.earningsGrowth || 0;
+  const revGrowth  = fd.revenueGrowth  || 0;
+  const avgGrowth  = (epsGrowth + revGrowth) / 2;
+  let mgmt3 = 3;
+  if(avgGrowth >= 0.15) mgmt3 = 5;
+  else if(avgGrowth >= 0.08) mgmt3 = 4;
+  else if(avgGrowth >= 0.02) mgmt3 = 3;
+  else if(avgGrowth >= -0.05) mgmt3 = 2;
+  else mgmt3 = 1;
+
+  // --- moat2: Competitive Advantage — Gross Margin proxy ---
+  const grossM = fd.grossMargins || 0;
+  let moat2 = 3;
+  if(grossM >= 0.60) moat2 = 5;
+  else if(grossM >= 0.45) moat2 = 4;
+  else if(grossM >= 0.30) moat2 = 3;
+  else if(grossM >= 0.20) moat2 = 2;
+  else moat2 = 1;
+
+  // --- moat3: Innovation / Reputation — same R&D proxy as mgmt5 ---
+  const moat3 = mgmt5;
+
+  // --- esg1: ESG Risk Score from Yahoo ---
+  const esgScores = summary.esgScores || {};
+  const esgTotal  = esgScores.totalEsg || esgScores.esgPerformance || null;
+  let esg1 = null;
+  if(esgTotal !== null && esgTotal !== undefined){
+    if(esgTotal <= 10) esg1 = 5;
+    else if(esgTotal <= 20) esg1 = 4;
+    else if(esgTotal <= 30) esg1 = 3;
+    else if(esgTotal <= 40) esg1 = 2;
+    else esg1 = 1;
+  }
+
+  // --- esg3: Crisis Resilience — FCF Margin proxy ---
+  const fcfM = (fd.freeCashflow||0) / (fd.totalRevenue||1);
+  let esg3 = 3;
+  if(fcfM >= 0.15) esg3 = 5;
+  else if(fcfM >= 0.10) esg3 = 4;
+  else if(fcfM >= 0.05) esg3 = 3;
+  else if(fcfM > 0) esg3 = 2;
+  else esg3 = 1;
+
+  // Apply all auto values
+  const autoMap = {mgmt2, mgmt3, mgmt4, mgmt5, moat2, moat3, esg3};
+  if(esg1 !== null) autoMap.esg1 = esg1;
+  else autoMap.esg1 = 3; // default neutral if Yahoo ESG unavailable
+
+  const hints = {
+    mgmt2: (roic*100).toFixed(1)+'% ROIC',
+    mgmt3: (avgGrowth*100).toFixed(1)+'% avg growth',
+    mgmt4: (insiderPct*100).toFixed(1)+'% insider',
+    mgmt5: (rdPct*100).toFixed(1)+'% R&D/Rev',
+    moat2: (grossM*100).toFixed(1)+'% gross margin',
+    moat3: (rdPct*100).toFixed(1)+'% R&D/Rev',
+    esg1:  esgTotal !== null ? 'ESG '+esgTotal : 'default 3★',
+    esg3:  (fcfM*100).toFixed(1)+'% FCF margin',
+  };
+
+  for(const [key, val] of Object.entries(autoMap)){
+    qualScores[key] = val;
+    const vEl = document.getElementById('qv-' + key);
+    if(vEl) vEl.textContent = val;
+    renderStarsAuto(key, val);
+    markAutoFilled(key, val, hints[key] || '');
+  }
+}
+function renderStarsAuto(key, val){
+  const el = document.getElementById('stars-' + key);
+  if(!el) return;
+  el.innerHTML = '';
+  for(let i = 1; i <= 5; i++){
+    const s = document.createElement('span');
+    s.className = 'star' + (i <= val ? ' on' : '');
+    s.textContent = '★';
+    const v = i;
+    s.onclick = () => {
+      qualScores[key] = v;
+      document.getElementById('qv-' + key).textContent = v;
+      renderStarsAuto(key, v);
+      // remove auto badge when user overrides
+      const badge = el.parentElement.querySelector('.auto-badge');
+      if(badge) badge.remove();
+      updateScorecard();
+    };
+    el.appendChild(s);
+  }
+}
+function markAutoFilled(key, val, hint){
+  const starsEl = document.getElementById('stars-' + key);
+  if(!starsEl) return;
+  // remove existing badge
+  const existing = starsEl.parentElement.querySelector('.auto-badge');
+  if(existing) existing.remove();
+  const badge = document.createElement('span');
+  badge.className = 'tag tag-auto auto-badge';
+  badge.style.cssText = 'font-size:.58rem;padding:1px 5px;margin-left:4px;cursor:default';
+  badge.title = 'Auto-filled from Yahoo Finance: ' + hint;
+  badge.textContent = '⚡ auto';
+  starsEl.parentElement.insertBefore(badge, starsEl.nextSibling);
+}
+
+// ==================== COMPARISON ENGINE ====================
+const CMP_COLORS = ['#6366f1','#10b981','#f59e0b'];
+const CMP_RADAR_DIMS = [
+  {key:'ratios',  label:'Financials'},
+  {key:'mgmt',    label:'Management'},
+  {key:'moat',    label:'Moat'},
+  {key:'esg',     label:'ESG'},
+  {key:'growth',  label:'Growth'},
+  {key:'margin',  label:'Margins'},
+];
+
+async function runCompare(){
+  const t1 = (document.getElementById('cmp-t1').value||'').trim().toUpperCase();
+  const t2 = (document.getElementById('cmp-t2').value||'').trim().toUpperCase();
+  const t3 = (document.getElementById('cmp-t3').value||'').trim().toUpperCase();
+  const tickers = [t1, t2, t3].filter(Boolean);
+  if(tickers.length < 2){
+    document.getElementById('cmp-error').innerHTML='<div class="error-box">⚠️ Please enter at least 2 tickers.</div>';
+    document.getElementById('cmp-error').style.display='block';
+    return;
+  }
+  document.getElementById('cmp-error').style.display='none';
+  document.getElementById('cmp-result').style.display='none';
+  document.getElementById('cmp-loading').style.display='block';
+  showProgress('start');
+  try{
+    const results = await Promise.all(tickers.map(async t => {
+      const [summary, chart] = await Promise.all([yahooSummary(t), yahooChart(t, '1y')]);
+      return buildCmpData(t, summary, chart);
+    }));
+    document.getElementById('cmp-loading').style.display='none';
+    renderRadar(results);
+    renderCmpTable(results);
+    document.getElementById('cmp-result').style.display='block';
+    showProgress('done');
+  }catch(e){
+    document.getElementById('cmp-loading').style.display='none';
+    document.getElementById('cmp-error').innerHTML=`<div class="error-box">⚠️ ${e.message}</div>`;
+    document.getElementById('cmp-error').style.display='block';
+    showProgress('done');
+  }
+}
+
+function buildCmpData(ticker, summary, chart){
+  const fd  = summary.financialData || {};
+  const ks  = summary.defaultKeyStatistics || {};
+  const meta= chart.meta || {};
+  const esgScores = summary.esgScores || {};
+
+  // Financial ratios avg score
+  const ratioVals = calcRatioVals(fd, ks, meta, chart.closes||[]);
+  let rTotal=0, rCnt=0;
+  for(const [k,v] of Object.entries(ratioVals)){
+    const b = RATIO_BENCH[k]; if(!b) continue;
+    rTotal += scoreRatio(v, b); rCnt++;
+  }
+  const ratiosScore = rCnt > 0 ? rTotal/rCnt : 3;
+
+  // Management dimension
+  const insiderPct = ks.heldPercentInsiders || 0;
+  const rdPct = (fd.researchDevelopment||0) / (fd.totalRevenue||1);
+  const netInc = fd.netIncomeToCommon || 0;
+  const ta = fd.totalAssets || ks.totalAssets || 0;
+  const cl = fd.totalCurrentLiabilities || 0;
+  const roic = (ta-cl)>0 ? netInc/(ta-cl) : 0;
+  const epsG = fd.earningsGrowth || ks.earningsGrowth || 0;
+  const revG = fd.revenueGrowth || 0;
+
+  const skinScore  = insiderPct>=0.10?5:insiderPct>=0.05?4:insiderPct>=0.01?3:insiderPct>=0.001?2:1;
+  const rdScore    = rdPct>=0.10?5:rdPct>=0.07?4:rdPct>=0.03?3:rdPct>0?2:1;
+  const roicScore  = roic>=0.15?5:roic>=0.10?4:roic>=0.05?3:roic>=0?2:1;
+  const mgmtScore  = (skinScore + rdScore + roicScore) / 3;
+
+  // Growth dimension
+  const avgGrowth = (epsG + revG) / 2;
+  const growthScore = avgGrowth>=0.15?5:avgGrowth>=0.08?4:avgGrowth>=0.02?3:avgGrowth>=-0.05?2:1;
+
+  // Margins dimension
+  const gm = fd.grossMargins || 0;
+  const om = fd.operatingMargins || 0;
+  const nm = fd.profitMargins || 0;
+  const marginScore = ((gm>=0.50?5:gm>=0.40?4:gm>=0.30?3:gm>=0.20?2:1)
+                     + (om>=0.25?5:om>=0.20?4:om>=0.15?3:om>=0.10?2:1)
+                     + (nm>=0.10?5:nm>=0.07?4:nm>=0.05?3:nm>=0.02?2:1)) / 3;
+
+  // Moat (gross margin proxy)
+  const moatScore = gm>=0.60?5:gm>=0.45?4:gm>=0.30?3:gm>=0.20?2:1;
+
+  // ESG
+  const esgTotal = esgScores.totalEsg || esgScores.esgPerformance;
+  const esgScore = esgTotal!=null
+    ? (esgTotal<=10?5:esgTotal<=20?4:esgTotal<=30?3:esgTotal<=40?2:1)
+    : 3;
+
+  // Weighted total (same weights as scorecard)
+  const total = ratiosScore*0.70 + mgmtScore*0.10 + moatScore*0.05 + esgScore*0.05;
+  const normalized = total / 0.90;
+
+  const price = meta.regularMarketPrice || 0;
+  const prev  = meta.chartPreviousClose || price;
+  const chgPct= prev>0 ? (price-prev)/prev*100 : 0;
+
+  return {
+    ticker,
+    name: meta.longName || meta.shortName || ticker,
+    sector: fd.sector || '',
+    price, chgPct,
+    marketCap: price * (ks.sharesOutstanding||0),
+    revenue: fd.totalRevenue || 0,
+    score: normalized,
+    dims: {
+      ratios: ratiosScore,
+      mgmt:   mgmtScore,
+      moat:   moatScore,
+      esg:    esgScore,
+      growth: growthScore,
+      margin: marginScore,
+    },
+    ratios: {
+      currentRatio: fd.currentRatio||0,
+      quickRatio:   fd.quickRatio||0,
+      grossMargin:  gm,
+      operatingMargin: om,
+      netMargin:    nm,
+      roe:          ta>0?netInc/((ta-cl)||1):0,
+      roic,
+      insiderPct,
+      rdPct,
+      epsGrowth: epsG,
+      revenueGrowth: revG,
+      esgTotal: esgTotal ?? '—',
+    },
+    fd, ks, meta
+  };
+}
+
+function calcRatioVals(fd, ks, meta, closes){
+  const totalCash = fd.totalCash || 0;
+  const totalDebt = fd.totalDebt || 0;
+  const totalRevenue = fd.totalRevenue || 0;
+  const freeCashflow = fd.freeCashflow || 0;
+  const netIncome = fd.netIncomeToCommon || 0;
+  const operatingCashflow = fd.operatingCashflow || 0;
+  // derive totalAssets/totalEquity if balance sheet missing
+  const roaD = fd.returnOnAssets || 0;
+  const totalAssets = fd.totalAssets || ks.totalAssets || (roaD>0&&netIncome>0 ? netIncome/roaD : 0);
+  const bookValue = ks.bookValue || 0;
+  const sharesOut = ks.sharesOutstanding || 0;
+  const totalEquity = fd.totalStockholderEquity || fd.stockholdersEquity || (bookValue>0&&sharesOut>0 ? bookValue*sharesOut : 0);
+  return {
+    currentRatio: fd.currentRatio||0,
+    quickRatio:   fd.quickRatio||0,
+    cashRatio:    totalDebt>0?totalCash/totalDebt:(totalCash>0?1:0),
+    equityToAssets: totalAssets>0&&totalEquity>0?totalEquity/totalAssets:0,
+    debtToEquity:   fd.debtToEquity>0?fd.debtToEquity/100:(totalEquity>0?totalDebt/totalEquity:0),
+    debtRatio:      totalAssets>0?totalDebt/totalAssets:0,
+    roa:            fd.returnOnAssets||0,
+    roe:            fd.returnOnEquity||0,
+    grossMargin:    fd.grossMargins||0,
+    operatingMargin:fd.operatingMargins||0,
+    netMargin:      fd.profitMargins||0,
+    assetTurnover:  totalAssets>0?totalRevenue/totalAssets:0,
+    fcfMargin:      totalRevenue>0?freeCashflow/totalRevenue:0,
+    cfToDebt:       totalDebt>0?operatingCashflow/totalDebt:0,
+  };
+}
+
+// SVG Radar Chart
+function renderRadar(results){
+  const svg = document.getElementById('cmp-radar');
+  svg.innerHTML = '';
+  const cx=210, cy=175, R=130, dims=CMP_RADAR_DIMS, n=dims.length;
+  const step = (2*Math.PI)/n;
+
+  // Grid rings
+  for(let ring=1; ring<=5; ring++){
+    const r = (ring/5)*R;
+    const pts = dims.map((_,i)=>{
+      const a = i*step - Math.PI/2;
+      return `${cx+r*Math.cos(a)},${cy+r*Math.sin(a)}`;
+    }).join(' ');
+    const poly = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+    poly.setAttribute('points', pts);
+    poly.setAttribute('fill', 'none');
+    poly.setAttribute('stroke', ring===5?'rgba(255,255,255,.12)':'rgba(255,255,255,.05)');
+    poly.setAttribute('stroke-width','1');
+    svg.appendChild(poly);
+    // ring label (score)
+    const labelAngle = -Math.PI/2;
+    const lx = cx + r*Math.cos(labelAngle) - 2;
+    const ly = cy + r*Math.sin(labelAngle) - 3;
+    const lt = document.createElementNS('http://www.w3.org/2000/svg','text');
+    lt.setAttribute('x', lx); lt.setAttribute('y', ly);
+    lt.setAttribute('fill','rgba(255,255,255,.18)');
+    lt.setAttribute('font-size','8');
+    lt.setAttribute('font-family','JetBrains Mono,monospace');
+    lt.setAttribute('text-anchor','middle');
+    lt.textContent = ring;
+    svg.appendChild(lt);
+  }
+
+  // Axis lines + labels
+  dims.forEach((d, i)=>{
+    const a = i*step - Math.PI/2;
+    const x2 = cx + R*Math.cos(a), y2 = cy + R*Math.sin(a);
+    const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1',cx); line.setAttribute('y1',cy);
+    line.setAttribute('x2',x2); line.setAttribute('y2',y2);
+    line.setAttribute('stroke','rgba(255,255,255,.1)');
+    line.setAttribute('stroke-width','1');
+    svg.appendChild(line);
+    // label
+    const lx = cx + (R+18)*Math.cos(a);
+    const ly = cy + (R+18)*Math.sin(a);
+    const label = document.createElementNS('http://www.w3.org/2000/svg','text');
+    label.setAttribute('x', lx); label.setAttribute('y', ly+4);
+    label.setAttribute('fill','rgba(255,255,255,.5)');
+    label.setAttribute('font-size','10');
+    label.setAttribute('font-family','Inter,sans-serif');
+    label.setAttribute('text-anchor','middle');
+    label.textContent = d.label;
+    svg.appendChild(label);
+  });
+
+  // Data polygons per company
+  results.forEach((r, ri)=>{
+    const color = CMP_COLORS[ri];
+    const pts = dims.map((d, i)=>{
+      const val = r.dims[d.key] || 0;
+      const frac = val/5;
+      const a = i*step - Math.PI/2;
+      return `${cx+frac*R*Math.cos(a)},${cy+frac*R*Math.sin(a)}`;
+    }).join(' ');
+    const poly = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+    poly.setAttribute('points', pts);
+    poly.setAttribute('fill', color+'28');
+    poly.setAttribute('stroke', color);
+    poly.setAttribute('stroke-width','2');
+    poly.setAttribute('stroke-linejoin','round');
+    svg.appendChild(poly);
+    // dots
+    dims.forEach((d, i)=>{
+      const val = r.dims[d.key] || 0;
+      const frac = val/5;
+      const a = i*step - Math.PI/2;
+      const dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      dot.setAttribute('cx', cx+frac*R*Math.cos(a));
+      dot.setAttribute('cy', cy+frac*R*Math.sin(a));
+      dot.setAttribute('r','4');
+      dot.setAttribute('fill', color);
+      dot.setAttribute('stroke','var(--bg2)');
+      dot.setAttribute('stroke-width','1.5');
+      svg.appendChild(dot);
+    });
+  });
+
+  // Legend
+  document.getElementById('cmp-radar-legend').innerHTML = results.map((r, i)=>`
+    <span style="display:flex;align-items:center;gap:5px">
+      <span style="width:10px;height:10px;border-radius:50%;background:${CMP_COLORS[i]};display:inline-block;flex-shrink:0"></span>
+      <span style="color:${CMP_COLORS[i]};font-weight:600">${r.ticker}</span>
+      <span style="color:var(--text3)">${r.name}</span>
+    </span>`).join('');
+
+  // Category winner table
+  const winnerEl = document.getElementById('cmp-winner-table');
+  let whtml = `<table class="winner-table"><thead><tr><th>Category</th><th>Winner</th>${results.map((_,i)=>`<th style="color:${CMP_COLORS[i]}">${results[i].ticker}</th>`).join('')}</tr></thead><tbody>`;
+  CMP_RADAR_DIMS.forEach(d => {
+    const vals = results.map(r => r.dims[d.key]||0);
+    const max = Math.max(...vals);
+    const winnerIdx = vals.indexOf(max);
+    const tied = vals.filter(v=>v===max).length > 1;
+    whtml += `<tr>
+      <td style="color:var(--text2);font-weight:500">${d.label}</td>
+      <td>${tied
+        ? `<span class="winner-chip" style="background:var(--amber-dim);color:var(--amber)">Tie</span>`
+        : `<span class="winner-chip" style="background:${CMP_COLORS[winnerIdx]}22;color:${CMP_COLORS[winnerIdx]}">${results[winnerIdx].ticker} ✓</span>`
+      }</td>
+      ${vals.map((v,i)=>`<td style="font-family:var(--mono);font-size:.78rem;color:${v===max?CMP_COLORS[i]:'var(--text3)'};font-weight:${v===max?'700':'400'}">${v.toFixed(2)}</td>`).join('')}
+    </tr>`;
+  });
+  // Overall winner
+  const totalVals = results.map(r=>r.score);
+  const totalMax = Math.max(...totalVals);
+  const totalWinner = totalVals.indexOf(totalMax);
+  whtml += `<tr style="border-top:1px solid var(--border2)">
+    <td style="font-weight:700">Overall Score</td>
+    <td><span class="winner-chip" style="background:${CMP_COLORS[totalWinner]}22;color:${CMP_COLORS[totalWinner]}">${results[totalWinner].ticker} 🏆</span></td>
+    ${totalVals.map((v,i)=>`<td style="font-family:var(--mono);font-weight:700;color:${CMP_COLORS[i]}">${v.toFixed(2)}</td>`).join('')}
+  </tr>`;
+  whtml += '</tbody></table>';
+  winnerEl.innerHTML = whtml;
+}
+
+function renderCmpTable(results){
+  const n = results.length;
+  // Find winner (max value) per numeric row
+  function winCols(vals){
+    const max = Math.max(...vals.map(v=>typeof v==='number'?v:-Infinity));
+    return vals.map(v=>v===max&&typeof v==='number');
+  }
+  function fmtPct(v){return typeof v==='number'?(v*100).toFixed(1)+'%':'—';}
+  function fmtX(v){return typeof v==='number'?v.toFixed(2)+'x':'—';}
+  function fmtBigLocal(v){return typeof v==='number'?fmtBig(v):'—';}
+  function fmtScore(v){return v.toFixed(2);}
+
+  const sections = [
+    {title:'Overview', rows:[
+      {label:'Ticker',    vals: results.map(r=>r.ticker), fmt:v=>v, text:true},
+      {label:'Company',   vals: results.map(r=>r.name),   fmt:v=>v, text:true},
+      {label:'Sector',    vals: results.map(r=>r.sector),  fmt:v=>v, text:true},
+      {label:'Price',     vals: results.map(r=>r.price),   fmt:v=>v===0?'—':'$'+v.toFixed(2), higherBetter:true},
+      {label:'Market Cap',vals: results.map(r=>r.marketCap),fmt:fmtBigLocal, higherBetter:true},
+      {label:'Revenue TTM',vals:results.map(r=>r.revenue),fmt:fmtBigLocal, higherBetter:true},
+    ]},
+    {title:'Scorecard Dimensions', rows:[
+      {label:'Total Score',    vals:results.map(r=>r.score),         fmt:fmtScore, higherBetter:true, bold:true},
+      {label:'  Financials',   vals:results.map(r=>r.dims.ratios),   fmt:fmtScore, higherBetter:true},
+      {label:'  Management',   vals:results.map(r=>r.dims.mgmt),     fmt:fmtScore, higherBetter:true},
+      {label:'  Moat',         vals:results.map(r=>r.dims.moat),     fmt:fmtScore, higherBetter:true},
+      {label:'  ESG',          vals:results.map(r=>r.dims.esg),      fmt:fmtScore, higherBetter:true},
+      {label:'  Growth',       vals:results.map(r=>r.dims.growth),   fmt:fmtScore, higherBetter:true},
+      {label:'  Margins',      vals:results.map(r=>r.dims.margin),   fmt:fmtScore, higherBetter:true},
+    ]},
+    {title:'Profitability', rows:[
+      {label:'Gross Margin',     vals:results.map(r=>r.ratios.grossMargin),    fmt:fmtPct, higherBetter:true},
+      {label:'Operating Margin', vals:results.map(r=>r.ratios.operatingMargin),fmt:fmtPct, higherBetter:true},
+      {label:'Net Margin',       vals:results.map(r=>r.ratios.netMargin),      fmt:fmtPct, higherBetter:true},
+      {label:'ROIC',             vals:results.map(r=>r.ratios.roic),           fmt:fmtPct, higherBetter:true},
+      {label:'ROE',              vals:results.map(r=>r.ratios.roe),            fmt:fmtPct, higherBetter:true},
+    ]},
+    {title:'Liquidity & Solvency', rows:[
+      {label:'Current Ratio', vals:results.map(r=>r.ratios.currentRatio), fmt:fmtX, higherBetter:true},
+      {label:'Quick Ratio',   vals:results.map(r=>r.ratios.quickRatio),   fmt:fmtX, higherBetter:true},
+    ]},
+    {title:'Growth & Quality', rows:[
+      {label:'EPS Growth TTM',  vals:results.map(r=>r.ratios.epsGrowth),     fmt:fmtPct, higherBetter:true},
+      {label:'Revenue Growth',  vals:results.map(r=>r.ratios.revenueGrowth), fmt:fmtPct, higherBetter:true},
+      {label:'R&D % Revenue',   vals:results.map(r=>r.ratios.rdPct),         fmt:fmtPct, higherBetter:true},
+      {label:'Insider Ownership',vals:results.map(r=>r.ratios.insiderPct),   fmt:fmtPct, higherBetter:true},
+      {label:'ESG Risk Score',  vals:results.map(r=>typeof r.ratios.esgTotal==='number'?r.ratios.esgTotal:null),
+        fmt:v=>v===null?'—':v.toFixed(1), higherBetter:false, note:'lower=better'},
+    ]},
+  ];
+
+  const colors = CMP_COLORS.slice(0, n);
+  let html = `<thead><tr><th style="min-width:160px">Metric</th>`;
+  results.forEach((r,i)=>`${html}<th style="color:${colors[i]};text-align:right">${r.ticker}</th>`);
+  results.forEach((r,i)=>{ html += `<th style="color:${colors[i]};text-align:right">${r.ticker}</th>`; });
+  html += '</tr></thead><tbody>';
+
+  sections.forEach(sec=>{
+    html += `<tr class="ratio-group-header"><td colspan="${n+1}">${sec.title}</td></tr>`;
+    sec.rows.forEach(row=>{
+      const vals = row.vals;
+      const numericVals = vals.map(v=>typeof v==='number'?v:null);
+      const isText = row.text;
+      let winners = new Array(n).fill(false);
+      if(!isText && row.higherBetter !== undefined){
+        const valid = numericVals.filter(v=>v!==null);
+        if(valid.length > 0){
+          const best = row.higherBetter ? Math.max(...valid) : Math.min(...valid);
+          winners = numericVals.map(v=>v!==null&&v===best);
+        }
+      }
+      const labelStyle = row.bold ? 'font-weight:700;color:var(--text)' : 'color:var(--text2)';
+      html += `<tr><td style="${labelStyle}">${row.label}${row.note?` <span style="font-size:.65rem;color:var(--text3)">(${row.note})</span>`:''}</td>`;
+      vals.forEach((v,i)=>{
+        const formatted = row.fmt(v);
+        const win = winners[i];
+        const col = win ? (row.higherBetter===false ? 'var(--cyan)' : 'var(--green)') : 'var(--text)';
+        html += `<td style="text-align:right;font-family:var(--mono);font-weight:${win?'700':'400'};color:${col}">${formatted}${win&&!isText?' ✓':''}</td>`;
+      });
+      html += '</tr>';
+    });
+  });
+  html += '</tbody>';
+  document.getElementById('cmp-table').innerHTML = html;
+}
+
+// ==================== PERIOD OVERVIEW ====================
+function renderPeriodOverview(summary, fd, ks){
+  const card = document.getElementById('period-card');
+  const el = document.getElementById('period-content');
+  if(!summary||!card) return;
+
+  const annualIS = summary?.incomeStatementHistory?.incomeStatementHistory||[];
+  const annualBS = summary?.balanceSheetHistory?.balanceSheetStatements||[];
+  const annualCF = summary?.cashflowStatementHistory?.cashflowStatements||[];
+  const quarterIS = summary?.incomeStatementHistoryQuarterly?.incomeStatementHistory||[];
+  const quarterBS = summary?.balanceSheetHistoryQuarterly?.balanceSheetStatements||[];
+  const quarterCF = summary?.cashflowStatementHistoryQuarterly?.cashflowStatements||[];
+
+  if(!annualIS.length && !quarterIS.length){ card.style.display='none'; return; }
+  card.style.display='block';
+
+  function periodLabel(s){ return s?.endDate ? new Date(s.endDate*1000).getFullYear()+'' : '?'; }
+  function qLabel(s){ if(!s?.endDate) return '?'; const d=new Date(s.endDate*1000); return `Q${Math.ceil((d.getMonth()+1)/3)} '${String(d.getFullYear()).slice(2)}`; }
+
+  // Build columns: TTM, Latest Q, FY1, FY2
+  const cols = [];
+  // Normalize TTM fd: Yahoo uses 'grossProfits' not 'grossProfit' in financialData
+  const fdTTM = Object.assign({}, fd, {
+    grossProfit: fd.grossProfit || fd.grossProfits || (fd.grossMargins&&fd.totalRevenue ? fd.grossMargins*fd.totalRevenue : null),
+    operatingIncome: fd.operatingIncome || (fd.operatingMargins&&fd.totalRevenue ? fd.operatingMargins*fd.totalRevenue : null),
+    totalAssets: fd.totalAssets || (fd.returnOnAssets&&fd.netIncomeToCommon ? fd.netIncomeToCommon/fd.returnOnAssets : null),
+    totalStockholderEquity: fd.totalStockholderEquity || (fd.returnOnEquity&&fd.netIncomeToCommon ? fd.netIncomeToCommon/fd.returnOnEquity : null),
+  });
+  cols.push({label:'TTM', fd: fdTTM});
+  if(quarterIS[0]) cols.push({label: qLabel(quarterIS[0]), fd: fdFromAnnual(quarterIS[0], quarterBS[0]||{}, quarterCF[0]||{})});
+  // Only add complete fiscal years (not current year)
+  const nowY = new Date().getFullYear();
+  const completeAnnual = annualIS.filter(s=>s?.endDate && new Date(s.endDate*1000).getFullYear() < nowY);
+  if(completeAnnual[0]) cols.push({label: periodLabel(completeAnnual[0]), fd: fdFromAnnual(completeAnnual[0], annualBS[annualIS.indexOf(completeAnnual[0])]||{}, annualCF[annualIS.indexOf(completeAnnual[0])]||{})});
+  if(completeAnnual[1]) cols.push({label: periodLabel(completeAnnual[1]), fd: fdFromAnnual(completeAnnual[1], annualBS[annualIS.indexOf(completeAnnual[1])]||{}, annualCF[annualIS.indexOf(completeAnnual[1])]||{})});
+
+  // Metrics to show
+  const pct = v => (v!=null&&v!==0) ? (v*100).toFixed(1)+'%' : null;
+  const big = v => (v!=null&&v!==0) ? fmtBig(v) : null;
+  const metrics = [
+    {label:'Revenue',         key:'totalRevenue',              fmt:big,  higherBetter:true},
+    {label:'Gross Profit',    key:'grossProfit',               fmt:big,  higherBetter:true},
+    {label:'Operating Income',key:'operatingIncome',           fmt:big,  higherBetter:true},
+    {label:'Net Income',      key:'netIncomeToCommon',         fmt:big,  higherBetter:true},
+    {label:'Free Cash Flow',  key:'freeCashflow',              fmt:big,  higherBetter:true},
+    {label:'Total Assets',    key:'totalAssets',               fmt:big,  higherBetter:true},
+    {label:'Total Equity',    key:'totalStockholderEquity',    fmt:big,  higherBetter:true},
+    {label:'Total Debt',      key:'totalDebt',                 fmt:big,  higherBetter:false},
+    {label:'Gross Margin',    key:'grossMargins',              fmt:pct,  higherBetter:true},
+    {label:'Operating Margin',key:'operatingMargins',          fmt:pct,  higherBetter:true},
+    {label:'Net Margin',      key:'profitMargins',             fmt:pct,  higherBetter:true},
+    {label:'ROA',             key:'returnOnAssets',            fmt:pct,  higherBetter:true},
+    {label:'ROE',             key:'returnOnEquity',            fmt:pct,  higherBetter:true},
+  ];
+
+  function trendCell(curr, prev, hb){
+    if(!curr||!prev||prev===0) return '<td class="trend-cell" style="color:var(--text3)">—</td>';
+    const chg = hb ? (curr-prev)/Math.abs(prev) : (prev-curr)/Math.abs(prev);
+    if(chg>0.08) return `<td class="trend-cell trend-up">↑↑</td>`;
+    if(chg>0.02) return `<td class="trend-cell trend-up" style="opacity:.7">↑</td>`;
+    if(chg<-0.08) return `<td class="trend-cell trend-down">↓↓</td>`;
+    if(chg<-0.02) return `<td class="trend-cell trend-down" style="opacity:.7">↓</td>`;
+    return `<td class="trend-cell trend-flat">→</td>`;
+  }
+
+  // Header
+  let html = `<table class="period-table"><thead><tr><th>Metric</th>`;
+  cols.forEach(c=>{ html += `<th>${c.label}</th>`; });
+  html += `<th style="text-align:center">Trend</th></tr></thead><tbody>`;
+
+  metrics.forEach(m=>{
+    const vals = cols.map(c=>c.fd[m.key]||null);
+    // Trend: compare first column (TTM) vs last available annual
+    const trendFrom = vals.length>=3 ? vals[vals.length-1] : (vals.length>=2 ? vals[1] : null);
+    const trendTo   = vals[0];
+    html += `<tr><td>${m.label}</td>`;
+    vals.forEach(v=>{
+      const formatted = v!=null ? m.fmt(v) : null;
+      html += `<td style="${formatted?'':'color:var(--text3)'}">${formatted||'—'}</td>`;
+    });
+    const trendFrom2 = vals.filter(v=>v!=null).slice(-1)[0];
+    const trendTo2   = vals[0];
+    html += trendCell(trendTo2, trendFrom2, m.higherBetter);
+    html += `</tr>`;
+  });
+
+  html += `</tbody></table>
+  <div style="margin-top:.75rem;font-size:.68rem;color:var(--text3)">
+    Trend arrow compares TTM to oldest available annual period. ↑↑ = >8% growth, ↑ = 2–8%, → = flat, ↓ = -2–8%, ↓↓ = >8% decline.
+    <span style="color:var(--green)">Green = improving</span> · <span style="color:var(--amber)">Yellow = flat</span> · <span style="color:var(--red)">Red = declining</span>.
+  </div>`;
+
+  el.innerHTML = html;
+}
+
+// ==================== COMPARE WITH PEERS ====================
+function compareCurrent(){
+  if(!currentCompany) return;
+  showPage('compare');
+  document.getElementById('cmp-t1').value = currentCompany.ticker;
+  document.getElementById('cmp-t2').focus();
+}
+
+// ==================== DCF INTRINSIC VALUE ====================
+function renderDCF(fd, ks, meta, waccInfo){
+  const price = meta.regularMarketPrice || 0;
+  const fcf = fd.freeCashflow || 0;
+  const rev = fd.totalRevenue || 1;
+  const sharesOut = ks.sharesOutstanding || 1;
+  const wacc = waccInfo.wacc || 0.09;
+  const epsGrowth = fd.earningsGrowth || 0;
+  const revGrowth = fd.revenueGrowth || 0;
+
+  // Default growth assumptions (editable)
+  const g1 = Math.min(Math.max((epsGrowth + revGrowth) / 2, 0.03), 0.30); // 10y growth capped 3-30%
+  const gTerm = 0.03; // terminal growth
+  const years = 10;
+  const wacc_ = wacc;
+
+  function calcFairValue(growthRate, termRate, discRate){
+    if(fcf <= 0) return null;
+    let pv = 0;
+    let cf = fcf;
+    for(let i = 1; i <= years; i++){
+      cf = cf * (1 + growthRate);
+      pv += cf / Math.pow(1 + discRate, i);
+    }
+    // Terminal value (Gordon Growth)
+    const terminalVal = cf * (1 + termRate) / (discRate - termRate);
+    pv += terminalVal / Math.pow(1 + discRate, years);
+    return pv / sharesOut;
+  }
+
+  const fairValue = calcFairValue(g1, gTerm, wacc_);
+  const el = document.getElementById('dcf-content');
+  if(!fairValue || price <= 0){ el.innerHTML='<div class="info-box" style="margin:0">⚠️ DCF requires positive Free Cash Flow.</div>'; return; }
+
+  const upside = (fairValue - price) / price;
+  const mos = upside; // margin of safety
+  const verdictClass = upside > 0.15 ? 'dcf-underval' : upside < -0.15 ? 'dcf-overval' : 'dcf-fair';
+  const verdictText = upside > 0.15 ? `🟢 Undervalued — ${(upside*100).toFixed(1)}% upside` : upside < -0.15 ? `🔴 Overvalued — ${Math.abs(upside*100).toFixed(1)}% downside` : `🟡 Fairly valued (±15%)`;
+
+  // Bull/Base/Bear
+  const bull = calcFairValue(Math.min(g1*1.5,0.40), gTerm+0.01, wacc_*0.9);
+  const bear = calcFairValue(Math.max(g1*0.5,0.01), gTerm-0.01, wacc_*1.1);
+
+  el.innerHTML = `
+    <div class="dcf-verdict ${verdictClass}">${verdictText}
+      <span style="margin-left:auto;font-size:.7rem;opacity:.7">MoS: ${(mos*100).toFixed(1)}%</span>
+    </div>
+    <div class="dcf-grid">
+      <div class="dcf-metric">
+        <div class="dcf-label">Current Price</div>
+        <div class="dcf-val">${fmtNum(price,2)}</div>
+        <div class="dcf-sub">${meta.currency||'USD'}</div>
+      </div>
+      <div class="dcf-metric" style="border-color:${upside>0?'rgba(16,185,129,.3)':'rgba(239,68,68,.3)'}">
+        <div class="dcf-label">Fair Value (Base)</div>
+        <div class="dcf-val" style="color:${upside>0?'var(--green)':'var(--red)'}">${fmtNum(fairValue,2)}</div>
+        <div class="dcf-sub">10y DCF</div>
+      </div>
+      <div class="dcf-metric">
+        <div class="dcf-label">Bull Case</div>
+        <div class="dcf-val" style="color:var(--green)">${bull?fmtNum(bull,2):'—'}</div>
+        <div class="dcf-sub">g×1.5, WACC−10%</div>
+      </div>
+      <div class="dcf-metric">
+        <div class="dcf-label">Bear Case</div>
+        <div class="dcf-val" style="color:var(--red)">${bear?fmtNum(bear,2):'—'}</div>
+        <div class="dcf-sub">g×0.5, WACC+10%</div>
+      </div>
+      <div class="dcf-metric">
+        <div class="dcf-label">FCF TTM</div>
+        <div class="dcf-val">${fmtBig(fcf)}</div>
+        <div class="dcf-sub">Free Cash Flow</div>
+      </div>
+      <div class="dcf-metric">
+        <div class="dcf-label">FCF Yield</div>
+        <div class="dcf-val">${price>0&&sharesOut>0?(fcf/sharesOut/price*100).toFixed(1)+'%':'—'}</div>
+        <div class="dcf-sub">FCF / Market Cap</div>
+      </div>
+    </div>
+    <div class="dcf-params">
+      <span>DCF Parameters (editable):</span>
+      <span class="dcf-param">Growth 10y: <input id="dcf-g" type="number" value="${(g1*100).toFixed(1)}" step="0.5" min="0" max="50" onchange="recalcDCF()">%</span>
+      <span class="dcf-param">Terminal g: <input id="dcf-gt" type="number" value="${(gTerm*100).toFixed(1)}" step="0.1" min="0" max="5" onchange="recalcDCF()">%</span>
+      <span class="dcf-param">WACC: <input id="dcf-w" type="number" value="${(wacc_*100).toFixed(1)}" step="0.1" min="1" max="25" onchange="recalcDCF()">%</span>
+      <span class="dcf-param">Years: <input id="dcf-y" type="number" value="${years}" step="1" min="5" max="20" onchange="recalcDCF()">y</span>
+    </div>`;
+}
+
+function recalcDCF(){
+  if(!currentCompany) return;
+  const {fd, ks, meta} = currentCompany;
+  const price = meta.regularMarketPrice || 0;
+  const fcf = fd.freeCashflow || 0;
+  const sharesOut = ks.sharesOutstanding || 1;
+  const g1 = (parseFloat(document.getElementById('dcf-g')?.value)||10)/100;
+  const gTerm = (parseFloat(document.getElementById('dcf-gt')?.value)||3)/100;
+  const wacc_ = (parseFloat(document.getElementById('dcf-w')?.value)||9)/100;
+  const years = parseInt(document.getElementById('dcf-y')?.value)||10;
+
+  function calc(gr, tr, dr){
+    if(fcf<=0) return null;
+    let pv=0, cf=fcf;
+    for(let i=1;i<=years;i++){cf*=(1+gr);pv+=cf/Math.pow(1+dr,i);}
+    const tv=cf*(1+tr)/(dr-tr);
+    pv+=tv/Math.pow(1+dr,years);
+    return pv/sharesOut;
+  }
+  const fv = calc(g1,gTerm,wacc_);
+  if(!fv) return;
+  const upside = (fv-price)/price;
+  const bull = calc(Math.min(g1*1.5,.4),gTerm+.01,wacc_*.9);
+  const bear = calc(Math.max(g1*.5,.01),gTerm-.01,wacc_*1.1);
+  const vc = upside>.15?'dcf-underval':upside<-.15?'dcf-overval':'dcf-fair';
+  const vt = upside>.15?`🟢 Undervalued — ${(upside*100).toFixed(1)}% upside`:upside<-.15?`🔴 Overvalued — ${Math.abs(upside*100).toFixed(1)}% downside`:`🟡 Fairly valued (±15%)`;
+  const vEl=document.querySelector('.dcf-verdict');
+  if(vEl){vEl.className='dcf-verdict '+vc;vEl.innerHTML=`${vt}<span style="margin-left:auto;font-size:.7rem;opacity:.7">MoS: ${(upside*100).toFixed(1)}%</span>`;}
+  const vals=document.querySelectorAll('.dcf-val');
+  if(vals[1]) vals[1].textContent=fmtNum(fv,2);
+  if(vals[2]) vals[2].textContent=bull?fmtNum(bull,2):'—';
+  if(vals[3]) vals[3].textContent=bear?fmtNum(bear,2):'—';
+}
+
+// ==================== PRICE CHART ====================
+// ── CHART RANGE LOADER ──
+let _chartTicker = '';
+async function loadChartRange(range){
+  if(!currentCompany) return;
+  _chartTicker = currentCompany.ticker;
+  // Update active tab
+  document.querySelectorAll('.chart-range-btn').forEach(b=>{
+    b.classList.toggle('active', b.dataset.range===range);
+  });
+  document.getElementById('chart-loading').style.display='block';
+  document.getElementById('price-chart-svg').style.opacity='.4';
+  try{
+    const chart = await yahooChart(_chartTicker, range);
+    const closes = chart.closes||[];
+    const highs = chart.highs||[];
+    const lows = chart.lows||[];
+    window._currentChartTimestamps = chart.timestamps||[];
+    renderPriceChart(closes, highs, lows, range);
+  }catch(e){
+    console.error('Chart load error:', e);
+  }
+  document.getElementById('chart-loading').style.display='none';
+  document.getElementById('price-chart-svg').style.opacity='1';
+}
+
+// ── CROSSHAIR ──
+function initChartCrosshair(){
+  const wrap = document.getElementById('chart-wrap');
+  const svg  = document.getElementById('price-chart-svg');
+  const ch   = document.getElementById('chart-crosshair');
+  const vline= document.getElementById('chart-vline');
+  const tip  = document.getElementById('chart-tooltip');
+  if(!wrap||!svg) return;
+
+  // Store chart data for lookup
+  svg._chartData = svg._chartData || {};
+
+  wrap.addEventListener('mousemove', e=>{
+    const rect = svg.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const W = rect.width, H = rect.height;
+    const data = svg._chartData;
+    if(!data.closes||!data.closes.length) return;
+
+    ch.style.display='block';
+    ch.style.width = W+'px';
+    ch.style.height= H+'px';
+
+    // Clamp x within chart area
+    const pad = data.pad || {l:52,r:15,t:15,b:30};
+    const chartW = W - pad.l - pad.r;
+    const relX = Math.max(0, Math.min(x - pad.l, chartW));
+    const idx = Math.round((relX / chartW) * (data.closes.length-1));
+    const price = data.closes[idx];
+    const px = pad.l + (idx/(data.closes.length-1)) * chartW;
+
+    vline.style.left = px+'px';
+    vline.style.top  = pad.t+'px';
+    vline.style.height= (H-pad.t-pad.b)+'px';
+
+    if(price!=null){
+      const ts = data.timestamps ? data.timestamps[idx] : null;
+      let dateStr = '';
+      if(ts){
+        const d = new Date(ts * 1000);
+        const range = data.rangeKey || '1y';
+        if(range === '1d'){
+          dateStr = d.toLocaleTimeString('de-DE', {hour:'2-digit', minute:'2-digit'});
+        } else {
+          dateStr = d.toLocaleDateString('de-DE', {day:'2-digit', month:'short', year:'2-digit'});
+        }
+      }
+      tip.textContent = (dateStr ? dateStr + '  ' : '') + price.toFixed(2);
+      tip.style.left = px+'px';
+      tip.style.top  = '0px';
+    }
+  });
+  wrap.addEventListener('mouseleave', ()=>{ ch.style.display='none'; });
+}
+
+
+function renderPriceChart(closes, highs, lows, rangeKey){
+  const svg = document.getElementById('price-chart-svg');
+  if(!svg||!closes||closes.length<2) return;
+  const W=800, H=220, pad={t:15,r:15,b:30,l:52};
+  svg._chartData = {closes, highs, lows, pad, timestamps: window._currentChartTimestamps||[], rangeKey};
+  const valid = closes.filter(v=>v!=null);
+  if(!valid.length) return;
+  const minV = Math.min(...valid), maxV = Math.max(...valid);
+  const priceRange = maxV - minV || 1;
+  const n = closes.length;
+  function cx(i){ return pad.l + (i/(n-1))*(W-pad.l-pad.r); }
+  function cy(v){ return pad.t + (1-(v-minV)/priceRange)*(H-pad.t-pad.b); }
+  let path='', areaPath='', started=false;
+  for(let i=0;i<n;i++){
+    if(closes[i]==null) continue;
+    const x=cx(i), y=cy(closes[i]);
+    if(!started){ path='M'+x+','+y; areaPath='M'+x+','+(H-pad.b)+' L'+x+','+y; started=true; }
+    else { path+=' L'+x+','+y; areaPath+=' L'+x+','+y; }
+  }
+  areaPath+=' L'+cx(n-1)+','+(H-pad.b)+' Z';
+  const last=valid[valid.length-1], first=valid[0];
+  const isUp=last>=first;
+  const lineColor=isUp?'#059669':'#dc2626';
+  const ns='http://www.w3.org/2000/svg';
+  svg.innerHTML='';
+  const defs=document.createElementNS(ns,'defs');
+  const grad=document.createElementNS(ns,'linearGradient');
+  grad.id='chartGrad'; grad.setAttribute('x1','0');grad.setAttribute('y1','0');grad.setAttribute('x2','0');grad.setAttribute('y2','1');
+  const s1=document.createElementNS(ns,'stop');s1.setAttribute('offset','0%');s1.setAttribute('stop-color',lineColor);s1.setAttribute('stop-opacity','.15');
+  const s2=document.createElementNS(ns,'stop');s2.setAttribute('offset','100%');s2.setAttribute('stop-color',lineColor);s2.setAttribute('stop-opacity','0');
+  grad.appendChild(s1);grad.appendChild(s2);defs.appendChild(grad);svg.appendChild(defs);
+  function addEl(tag,attrs){ const e=document.createElementNS(ns,tag); Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,String(v))); svg.appendChild(e); return e; }
+  function addTxt(x,y,t,fill,sz,anchor,fw){ const e=document.createElementNS(ns,'text'); e.setAttribute('x',x);e.setAttribute('y',y);e.setAttribute('fill',fill);e.setAttribute('font-size',sz);e.setAttribute('font-family','JetBrains Mono,monospace');e.setAttribute('text-anchor',anchor||'middle');if(fw)e.setAttribute('font-weight',fw);e.textContent=t;svg.appendChild(e); }
+  [0,.25,.5,.75,1].forEach(function(t){ var v=minV+t*priceRange,y=cy(v),lbl=v>=1000?v.toFixed(0):v.toFixed(2); addEl('line',{x1:pad.l,y1:y,x2:W-pad.r,y2:y,stroke:'rgba(0,0,0,.06)','stroke-width':1,'stroke-dasharray':'3,3'}); addTxt(pad.l-6,y+4,lbl,'rgba(0,0,0,.35)',9,'end'); });
+  addEl('line',{x1:pad.l,y1:pad.t,x2:pad.l,y2:H-pad.b,stroke:'rgba(0,0,0,.1)','stroke-width':1});
+  addEl('line',{x1:pad.l,y1:H-pad.b,x2:W-pad.r,y2:H-pad.b,stroke:'rgba(0,0,0,.1)','stroke-width':1});
+  addEl('path',{d:areaPath,fill:'url(#chartGrad)',opacity:.2});
+  addEl('path',{d:path,fill:'none',stroke:lineColor,'stroke-width':1.8,'stroke-linejoin':'round','stroke-linecap':'round'});
+  var xLabMap={'1d':['Open','Mid','Now'],'5d':['5D ago','Mid','Today'],'1mo':['1M ago','2W','Today'],'6mo':['6M ago','3M','Today'],'ytd':['Jan','Mid','Today'],'1y':['12M ago','6M ago','Today'],'max':['Start','Mid','Today']};
+  var xLabs=xLabMap[rangeKey]||['Start','Mid','Today'];
+  [0,.5,1].forEach(function(t,li){ var i=Math.floor(t*(n-1)); addTxt(cx(i),H-pad.b+14,xLabs[li],'rgba(0,0,0,.3)',9,'middle'); });
+  addEl('circle',{cx:cx(n-1),cy:cy(last),r:4,fill:lineColor,stroke:'white','stroke-width':2});
+  const currency = currentCompany?.meta?.currency||'';
+  addTxt(cx(n-1)+10,cy(last)+4,last.toFixed(2)+(currency?' '+currency:''),lineColor,10,'start','600');
+  var minIdx=closes.indexOf(Math.min.apply(null,valid));
+  var maxIdx=closes.indexOf(Math.max.apply(null,valid));
+  if(minIdx>=0) addTxt(cx(minIdx),cy(Math.min.apply(null,valid))+14,Math.min.apply(null,valid).toFixed(2),'rgba(220,38,38,.6)',8,'middle');
+  if(maxIdx>=0) addTxt(cx(maxIdx),cy(Math.max.apply(null,valid))-6,Math.max.apply(null,valid).toFixed(2),'rgba(5,150,105,.6)',8,'middle');
+}
+
+// ==================== MARGINS CHART ====================
+function renderMarginsChart(fd){
+  const card = document.getElementById('margins-card');
+  const el = document.getElementById('margins-chart-content');
+  const gross = fd.grossMargins||0;
+  const operating = fd.operatingMargins||0;
+  const net = fd.profitMargins||0;
+  if(!gross && !operating && !net){card.style.display='none';return;}
+  card.style.display='block';
+
+  const margins = [
+    {label:'Gross Margin', value:gross, color:'#059669'},
+    {label:'Operating Margin', value:operating, color:'#7c3aed'},
+    {label:'Net Margin', value:net, color:'#d97706'},
+  ];
+
+  el.innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:14px">
+      ${margins.map(m=>`
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <span style="font-size:.8rem;color:var(--text2)">${m.label}</span>
+            <span style="font-size:.9rem;font-weight:600;font-family:var(--mono);color:${m.color}">${(m.value*100).toFixed(1)}%</span>
+          </div>
+          <div style="height:6px;background:var(--bg3);border-radius:6px;overflow:hidden">
+            <div style="height:100%;width:${Math.min(m.value*100,100).toFixed(1)}%;background:${m.color};border-radius:6px;transition:width .6s ease"></div>
+          </div>
+        </div>`).join('')}
+    </div>
+    <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;text-align:center">
+      <div>
+        <div style="font-size:.62rem;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Revenue TTM</div>
+        <div style="font-size:1.1rem;font-weight:600;font-family:var(--mono)">${fmtBig(fd.totalRevenue||0)}</div>
+      </div>
+      <div>
+        <div style="font-size:.62rem;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">EBITDA</div>
+        <div style="font-size:1.1rem;font-weight:600;font-family:var(--mono)">${fmtBig(fd.ebitda||0)}</div>
+      </div>
+      <div>
+        <div style="font-size:.62rem;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Free Cash Flow</div>
+        <div style="font-size:1.1rem;font-weight:600;font-family:var(--mono);color:${(fd.freeCashflow||0)>=0?'var(--green)':'var(--red)'}">${fmtBig(fd.freeCashflow||0)}</div>
+      </div>
+    </div>`;
+}
+
+// ==================== FINANCIALS BAR CHART ====================
+function renderFinancialsChart(fd, ks, meta){
+  const card = document.getElementById('financials-card');
+  const el = document.getElementById('financials-chart-content');
+  const price = meta.regularMarketPrice||0;
+  const shares = ks.sharesOutstanding||0;
+  const marketCap = price*shares;
+  const ev = ks.enterpriseValue||0;
+  const revenue = fd.totalRevenue||0;
+  const fcf = fd.freeCashflow||0;
+  const ebitda = fd.ebitda||0;
+  const netIncome = fd.netIncomeToCommon||0;
+  const forwardPE = ks.forwardPE||0;
+  const epsG = fd.earningsGrowth||0;
+  const revG = fd.revenueGrowth||0;
+
+  if(!revenue){card.style.display='none';return;}
+  card.style.display='block';
+
+  // Valuation multiples
+  const evRev = revenue>0 ? ev/revenue : 0;
+  const evEbitda = ebitda>0 ? ev/ebitda : 0;
+  const fcfYield = marketCap>0 && fcf>0 ? (fcf/marketCap)*100 : 0;
+
+  const bars = [
+    {label:'Revenue', value:revenue, color:'#7c3aed', fmt:fmtBig},
+    {label:'EBITDA', value:ebitda, color:'#059669', fmt:fmtBig},
+    {label:'Free Cash Flow', value:fcf, color:fcf>=0?'#059669':'#dc2626', fmt:fmtBig},
+    {label:'Net Income', value:netIncome, color:netIncome>=0?'#059669':'#dc2626', fmt:fmtBig},
+  ].filter(b=>b.value!==0);
+
+  const maxVal = Math.max(...bars.map(b=>Math.abs(b.value)));
+
+  el.innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:1.25rem">
+      ${bars.map(b=>`
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+            <span style="font-size:.8rem;color:var(--text2)">${b.label}</span>
+            <span style="font-size:.9rem;font-weight:600;font-family:var(--mono);color:${b.color}">${b.fmt(b.value)}</span>
+          </div>
+          <div style="height:5px;background:var(--bg3);border-radius:5px;overflow:hidden">
+            <div style="height:100%;width:${(Math.abs(b.value)/maxVal*100).toFixed(1)}%;background:${b.color};border-radius:5px;transition:width .6s ease"></div>
+          </div>
+        </div>`).join('')}
+    </div>
+    <div style="padding-top:1rem;border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:1rem;text-align:center">
+      ${forwardPE>0?`<div><div style="font-size:.62rem;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Forward P/E</div><div style="font-size:1rem;font-weight:600;font-family:var(--mono)">${forwardPE.toFixed(1)}x</div></div>`:''}
+      ${evRev>0?`<div><div style="font-size:.62rem;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">EV/Revenue</div><div style="font-size:1rem;font-weight:600;font-family:var(--mono)">${evRev.toFixed(1)}x</div></div>`:''}
+      ${evEbitda>0?`<div><div style="font-size:.62rem;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">EV/EBITDA</div><div style="font-size:1rem;font-weight:600;font-family:var(--mono)">${evEbitda.toFixed(1)}x</div></div>`:''}
+      ${fcfYield>0?`<div><div style="font-size:.62rem;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">FCF Yield</div><div style="font-size:1rem;font-weight:600;font-family:var(--mono);color:var(--green)">${fcfYield.toFixed(1)}%</div></div>`:''}
+      ${epsG?`<div><div style="font-size:.62rem;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">EPS Growth</div><div style="font-size:1rem;font-weight:600;font-family:var(--mono);color:${epsG>=0?'var(--green)':'var(--red)'}">${epsG>=0?'+':''}${(epsG*100).toFixed(1)}%</div></div>`:''}
+      ${revG?`<div><div style="font-size:.62rem;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Rev Growth</div><div style="font-size:1rem;font-weight:600;font-family:var(--mono);color:${revG>=0?'var(--green)':'var(--red)'}">${revG>=0?'+':''}${(revG*100).toFixed(1)}%</div></div>`:''}
+    </div>`;
+}
+
+// ==================== MARKET CONTEXT ====================
+function renderMarketContext(meta, fd, ks, closes){
+  const card = document.getElementById('market-context-card');
+  const el   = document.getElementById('market-context-content');
+  if(!card||!el) return;
+  card.style.display='block';
+
+  const price    = meta.regularMarketPrice||0;
+  const high52   = meta.fiftyTwoWeekHigh||0;
+  const low52    = meta.fiftyTwoWeekLow||0;
+  const prev     = meta.chartPreviousClose||price;
+  const chgPct   = prev>0?(price-prev)/prev*100:0;
+
+  // Trend: price vs SMA200 from closes
+  const sma200   = closes.length>=200 ? closes.slice(-200).filter(v=>v).reduce((a,b)=>a+b,0)/200 : null;
+  const aboveSma = sma200 ? price>sma200 : null;
+
+  // Volatility: 52W range width as % of mid
+  const mid52    = (high52+low52)/2;
+  const vol52    = mid52>0 ? (high52-low52)/mid52*100 : 0;
+  const volLabel = vol52>50?'High':vol52>25?'Moderate':'Low';
+  const volColor = vol52>50?'var(--red)':vol52>25?'var(--amber)':'var(--green)';
+
+  // Position in 52W range
+  const rangePos = (high52-low52)>0 ? (price-low52)/(high52-low52)*100 : 50;
+
+  // DCF fair value (from current DCF card if rendered)
+  const dcfVal = document.querySelector('.dcf-val');
+  const fairValue = dcfVal ? parseFloat(dcfVal.textContent) : null;
+  const upside = fairValue&&price ? (fairValue-price)/price*100 : null;
+
+  // Forward P/E context
+  const fpe = ks.forwardPE||0;
+  const peLabel = fpe>30?'Expensive':fpe>20?'Fair':fpe>10?'Cheap':'Very Cheap';
+  const peColor = fpe>30?'var(--red)':fpe>20?'var(--amber)':'var(--green)';
+
+  el.innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1px;background:var(--border);border-radius:var(--radius-sm);overflow:hidden;margin-bottom:1rem">
+      <div style="background:var(--bg);padding:1rem 1.1rem">
+        <div style="font-size:.6rem;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Trend (vs SMA 200)</div>
+        <div style="font-size:1.1rem;font-weight:600;color:${aboveSma===null?'var(--text2)':aboveSma?'var(--green)':'var(--red)'}">${aboveSma===null?'—':aboveSma?'↑ Uptrend':'↓ Downtrend'}</div>
+        <div style="font-size:.7rem;color:var(--text3);margin-top:3px;font-family:var(--mono)">${sma200?'SMA200: '+sma200.toFixed(2):'Need more data'}</div>
+      </div>
+      <div style="background:var(--bg);padding:1rem 1.1rem">
+        <div style="font-size:.6rem;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Volatility (52W)</div>
+        <div style="font-size:1.1rem;font-weight:600;color:${volColor}">${volLabel}</div>
+        <div style="font-size:.7rem;color:var(--text3);margin-top:3px;font-family:var(--mono)">${vol52.toFixed(0)}% range width</div>
+      </div>
+      <div style="background:var(--bg);padding:1rem 1.1rem">
+        <div style="font-size:.6rem;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">52W Position</div>
+        <div style="font-size:1.1rem;font-weight:600">${rangePos.toFixed(0)}%</div>
+        <div style="height:4px;background:var(--bg3);border-radius:4px;margin-top:6px;overflow:hidden;position:relative">
+          <div style="position:absolute;left:0;top:0;height:100%;width:${rangePos.toFixed(0)}%;background:${rangePos>80?'var(--red)':rangePos<20?'var(--green)':'var(--amber)'};border-radius:4px;transition:width .6s ease"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:.62rem;color:var(--text3);font-family:var(--mono);margin-top:3px"><span>${low52.toFixed(0)}</span><span>${high52.toFixed(0)}</span></div>
+      </div>
+      ${fpe>0?`<div style="background:var(--bg);padding:1rem 1.1rem">
+        <div style="font-size:.6rem;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Forward P/E</div>
+        <div style="font-size:1.1rem;font-weight:600;color:${peColor}">${fpe.toFixed(1)}x — ${peLabel}</div>
+        <div style="font-size:.7rem;color:var(--text3);margin-top:3px;font-family:var(--mono)">Market expectation</div>
+      </div>`:''}
+      ${upside!==null?`<div style="background:var(--bg);padding:1rem 1.1rem">
+        <div style="font-size:.6rem;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">DCF Upside</div>
+        <div style="font-size:1.1rem;font-weight:600;color:${upside>15?'var(--green)':upside<-15?'var(--red)':'var(--amber)'}">${upside>0?'+':''}${upside.toFixed(1)}%</div>
+        <div style="font-size:.7rem;color:var(--text3);margin-top:3px;font-family:var(--mono)">Fair value: ${fairValue.toFixed(2)}</div>
+      </div>`:''}
+    </div>
+    `;
+}
+
+// ==================== INIT ====================
+updateApiBadge();checkProxyWarnings();
+renderPortfolio();renderTrades();renderWatchlist();updateBadges();calcTrade();
