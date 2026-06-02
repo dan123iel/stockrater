@@ -2354,8 +2354,7 @@ function renderCmpTable(results){
         const formatted = row.fmt(v);
         const win = winners[i];
         const col = win ? (row.higherBetter===false ? 'var(--cyan)' : 'var(--green)') : 'var(--text)';
-        const bg  = win ? (row.higherBetter===false ? 'rgba(6,182,212,.1)' : 'var(--green-dim)') : '';
-        html += `<td style="text-align:right;font-family:var(--mono);font-weight:${win?'700':'400'};color:${col};background:${bg}">${formatted}${win&&!isText?' ✓':''}</td>`;
+        html += `<td style="text-align:right;font-family:var(--mono);font-weight:${win?'700':'400'};color:${col}">${formatted}${win&&!isText?' ✓':''}</td>`;
       });
       html += '</tr>';
     });
