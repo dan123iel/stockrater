@@ -487,43 +487,13 @@ code{background:var(--bg4);padding:2px 5px;border-radius:3px;font-size:.76em;fon
 
     </div>
 
-    <!-- PERIOD OVERVIEW — directly below scorecard -->
-    <div class="card" id="period-card" style="display:none">
-      <div class="card-title">Period Overview <span class="tag tag-live">annual · quarterly · TTM</span></div>
-      <div id="period-content"></div>
+    <!-- MARKET CONTEXT — price vs fundamentals, separate from scorecard -->
+    <div class="card" id="market-context-card" style="display:none">
+      <div class="card-title">Market Context <span style="font-size:.65rem;font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3)">— price signals, separate from fundamental scorecard</span></div>
+      <div id="market-context-content"></div>
     </div>
 
-    <!-- A) FINANCIAL RATIOS -->
-    <div class="card">
-      <div class="card-title">Financial Ratios <span class="tag tag-live">live · Yahoo Finance</span></div>
-      <div id="key-metrics"></div>
-      <div id="ratio-table"></div>
-    </div>
-
-    <!-- B) QUALITATIVE -->
-    <div class="card">
-      <div class="card-title">Qualitative Assessment <span class="tag tag-auto">API auto-fill</span> <span class="tag tag-manual">manual override</span></div>
-      <div class="qual-group">
-        <div class="qual-group-header">Management Quality <span style="font-size:.6rem;color:var(--text3);margin-left:4px;font-weight:400">(hover for guidance)</span></div>
-        <div id="qual-mgmt"></div>
-      </div>
-      <div class="qual-group" style="margin-top:.85rem">
-        <div class="qual-group-header">Moat &amp; Competitive Position</div>
-        <div id="qual-moat"></div>
-      </div>
-      <div class="qual-group" style="margin-top:.85rem">
-        <div class="qual-group-header">ESG &amp; Risk</div>
-        <div id="qual-esg"></div>
-      </div>
-    </div>
-
-    <!-- D) INTRINSIC VALUE (DCF) -->
-    <div class="card" id="dcf-card">
-      <div class="card-title">Intrinsic Value <span class="tag tag-live">DCF · Yahoo Finance</span></div>
-      <div id="dcf-content"></div>
-    </div>
-
-    <!-- E) PRICE CHART -->
+    <!-- PRICE CHART — after Market Context -->
     <div class="card">
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:1rem">
         <div class="card-title" style="margin:0">Price Chart</div>
@@ -547,22 +517,52 @@ code{background:var(--bg4);padding:2px 5px;border-radius:3px;font-size:.76em;fon
       <div id="chart-loading" style="display:none;text-align:center;padding:.5rem;font-size:.75rem;color:var(--text3);font-family:var(--mono)">Loading…</div>
     </div>
 
-    <!-- F) MARGINS CHART -->
-    <div class="card" id="margins-card" style="display:none">
-      <div class="card-title">Margin Profile <span class="tag tag-live">live · Yahoo Finance</span></div>
-      <div id="margins-chart-content"></div>
-    </div>
-
-    <!-- G) KEY FINANCIALS BAR CHART -->
-    <div class="card" id="financials-card" style="display:none">
-      <div class="card-title">Key Financials <span class="tag tag-live">live · Yahoo Finance</span></div>
-      <div id="financials-chart-content"></div>
-    </div>
-
-    <!-- H) PERIOD OVERVIEW -->
+    <!-- PERIOD OVERVIEW -->
     <div class="card" id="period-card" style="display:none">
-      <div class="card-title">H) Period Overview <span class="tag tag-live">annual · quarterly · TTM</span></div>
+      <div class="card-title">Period Overview <span class="tag tag-live">annual · quarterly · TTM</span></div>
       <div id="period-content"></div>
+    </div>
+
+    <!-- FINANCIAL RATIOS -->
+    <div class="card">
+      <div class="card-title">Financial Ratios <span class="tag tag-live">live · Yahoo Finance</span></div>
+      <div id="key-metrics"></div>
+      <div id="ratio-table"></div>
+    </div>
+
+    <!-- QUALITATIVE -->
+    <div class="card">
+      <div class="card-title">Qualitative Assessment <span class="tag tag-auto">API auto-fill</span> <span class="tag tag-manual">manual override</span></div>
+      <div class="qual-group">
+        <div class="qual-group-header">Management Quality <span style="font-size:.6rem;color:var(--text3);margin-left:4px;font-weight:400">(hover for guidance)</span></div>
+        <div id="qual-mgmt"></div>
+      </div>
+      <div class="qual-group" style="margin-top:.85rem">
+        <div class="qual-group-header">Moat &amp; Competitive Position</div>
+        <div id="qual-moat"></div>
+      </div>
+      <div class="qual-group" style="margin-top:.85rem">
+        <div class="qual-group-header">ESG &amp; Risk</div>
+        <div id="qual-esg"></div>
+      </div>
+    </div>
+
+    <!-- DCF -->
+    <div class="card" id="dcf-card">
+      <div class="card-title">Intrinsic Value <span class="tag tag-live">DCF · Yahoo Finance</span></div>
+      <div id="dcf-content"></div>
+    </div>
+
+    <!-- MARGINS + FINANCIALS nebeneinander -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem" id="charts-grid">
+      <div class="card" id="margins-card" style="display:none;margin-bottom:0">
+        <div class="card-title">Margin Profile <span class="tag tag-live">live · Yahoo Finance</span></div>
+        <div id="margins-chart-content"></div>
+      </div>
+      <div class="card" id="financials-card" style="display:none;margin-bottom:0">
+        <div class="card-title">Key Financials <span class="tag tag-live">live · Yahoo Finance</span></div>
+        <div id="financials-chart-content"></div>
+      </div>
     </div>
   </div>
 </div>
