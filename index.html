@@ -1459,8 +1459,6 @@ function renderRatios(fd,ks,meta,closes,highs,lows,summary){
   const waccInfo=getWaccInfo(fd);
   document.getElementById('sc-wacc').textContent=
     `WACC ${(waccInfo.wacc*100).toFixed(1)}%  ·  β ${waccInfo.beta}  ·  ${sector||'Unknown sector'}`;
-  document.getElementById('sc-company').textContent=
-    currentCompany?.meta?.longName||currentCompany?.meta?.shortName||'';
 }
 
 function calcRatioScore(ratioVals){
