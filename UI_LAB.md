@@ -1025,5 +1025,120 @@ Each section of the UI Lab has an "Apply to App" button that writes the chosen v
 
 ---
 
+## 14. Section 11 — Animation Tools Reference `[RM]` `[MM]`
+
+### 14.1 Remotion — Programmatic Video `[RM]`
+
+**What it is:** React component library that renders to MP4/WebM/GIF. Every frame is a React component. Data-parametrizable — same template, different data = different video.
+
+**Use cases for vistaclara:**
+
+| Feature | Implementation |
+|---------|---------------|
+| Gauge fill animation | Remotion `interpolate()` from 0 → score over 60 frames |
+| Score reveal | Numbers count up: `0.00 → 4.19` with easing |
+| Ratio bars | Each bar animates in sequentially, 10-frame stagger |
+| Price chart | Line draws itself left to right using SVG pathLength trick |
+| Report video | Full 15s MP4: company name → gauge → 4 score rows → key metrics → verdict |
+| Social format | 1080×1920 (9:16), 30fps, 15 seconds, exported as MP4 |
+
+**Key Remotion APIs:**
+```js
+useCurrentFrame()        // current frame number
+interpolate(frame, [0, 30], [0, 1])       // map frame range to value range
+spring({ frame, fps, from, to })           // physics-based easing (gauges)
+sequence({ from, duration })               // delay + duration for stagger
+```
+
+**Easing presets for vistaclara:**
+```js
+// Gauge — spring physics
+spring({ frame, fps: 30, from: 0, to: targetScore, config: { damping: 12 } })
+
+// Score counter — ease-out cubic
+interpolate(frame, [0, 45], [0, targetScore], { easing: Easing.out(Easing.cubic) })
+
+// Bar fill — ease-out quad (snappy)
+interpolate(frame, [offset, offset + 20], [0, targetWidth], {
+  easing: Easing.out(Easing.quad), extrapolateRight: 'clamp'
+})
+```
+
+**Integration path:**
+- Option A: Browser-only — `<Player>` component inline, no server
+- Option B: Server render — API endpoint returns MP4 download
+
+---
+
+### 14.2 Manim — Animation Philosophy `[MM]`
+
+**What it is:** Python math animation library (3Blue1Brown). Not used directly in the web app — used as the **animation philosophy reference**.
+
+**Core Manim types → vistaclara equivalents:**
+
+| Manim | vistaclara | CSS/JS |
+|-------|-----------|--------|
+| `Write(text)` | Score number appears drawn | SVG stroke-dashoffset |
+| `GrowFromCenter(circle)` | Gauge arc grows from 0 | stroke-dashoffset animation |
+| `ReplacementTransform(A,B)` | Score morphs to new value | countUp + requestAnimationFrame |
+| `Create(line)` | Chart line draws itself | SVG pathLength trick |
+| `FadeIn(obj, shift=UP)` | Card slides in from below | translateY + opacity |
+| `Succession(*anims)` | Bars animate one after another | animation-delay: calc(var(--i) * 80ms) |
+
+**The Manim Smooth Easing — CSS approximation:**
+```css
+--ease-manim: cubic-bezier(0.16, 1, 0.3, 1);
+```
+
+**Sequencing rule (3Blue1Brown principle):**
+Never animate two unrelated things simultaneously. Each element gets its moment:
+```
+1. Gauge fills                     → 900ms
+2. Verdict pill fades in           → delay 200ms, duration 300ms
+3. Score rows appear staggered     → delay 400ms, stagger 60ms each
+4. Chart draws on scroll           → IntersectionObserver, 600ms
+5. Ratio bars fill on scroll       → stagger 40ms per bar
+```
+
+---
+
+### 14.3 Figma Design Principles Applied `[FT]`
+
+**Minor Third Type Scale (ratio 1.250):**
+```
+0.64rem  Labels, badges
+0.80rem  Small mono, captions
+1.00rem  Body base
+1.25rem  Body large
+1.563rem H3
+1.953rem H2
+2.441rem H1
+3.052rem Display small
+clamp(4rem, 8vw, 10rem)  Hero display
+```
+
+**60 / 30 / 10 Color Rule:**
+```
+60%  Neutral (white + grays)
+30%  Typography (dark text)
+10%  Accent (one semantic color at a time)
+```
+
+**Progressive Disclosure:**
+- Default visible: Hero + Scorecard + Price Chart
+- On scroll: Ratios, Qualitative, DCF
+- On click: detail explanations, DCF params, period data
+
+**Accessibility — contrast on white `#ffffff`:**
+```
+#374151 (--text2)   → 7.8:1  ✅ AAA
+#6b7280 (--text3)   → 4.6:1  ✅ AA
+#059669 (--green)   → 3.8:1  ⚠️  AA large text only
+#dc2626 (--red)     → 5.9:1  ✅ AA
+#d97706 (--amber)   → 3.2:1  ❌  use #b45309 for amber text on white
+```
+
+---
+
 *Last updated: 2026-06-02*  
-*Maintained by: vistaclara project*
+*Scope: Project-agnostic design system — vistaclara and future projects*
