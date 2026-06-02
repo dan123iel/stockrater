@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>vistaclara — equity analysis</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230f1117'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Inter,sans-serif' font-size='18' font-weight='700' fill='white'>v</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -215,10 +216,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .gauge-wrap{position:relative;width:90px;height:90px;flex-shrink:0}
 .gauge-wrap svg{width:100%;height:100%}
 .gauge-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none}
-.gauge-num{font-size:1.4rem;font-weight:600;font-family:var(--mono);letter-spacing:-.03em;color:var(--text)}
+.gauge-num{font-size:1.6rem;font-weight:700;font-family:var(--mono);letter-spacing:-.04em;color:var(--text)}
 .gauge-denom{font-size:.55rem;color:var(--text3);font-family:var(--mono)}
 .scorecard-meta{flex:1}
-.verdict-pill{display:inline-flex;align-items:center;padding:4px 11px;border-radius:4px;font-size:.8rem;font-weight:600;margin-bottom:10px;letter-spacing:.02em}
+.verdict-pill{display:inline-flex;align-items:center;padding:6px 14px;border-radius:6px;font-size:.88rem;font-weight:700;margin-bottom:12px;letter-spacing:.04em;text-transform:uppercase}
 .verdict-strong{background:var(--green-dim);color:var(--green)}
 .verdict-buy{background:var(--bg4);color:var(--text2)}
 .verdict-hold{background:var(--amber-dim);color:var(--amber)}
@@ -410,7 +411,7 @@ code{background:var(--bg4);padding:2px 5px;border-radius:3px;font-size:.76em;fon
   <div class="page-header">
     <div class="page-eyebrow">Fundamental Analysis</div>
     <div class="page-title">Company Rating</div>
-    <div class="page-sub">Enter a ticker to load live financials and generate a full scorecard</div>
+
   </div>
   
   <div class="search-bar">
@@ -430,11 +431,11 @@ code{background:var(--bg4);padding:2px 5px;border-radius:3px;font-size:.76em;fon
     <div class="card" id="scorecard-card">
       <div class="card-title">Scorecard</div>
       <div class="scorecard-layout">
-        <div class="gauge-wrap">
+        <div class="gauge-wrap" style="width:130px;height:130px">
           <svg viewBox="0 0 110 110">
             <circle cx="55" cy="55" r="46" fill="none" stroke="rgba(0,0,0,.04)" stroke-width="1"/>
-            <circle cx="55" cy="55" r="40" fill="none" stroke="rgba(0,0,0,.05)" stroke-width="9"/>
-            <circle cx="55" cy="55" r="40" fill="none" stroke="url(#gaugeGrad)" stroke-width="9"
+            <circle cx="55" cy="55" r="40" fill="none" stroke="rgba(0,0,0,.06)" stroke-width="11"/>
+            <circle cx="55" cy="55" r="40" fill="none" stroke="url(#gaugeGrad)" stroke-width="11"
               stroke-dasharray="251.3" stroke-dashoffset="251.3" stroke-linecap="round"
               transform="rotate(-90 55 55)" id="gauge-arc"
               style="transition:stroke-dashoffset .9s cubic-bezier(.4,0,.2,1),stroke .4s"/>
@@ -461,17 +462,12 @@ code{background:var(--bg4);padding:2px 5px;border-radius:3px;font-size:.76em;fon
         </div>
         <div class="scorecard-meta">
           <div id="verdict-pill" class="verdict-pill verdict-hold" style="margin-bottom:9px">—</div>
-          <div id="sc-company" style="font-size:.95rem;font-weight:600;margin-bottom:3px">—</div>
+          <div id="sc-company" style="font-size:1.1rem;font-weight:600;margin-bottom:4px;letter-spacing:-.02em">—</div>
           <div id="sc-wacc" style="font-size:.72rem;color:var(--text3);font-family:var(--mono)">WACC: —</div>
         </div>
       </div>
       <div id="scorecard-rows"></div>
-      <div class="divider"></div>
-      <div style="display:flex;gap:7px;flex-wrap:wrap">
-        <button class="btn btn-primary btn-sm" onclick="saveToPortfolio()">+ Portfolio</button>
-        <button class="btn btn-sm" onclick="saveToWatchlist()">+ Watchlist</button>
-        <button class="btn btn-sm" onclick="compareCurrent()">Compare</button>
-      </div>
+
     </div>
 
     <!-- PERIOD OVERVIEW — directly below scorecard -->
@@ -543,7 +539,7 @@ code{background:var(--bg4);padding:2px 5px;border-radius:3px;font-size:.76em;fon
   <div class="page-header">
     <div class="page-eyebrow">Position Sizing</div>
     <div class="page-title">Leverage Trading</div>
-    <div class="page-sub">ATR-based SL/TP and dynamic leverage sizing</div>
+
   </div>
   
   <div class="search-bar">
@@ -597,7 +593,7 @@ code{background:var(--bg4);padding:2px 5px;border-radius:3px;font-size:.76em;fon
   <div class="page-header">
     <div class="page-eyebrow">Overview</div>
     <div class="page-title">My Portfolio</div>
-    <div class="page-sub">Saved company ratings and active trades</div>
+
   </div>
   <div class="card">
     <div class="card-title">Rated Companies</div>
@@ -614,7 +610,7 @@ code{background:var(--bg4);padding:2px 5px;border-radius:3px;font-size:.76em;fon
   <div class="page-header">
     <div class="page-eyebrow">Radar</div>
     <div class="page-title">Watchlist</div>
-    <div class="page-sub">Companies on your radar — not yet rated</div>
+
   </div>
   <div class="card">
     <ul class="company-list" id="watchlist-list"></ul>
@@ -626,7 +622,7 @@ code{background:var(--bg4);padding:2px 5px;border-radius:3px;font-size:.76em;fon
   <div class="page-header">
     <div class="page-eyebrow">Configuration</div>
     <div class="page-title">Settings</div>
-    <div class="page-sub">Cache, storage and preferences</div>
+
   </div>
   <div style="display:none"><input type="text" id="worker-url-input"></div>
   <div id="worker-url-status" style="display:none"></div>
@@ -645,7 +641,7 @@ code{background:var(--bg4);padding:2px 5px;border-radius:3px;font-size:.76em;fon
   <div class="page-header">
     <div class="page-eyebrow">Side-by-Side Analysis</div>
     <div class="page-title">Company Comparison</div>
-    <div class="page-sub">Compare up to 3 companies — full scorecard, radar chart, ratio table</div>
+
   </div>
   
   <div class="card">
@@ -1029,7 +1025,7 @@ function renderCompanyHero(meta,fd,ks){
       </div>
     </div>
     <div class="company-price">
-      <div class="price-big">${fmtNum(price,2)}</div>
+      <div style="display:flex;align-items:baseline;gap:8px"><div class="price-big">${fmtNum(price,2)}</div><div style="font-size:1rem;font-weight:400;color:var(--text2);font-family:var(--mono)">${meta.currency||''}</div></div>
       <div class="price-change ${change>=0?'pos':'neg'}">
         <span>${change>=0?'▲':'▼'} ${Math.abs(change).toFixed(2)}</span>
         <span class="price-badge">${change>=0?'+':''}${pct.toFixed(2)}%</span>
@@ -1301,7 +1297,6 @@ function renderRatioTable(sector, labels, ks){
       rows+=`<tr>
         <td style="color:var(--text2)">${bench.label}</td>
         <td style="font-family:var(--mono);font-weight:600">${displayed}</td>
-        <td class="trend-cell">${arrow}</td>
         <td style="font-family:var(--mono);font-size:.72rem;color:var(--text3)">≥${b5}</td>
         <td style="white-space:nowrap">
           <div style="display:flex;flex-direction:column;gap:4px">
@@ -1336,7 +1331,6 @@ function renderRatioTable(sector, labels, ks){
     <table class="rtable">
       <thead><tr>
         <th>Ratio</th><th>Value</th>
-        <th title="Trend vs prior period" style="width:44px;text-align:center">Trend</th>
         <th>Target ★5</th>
         <th style="min-width:120px"><span title="T = Theory (Excel benchmarks), S = Sector (S&P 500 median)" style="cursor:help">Score <span style="font-size:.58rem;color:var(--text3)">T = theory  S = sector</span></span></th>
       </tr></thead>
@@ -1466,18 +1460,18 @@ function updateScorecard(){
   document.getElementById('scorecard-rows').innerHTML=rows.map(r=>{
     const c=scoreColor(r.score);
     const bar=(r.score/5)*100;
-    return `<div class="score-row">
-      <span style="color:var(--text2)">${r.label}</span>
+    const bg = r.score>=4.5?'rgba(5,150,105,.06)':r.score>=3.5?'rgba(5,150,105,.03)':r.score<2.5?'rgba(220,38,38,.04)':'';
+    return `<div class="score-row" style="border-left:3px solid ${c};padding-left:10px;margin-left:-10px;background:${bg};border-radius:0 4px 4px 0">
+      <span style="color:var(--text);font-weight:500">${r.label}</span>
       <span class="score-right">
         <span class="score-weight">${r.weight}</span>
-        <div class="score-bar-wrap" style="width:55px"><div class="score-bar-fill" style="width:${bar}%;background:${c}"></div></div>
-        <span style="font-family:var(--mono);font-weight:600;color:${c};min-width:30px;text-align:right">${r.score.toFixed(2)}</span>
+        <div style="width:80px;height:4px;background:var(--bg3);border-radius:4px;overflow:hidden">
+          <div style="height:100%;width:${bar}%;background:${c};border-radius:4px;transition:width .6s ease"></div>
+        </div>
+        <span style="font-family:var(--mono);font-weight:700;color:${c};min-width:32px;text-align:right;font-size:.9rem">${r.score.toFixed(1)}</span>
       </span>
     </div>`;
-  }).join('')+`<div class="score-row total">
-    <span>Total Score</span>
-    <span style="font-family:var(--mono);font-weight:700;color:${col}">${normalized.toFixed(2)} / 5.00</span>
-  </div>`;
+  }).join('');
 }
 
 // Draw gauge ticks (Manim-style)
