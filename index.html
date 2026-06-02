@@ -2651,7 +2651,18 @@ function initChartCrosshair(){
     vline.style.height= (H-pad.t-pad.b)+'px';
 
     if(price!=null){
-      tip.textContent = price.toFixed(2);
+      const ts = data.timestamps ? data.timestamps[idx] : null;
+      let dateStr = '';
+      if(ts){
+        const d = new Date(ts * 1000);
+        const range = data.rangeKey || '1y';
+        if(range === '1d'){
+          dateStr = d.toLocaleTimeString('de-DE', {hour:'2-digit', minute:'2-digit'});
+        } else {
+          dateStr = d.toLocaleDateString('de-DE', {day:'2-digit', month:'short', year:'2-digit'});
+        }
+      }
+      tip.textContent = (dateStr ? dateStr + '  ' : '') + price.toFixed(2);
       tip.style.left = px+'px';
       tip.style.top  = '0px';
     }
