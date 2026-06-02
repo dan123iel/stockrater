@@ -91,6 +91,12 @@ All design decisions in the UI Lab trace back to one or more of these reference 
 | `[RL]` | Meta Smart Glasses | Floating annotation boxes on product, white bg with max airiness |
 | `[FR]` | francouvertes.ca | Horizontal marquee ticker, per-section background colors, full-bleed color bands |
 | `[RD]` | THE RED / Inquire | Monochrome section, repeating text as background pattern, large ↗ CTA |
+| `[FT]` | figma.com/resource-library | Bold typography, neumorphism, scroll animations, dark mode, gamification, 60/30/10 color rule, progressive disclosure, Minor Third type scale |
+| `[FF]` | figma.com/font-library/futuristic | Futuristic font reference: Space Mono, Orbitron, Russo One, Electrolize, Tomorrow, Unbounded |
+| `[RM]` | remotion.dev | React → MP4/WebM/GIF. Programmatic video from components. Parametrizable templates. Inline `<Player>`. Score-report video generation |
+| `[MM]` | manim.community | Python math animation library (3Blue1Brown). Animation principles: `smooth` easing, `Write()`, `GrowFromCenter()`, `ReplacementTransform()`, sequential reveal |
+| `[FR]` | francouvertes.ca | Horizontal marquee ticker, per-section background colors, full-bleed color bands |
+| `[RD]` | THE RED / Inquire | Monochrome section, repeating text as background pattern, large ↗ CTA |
 | `[FT]` | Figma Trends 2026 | Bold typography, neumorphism, scroll animations, dark mode, gamification |
 | `[FF]` | Figma Font Library | Futuristic font reference list |
 
