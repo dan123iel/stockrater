@@ -2566,7 +2566,6 @@ function renderPriceChart(closes, highs, lows, range){
         <stop offset="100%" stop-color="${gradColor}" stop-opacity="0"/>
       </linearGradient>
     </defs>
-    <!-- Y-axis gridlines + labels -->
     ${yTicks.map(t=>{
       const v = minV + t*range;
       const y = cy(v);
@@ -2574,23 +2573,17 @@ function renderPriceChart(closes, highs, lows, range){
       return `<line x1="${pad.l}" y1="${y}" x2="${W-pad.r}" y2="${y}" stroke="rgba(0,0,0,.06)" stroke-width="1" stroke-dasharray="3,3"/>
               <text x="${pad.l-6}" y="${y+4}" fill="rgba(0,0,0,.35)" font-size="9" font-family="JetBrains Mono,monospace" text-anchor="end">${label}</text>`;
     }).join('')}
-    <!-- Y-axis line -->
     <line x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${H-pad.b}" stroke="rgba(0,0,0,.1)" stroke-width="1"/>
-    <!-- X-axis line -->
     <line x1="${pad.l}" y1="${H-pad.b}" x2="${W-pad.r}" y2="${H-pad.b}" stroke="rgba(0,0,0,.1)" stroke-width="1"/>
-    <!-- Area fill -->
     <path d="${areaPath}" class="chart-area"/>
-    <!-- Price line -->
     <path d="${path}" fill="none" stroke="${lineColor}" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
     ${[0,0.5,1].map((t,li)=>{
       const xLabMap={'1d':['Open','Mid','Now'],'5d':['5D ago','Mid','Today'],'1mo':['1M ago','2W','Today'],'6mo':['6M ago','3M','Today'],'ytd':['Jan','Mid','Today'],'1y':['12M ago','6M ago','Today'],'max':['Start','Mid','Today']};
       const labs=(xLabMap[range])||['Start','Mid','Today'];
       const i=Math.floor(t*(n-1));return `<text x="${cx(i)}" y="${H-pad.b+14}" fill="rgba(0,0,0,.3)" font-size="9" font-family="JetBrains Mono,monospace" text-anchor="middle">${labs[li]}</text>`;
     }).join('')}
-    <!-- Current price dot + label -->
     <circle cx="${cx(n-1)}" cy="${cy(last)}" r="4" fill="${lineColor}" stroke="white" stroke-width="2"/>
     <text x="${cx(n-1)+8}" y="${cy(last)+4}" fill="${lineColor}" font-size="10" font-family="JetBrains Mono,monospace" font-weight="600">${last.toFixed(2)}</text>
-    <!-- Min/Max labels -->
     <text x="${cx(closes.indexOf(Math.min(...valid)))}" y="${cy(Math.min(...valid))+14}" fill="rgba(220,38,38,.7)" font-size="8" font-family="JetBrains Mono,monospace" text-anchor="middle">${Math.min(...valid).toFixed(2)}</text>
     <text x="${cx(closes.indexOf(Math.max(...valid)))}" y="${cy(Math.max(...valid))-6}" fill="rgba(5,150,105,.7)" font-size="8" font-family="JetBrains Mono,monospace" text-anchor="middle">${Math.max(...valid).toFixed(2)}</text>`;
 }
