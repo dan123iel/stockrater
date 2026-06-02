@@ -2777,8 +2777,8 @@ function renderFinancialsChart(fd, ks, meta){
   const fcfYield = marketCap>0 && fcf>0 ? (fcf/marketCap)*100 : 0;
 
   const bars = [
-    {label:'Revenue', value:revenue, color:'#4f46e5', fmt:fmtBig},
-    {label:'EBITDA', value:ebitda, color:'#0284c7', fmt:fmtBig},
+    {label:'Revenue', value:revenue, color:'#7c3aed', fmt:fmtBig},
+    {label:'EBITDA', value:ebitda, color:'#059669', fmt:fmtBig},
     {label:'Free Cash Flow', value:fcf, color:fcf>=0?'#059669':'#dc2626', fmt:fmtBig},
     {label:'Net Income', value:netIncome, color:netIncome>=0?'#059669':'#dc2626', fmt:fmtBig},
   ].filter(b=>b.value!==0);
