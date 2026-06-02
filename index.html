@@ -371,6 +371,10 @@ code{background:var(--bg4);padding:2px 5px;border-radius:3px;font-size:.76em;fon
 .chart-range-btn{padding:.28rem .6rem;border-radius:4px;font-size:.72rem;font-family:var(--mono);cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text3);transition:all .12s;font-weight:500}
 .chart-range-btn:hover{background:var(--bg2);color:var(--text)}
 .chart-range-btn.active{background:var(--text);color:var(--bg);border-color:var(--text)}
+/* ── SEARCH DROPDOWN ── */
+.search-dd-item{display:flex;align-items:center;padding:.6rem .9rem;cursor:pointer;transition:background .1s;border-bottom:1px solid var(--border)}
+.search-dd-item:last-child{border:none}
+.search-dd-item:hover{background:var(--bg2)}
 </style>
 </head>
 <body>
@@ -418,11 +422,19 @@ code{background:var(--bg4);padding:2px 5px;border-radius:3px;font-size:.76em;fon
 
   </div>
   
-  <div class="search-bar">
-    <span style="color:var(--text3);align-self:center;flex-shrink:0;font-size:.85rem">↗</span>
-    <input class="search-input" id="r-ticker" placeholder="AAPL, MSFT, NVDA — press Enter" onkeydown="if(event.key==='Enter')fetchCompany()">
-    <button class="btn btn-primary" onclick="fetchCompany()">Analyse</button>
-    <button class="btn btn-ghost btn-icon" onclick="clearRating()">✕</button>
+  <div style="position:relative">
+    <div class="search-bar">
+      <span style="color:var(--text3);align-self:center;flex-shrink:0;font-size:.85rem">↗</span>
+      <input class="search-input" id="r-ticker"
+        placeholder="Ticker, Name, ISIN, WKN — press Enter"
+        onkeydown="if(event.key==='Enter')fetchCompany()"
+        oninput="renderSearchDropdown(this.value)"
+        onfocus="renderSearchDropdown(this.value)"
+        onblur="hideDropdown()">
+      <button class="btn btn-primary" onclick="fetchCompany()">Analyse</button>
+      <button class="btn btn-ghost btn-icon" onclick="clearRating()">✕</button>
+    </div>
+    <div id="search-dropdown" style="display:none;position:absolute;top:100%;left:0;right:0;background:white;border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 4px 16px rgba(0,0,0,.1);z-index:50;max-height:280px;overflow-y:auto;margin-top:4px"></div>
   </div>
   <div id="rating-loading" style="display:none"><div class="loading"><div class="spinner-ring"></div><div class="loading-text">Loading from Yahoo Finance…</div></div></div>
   <div id="rating-error" style="display:none"></div>
@@ -949,35 +961,131 @@ function showProgress(state){
 }
 
 // ==================== FETCH COMPANY ====================
-// Common name→ticker map for convenience
+// Name → Ticker + ISIN/WKN lookup
 const NAME_TO_TICKER = {
+  // US Tech
   'NVIDIA':['NVDA'],'APPLE':['AAPL'],'MICROSOFT':['MSFT'],'GOOGLE':['GOOGL'],
   'ALPHABET':['GOOGL'],'AMAZON':['AMZN'],'META':['META'],'TESLA':['TSLA'],
-  'NETFLIX':['NFLX'],'SAMSUNG':['005930.KS'],'BERKSHIRE':['BRK-B'],
-  'VISA':['V'],'MASTERCARD':['MA'],'JPMORGAN':['JPM'],'GOLDMAN':['GS'],
-  'BLACKROCK':['BLK'],'TAIWAN SEMICONDUCTOR':['TSM'],'TSMC':['TSM'],
-  'ASML':['ASML'],'SAP':['SAP'],'SIEMENS':['SIE.DE'],'VOLKSWAGEN':['VOW3.DE'],
-  'BMW':['BMW.DE'],'MERCEDES':['MBG.DE'],'ADIDAS':['ADS.DE'],
+  'NETFLIX':['NFLX'],'BERKSHIRE':['BRK-B'],'BERKSHIRE HATHAWAY':['BRK-B'],
+  'VISA':['V'],'MASTERCARD':['MA'],'JPMORGAN':['JPM'],'JP MORGAN':['JPM'],
+  'GOLDMAN':['GS'],'GOLDMAN SACHS':['GS'],'BLACKROCK':['BLK'],
+  'TAIWAN SEMICONDUCTOR':['TSM'],'TSMC':['TSM'],
   'SHOPIFY':['SHOP'],'SALESFORCE':['CRM'],'ORACLE':['ORCL'],
   'INTEL':['INTC'],'AMD':['AMD'],'QUALCOMM':['QCOM'],'BROADCOM':['AVGO'],
-  'DISNEY':['DIS'],'COCA COLA':['KO'],'PEPSI':['PEP'],'JOHNSON':['JNJ'],
-  'PFIZER':['PFE'],'NOVARTIS':['NVS'],'ROCHE':['ROG.SW'],'NESTLE':['NESN.SW'],
+  'DISNEY':['DIS'],'COCA COLA':['KO'],'COCACOLA':['KO'],
+  'PEPSI':['PEP'],'PEPSICO':['PEP'],
+  'JOHNSON':['JNJ'],'JOHNSON & JOHNSON':['JNJ'],
+  'PFIZER':['PFE'],'EXXON':['XOM'],'CHEVRON':['CVX'],
+  'CITIGROUP':['C'],'CITI':['C'],'BANK OF AMERICA':['BAC'],
+  'WELLS FARGO':['WFC'],'MORGAN STANLEY':['MS'],'PAYPAL':['PYPL'],
+  'UBER':['UBER'],'AIRBNB':['ABNB'],'SPOTIFY':['SPOT'],
+  'PALANTIR':['PLTR'],'SNOWFLAKE':['SNOW'],'CROWDSTRIKE':['CRWD'],
+  'ROCKET LAB':['RKLB'],'SPACEX':['RKLB'],
+  // European
+  'ASML':['ASML'],'SAP':['SAP'],'SIEMENS':['SIE.DE'],
+  'VOLKSWAGEN':['VOW3.DE'],'VW':['VOW3.DE'],
+  'BMW':['BMW.DE'],'MERCEDES':['MBG.DE'],'DAIMLER':['MBG.DE'],
+  'ADIDAS':['ADS.DE'],'BASF':['BAS.DE'],'BAYER':['BAYN.DE'],
+  'ALLIANZ':['ALV.DE'],'DEUTSCHE BANK':['DBK.DE'],'COMMERZBANK':['CBK.DE'],
+  'INFINEON':['IFX.DE'],'MUNICH RE':['MUV2.DE'],'MUENCHENER':['MUV2.DE'],
+  'NOVARTIS':['NVS'],'ROCHE':['ROG.SW'],'NESTLE':['NESN.SW'],
+  'LVMH':['MC.PA'],'AIRBUS':['AIR.PA'],'TOTALENERGIES':['TTE.PA'],
+  'UNILEVER':['ULVR.L'],'SHELL':['SHEL.L'],'BP':['BP.L'],
+  'HSBC':['HSBA.L'],'ASTRAZENECA':['AZN.L'],
+  // ISIN → Ticker
+  'US67066G1040':['NVDA'],'US0378331005':['AAPL'],'US5949181045':['MSFT'],
+  'US02079K3059':['GOOGL'],'US0231351067':['AMZN'],'US30303M1027':['META'],
+  'US88160R1014':['TSLA'],'US38141G1040':['GS'],'US46625H1005':['JPM'],
+  'US9311421039':['WMT'],'US1912161007':['KO'],'US7134481081':['PFE'],
+  'US4592001014':['IBM'],'US4581401001':['INTC'],'US00206R1023':['T'],
+  'DE0007164600':['SAP'],'DE0007236101':['SIE.DE'],'DE0008404005':['ALV.DE'],
+  'DE0005140008':['DBK.DE'],'NL0010273215':['ASML'],
+  // WKN → Ticker
+  '716460':['SAP'],'723610':['SIE.DE'],'840400':['ALV.DE'],
+  '514000':['DBK.DE'],'A1J37A':['ASML'],'918422':['NVDA'],
 };
-function resolveTickerInput(raw){
+
+// ISIN pattern: 2 letters + 10 alphanumeric
+const ISIN_RE = /^[A-Z]{2}[A-Z0-9]{10}$/;
+// WKN pattern: 6 alphanumeric chars
+const WKN_RE = /^[A-Z0-9]{6}$/;
+
+async function resolveTickerInput(raw){
   const upper = raw.toUpperCase().trim();
+  // Direct ticker or known name/ISIN/WKN
   if(NAME_TO_TICKER[upper]) return NAME_TO_TICKER[upper][0];
-  // partial match
+  // Partial name match
   for(const [name,tickers] of Object.entries(NAME_TO_TICKER)){
-    if(upper.includes(name) || name.includes(upper)) return tickers[0];
+    if(name.length>3 && (upper.includes(name) || name.includes(upper))) return tickers[0];
   }
+  // If it looks like a ticker already (short, uppercase), return as-is
+  if(/^[A-Z0-9.\-^]{1,6}$/.test(upper)) return upper;
+  // Otherwise search via Yahoo API
+  try{
+    const w = getWorkerUrl();
+    const res = await fetch(w+'/yahoo/search?q='+encodeURIComponent(raw));
+    const data = await res.json();
+    if(data.quotes && data.quotes.length>0){
+      // Show dropdown and return first result
+      return {search: true, quotes: data.quotes};
+    }
+  }catch(e){}
   return upper;
 }
+
+// Search history (max 10)
+let searchHistory = JSON.parse(localStorage.getItem('sr_search_history')||'[]');
+function addToHistory(ticker, name){
+  searchHistory = searchHistory.filter(h=>h.ticker!==ticker);
+  searchHistory.unshift({ticker, name: name||ticker});
+  if(searchHistory.length>10) searchHistory.pop();
+  localStorage.setItem('sr_search_history', JSON.stringify(searchHistory));
+  renderSearchDropdown('');
+}
+
+function renderSearchDropdown(query){
+  const dd = document.getElementById('search-dropdown');
+  if(!dd) return;
+  const items = query
+    ? searchHistory.filter(h=>h.ticker.includes(query.toUpperCase())||h.name.toUpperCase().includes(query.toUpperCase()))
+    : searchHistory;
+  if(!items.length){ dd.style.display='none'; return; }
+  dd.innerHTML = items.map(h=>`
+    <div class="search-dd-item" onclick="selectFromHistory('${h.ticker}')">
+      <span style="font-family:var(--mono);font-weight:600;font-size:.82rem">${h.ticker}</span>
+      <span style="color:var(--text2);font-size:.8rem;margin-left:8px">${h.name}</span>
+    </div>`).join('');
+  dd.style.display='block';
+}
+
+function selectFromHistory(ticker){
+  document.getElementById('r-ticker').value = ticker;
+  document.getElementById('search-dropdown').style.display='none';
+  fetchCompany();
+}
+
+function hideDropdown(){ setTimeout(()=>{ const dd=document.getElementById('search-dropdown'); if(dd) dd.style.display='none'; },200); }
 
 async function fetchCompany(){
   const raw=document.getElementById('r-ticker').value.trim();
   if(!raw) return;
-  const ticker=resolveTickerInput(raw);
-  // Show resolved ticker in input if it changed
+  document.getElementById('search-dropdown').style.display='none';
+  const resolved = await resolveTickerInput(raw);
+  // Handle search results dropdown
+  if(resolved && typeof resolved==='object' && resolved.search){
+    const dd = document.getElementById('search-dropdown');
+    if(dd){
+      dd.innerHTML = resolved.quotes.map(q=>`
+        <div class="search-dd-item" onclick="selectFromHistory('${q.symbol}')">
+          <span style="font-family:var(--mono);font-weight:600;font-size:.82rem">${q.symbol}</span>
+          <span style="color:var(--text2);font-size:.8rem;margin-left:8px">${q.name}</span>
+          <span style="color:var(--text3);font-size:.72rem;margin-left:auto;font-family:var(--mono)">${q.exchange||''}</span>
+        </div>`).join('');
+      dd.style.display='block';
+    }
+    return;
+  }
+  const ticker = typeof resolved==='string' ? resolved : raw.toUpperCase();
   if(ticker !== raw.toUpperCase()) document.getElementById('r-ticker').value=ticker;
   showProgress('start');
   showRatingLoading(true);
@@ -993,6 +1101,7 @@ async function fetchCompany(){
     const lows=chart.lows||[];
     currentCompany={ticker,fd,ks,meta,summary,closes,highs,lows};
     renderCompanyHero(meta,fd,ks);
+    addToHistory(ticker, meta.longName||meta.shortName||ticker);
     renderRatios(fd,ks,meta,closes,highs,lows,summary);
     renderQual();
     autoFillQual(fd, ks, closes, summary);
