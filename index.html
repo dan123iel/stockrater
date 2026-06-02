@@ -2605,6 +2605,7 @@ async function loadChartRange(range){
     const closes = chart.closes||[];
     const highs = chart.highs||[];
     const lows = chart.lows||[];
+    window._currentChartTimestamps = chart.timestamps||[];
     renderPriceChart(closes, highs, lows, range);
   }catch(e){
     console.error('Chart load error:', e);
