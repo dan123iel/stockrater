@@ -1117,6 +1117,7 @@ function selectFromHistory(ticker){
   document.getElementById('r-ticker').value = ticker;
   document.getElementById('search-dropdown').style.display='none';
   fetchCompany();
+  setTimeout(()=>{ document.getElementById('r-ticker').value=''; },300);
 }
 
 function hideDropdown(){ setTimeout(()=>{ const dd=document.getElementById('search-dropdown'); if(dd) dd.style.display='none'; },200); }
