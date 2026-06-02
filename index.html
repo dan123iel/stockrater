@@ -2582,25 +2582,11 @@ function renderPriceChart(closes, highs, lows, range){
     <path d="${areaPath}" class="chart-area"/>
     <!-- Price line -->
     <path d="${path}" fill="none" stroke="${lineColor}" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
-    <!-- X-axis labels -->
-    ${(()=>{
-      const rangeLabels = {
-        '1d':['Open','','Now'],
-        '5d':['5D ago','','Today'],
-        '1mo':['1M ago','2W ago','Today'],
-        '6mo':['6M ago','3M ago','Today'],
-        'ytd':['Jan','','Today'],
-        '1y':['12M ago','6M ago','Today'],
-        'max':['Start','Mid','Today'],
-      };
-      const labs = (rangeLabels[range])||['Start','Mid','Today'];
-      return [0, 0.5, 1].map(t=>{
-        const i = Math.floor(t*(n-1));
-        const x = cx(i);
-        const li = Math.round(t*2);
-        return `<text x="${x}" y="${H-pad.b+14}" fill="rgba(0,0,0,.3)" font-size="9" font-family="JetBrains Mono,monospace" text-anchor="middle">${labs[li]||''}</text>`;
-      }).join('');
-    })()}
+    ${[0,0.5,1].map((t,li)=>{
+      const xLabMap={'1d':['Open','Mid','Now'],'5d':['5D ago','Mid','Today'],'1mo':['1M ago','2W','Today'],'6mo':['6M ago','3M','Today'],'ytd':['Jan','Mid','Today'],'1y':['12M ago','6M ago','Today'],'max':['Start','Mid','Today']};
+      const labs=(xLabMap[range])||['Start','Mid','Today'];
+      const i=Math.floor(t*(n-1));return `<text x="${cx(i)}" y="${H-pad.b+14}" fill="rgba(0,0,0,.3)" font-size="9" font-family="JetBrains Mono,monospace" text-anchor="middle">${labs[li]}</text>`;
+    }).join('')}
     <!-- Current price dot + label -->
     <circle cx="${cx(n-1)}" cy="${cy(last)}" r="4" fill="${lineColor}" stroke="white" stroke-width="2"/>
     <text x="${cx(n-1)+8}" y="${cy(last)+4}" fill="${lineColor}" font-size="10" font-family="JetBrains Mono,monospace" font-weight="600">${last.toFixed(2)}</text>
