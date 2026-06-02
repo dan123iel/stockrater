@@ -25,6 +25,12 @@ export default {
       return handleChart(chartMatch[1].toUpperCase(), range);
     }
 
+    // /yahoo/search?q=query — search by name, ISIN, WKN
+    if (path === '/yahoo/search') {
+      const q = url.searchParams.get('q') || '';
+      return handleSearch(q);
+    }
+
     return corsResponse({ error: 'Unknown endpoint' }, 404);
   },
 };
@@ -109,6 +115,25 @@ async function handleSummary(ticker) {
     return corsResponse(flat);
   } catch (e) {
     return corsResponse({ error: e.message }, 500);
+  }
+}
+
+async function handleSearch(query) {
+  try {
+    const res = await fetch(
+      `https://query1.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(query)}&quotesCount=6&newsCount=0&listsCount=0`,
+      { headers: { 'User-Agent': 'Mozilla/5.0' } }
+    );
+    const json = await res.json();
+    const quotes = (json?.quotes || []).map(q => ({
+      symbol: q.symbol,
+      name: q.longname || q.shortname || q.symbol,
+      exchange: q.exchange,
+      type: q.quoteType,
+    })).filter(q => q.type === 'EQUITY' || q.type === 'ETF');
+    return corsResponse({ quotes });
+  } catch (e) {
+    return corsResponse({ error: e.message, quotes: [] }, 500);
   }
 }
 
