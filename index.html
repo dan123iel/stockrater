@@ -1124,8 +1124,8 @@ function selectFromHistory(ticker){
 
 function hideDropdown(){ setTimeout(()=>{ const dd=document.getElementById('search-dropdown'); if(dd) dd.style.display='none'; },200); }
 
-async function fetchCompany(){
-  const raw=document.getElementById('r-ticker').value.trim();
+async function fetchCompany(forceTicker){
+  const raw = forceTicker || document.getElementById('r-ticker').value.trim();
   if(!raw) return;
   document.getElementById('search-dropdown').style.display='none';
   const resolved = await resolveTickerInput(raw);
