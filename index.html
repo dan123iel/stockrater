@@ -1679,7 +1679,7 @@ function updateScorecard(){
   document.getElementById('scorecard-rows').innerHTML=rows.map(r=>{
     const c=scoreColor(r.score);
     const bar=(r.score/5)*100;
-    return `<div class="score-row" style="border-left:3px solid ${c};padding-left:10px;margin-left:-10px;border-radius:0 4px 4px 0">
+    return `<div class="score-row" style="padding-left:0">
       <span style="color:var(--text);font-weight:500">${r.label}</span>
       <span class="score-right">
         <span class="score-weight">${r.weight}</span>
