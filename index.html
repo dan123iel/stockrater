@@ -1523,18 +1523,18 @@ function renderRatioTable(sector, labels, ks){
         <td style="color:var(--text2)">${bench.label} ${arrow}</td>
         <td style="font-family:var(--mono);font-weight:600">${displayed}</td>
         <td style="font-family:var(--mono);font-size:.72rem;color:var(--text3)">≥${b5}</td>
-        <td style="min-width:220px;padding-right:8px">
-          <div style="display:flex;flex-direction:column;gap:5px">
-            <div style="display:flex;align-items:center;gap:8px">
-              <span title="Theory score (your benchmarks)" style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:#222;color:#fff;font-size:.5rem;font-weight:700;flex-shrink:0;letter-spacing:0">T</span>
-              <div style="flex:1;height:8px;background:var(--bg4);border-radius:4px;overflow:hidden">
+        <td style="width:40%;padding-right:8px">
+          <div style="display:flex;flex-direction:column;gap:5px;width:100%">
+            <div style="display:flex;align-items:center;gap:8px;width:100%">
+              <span title="Theory score (your benchmarks)" style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:#222;color:#fff;font-size:.5rem;font-weight:700;flex-shrink:0">T</span>
+              <div style="flex:1;min-width:0;height:8px;background:var(--bg4);border-radius:4px;overflow:hidden">
                 <div style="height:100%;width:${barWT}%;background:${colT};border-radius:4px;transition:width .6s ease"></div>
               </div>
               <span style="font-family:var(--mono);font-weight:700;font-size:.75rem;color:${colT};min-width:24px;text-align:right">${sc}.0</span>
             </div>
-            <div style="display:flex;align-items:center;gap:8px">
-              <span title="Sector score (S&P 500 median)" style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:#222;color:#fff;font-size:.5rem;font-weight:700;flex-shrink:0;letter-spacing:0">S</span>
-              <div style="flex:1;height:8px;background:var(--bg4);border-radius:4px;overflow:hidden">
+            <div style="display:flex;align-items:center;gap:8px;width:100%">
+              <span title="Sector score (S&P 500 median)" style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:#222;color:#fff;font-size:.5rem;font-weight:700;flex-shrink:0">S</span>
+              <div style="flex:1;min-width:0;height:8px;background:var(--bg4);border-radius:4px;overflow:hidden">
                 <div style="height:100%;width:${barWI}%;background:${colI};border-radius:4px;transition:width .6s ease"></div>
               </div>
               <span style="font-family:var(--mono);font-weight:700;font-size:.75rem;color:${colI};min-width:24px;text-align:right">${scI}.0</span>
