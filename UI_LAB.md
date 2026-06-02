@@ -955,9 +955,20 @@ border: 1px solid var(--border);
 ### 13.1 File Location
 
 ```
-src/pages/ui-lab.html       Main UI Lab page
-src/css/ui-lab.css          UI Lab specific styles (does not affect main app)
-src/js/ui-lab.js            UI Lab controls, token overrides, variant switching
+UI-Lab/                     ← standalone project, NOT inside Trading/
+  index.html                ← Lab interface
+  UI_LAB.md                 ← this document
+  src/
+    css/
+      variables.css         ← master token file (products copy from here)
+      lab.css               ← lab-only styles
+    js/
+      lab.js                ← controls, token overrides, variant switching
+```
+
+**Products consuming the UI Lab (e.g. vistaclara):**
+```
+Trading/files/src/css/variables.css   ← copies token values from UI Lab master
 ```
 
 ### 13.2 Token Override System
