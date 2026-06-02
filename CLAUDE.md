@@ -1,5 +1,7 @@
 # vistaclara — Equity Analysis Platform
 
+> **UI Lab Spec:** See `UI_LAB.md` for the complete design system, component gallery, layout/nav/hero variants, animation specs, dark mode, and all visual experiments — with full reference index to NVRMND, Locomotive, The Outline, Starface, Stripe, Glossier and other sources.
+
 ## Projektübersicht
 
 Single-page Equity Analysis App (eine `index.html`, kein Build-Step).
