@@ -1163,12 +1163,11 @@ function renderCompanyHero(meta,fd,ks){
   const isin=ks.isin||null;
   const wkn=ks.wkn||null;
   document.getElementById('company-hero').innerHTML=`
-    <div class="company-avatar" id="co-avatar" style="width:60px;height:60px;color:${col};border:1px solid ${col}33;background:${col}18;overflow:hidden;position:relative">
-      <img src="https://logo.clearbit.com/${domain}"
-           style="width:100%;height:100%;object-fit:contain;border-radius:4px"
-           onerror="this.style.display='none';document.getElementById('co-initials').style.display='flex'"
-           onload="document.getElementById('co-initials').style.display='none'">
-      <span id="co-initials" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;position:absolute;top:0;left:0;font-size:.85rem;font-weight:600;font-family:var(--mono)">${initials}</span>
+    <div class="company-avatar" id="co-avatar" style="width:60px;height:60px;color:${col};border:1px solid ${col}33;background:${col}18;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center">
+      ${domain?`<img src="https://logo.clearbit.com/${domain}"
+           style="width:100%;height:100%;object-fit:contain;border-radius:4px;position:absolute;top:0;left:0"
+           onerror="this.remove()">`:''}
+      <span style="font-size:.85rem;font-weight:600;font-family:var(--mono);z-index:1">${initials}</span>
     </div>
     <div class="company-info">
       <div class="company-name">${name}</div>
