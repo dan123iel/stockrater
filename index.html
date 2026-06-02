@@ -1383,14 +1383,14 @@ function renderRatios(fd,ks,meta,closes,highs,lows,summary){
   document.getElementById('key-metrics').innerHTML=`
     <div class="section-label">Key Metrics</div>
     <div class="metrics">
-      <div class="metric"><div class="metric-label">MARKET CAP</div><div class="metric-value">${fmtBig(marketCap)}</div></div>
-      <div class="metric"><div class="metric-label">REVENUE TTM</div><div class="metric-value">${fmtBig(totalRevenue)}</div></div>
-      <div class="metric"><div class="metric-label">EBITDA</div><div class="metric-value">${fmtBig(ebitda)}</div></div>
-      <div class="metric"><div class="metric-label">FREE CASH FLOW</div><div class="metric-value">${fmtBig(freeCashflow)}</div></div>
-      <div class="metric"><div class="metric-label">FORWARD P/E</div><div class="metric-value">${fmtNum(ks.forwardPE,1)}x</div></div>
-      <div class="metric"><div class="metric-label">52W RANGE</div><div class="metric-value" style="font-size:.82rem">${fmtNum(meta.fiftyTwoWeekLow,0)} – ${fmtNum(meta.fiftyTwoWeekHigh,0)}</div></div>
-      <div class="metric"><div class="metric-label">TOTAL ASSETS</div><div class="metric-value">${fmtBig(totalAssets)||'—'}</div></div>
-      <div class="metric"><div class="metric-label">TOTAL EQUITY</div><div class="metric-value">${fmtBig(totalEquity)||'—'}</div></div>
+      <div class="metric"><div class="metric-label">MARKET CAP</div><div class="metric-value">${fmtBig(marketCap)}</div><div class="metric-sub">${meta.currency||'USD'}</div></div>
+      <div class="metric"><div class="metric-label">REVENUE TTM</div><div class="metric-value">${fmtBig(totalRevenue)}</div><div class="metric-sub">${meta.currency||'USD'} · TTM</div></div>
+      <div class="metric"><div class="metric-label">EBITDA</div><div class="metric-value">${fmtBig(ebitda)}</div><div class="metric-sub">${meta.currency||'USD'}</div></div>
+      <div class="metric"><div class="metric-label">FREE CASH FLOW</div><div class="metric-value">${fmtBig(freeCashflow)}</div><div class="metric-sub">${meta.currency||'USD'}</div></div>
+      <div class="metric"><div class="metric-label">FORWARD P/E</div><div class="metric-value">${fmtNum(ks.forwardPE,1)}x</div><div class="metric-sub">Ratio</div></div>
+      <div class="metric"><div class="metric-label">52W RANGE</div><div class="metric-value" style="font-size:.82rem">${fmtNum(meta.fiftyTwoWeekLow,0)} – ${fmtNum(meta.fiftyTwoWeekHigh,0)}</div><div class="metric-sub">${meta.currency||'USD'}</div></div>
+      <div class="metric"><div class="metric-label">TOTAL ASSETS</div><div class="metric-value">${fmtBig(totalAssets)||'—'}</div><div class="metric-sub">${meta.currency||'USD'}</div></div>
+      <div class="metric"><div class="metric-label">TOTAL EQUITY</div><div class="metric-value">${fmtBig(totalEquity)||'—'}</div><div class="metric-sub">${meta.currency||'USD'}</div></div>
     </div>`;
 
   // Render ratio table for current period
