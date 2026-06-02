@@ -1104,6 +1104,7 @@ async function fetchCompany(){
     const closes=chart.closes||[];
     const highs=chart.highs||[];
     const lows=chart.lows||[];
+    window._currentChartTimestamps = chart.timestamps||[];
     currentCompany={ticker,fd,ks,meta,summary,closes,highs,lows};
     renderCompanyHero(meta,fd,ks);
     addToHistory(ticker, meta.longName||meta.shortName||ticker);
