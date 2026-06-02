@@ -1160,7 +1160,7 @@ async function fetchCompany(forceTicker){
     return;
   }
   const ticker = typeof resolved==='string' ? resolved : raw.toUpperCase();
-  if(ticker !== raw.toUpperCase()) document.getElementById('r-ticker').value=ticker;
+  document.getElementById('r-ticker').value = '';
   showProgress('start');
   showRatingLoading(true);
   document.getElementById('rating-error').style.display='none';
