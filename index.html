@@ -2528,31 +2528,70 @@ function initChartCrosshair(){
   wrap.addEventListener('mouseleave', ()=>{ ch.style.display='none'; });
 }
 
-function renderPriceChart(closes, highs, lows, range){
+function renderPriceChart(closes, highs, lows, rangeKey){
   const svg = document.getElementById('price-chart-svg');
   if(!svg||!closes||closes.length<2) return;
   const W=800, H=220, pad={t:15,r:15,b:30,l:52};
-  // Store data reference for crosshair
-  const svgEl = document.getElementById('price-chart-svg');
-  if(svgEl) svgEl._chartData = {closes, highs, lows, pad};
+  svg._chartData = {closes, highs, lows, pad};
   const valid = closes.filter(v=>v!=null);
   if(!valid.length) return;
   const minV = Math.min(...valid), maxV = Math.max(...valid);
-  const range = maxV - minV || 1;
+  const priceRange = maxV - minV || 1;
   const n = closes.length;
-
   function cx(i){ return pad.l + (i/(n-1))*(W-pad.l-pad.r); }
-  function cy(v){ return pad.t + (1-(v-minV)/range)*(H-pad.t-pad.b); }
+  function cy(v){ return pad.t + (1-(v-minV)/priceRange)*(H-pad.t-pad.b); }
 
-  // Build path
-  let path='', areaPath='';
-  let started=false;
+  let path='', areaPath='', started=false;
   for(let i=0;i<n;i++){
     if(closes[i]==null) continue;
     const x=cx(i), y=cy(closes[i]);
-    if(!started){ path=`M${x},${y}`; areaPath=`M${x},${H-pad.b} L${x},${y}`; started=true; }
-    else { path+=` L${x},${y}`; areaPath+=` L${x},${y}`; }
+    if(!started){ path='M'+x+','+y; areaPath='M'+x+','+(H-pad.b)+' L'+x+','+y; started=true; }
+    else { path+=' L'+x+','+y; areaPath+=' L'+x+','+y; }
   }
+  areaPath+=' L'+cx(n-1)+','+(H-pad.b)+' Z';
+  const last=valid[valid.length-1], first=valid[0];
+  const isUp=last>=first;
+  const lineColor=isUp?'#059669':'#dc2626';
+  const gradColor=lineColor;
+
+  const ns='http://www.w3.org/2000/svg';
+  svg.innerHTML='';
+  const defs=document.createElementNS(ns,'defs');
+  const grad=document.createElementNS(ns,'linearGradient');
+  grad.id='chartGrad'; grad.setAttribute('x1','0');grad.setAttribute('y1','0');grad.setAttribute('x2','0');grad.setAttribute('y2','1');
+  const s1=document.createElementNS(ns,'stop');s1.setAttribute('offset','0%');s1.setAttribute('stop-color',gradColor);s1.setAttribute('stop-opacity','.18');
+  const s2=document.createElementNS(ns,'stop');s2.setAttribute('offset','100%');s2.setAttribute('stop-color',gradColor);s2.setAttribute('stop-opacity','0');
+  grad.appendChild(s1);grad.appendChild(s2);defs.appendChild(grad);svg.appendChild(defs);
+
+  function el(tag,attrs){ const e=document.createElementNS(ns,tag); Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,v)); svg.appendChild(e); return e; }
+  function txt(x,y,t,fill,sz,anchor,fw){
+    const e=document.createElementNS(ns,'text');
+    e.setAttribute('x',x);e.setAttribute('y',y);e.setAttribute('fill',fill);e.setAttribute('font-size',sz);
+    e.setAttribute('font-family','JetBrains Mono,monospace');e.setAttribute('text-anchor',anchor||'middle');
+    if(fw)e.setAttribute('font-weight',fw); e.textContent=t; svg.appendChild(e);
+  }
+
+  [0,.25,.5,.75,1].forEach(t=>{
+    const v=minV+t*priceRange, y=cy(v), lbl=v>=1000?v.toFixed(0):v.toFixed(2);
+    el('line',{x1:pad.l,y1:y,x2:W-pad.r,y2:y,stroke:'rgba(0,0,0,.06)','stroke-width':1,'stroke-dasharray':'3,3'});
+    txt(pad.l-6,y+4,lbl,'rgba(0,0,0,.35)',9,'end');
+  });
+  el('line',{x1:pad.l,y1:pad.t,x2:pad.l,y2:H-pad.b,stroke:'rgba(0,0,0,.1)','stroke-width':1});
+  el('line',{x1:pad.l,y1:H-pad.b,x2:W-pad.r,y2:H-pad.b,stroke:'rgba(0,0,0,.1)','stroke-width':1});
+  el('path',{d:areaPath,fill:'url(#chartGrad)',opacity:.2});
+  el('path',{d:path,fill:'none',stroke:lineColor,'stroke-width':1.8,'stroke-linejoin':'round','stroke-linecap':'round'});
+
+  const xLabMap={'1d':['Open','Mid','Now'],'5d':['5D ago','Mid','Today'],'1mo':['1M ago','2W','Today'],'6mo':['6M ago','3M','Today'],'ytd':['Jan','Mid','Today'],'1y':['12M ago','6M ago','Today'],'max':['Start','Mid','Today']};
+  const xLabs=xLabMap[rangeKey]||['Start','Mid','Today'];
+  [0,.5,1].forEach((t,li)=>{ const i=Math.floor(t*(n-1)); txt(cx(i),H-pad.b+14,xLabs[li],'rgba(0,0,0,.3)',9,'middle'); });
+
+  el('circle',{cx:cx(n-1),cy:cy(last),r:4,fill:lineColor,stroke:'white','stroke-width':2});
+  txt(cx(n-1)+10,cy(last)+4,last.toFixed(2),lineColor,10,'start','600');
+  const minIdx=closes.indexOf(Math.min(...valid));
+  const maxIdx=closes.indexOf(Math.max(...valid));
+  if(minIdx>=0) txt(cx(minIdx),cy(Math.min(...valid))+14,Math.min(...valid).toFixed(2),'rgba(220,38,38,.6)',8,'middle');
+  if(maxIdx>=0) txt(cx(maxIdx),cy(Math.max(...valid))-6,Math.max(...valid).toFixed(2),'rgba(5,150,105,.6)',8,'middle');
+}
   areaPath+=` L${cx(n-1)},${H-pad.b} Z`;
 
   const first=valid[0], last=valid[valid.length-1];
