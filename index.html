@@ -427,9 +427,8 @@ code{background:var(--bg4);padding:2px 5px;border-radius:3px;font-size:.76em;fon
       <span style="color:var(--text3);align-self:center;flex-shrink:0;font-size:.85rem">↗</span>
       <input class="search-input" id="r-ticker"
         placeholder="Ticker, Name, ISIN, WKN — press Enter"
-        onkeydown="if(event.key==='Enter')fetchCompany()"
-        oninput="renderSearchDropdown(this.value)"
-        onfocus="renderSearchDropdown(this.value)"
+        onkeydown="if(event.key==='Enter'){document.getElementById('search-dropdown').style.display='none';fetchCompany()}"
+        onfocus="renderSearchDropdown('')"
         onblur="hideDropdown()">
       <button class="btn btn-primary" onclick="fetchCompany()">Analyse</button>
       <button class="btn btn-ghost btn-icon" onclick="clearRating()">✕</button>
@@ -442,6 +441,12 @@ code{background:var(--bg4);padding:2px 5px;border-radius:3px;font-size:.76em;fon
 
     <!-- HERO -->
     <div class="company-hero" id="company-hero"></div>
+
+    <!-- MARKET CONTEXT — price vs fundamentals, separate from scorecard -->
+    <div class="card" id="market-context-card" style="display:none">
+      <div class="card-title">Market Context <span style="font-size:.65rem;font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3)">— price signals, separate from fundamental scorecard</span></div>
+      <div id="market-context-content"></div>
+    </div>
 
     <!-- SCORECARD — directly below hero -->
     <div class="card" id="scorecard-card">
@@ -1102,6 +1107,7 @@ async function fetchCompany(){
     currentCompany={ticker,fd,ks,meta,summary,closes,highs,lows};
     renderCompanyHero(meta,fd,ks);
     addToHistory(ticker, meta.longName||meta.shortName||ticker);
+    renderMarketContext(meta, fd, ks, closes);
     renderRatios(fd,ks,meta,closes,highs,lows,summary);
     renderQual();
     autoFillQual(fd, ks, closes, summary);
@@ -2785,6 +2791,81 @@ function renderFinancialsChart(fd, ks, meta){
       ${fcfYield>0?`<div><div style="font-size:.62rem;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">FCF Yield</div><div style="font-size:1rem;font-weight:600;font-family:var(--mono);color:var(--green)">${fcfYield.toFixed(1)}%</div></div>`:''}
       ${epsG?`<div><div style="font-size:.62rem;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">EPS Growth</div><div style="font-size:1rem;font-weight:600;font-family:var(--mono);color:${epsG>=0?'var(--green)':'var(--red)'}">${epsG>=0?'+':''}${(epsG*100).toFixed(1)}%</div></div>`:''}
       ${revG?`<div><div style="font-size:.62rem;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Rev Growth</div><div style="font-size:1rem;font-weight:600;font-family:var(--mono);color:${revG>=0?'var(--green)':'var(--red)'}">${revG>=0?'+':''}${(revG*100).toFixed(1)}%</div></div>`:''}
+    </div>`;
+}
+
+// ==================== MARKET CONTEXT ====================
+function renderMarketContext(meta, fd, ks, closes){
+  const card = document.getElementById('market-context-card');
+  const el   = document.getElementById('market-context-content');
+  if(!card||!el) return;
+  card.style.display='block';
+
+  const price    = meta.regularMarketPrice||0;
+  const high52   = meta.fiftyTwoWeekHigh||0;
+  const low52    = meta.fiftyTwoWeekLow||0;
+  const prev     = meta.chartPreviousClose||price;
+  const chgPct   = prev>0?(price-prev)/prev*100:0;
+
+  // Trend: price vs SMA200 from closes
+  const sma200   = closes.length>=200 ? closes.slice(-200).filter(v=>v).reduce((a,b)=>a+b,0)/200 : null;
+  const aboveSma = sma200 ? price>sma200 : null;
+
+  // Volatility: 52W range width as % of mid
+  const mid52    = (high52+low52)/2;
+  const vol52    = mid52>0 ? (high52-low52)/mid52*100 : 0;
+  const volLabel = vol52>50?'High':vol52>25?'Moderate':'Low';
+  const volColor = vol52>50?'var(--red)':vol52>25?'var(--amber)':'var(--green)';
+
+  // Position in 52W range
+  const rangePos = (high52-low52)>0 ? (price-low52)/(high52-low52)*100 : 50;
+
+  // DCF fair value (from current DCF card if rendered)
+  const dcfVal = document.querySelector('.dcf-val');
+  const fairValue = dcfVal ? parseFloat(dcfVal.textContent) : null;
+  const upside = fairValue&&price ? (fairValue-price)/price*100 : null;
+
+  // Forward P/E context
+  const fpe = ks.forwardPE||0;
+  const peLabel = fpe>30?'Expensive':fpe>20?'Fair':fpe>10?'Cheap':'Very Cheap';
+  const peColor = fpe>30?'var(--red)':fpe>20?'var(--amber)':'var(--green)';
+
+  el.innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1px;background:var(--border);border-radius:var(--radius-sm);overflow:hidden;margin-bottom:1rem">
+      <div style="background:var(--bg);padding:1rem 1.1rem">
+        <div style="font-size:.6rem;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Trend (vs SMA 200)</div>
+        <div style="font-size:1.1rem;font-weight:600;color:${aboveSma===null?'var(--text2)':aboveSma?'var(--green)':'var(--red)'}">${aboveSma===null?'—':aboveSma?'↑ Uptrend':'↓ Downtrend'}</div>
+        <div style="font-size:.7rem;color:var(--text3);margin-top:3px;font-family:var(--mono)">${sma200?'SMA200: '+sma200.toFixed(2):'Need more data'}</div>
+      </div>
+      <div style="background:var(--bg);padding:1rem 1.1rem">
+        <div style="font-size:.6rem;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Volatility (52W)</div>
+        <div style="font-size:1.1rem;font-weight:600;color:${volColor}">${volLabel}</div>
+        <div style="font-size:.7rem;color:var(--text3);margin-top:3px;font-family:var(--mono)">${vol52.toFixed(0)}% range width</div>
+      </div>
+      <div style="background:var(--bg);padding:1rem 1.1rem">
+        <div style="font-size:.6rem;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">52W Position</div>
+        <div style="font-size:1.1rem;font-weight:600">${rangePos.toFixed(0)}%</div>
+        <div style="height:4px;background:var(--bg3);border-radius:4px;margin-top:6px;overflow:hidden;position:relative">
+          <div style="position:absolute;left:0;top:0;height:100%;width:${rangePos.toFixed(0)}%;background:${rangePos>80?'var(--red)':rangePos<20?'var(--green)':'var(--amber)'};border-radius:4px;transition:width .6s ease"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:.62rem;color:var(--text3);font-family:var(--mono);margin-top:3px"><span>${low52.toFixed(0)}</span><span>${high52.toFixed(0)}</span></div>
+      </div>
+      ${fpe>0?`<div style="background:var(--bg);padding:1rem 1.1rem">
+        <div style="font-size:.6rem;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Forward P/E</div>
+        <div style="font-size:1.1rem;font-weight:600;color:${peColor}">${fpe.toFixed(1)}x — ${peLabel}</div>
+        <div style="font-size:.7rem;color:var(--text3);margin-top:3px;font-family:var(--mono)">Market expectation</div>
+      </div>`:''}
+      ${upside!==null?`<div style="background:var(--bg);padding:1rem 1.1rem">
+        <div style="font-size:.6rem;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">DCF Upside</div>
+        <div style="font-size:1.1rem;font-weight:600;color:${upside>15?'var(--green)':upside<-15?'var(--red)':'var(--amber)'}">${upside>0?'+':''}${upside.toFixed(1)}%</div>
+        <div style="font-size:.7rem;color:var(--text3);margin-top:3px;font-family:var(--mono)">Fair value: ${fairValue.toFixed(2)}</div>
+      </div>`:''}
+    </div>
+    <div style="font-size:.68rem;color:var(--text3);line-height:1.5">
+      <strong style="color:var(--text2)">Note:</strong> Market Context is intentionally separate from the Scorecard. 
+      The Scorecard measures company quality (fundamental, timeless). 
+      Market Context shows price signals (speculative, short-term). 
+      A great company can be overpriced — and vice versa.
     </div>`;
 }
 
