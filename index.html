@@ -1209,11 +1209,10 @@ function scoreRatio(val,bench){
   return 1;
 }
 function scoreColor(sc){
-  if(sc>=4.5) return 'var(--green)';
-  if(sc>=3.5) return '#059669';
-  if(sc>=2.5) return 'var(--indigo)';
-  if(sc>=1.5) return 'var(--amber)';
-  return 'var(--red)';
+  if(sc>=4.0) return '#059669';   // grün
+  if(sc>=3.0) return '#7c3aed';   // lila/violet
+  if(sc>=2.0) return '#d97706';   // gelb/amber
+  return '#dc2626';               // rot
 }
 function fmtVal(val,bench){
   if(val===null||val===undefined||isNaN(val)||val===0) return '—';
