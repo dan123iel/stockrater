@@ -1084,16 +1084,7 @@ async function resolveTickerInput(raw){
   }
   // If it looks like a ticker already (short, uppercase), return as-is
   if(/^[A-Z0-9.\-^]{1,6}$/.test(upper)) return upper;
-  // Otherwise search via Yahoo API
-  try{
-    const w = getWorkerUrl();
-    const res = await fetch(w+'/yahoo/search?q='+encodeURIComponent(raw));
-    const data = await res.json();
-    if(data.quotes && data.quotes.length>0){
-      // Show dropdown and return first result
-      return {search: true, quotes: data.quotes};
-    }
-  }catch(e){}
+  // Otherwise treat as ticker directly (search endpoint not available)
   return upper;
 }
 
