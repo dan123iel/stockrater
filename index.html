@@ -1615,8 +1615,7 @@ function updateScorecard(){
   document.getElementById('scorecard-rows').innerHTML=rows.map(r=>{
     const c=scoreColor(r.score);
     const bar=(r.score/5)*100;
-    const bg = r.score>=4.5?'rgba(5,150,105,.06)':r.score>=3.5?'rgba(5,150,105,.03)':r.score<2.5?'rgba(220,38,38,.04)':'';
-    return `<div class="score-row" style="border-left:3px solid ${c};padding-left:10px;margin-left:-10px;background:${bg};border-radius:0 4px 4px 0">
+    return `<div class="score-row" style="border-left:3px solid ${c};padding-left:10px;margin-left:-10px;border-radius:0 4px 4px 0">
       <span style="color:var(--text);font-weight:500">${r.label}</span>
       <span class="score-right">
         <span class="score-weight">${r.weight}</span>
