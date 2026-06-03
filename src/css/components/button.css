@@ -1,51 +1,53 @@
 /* ── Buttons ── */
 .btn {
-  padding: .55rem 1.1rem;
-  border-radius: var(--radius-sm);
+  padding: .6rem 1.2rem;
+  border-radius: var(--radius-pill);
   cursor: pointer;
   font-size: .875rem;
   font-family: var(--font);
-  font-weight: 500;
-  border: 1px solid var(--border2);
-  background: var(--card);
+  font-weight: 600;
+  border: 1.5px solid var(--border2);
+  background: var(--bg2);
   color: var(--text2);
   transition: all .15s;
   white-space: nowrap;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   letter-spacing: -.01em;
 }
-.btn:hover  { background: var(--bg3); color: var(--text); border-color: var(--border2); }
-.btn:active { opacity: .75; }
+.btn:hover  { background: var(--bg3); color: var(--text); border-color: var(--text); }
+.btn:active { transform: scale(.97); }
 
 .btn-primary {
-  background: var(--text);
-  color: var(--bg);
+  background: var(--violet);
+  color: #fff;
   border: none;
-  font-weight: 600;
-  letter-spacing: -.015em;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  box-shadow: 0 4px 14px rgba(91,33,245,.3);
 }
-.btn-primary:hover { opacity: .82; background: var(--text); }
+.btn-primary:hover { opacity: .88; background: var(--violet); box-shadow: 0 6px 20px rgba(91,33,245,.4); }
 
-.btn-sm  { padding: .3rem .7rem; font-size: .75rem; }
+.btn-sm  { padding: .32rem .8rem; font-size: .75rem; }
 .btn-ghost { background: transparent; border-color: transparent; color: var(--text3); }
-.btn-ghost:hover { background: var(--glass2); border-color: var(--border); color: var(--text2); }
-.btn-icon { width: 32px; height: 32px; padding: 0; justify-content: center; }
+.btn-ghost:hover { background: var(--bg2); border-color: var(--border); color: var(--text2); }
+.btn-icon { width: 34px; height: 34px; padding: 0; justify-content: center; border-radius: var(--radius-sm); }
 
 /* ── Tags / Pills ── */
 .tag {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: .68rem;
-  padding: 2px 8px;
+  font-size: .65rem;
+  padding: 3px 9px;
   border-radius: 99px;
   font-family: var(--mono);
-  font-weight: 500;
-  letter-spacing: .01em;
+  font-weight: 600;
+  letter-spacing: .02em;
+  text-transform: uppercase;
 }
-.tag::before { content: ""; width: 4px; height: 4px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+.tag::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
 .tag-live     { background: var(--green-dim); color: var(--green); }
 .tag-manual   { background: var(--amber-dim); color: var(--amber); }
 .tag-required { background: var(--bg3); color: var(--text3); }
@@ -55,11 +57,11 @@
 .verdict-pill {
   display: inline-flex;
   align-items: center;
-  padding: 5px 14px;
+  padding: 5px 16px;
   border-radius: 99px;
-  font-size: .78rem;
-  font-weight: 700;
-  letter-spacing: .06em;
+  font-size: .75rem;
+  font-weight: 800;
+  letter-spacing: .08em;
   text-transform: uppercase;
   font-family: var(--mono);
 }
