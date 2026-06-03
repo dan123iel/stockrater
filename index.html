@@ -259,25 +259,27 @@
     <div class="card-title">Profit Targets</div>
     <div class="tp-grid" id="tp-grid"></div>
   </div>
-  <div style="margin-top:1rem;display:flex;gap:7px">
+  <div style="margin-top:1rem;display:flex;gap:7px;padding:0 2.5rem 2.5rem">
     <button class="btn btn-primary" onclick="saveTrade()">+ Save trade</button>
   </div>
+  </div><!-- /padding wrapper -->
 </div>
 
 <!-- ===== PORTFOLIO PAGE ===== -->
 <div class="page" id="page-portfolio">
   <div class="page-header">
     <div class="page-eyebrow">Overview</div>
-    <div class="page-title">My Portfolio</div>
-
+    <div class="page-title">My<br>Portfolio.</div>
   </div>
+  <div style="padding:1.5rem 2.5rem 0">
   <div class="card">
     <div class="card-title">Rated Companies</div>
     <ul class="company-list" id="portfolio-list"></ul>
   </div>
-  <div class="card" style="margin-top:.85rem">
+  <div class="card">
     <div class="card-title">Saved Trades</div>
     <ul class="company-list" id="trade-list"></ul>
+  </div>
   </div>
 </div>
 
@@ -285,11 +287,12 @@
 <div class="page" id="page-watchlist">
   <div class="page-header">
     <div class="page-eyebrow">Radar</div>
-    <div class="page-title">Watchlist</div>
-
+    <div class="page-title">Watch-<br>list.</div>
   </div>
+  <div style="padding:1.5rem 2.5rem 0">
   <div class="card">
     <ul class="company-list" id="watchlist-list"></ul>
+  </div>
   </div>
 </div>
 
@@ -297,9 +300,9 @@
 <div class="page" id="page-settings">
   <div class="page-header">
     <div class="page-eyebrow">Configuration</div>
-    <div class="page-title">Settings</div>
-
+    <div class="page-title">Settings.</div>
   </div>
+  <div style="padding:1.5rem 2.5rem 0">
   <div style="display:none"><input type="text" id="worker-url-input"></div>
   <div id="worker-url-status" style="display:none"></div>
   <div class="card">
@@ -310,15 +313,16 @@
       <button class="btn btn-sm" style="color:var(--red)" onclick="clearAll()">Clear all data</button>
     </div>
   </div>
+  </div>
 </div>
 
 <!-- ===== COMPARE PAGE ===== -->
 <div class="page" id="page-compare">
   <div class="page-header">
     <div class="page-eyebrow">Side-by-Side Analysis</div>
-    <div class="page-title">Company Comparison</div>
-
+    <div class="page-title">Compare.</div>
   </div>
+  <div style="padding:1.5rem 2.5rem 0">
   
   <div class="card">
     <div class="card-title">Load Companies</div>
