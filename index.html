@@ -1213,6 +1213,87 @@ body {
 
 </div><!-- /app -->
 
+<!-- ============================================================
+     FOOTER — Happly style: Farbfläche + Riesenschrift unten
+     ============================================================ -->
+<footer class="site-footer">
+  <div class="footer-top">
+    <div class="footer-tagline">
+      <div class="footer-tagline-big">equity<br>analysis.<br>reimagined.</div>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <div class="footer-col-title">Pages</div>
+        <div onclick="showPage('rating')"    style="cursor:pointer">Analysis</div>
+        <div onclick="showPage('compare')"   style="cursor:pointer">Compare</div>
+        <div onclick="showPage('trading')"   style="cursor:pointer">Risk Engine</div>
+        <div onclick="showPage('portfolio')" style="cursor:pointer">Portfolio</div>
+        <div onclick="showPage('watchlist')" style="cursor:pointer">Watchlist</div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Data</div>
+        <div>Yahoo Finance</div>
+        <div>Damodaran WACC</div>
+        <div>DCF Model</div>
+        <div>Fundamental Ratios</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-wordmark">vistaclara</div>
+  <div class="footer-bottom">
+    <span>All data client-side only · No cookies · No tracking</span>
+    <span>Built with ♥ · vistaclara © 2026</span>
+  </div>
+</footer>
+
+<style>
+.site-footer {
+  background: var(--hot);
+  color: #fff;
+  padding: 3rem 3rem 0;
+  position: relative;
+  overflow: hidden;
+  margin-top: 4rem;
+}
+.footer-top {
+  display: flex; gap: 3rem; justify-content: space-between;
+  flex-wrap: wrap; margin-bottom: 3rem;
+}
+.footer-tagline-big {
+  font-family: var(--body); font-size: clamp(1.5rem, 4vw, 2.2rem);
+  font-weight: 900; letter-spacing: -.04em; line-height: 1.1;
+  color: rgba(255,255,255,.9);
+}
+.footer-links { display: flex; gap: 3rem; flex-wrap: wrap; }
+.footer-col { display: flex; flex-direction: column; gap: .5rem; font-size: .875rem; color: rgba(255,255,255,.65); }
+.footer-col div:hover { color: #fff; cursor: pointer; }
+.footer-col-title { font-family: var(--mono); font-size: .6rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.4); margin-bottom: .25rem; }
+/* Riesige Wordmark — bricht aus dem Footer raus wie Happly */
+.footer-wordmark {
+  font-family: var(--display);
+  font-size: clamp(6rem, 22vw, 16rem);
+  letter-spacing: .01em;
+  line-height: .8;
+  color: rgba(255,255,255,.15);
+  margin-bottom: -0.2em;
+  user-select: none;
+  pointer-events: none;
+}
+.footer-bottom {
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+  padding: 1.25rem 0;
+  border-top: 1px solid rgba(255,255,255,.15);
+  font-family: var(--mono); font-size: .62rem;
+  color: rgba(255,255,255,.4);
+  letter-spacing: .04em;
+}
+@media (max-width: 600px) {
+  .site-footer { padding: 2rem 1.25rem 0; }
+  .footer-top { gap: 2rem; }
+  .footer-bottom { flex-direction: column; gap: .5rem; }
+}
+</style>
+
 <script>
 // Mobile nav helpers (new top nav)
 function toggleMobileNav() {
