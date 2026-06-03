@@ -208,33 +208,60 @@ body {
 }
 
 /* ============================================================
-   PAGE HERO — Happly style: riesige Schrift über Farbfläche
+   PAGE HERO — Happly style: riesige zentrierte Schrift über Farbfläche
+   Schrift bricht nach oben und unten raus
    ============================================================ */
 .page-hero {
   background: var(--ink);
-  padding: 4rem 3rem 3.5rem;
+  padding: 5rem 2rem 4rem;
   position: relative;
-  overflow: hidden;
-  min-height: 280px;
+  overflow: visible;        /* Schrift darf rausgehen */
+  min-height: 320px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  clip-path: inset(0);      /* clip nur visuell */
+}
+/* Sektions-Übergangs-Farbflächen wie The Outline #5/#6 */
+.page-hero + .ticker {
+  margin-top: 0;
 }
 /* Animierter Akzent-Blob */
 .page-hero::before {
   content: "";
   position: absolute;
-  width: 600px; height: 600px;
+  width: 700px; height: 700px;
   border-radius: 50%;
-  top: -200px; right: -150px;
+  top: -250px; right: -200px;
   animation: blob 8s ease-in-out infinite;
   pointer-events: none;
+  z-index: 0;
 }
-.page-hero[data-color="hot"]::before      { background: radial-gradient(circle, var(--hot) 0%, transparent 65%); opacity: .35; }
-.page-hero[data-color="electric"]::before { background: radial-gradient(circle, var(--electric) 0%, transparent 65%); opacity: .4; }
-.page-hero[data-color="tangerine"]::before{ background: radial-gradient(circle, var(--tangerine) 0%, transparent 65%); opacity: .35; }
-.page-hero[data-color="sky"]::before      { background: radial-gradient(circle, var(--sky) 0%, transparent 65%); opacity: .3; }
-.page-hero[data-color="acid"]::before     { background: radial-gradient(circle, var(--acid) 0%, transparent 65%); opacity: .25; }
+.page-hero[data-color="hot"]::before      { background: radial-gradient(circle, var(--hot) 0%, transparent 65%); opacity: .4; }
+.page-hero[data-color="electric"]::before { background: radial-gradient(circle, var(--electric) 0%, transparent 65%); opacity: .45; }
+.page-hero[data-color="tangerine"]::before{ background: radial-gradient(circle, var(--tangerine) 0%, transparent 65%); opacity: .4; }
+.page-hero[data-color="sky"]::before      { background: radial-gradient(circle, var(--sky) 0%, transparent 65%); opacity: .35; }
+.page-hero[data-color="acid"]::before     { background: radial-gradient(circle, var(--acid) 0%, transparent 65%); opacity: .3; }
+
+/* Zweiter Blob links unten für mehr Tiefe */
+.page-hero::after {
+  content: "";
+  position: absolute;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  bottom: -180px; left: -150px;
+  animation: blob 10s ease-in-out infinite reverse;
+  pointer-events: none;
+  z-index: 0;
+  opacity: .2;
+}
+.page-hero[data-color="hot"]::after      { background: radial-gradient(circle, var(--electric) 0%, transparent 65%); }
+.page-hero[data-color="electric"]::after { background: radial-gradient(circle, var(--hot) 0%, transparent 65%); }
+.page-hero[data-color="tangerine"]::after{ background: radial-gradient(circle, var(--hot) 0%, transparent 65%); }
+.page-hero[data-color="sky"]::after      { background: radial-gradient(circle, var(--electric) 0%, transparent 65%); }
+.page-hero[data-color="acid"]::after     { background: radial-gradient(circle, var(--tangerine) 0%, transparent 65%); }
 
 @keyframes blob {
   0%,100% { transform: scale(1) translate(0,0); }
@@ -257,14 +284,37 @@ body {
 .page-hero[data-color="sky"]       .page-eyebrow { color: var(--sky); }
 .page-hero[data-color="acid"]      .page-eyebrow { color: var(--acid); }
 
+/* Riesige zentrierte Schrift — ragt in den Content rein wie Happly */
 .page-title {
   font-family: var(--display);
-  font-size: clamp(4.5rem, 12vw, 9rem);
-  line-height: .9;
-  letter-spacing: .02em;
+  font-size: clamp(5rem, 16vw, 11rem);
+  line-height: .88;
+  letter-spacing: .01em;
   color: #fff;
   position: relative; z-index: 1;
+  text-align: center;
+  /* Margin-bottom negativ damit Schrift in nächste Sektion ragt */
+  margin-bottom: -1.5rem;
 }
+
+/* Farbige Sektions-Blöcke wie The Outline für Übergänge */
+.section-band {
+  width: 100%;
+  padding: 3rem 3rem 0;
+  position: relative;
+  overflow: hidden;
+}
+.section-band-title {
+  font-family: var(--display);
+  font-size: clamp(4rem, 12vw, 8rem);
+  line-height: .9;
+  letter-spacing: .02em;
+  text-align: center;
+  padding-bottom: 2rem;
+}
+.band-hot      { background: var(--hot); }      .band-hot      .section-band-title { color: rgba(255,255,255,.15); }
+.band-electric { background: var(--electric); } .band-electric .section-band-title { color: rgba(255,255,255,.15); }
+.band-acid     { background: var(--acid); }     .band-acid     .section-band-title { color: rgba(0,0,0,.1); }
 
 /* Scrollender Ticker unter Hero */
 .ticker {
