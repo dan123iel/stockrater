@@ -1,40 +1,42 @@
 /* Global typography */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font);
   font-size: 16px;
   line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Page headers */
+/* Page headers — editorial, generous */
 .page-eyebrow {
   font-size: .7rem;
   font-weight: 500;
-  letter-spacing: .08em;
+  letter-spacing: .12em;
   text-transform: uppercase;
   color: var(--text3);
-  margin-bottom: 6px;
+  margin-bottom: .5rem;
   font-family: var(--mono);
 }
 .page-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  letter-spacing: -.03em;
-  line-height: 1.2;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -.04em;
+  line-height: 1.1;
   color: var(--text);
 }
 
-/* Trend arrows */
-.trend-up   { color: #059669; font-weight: 700; font-size: .85rem; }
-.trend-flat { color: #d97706; font-weight: 600; font-size: .85rem; }
-.trend-down { color: #dc2626; font-weight: 700; font-size: .85rem; }
+/* Trend */
+.trend-up   { color: var(--green); font-weight: 700; font-size: .85rem; }
+.trend-flat { color: var(--amber); font-weight: 600; font-size: .85rem; }
+.trend-down { color: var(--red);   font-weight: 700; font-size: .85rem; }
 
-/* Monospace utilities */
 code {
-  background: var(--bg4);
-  padding: 2px 5px;
-  border-radius: 3px;
+  background: var(--bg3);
+  padding: 2px 6px;
+  border-radius: 4px;
   font-size: .76em;
   font-family: var(--mono);
   color: var(--text2);
