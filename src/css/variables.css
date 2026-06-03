@@ -1,50 +1,52 @@
 /* ── Design Tokens ── */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap');
+
 :root {
-  /* Surfaces */
-  --bg: #ffffff;
-  --bg2: #f9fafb;
-  --bg3: #f3f4f6;
-  --bg4: #e9eaec;
-  --bg5: #d1d5db;
+  /* Surfaces — cream-white base, not pure white */
+  --bg:  #f7f6f3;
+  --bg2: #f0efe9;
+  --bg3: #e8e6de;
+  --bg4: #dddbd0;
+  --bg5: #c9c6b8;
 
-  /* Glass / utility */
-  --glass: rgba(0,0,0,.02);
-  --glass2: rgba(0,0,0,.04);
+  /* Card surface — slightly whiter than bg */
+  --card: #faf9f6;
 
-  /* Borders */
-  --border: rgba(0,0,0,.07);
-  --border2: rgba(0,0,0,.13);
+  /* Glass */
+  --glass: rgba(0,0,0,.025);
+  --glass2: rgba(0,0,0,.05);
 
-  /* Typography */
-  --text: #111827;
-  --text2: #374151;
-  --text3: #6b7280;
+  /* Borders — warm */
+  --border:  rgba(0,0,0,.08);
+  --border2: rgba(0,0,0,.16);
 
-  /* Accent aliases */
-  --indigo: #7c3aed;
-  --indigo-light: #8b5cf6;
-  --indigo-dim: rgba(124,58,237,.08);
-  --indigo-glow: rgba(124,58,237,.12);
-  --violet: #7c3aed;
-  --cyan: #059669;
+  /* Typography — near-black, warm */
+  --text:  #1a1816;
+  --text2: #3d3a35;
+  --text3: #8a8679;
 
-  /* Semantic colors — only green / red / amber / violet */
-  --green: #059669;
-  --green-dim: rgba(5,150,105,.07);
-  --red: #dc2626;
-  --red-dim: rgba(220,38,38,.07);
-  --amber: #d97706;
-  --amber-dim: rgba(217,119,6,.07);
+  /* Semantic — same values, intentional */
+  --green:     #0a7c55;
+  --green-dim: rgba(10,124,85,.09);
+  --red:       #c0392b;
+  --red-dim:   rgba(192,57,43,.09);
+  --amber:     #b8860b;
+  --amber-dim: rgba(184,134,11,.09);
+  --violet:    #5b21b6;
+  --violet-dim:rgba(91,33,182,.08);
 
-  /* Geometry */
-  --radius: 8px;
-  --radius-sm: 6px;
-  --radius-lg: 10px;
+  /* Accent — used sparingly */
+  --accent: #1a1816;
+
+  /* Geometry — generous radius */
+  --radius:    12px;
+  --radius-sm:  8px;
+  --radius-lg: 16px;
 
   /* Fonts */
-  --font: 'Inter', sans-serif;
-  --mono: 'JetBrains Mono', monospace;
+  --font: 'DM Sans', sans-serif;
+  --mono: 'DM Mono', monospace;
 
   /* Layout */
-  --sidebar: 216px;
+  --sidebar: 220px;
 }
