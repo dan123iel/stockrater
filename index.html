@@ -766,26 +766,26 @@ body {
    ============================================================ */
 .btn {
   display: inline-flex; align-items: center; gap: 6px;
-  padding: .6rem 1.4rem; border-radius: var(--rm);
+  padding: .6rem 1.4rem; border-radius: var(--rl);
   font-family: var(--body); font-size: .875rem; font-weight: 700;
-  border: 2px solid var(--ink); background: var(--white); color: var(--ink);
+  border: 1.5px solid rgba(0,0,0,.15); background: var(--white); color: var(--ink);
   cursor: pointer; white-space: nowrap; letter-spacing: -.01em;
-  transition: transform .15s, box-shadow .15s;
-  box-shadow: 3px 3px 0 var(--ink);
+  transition: transform .15s, box-shadow .15s, background .15s;
+  box-shadow: 0 2px 8px rgba(0,0,0,.07);
 }
-.btn:hover { transform: translate(-2px,-2px); box-shadow: 5px 5px 0 var(--ink); }
-.btn:active { transform: translate(0,0); box-shadow: 1px 1px 0 var(--ink); }
+.btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.12); }
+.btn:active { transform: translateY(0); box-shadow: 0 1px 4px rgba(0,0,0,.08); }
 
 .btn-primary {
   background: var(--hot); color: #fff; border-color: var(--hot);
-  box-shadow: 3px 3px 0 var(--ink);
+  box-shadow: 0 4px 16px rgba(255,45,107,.35);
 }
-.btn-primary:hover { box-shadow: 5px 5px 0 var(--ink); }
+.btn-primary:hover { box-shadow: 0 8px 28px rgba(255,45,107,.45); background: var(--hot); }
 
-.btn-sm   { padding: .35rem .85rem; font-size: .78rem; }
-.btn-ghost { background: transparent; border-color: rgba(0,0,0,.2); color: var(--muted); box-shadow: none; }
-.btn-ghost:hover { box-shadow: 3px 3px 0 rgba(0,0,0,.15); border-color: var(--ink); color: var(--ink); }
-.btn-icon { width: 38px; height: 38px; padding: 0; justify-content: center; }
+.btn-sm   { padding: .35rem .85rem; font-size: .78rem; border-radius: var(--r); }
+.btn-ghost { background: transparent; border-color: rgba(0,0,0,.15); color: var(--muted); box-shadow: none; }
+.btn-ghost:hover { box-shadow: 0 2px 8px rgba(0,0,0,.08); border-color: var(--ink); color: var(--ink); }
+.btn-icon { width: 38px; height: 38px; padding: 0; justify-content: center; border-radius: var(--r); }
 
 /* ============================================================
    LOADING / ERROR / EMPTY
