@@ -1,56 +1,52 @@
-/* ── Design Tokens ── */
+/* ── Design Tokens — SCHRILLE EDITION ── */
 :root {
-  /* Surfaces — echtes weiß, Farbe kommt durch Akzente */
-  --bg:  #ffffff;
-  --bg2: #f5f5f3;
-  --bg3: #ebebea;
-  --bg4: #d8d8d5;
-  --bg5: #b8b8b4;
-
-  /* Card */
-  --card: #ffffff;
+  /* Backgrounds */
+  --bg:    #f5f2eb;   /* warmes off-white */
+  --bg2:   #edeae0;
+  --bg3:   #e0ddd3;
+  --bg4:   #c8c4b8;
+  --card:  #ffffff;
 
   /* Borders */
-  --border:  rgba(0,0,0,.09);
-  --border2: rgba(0,0,0,.18);
+  --border:  rgba(0,0,0,.1);
+  --border2: rgba(0,0,0,.22);
 
-  /* Typography */
-  --text:  #0d0d0d;
-  --text2: #3a3a3a;
-  --text3: #8a8a87;
+  /* Text */
+  --text:  #0a0a0a;
+  --text2: #2a2a2a;
+  --text3: #888880;
 
-  /* ── Akzentfarben — mutig, bewusst eingesetzt ── */
-  /* Lila — Hauptakzent, Sidebar active, CTA */
-  --violet:     #5b21f5;
-  --violet-dim: rgba(91,33,245,.1);
-  --violet-bg:  #f3f0ff;
+  /* ── SCHRILLE AKZENTFARBEN ── */
+  --electric: #4f00ff;      /* Electric Purple — Hauptakzent */
+  --electric-dim: rgba(79,0,255,.1);
+  --electric-bg:  rgba(79,0,255,.06);
 
-  /* Lime — sekundärer Akzent, positive Highlights */
-  --lime:     #c8f135;
-  --lime-dark:#8aad0e;
+  --hot:   #ff2d55;          /* Hot Pink/Red — sekundär */
+  --hot-dim: rgba(255,45,85,.1);
 
-  /* Coral/Peach — warmer Akzent */
-  --coral:    #ff5c3a;
-  --coral-bg: #fff3f0;
+  --lime:  #b8ff00;          /* Acid Lime — Highlight */
+  --lime-dark: #7aaa00;
 
-  /* Semantisch — Grün/Rot/Amber erhalten ihre Bedeutung */
-  --green:     #0d7a55;
-  --green-dim: rgba(13,122,85,.1);
-  --red:       #e03420;
-  --red-dim:   rgba(224,52,32,.1);
-  --amber:     #c47f00;
-  --amber-dim: rgba(196,127,0,.1);
+  --sky:   #00e5ff;          /* Electric Cyan */
+
+  /* Semantisch */
+  --green:     #00b87a;
+  --green-dim: rgba(0,184,122,.1);
+  --red:       #ff2d55;
+  --red-dim:   rgba(255,45,85,.1);
+  --amber:     #ff9500;
+  --amber-dim: rgba(255,149,0,.1);
 
   /* Geometry */
-  --radius:    14px;
-  --radius-sm:  9px;
-  --radius-lg: 20px;
-  --radius-pill: 999px;
+  --radius:    16px;
+  --radius-sm: 10px;
+  --radius-lg: 24px;
+  --pill:      999px;
 
   /* Fonts */
   --font: 'DM Sans', sans-serif;
   --mono: 'DM Mono', monospace;
 
   /* Layout */
-  --sidebar: 220px;
+  --sidebar: 240px;
 }
