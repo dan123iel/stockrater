@@ -10,34 +10,32 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Page headers — editorial, riesig */
+/* Page eyebrow — klein, mono */
 .page-eyebrow {
-  font-size: .72rem;
-  font-weight: 600;
-  letter-spacing: .14em;
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .18em;
   text-transform: uppercase;
-  color: var(--violet);
-  margin-bottom: .6rem;
+  color: var(--electric);
+  margin-bottom: .5rem;
   font-family: var(--mono);
 }
+
+/* Page title — RIESIG wie Happly/The Outline */
 .page-title {
-  font-size: 2.6rem;
-  font-weight: 800;
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 900;
   letter-spacing: -.05em;
-  line-height: 1.0;
+  line-height: .95;
   color: var(--text);
 }
 
-/* Trend */
-.trend-up   { color: var(--green); font-weight: 700; font-size: .85rem; }
-.trend-flat { color: var(--amber); font-weight: 600; font-size: .85rem; }
-.trend-down { color: var(--red);   font-weight: 700; font-size: .85rem; }
+.trend-up   { color: var(--green); font-weight: 800; font-size: .85rem; }
+.trend-flat { color: var(--amber); font-weight: 700; font-size: .85rem; }
+.trend-down { color: var(--red);   font-weight: 800; font-size: .85rem; }
 
 code {
   background: var(--bg3);
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: .76em;
-  font-family: var(--mono);
-  color: var(--text2);
+  padding: 2px 6px; border-radius: 4px;
+  font-size: .76em; font-family: var(--mono); color: var(--text2);
 }
