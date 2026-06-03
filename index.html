@@ -1319,6 +1319,28 @@ _mpages.forEach(p => {
     obs.observe(dn, { attributes: true, attributeFilter: ['class'] });
   }
 });
+
+// Auto-hide search bar when company loads
+(function() {
+  const wrap = document.getElementById('rating-content');
+  const searchWrap = document.querySelector('#page-rating .search-wrap');
+  if (!wrap || !searchWrap) return;
+  // Watch for rating-content becoming visible
+  const obs = new MutationObserver(() => {
+    if (wrap.style.display !== 'none' && wrap.style.display !== '') {
+      searchWrap.classList.add('hidden');
+    }
+  });
+  obs.observe(wrap, { attributes: true, attributeFilter: ['style'] });
+
+  // Show search again when clear button clicked
+  const clearBtn = document.querySelector('[onclick="clearRating()"]');
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      setTimeout(() => searchWrap.classList.remove('hidden'), 50);
+    });
+  }
+})();
 </script>
 </body>
 </html>
