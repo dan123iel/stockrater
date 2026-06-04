@@ -1109,7 +1109,7 @@ function hexToNavBg(hex) {
   const r = parseInt(hex.substring(0,2),16);
   const g = parseInt(hex.substring(2,4),16);
   const b = parseInt(hex.substring(4,6),16);
-  return 'rgba('+Math.round(r*.45)+','+Math.round(g*.45)+','+Math.round(b*.45)+',.75)';
+  return 'rgba('+Math.round(r*.5)+','+Math.round(g*.5)+','+Math.round(b*.5)+',.6)';
 }
 
 function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
