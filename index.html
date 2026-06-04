@@ -1150,6 +1150,86 @@ document.addEventListener('DOMContentLoaded', function() {
   const nav = document.getElementById('topnav');
   if (nav) nav.style.background = hexToNavBg(homeColor);
 });
+
+/* ============================================================
+   FULLSCREEN LOADER — intercepts rating-loading show/hide
+   ============================================================ */
+(function(){
+  const DOT_COUNT = 32;
+  const loaderEl = document.getElementById('fullscreen-loader');
+  const pctEl    = document.getElementById('loader-pct');
+  const dotsEl   = document.getElementById('loader-dots');
+  if (!loaderEl || !dotsEl) return;
+
+  // Build dots
+  for (let i = 0; i < DOT_COUNT; i++) {
+    const d = document.createElement('div');
+    d.className = 'loader-dot';
+    dotsEl.appendChild(d);
+  }
+
+  let animFrame;
+  let pct = 0;
+
+  function startLoader() {
+    loaderEl.classList.add('visible');
+    loaderEl.classList.remove('fading');
+    // Update loader bg to match current section color
+    const analysisColor = getComputedStyle(document.documentElement).getPropertyValue('--section-analysis-color').trim();
+    if (analysisColor) loaderEl.style.background = analysisColor;
+    pct = 0;
+    animateLoader();
+  }
+
+  function animateLoader() {
+    pct = Math.min(pct + (Math.random() * 3 + .5), 92);
+    updateDots(pct);
+    if (pctEl) pctEl.textContent = Math.round(pct) + '%';
+    animFrame = requestAnimationFrame(() => setTimeout(animateLoader, 80));
+  }
+
+  function stopLoader() {
+    cancelAnimationFrame(animFrame);
+    updateDots(100);
+    if (pctEl) pctEl.textContent = '100%';
+    setTimeout(() => {
+      loaderEl.classList.add('fading');
+      setTimeout(() => {
+        loaderEl.classList.remove('visible');
+        loaderEl.classList.remove('fading');
+      }, 350);
+    }, 200);
+  }
+
+  function updateDots(p) {
+    const filled = Math.round((p / 100) * DOT_COUNT);
+    dotsEl.querySelectorAll('.loader-dot').forEach((d, i) => {
+      d.classList.toggle('filled', i < filled);
+    });
+  }
+
+  // Watch rating-loading element
+  const ratingLoading = document.getElementById('rating-loading');
+  if (ratingLoading) {
+    const obs = new MutationObserver(() => {
+      const vis = ratingLoading.style.display !== 'none' && ratingLoading.style.display !== '';
+      if (vis) { startLoader(); }
+      else      { stopLoader(); }
+    });
+    obs.observe(ratingLoading, {attributes:true, attributeFilter:['style']});
+  }
+
+  // Also watch cmp-loading
+  const cmpLoading = document.getElementById('cmp-loading');
+  if (cmpLoading) {
+    const obs2 = new MutationObserver(() => {
+      const vis = cmpLoading.style.display !== 'none' && cmpLoading.style.display !== '';
+      if (vis) { startLoader(); }
+      else      { stopLoader(); }
+    });
+    obs2.observe(cmpLoading, {attributes:true, attributeFilter:['style']});
+  }
+})();
 </script>
 </body>
 </html>
