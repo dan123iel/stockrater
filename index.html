@@ -48,12 +48,58 @@ ul,ol{list-style:none}
   --section-search-color:#ff6b52;
 }
 
-/* ── Progress bar ── */
-.page-progress{position:fixed;top:0;left:0;height:3px;z-index:9999;background:linear-gradient(90deg,var(--hot),var(--electric),var(--acid));background-size:200%;animation:gradmove 1.5s linear infinite;width:0}
-@keyframes gradmove{0%{background-position:0%}100%{background-position:-200%}}
-.page-progress.loading{animation:pfill .7s ease forwards,gradmove 1.5s linear infinite}
-@keyframes pfill{0%{width:0}60%{width:72%}100%{width:90%}}
-.page-progress.done{width:100%;transition:width .1s,opacity .3s .2s;opacity:0}
+/* ── Fullscreen loading overlay ── */
+.fullscreen-loader{
+  display:none;
+  position:fixed;inset:0;
+  z-index:9000;
+  background:var(--section-analysis-color);
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  transition:opacity .3s;
+}
+.fullscreen-loader.visible{display:flex}
+.fullscreen-loader.fading{opacity:0}
+.loader-row{
+  width:min(700px,80vw);
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  margin-bottom:1.5rem;
+}
+.loader-label{
+  font-family:var(--mono);
+  font-size:.85rem;
+  font-weight:700;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.6);
+}
+.loader-pct{
+  font-family:var(--mono);
+  font-size:3rem;
+  font-weight:700;
+  letter-spacing:-.04em;
+  color:#fff;
+}
+.loader-dots{
+  width:min(700px,80vw);
+  display:flex;
+  gap:6px;
+  flex-wrap:nowrap;
+}
+.loader-dot{
+  width:14px;height:14px;
+  border-radius:50%;
+  background:rgba(255,255,255,.2);
+  flex-shrink:0;
+  transition:background .15s;
+}
+.loader-dot.filled{background:var(--acid)}
+
+/* ── Progress bar (thin top, kept for compat) ── */
+.page-progress{display:none}
 
 /* ============================================================
    FIXED NAV — Pill, transparent/colored per section
