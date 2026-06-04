@@ -40,6 +40,12 @@ ul,ol{list-style:none}
   --pill:999px;
   --r:18px;
   --rm:12px;
+  --section-home-color:#ff2d6b;
+  --section-analysis-color:#4a1ae8;
+  --section-compare-color:#2a0a40;
+  --section-portfolio-color:#0d0b2e;
+  --section-settings-color:#3d1060;
+  --section-search-color:#ff6b52;
 }
 
 /* ── Progress bar ── */
@@ -70,11 +76,6 @@ ul,ol{list-style:none}
   white-space:nowrap;
   transition:background .4s;
 }
-/* Nav adapts to section color */
-.topnav.on-hot{background:rgba(180,0,60,.5)}
-.topnav.on-electric{background:rgba(30,5,140,.6)}
-.topnav.on-plum{background:rgba(40,5,80,.6)}
-.topnav.on-aubergine{background:rgba(20,2,40,.65)}
 
 .tnav-item{
   font-size:.82rem;
@@ -94,27 +95,6 @@ ul,ol{list-style:none}
   font-weight:700;
 }
 
-/* Logo — shown on non-home sections */
-.nav-logo{
-  display:none;
-  align-items:center;
-  justify-content:center;
-  background:var(--hot);
-  color:#fff;
-  font-size:.72rem;
-  font-weight:900;
-  line-height:1.1;
-  text-align:center;
-  width:52px;
-  height:44px;
-  border-radius:10px;
-  margin-right:.5rem;
-  flex-shrink:0;
-  letter-spacing:-.02em;
-  cursor:pointer;
-}
-.topnav.show-logo .nav-logo{display:flex}
-
 /* ============================================================
    SECTIONS — each is 100vh, stacked vertically
    ============================================================ */
@@ -128,32 +108,38 @@ ul,ol{list-style:none}
 }
 
 /* ── SECTION: HOME ── */
-.section-home{background:var(--hot)}
+.section-home{background:var(--section-home-color)}
 
 .home-wordmark{
   position:absolute;
-  top:0;left:0;right:0;bottom:0;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  overflow:hidden;
   display:flex;
   flex-direction:column;
-  align-items:flex-start;
   justify-content:center;
-  padding:0 0 0 -2vw;
+  padding:0;
   pointer-events:none;
   user-select:none;
 }
 .home-word{
-  font-size:clamp(10rem,28vw,22rem);
+  font-size:clamp(16rem, 40vw, 38rem);
   font-weight:900;
   letter-spacing:-.04em;
-  line-height:.88;
+  line-height:.82;
   color:rgba(255,255,255,.18);
   white-space:nowrap;
-  padding-left:-.5vw;
+  margin-left:-1vw;
+}
+.home-word-second{
+  margin-top:-2rem;
 }
 
 /* ── SECTION: ANALYSIS ── */
 .section-analysis{
-  background:var(--electric);
+  background:var(--section-analysis-color);
   justify-content:space-between;
 }
 
@@ -165,13 +151,19 @@ ul,ol{list-style:none}
 }
 
 /* ── SECTION: COMPARE ── */
-.section-compare{background:var(--aubergine)}
+.section-compare{background:var(--section-compare-color)}
 
 /* ── SECTION: PORTFOLIO ── */
-.section-portfolio{background:var(--navy)}
+.section-portfolio{
+  background:var(--section-portfolio-color);
+  padding:6rem 2.5rem 3rem;
+}
 
 /* ── SECTION: SETTINGS ── */
-.section-settings{background:var(--plum)}
+.section-settings{
+  background:var(--section-settings-color);
+  padding:6rem 2.5rem 3rem;
+}
 
 /* ============================================================
    NAV INSIDE SECTION (top spacer)
@@ -190,7 +182,7 @@ ul,ol{list-style:none}
 .search-coral{
   display:flex;
   align-items:center;
-  background:var(--coral);
+  background:var(--section-search-color);
   border-radius:var(--pill);
   border:2px solid rgba(255,255,255,.15);
   padding:.5rem .5rem .5rem 1.75rem;
@@ -329,6 +321,24 @@ ul,ol{list-style:none}
 .card-acid{border-left:4px solid var(--lime)}
 .card-tangerine{border-left:4px solid var(--amber)}
 
+/* Cards inside dark sections (portfolio + settings) */
+.section-portfolio .card,
+.section-settings .card{
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.15);
+  color:#fff;
+  box-shadow:none;
+}
+.section-portfolio .card:hover,
+.section-settings .card:hover{
+  background:rgba(255,255,255,.16);
+  box-shadow:0 8px 32px rgba(0,0,0,.2);
+}
+.section-portfolio .card-label,
+.section-settings .card-label{
+  color:rgba(255,255,255,.5);
+}
+
 /* ============================================================
    METRICS
    ============================================================ */
@@ -455,6 +465,17 @@ ul,ol{list-style:none}
 .li-meta{font-family:var(--mono);font-size:.62rem;color:var(--muted);margin-top:2px}
 .li-score{padding:3px 10px;border-radius:var(--pill);font-family:var(--mono);font-size:.65rem;font-weight:700}
 
+/* Company list items white in dark sections */
+.section-portfolio .company-li,
+.section-settings .company-li{
+  border-bottom-color:rgba(255,255,255,.1);
+  color:#fff;
+}
+.section-portfolio .li-name,
+.section-settings .li-name{color:#fff}
+.section-portfolio .li-meta,
+.section-settings .li-meta{color:rgba(255,255,255,.5)}
+
 /* Section body */
 .section-body{background:var(--cream);padding:2.5rem;flex:1}
 .section-header{
@@ -475,13 +496,6 @@ ul,ol{list-style:none}
 .empty-icon{font-size:2.5rem;margin-bottom:1rem;opacity:.15}
 .section-label{font-family:var(--mono);font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--electric);margin:2rem 0 1rem;display:flex;align-items:center;gap:10px}
 .section-label::after{content:"";flex:1;height:1px;background:rgba(0,0,0,.08)}
-
-/* Ticker */
-.ticker{overflow:hidden;white-space:nowrap;padding:.55rem 0;flex-shrink:0}
-.ticker-inner{display:inline-block;animation:ticker 22s linear infinite}
-@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.ticker-item{display:inline-block;font-family:var(--mono);font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:0 1.25rem}
-.ticker-item::after{content:" ✦ ";opacity:.4}
 
 /* Compare winner/period tables */
 .winner-table{width:100%;border-collapse:collapse;font-size:.76rem;margin-top:1rem}
@@ -530,6 +544,7 @@ ul,ol{list-style:none}
   .section-search{padding:1.5rem 1.25rem 2rem}
   .result-header,.section-header{padding:5rem 1.5rem 1.5rem}
   .result-content-area,.section-body{padding:1.5rem}
+  .section-portfolio,.section-settings{padding:5rem 1.5rem 2rem}
   .form-grid,.form-grid-3{grid-template-columns:1fr}
   .tp-grid{grid-template-columns:1fr 1fr}
   .metrics{grid-template-columns:1fr 1fr}
@@ -550,7 +565,6 @@ ul,ol{list-style:none}
      FIXED NAV
      ============================================================ -->
 <nav class="topnav" id="topnav">
-  <div class="nav-logo" onclick="scrollToSection('home')">vista<br>clara</div>
   <div class="tnav-item active" id="tnav-home"      onclick="scrollToSection('home')">home</div>
   <div class="tnav-item"        id="tnav-analysis"  onclick="scrollToSection('analysis')">analysis</div>
   <div class="tnav-item"        id="tnav-compare"   onclick="scrollToSection('compare')">compare</div>
@@ -564,7 +578,7 @@ ul,ol{list-style:none}
 <section class="section section-home" id="section-home">
   <div class="home-wordmark">
     <div class="home-word">vista</div>
-    <div class="home-word">clara</div>
+    <div class="home-word home-word-second">clara</div>
   </div>
 </section>
 
@@ -573,24 +587,6 @@ ul,ol{list-style:none}
      ============================================================ -->
 <section class="section section-analysis" id="section-analysis">
   <div class="section-spacer"></div>
-
-  <!-- Ticker -->
-  <div class="ticker" style="background:rgba(255,255,255,.07);flex-shrink:0">
-    <div class="ticker-inner">
-      <span class="ticker-item" style="color:rgba(255,255,255,.5)">Equity Analysis</span>
-      <span class="ticker-item" style="color:rgba(255,255,255,.5)">DCF Valuation</span>
-      <span class="ticker-item" style="color:rgba(255,255,255,.5)">Fundamental Ratios</span>
-      <span class="ticker-item" style="color:rgba(255,255,255,.5)">vistaclara</span>
-      <span class="ticker-item" style="color:rgba(255,255,255,.5)">Risk Engine</span>
-      <span class="ticker-item" style="color:rgba(255,255,255,.5)">Scorecard</span>
-      <span class="ticker-item" style="color:rgba(255,255,255,.5)">Equity Analysis</span>
-      <span class="ticker-item" style="color:rgba(255,255,255,.5)">DCF Valuation</span>
-      <span class="ticker-item" style="color:rgba(255,255,255,.5)">Fundamental Ratios</span>
-      <span class="ticker-item" style="color:rgba(255,255,255,.5)">vistaclara</span>
-      <span class="ticker-item" style="color:rgba(255,255,255,.5)">Risk Engine</span>
-      <span class="ticker-item" style="color:rgba(255,255,255,.5)">Scorecard</span>
-    </div>
-  </div>
 
   <div style="flex:1"></div>
 
@@ -659,7 +655,7 @@ ul,ol{list-style:none}
       <div class="form-grid-3" style="background:rgba(74,26,232,.07);border-radius:var(--r);padding:1.25rem;margin-bottom:1rem">
         <div class="field"><label>Risk per trade (%)</label><input id="t-risk" type="number" value="0.2" step="0.01" oninput="calcTrade()"></div>
         <div class="field"><label>SMA 200</label><input id="t-sma" type="number" value="226" step="0.01" oninput="calcTrade()"></div>
-        <div class="field"><label>Market filter (S&P 500)</label>
+        <div class="field"><label>Market filter (S&amp;P 500)</label>
           <select id="t-mf" onchange="calcTrade()">
             <option value="Y">Y — above SMA200</option>
             <option value="N">N — below SMA200</option>
@@ -797,19 +793,6 @@ ul,ol{list-style:none}
 <section class="section section-compare" id="section-compare">
   <div class="section-spacer"></div>
 
-  <div class="ticker" style="background:rgba(255,255,255,.05)">
-    <div class="ticker-inner">
-      <span class="ticker-item" style="color:rgba(255,255,255,.35)">Side by Side</span>
-      <span class="ticker-item" style="color:rgba(255,255,255,.35)">Radar Chart</span>
-      <span class="ticker-item" style="color:rgba(255,255,255,.35)">6 Dimensions</span>
-      <span class="ticker-item" style="color:rgba(255,255,255,.35)">Up to 3 Companies</span>
-      <span class="ticker-item" style="color:rgba(255,255,255,.35)">Side by Side</span>
-      <span class="ticker-item" style="color:rgba(255,255,255,.35)">Radar Chart</span>
-      <span class="ticker-item" style="color:rgba(255,255,255,.35)">6 Dimensions</span>
-      <span class="ticker-item" style="color:rgba(255,255,255,.35)">Up to 3 Companies</span>
-    </div>
-  </div>
-
   <div style="flex:1"></div>
 
   <!-- Two acid search bars bottom like #22 -->
@@ -827,12 +810,8 @@ ul,ol{list-style:none}
         <button class="search-acid-btn" onclick="runCompare()">compare</button>
       </div>
     </div>
-    <!-- Optional 3rd -->
-    <div style="margin-top:.75rem">
-      <div class="search-acid" style="max-width:400px">
-        <input class="search-acid-input" id="cmp-t3" placeholder="search (optional 3rd)" onkeydown="if(event.key==='Enter')runCompare()" style="font-size:1rem">
-      </div>
-    </div>
+    <!-- Hidden 3rd ticker for JS compatibility -->
+    <input id="cmp-t3" type="hidden" value="">
   </div>
 </section>
 
@@ -859,23 +838,19 @@ ul,ol{list-style:none}
      SECTION: PORTFOLIO (incl. Watchlist)
      ============================================================ -->
 <section class="section section-portfolio" id="section-portfolio">
-  <div class="section-header">
-    <div class="section-eyebrow">Overview</div>
-    <div class="section-title">portfolio</div>
+  <div class="section-eyebrow">Overview</div>
+  <div class="section-title" style="margin-bottom:2rem">portfolio</div>
+  <div class="card card-tangerine">
+    <div class="card-label">Rated Companies</div>
+    <ul class="company-list" id="portfolio-list"></ul>
   </div>
-  <div class="section-body">
-    <div class="card card-tangerine">
-      <div class="card-label">Rated Companies</div>
-      <ul class="company-list" id="portfolio-list"></ul>
-    </div>
-    <div class="card">
-      <div class="card-label">Saved Trades</div>
-      <ul class="company-list" id="trade-list"></ul>
-    </div>
-    <div class="card card-electric">
-      <div class="card-label">Watchlist</div>
-      <ul class="company-list" id="watchlist-list"></ul>
-    </div>
+  <div class="card">
+    <div class="card-label">Saved Trades</div>
+    <ul class="company-list" id="trade-list"></ul>
+  </div>
+  <div class="card card-electric">
+    <div class="card-label">Watchlist</div>
+    <ul class="company-list" id="watchlist-list"></ul>
   </div>
 </section>
 
@@ -883,20 +858,16 @@ ul,ol{list-style:none}
      SECTION: SETTINGS
      ============================================================ -->
 <section class="section section-settings" id="section-settings">
-  <div class="section-header">
-    <div class="section-eyebrow">Configuration</div>
-    <div class="section-title">settings</div>
-  </div>
-  <div class="section-body">
-    <div style="display:none"><input type="text" id="worker-url-input"></div>
-    <div id="worker-url-status" style="display:none"></div>
-    <div class="card">
-      <div class="card-label">Cache &amp; Storage</div>
-      <div style="font-size:.875rem;color:#333;margin-bottom:1rem;line-height:1.6">API responses cached 1 hour. All data stored client-side only.</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn btn-sm" onclick="clearCache()">clear cache</button>
-        <button class="btn btn-sm" style="color:var(--red);border-color:var(--red)" onclick="clearAll()">clear all data</button>
-      </div>
+  <div class="section-eyebrow">Configuration</div>
+  <div class="section-title" style="margin-bottom:2rem">settings</div>
+  <div style="display:none"><input type="text" id="worker-url-input"></div>
+  <div id="worker-url-status" style="display:none"></div>
+  <div class="card">
+    <div class="card-label">Cache &amp; Storage</div>
+    <div style="font-size:.875rem;color:rgba(255,255,255,.7);margin-bottom:1rem;line-height:1.6">API responses cached 1 hour. All data stored client-side only.</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-sm" onclick="clearCache()">clear cache</button>
+      <button class="btn btn-sm" style="color:var(--red);border-color:var(--red)" onclick="clearAll()">clear all data</button>
     </div>
   </div>
 </section>
@@ -956,19 +927,24 @@ const navObserver = new IntersectionObserver((entries) => {
     document.querySelectorAll('.tnav-item').forEach(i => i.classList.remove('active'));
     const active = document.getElementById('tnav-' + id);
     if (active) active.classList.add('active');
-    // Show/hide logo
+    // Nav color per section — use dynamic colors from colorizer
     const nav = document.getElementById('topnav');
-    if (id === 'home') {
-      nav.classList.remove('show-logo');
-    } else {
-      nav.classList.add('show-logo');
+    const colorMap = {
+      home: '--section-home-color',
+      analysis: '--section-analysis-color',
+      result: '--section-analysis-color',
+      compare: '--section-compare-color',
+      portfolio: '--section-portfolio-color',
+      settings: '--section-settings-color'
+    };
+    const prop = colorMap[id];
+    if (prop) {
+      const sectionColor = getComputedStyle(document.documentElement).getPropertyValue(prop).trim();
+      // Darken by overlaying black at 40% opacity via the nav bg
+      nav.style.background = sectionColor ? hexToNavBg(sectionColor) : '';
     }
-    // Nav color per section
-    nav.className = nav.className.replace(/on-\w+/g,'').trim();
-    const colorMap = {home:'on-hot',analysis:'on-electric',result:'on-electric',compare:'on-aubergine',portfolio:'on-aubergine',settings:'on-plum'};
-    if (colorMap[id]) nav.classList.add(colorMap[id]);
   });
-}, {threshold: 0.3});
+}, {threshold: 0.2});
 
 SECTIONS.forEach(id => {
   const el = document.getElementById('section-' + id);
@@ -1076,6 +1052,51 @@ window.showPage = function(name) {
   });
   obs.observe(cmpResult, {attributes:true, attributeFilter:['style']});
 })();
+
+/* ============================================================
+   RANDOM SECTION COLORS ON EACH LOAD
+   ============================================================ */
+function hexToNavBg(hex) {
+  // Parse hex and create a darkened rgba background for the nav
+  hex = hex.replace('#','');
+  if (hex.length === 3) hex = hex.split('').map(c=>c+c).join('');
+  const r = parseInt(hex.substring(0,2),16);
+  const g = parseInt(hex.substring(2,4),16);
+  const b = parseInt(hex.substring(4,6),16);
+  return 'rgba('+Math.round(r*.45)+','+Math.round(g*.45)+','+Math.round(b*.45)+',.75)';
+}
+
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+document.addEventListener('DOMContentLoaded', function() {
+  const palettes = {
+    home:     ['#ff2d6b','#ff6b00','#cc00ff','#ff0088'],
+    analysis: ['#4a1ae8','#2200aa','#6600ff','#3300cc'],
+    compare:  ['#2a0a40','#1a0050','#3d0070','#0a1a60'],
+    portfolio:['#0d0b2e','#001a40','#0a2a1a','#1a0a30'],
+    settings: ['#3d1060','#2a0050','#1a0a50','#400030'],
+    search:   ['#ff6b52','#ff9500','#ff4488','#ff6600']
+  };
+
+  const homeColor     = pick(palettes.home);
+  const analysisColor = pick(palettes.analysis);
+  const compareColor  = pick(palettes.compare);
+  const portfolioColor= pick(palettes.portfolio);
+  const settingsColor = pick(palettes.settings);
+  const searchColor   = pick(palettes.search);
+
+  const root = document.documentElement;
+  root.style.setProperty('--section-home-color',      homeColor);
+  root.style.setProperty('--section-analysis-color',  analysisColor);
+  root.style.setProperty('--section-compare-color',   compareColor);
+  root.style.setProperty('--section-portfolio-color', portfolioColor);
+  root.style.setProperty('--section-settings-color',  settingsColor);
+  root.style.setProperty('--section-search-color',    searchColor);
+
+  // Also update nav background to match home section initially
+  const nav = document.getElementById('topnav');
+  if (nav) nav.style.background = hexToNavBg(homeColor);
+});
 </script>
 </body>
 </html>
