@@ -1287,8 +1287,10 @@ function calcTrade(){
 function saveToPortfolio(){
   if(!currentCompany){alert('Please load a company first.');return;}
   const {mgmt,moat,esg}=getQualSubs();
-  const total=currentRatioScore*0.70+mgmt*0.10+moat*0.05+esg*0.05;
-  const normalized=total/0.90;
+  // New weights: Financial 65%, Management 12%, Moat 10%, ESG 8%, Valuation 5%
+  const valScore = window._lastValuationScore || 3.0;
+  const total=currentRatioScore*0.65+mgmt*0.12+moat*0.10+esg*0.08+valScore*0.05;
+  const normalized=total/0.95;
   const verdict=normalized>=4.5?'Strong Buy':normalized>=3.5?'Buy':normalized>=2.5?'Hold':'Avoid';
   const name=currentCompany.meta?.longName||currentCompany.meta?.shortName||currentCompany.ticker;
   const entry={ticker:currentCompany.ticker,name,
