@@ -723,13 +723,18 @@ ul,ol{list-style:none}
 <nav class="topnav" id="topnav">
   <div class="tnav-brand" onclick="scrollToSection('home')">vistaclara<sup>®</sup></div>
   <div class="tnav-div"></div>
-  <div class="tnav-item active" id="tnav-home"      onclick="scrollToSection('home')">home</div>
-  <div class="tnav-item"        id="tnav-analysis"  onclick="scrollToSection('analysis')">analysis</div>
+  <div class="tnav-item active" id="tnav-analysis"  onclick="scrollToSection('analysis')">analysis</div>
   <div class="tnav-item"        id="tnav-compare"   onclick="scrollToSection('compare')">compare</div>
   <div class="tnav-item"        id="tnav-portfolio" onclick="scrollToSection('portfolio')">portfolio</div>
   <div class="tnav-item"        id="tnav-settings"  onclick="scrollToSection('settings')">settings</div>
   <div class="tnav-div"></div>
-  <div class="tnav-cta" onclick="scrollToSection('analysis')">analyse →</div>
+  <!-- Inline search in nav -->
+  <div class="tnav-search-wrap" id="tnav-search-wrap">
+    <input class="tnav-search-input" id="tnav-ticker" placeholder="ticker or company…"
+      onkeydown="if(event.key==='Enter'){navSearch();}"
+      onblur="setTimeout(()=>{if(!document.getElementById('tnav-ticker').value)closeNavSearch()},200)">
+  </div>
+  <div class="tnav-search-btn" id="tnav-search-btn" onclick="toggleNavSearch()" title="Search company">🔍</div>
 </nav>
 
 <!-- ============================================================
