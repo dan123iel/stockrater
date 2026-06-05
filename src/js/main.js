@@ -831,9 +831,9 @@ function scoreRatio(val,bench){
   return 1;
 }
 function scoreColor(sc){
-  if(sc>=3.5) return '#059669';   // grün
-  if(sc>=2.5) return '#d97706';   // gelb
-  return '#dc2626';               // rot
+  if(sc>=3.5) return '#059669';   // grün — CLAUDE.md
+  if(sc>=2.5) return '#d97706';   // amber — CLAUDE.md
+  return '#dc2626';               // rot — CLAUDE.md
 }
 function fmtVal(val,bench){
   if(val===null||val===undefined||isNaN(val)||val===0) return '—';
