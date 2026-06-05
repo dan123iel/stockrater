@@ -1088,7 +1088,9 @@ function saveToPortfolio(){
   const normalized=total/0.90;
   const verdict=normalized>=4.5?'Strong Buy':normalized>=3.5?'Buy':normalized>=2.5?'Hold':'Avoid';
   const name=currentCompany.meta?.longName||currentCompany.meta?.shortName||currentCompany.ticker;
-  const entry={ticker:currentCompany.ticker,name,sector:currentCompany.fd?.sector||'',
+  const entry={ticker:currentCompany.ticker,name,
+    sector:currentCompany.fd?.sector||currentCompany.summary?.assetProfile?.sector||'',
+    industry:currentCompany.fd?.industry||currentCompany.summary?.assetProfile?.industry||'',
     price:currentCompany.meta?.regularMarketPrice||0,score:normalized,verdict,ts:Date.now()};
   portfolio=portfolio.filter(p=>p.ticker!==entry.ticker);
   portfolio.unshift(entry);
