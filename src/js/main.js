@@ -938,6 +938,7 @@ function renderRatios(fd,ks,meta,closes,highs,lows,summary){
 
   // Render ratio table for current period
   renderRatioTable(sector, labels, ks);
+  renderStressTests(fd, ks, meta);
 
   currentRatioScore = calcRatioScore(buildRatioVals(fd, ks));
 
