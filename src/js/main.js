@@ -868,6 +868,215 @@ function trendArrow(curr, prev, inverted){
   return '<span class="trend-flat">→</span>';
 }
 
+
+// ==================== STRESS TESTS ====================
+function renderStressTests(fd, ks, meta){
+  const rev = fd.totalRevenue || 0;
+  const gm  = fd.grossMargins || 0;
+  const om  = fd.operatingMargins || 0;
+  const fcf = fd.freeCashflow || 0;
+  const debt = fd.totalDebt || 0;
+  const ebitda = fd.ebitda || 0;
+  const interest = fd.interestExpense || 0;
+  const waccInfo = getWaccInfo(fd);
+  const wacc = waccInfo.wacc;
+  const price = meta.regularMarketPrice || 0;
+  const sharesOut = ks.sharesOutstanding || 0;
+  const mcap = price * sharesOut;
+
+  // Helper: DCF simplified (5yr, terminal 2.5%)
+  function simpleDCF(fcfBase, waccAdj){
+    if(!fcfBase || fcfBase <= 0) return null;
+    const g = 0.05; const term = 0.025;
+    let pv = 0;
+    for(let i=1;i<=5;i++) pv += fcfBase * Math.pow(1+g,i) / Math.pow(1+waccAdj,i);
+    pv += (fcfBase * Math.pow(1+g,5) * (1+term)) / ((waccAdj-term) * Math.pow(1+waccAdj,5));
+    return sharesOut > 0 ? (pv - debt) / sharesOut : null;
+  }
+
+  const baseFV = simpleDCF(fcf, wacc);
+
+  // Revenue shock scenarios
+  const revenueShocks = [-0.10, -0.20, -0.30].map(shock => {
+    const newRev = rev * (1 + shock);
+    const newFCF = newRev * (om * 0.7); // rough FCF from op margin
+    const newDE  = rev > 0 ? debt / (newRev * 0.35) : null;
+    const icr    = interest > 0 ? (newRev * om) / Math.abs(interest) : null;
+    const fvAdj  = simpleDCF(newFCF, wacc);
+    const mosPct = (baseFV && fvAdj && price > 0) ? ((fvAdj - price)/price*100) : null;
+    return { shock, newRev, newFCF, newDE, icr, fvAdj, mosPct,
+      danger: (newDE && newDE > 3) || (icr !== null && icr < 1.5) };
+  });
+
+  // Margin compression
+  const marginShocks = [-0.05, -0.10].map(pp => {
+    const newGM = gm + pp;
+    const newOM = om + pp * 0.7;
+    const newFCF = rev * newOM * 0.7;
+    return { pp, newGM, newOM, newFCF,
+      danger: newOM < 0 };
+  });
+
+  // WACC sensitivity
+  const waccShocks = [0.01, 0.02, 0.03].map(dw => {
+    const newWacc = wacc + dw;
+    const fvAdj = simpleDCF(fcf, newWacc);
+    const drop = (baseFV && fvAdj) ? ((fvAdj - baseFV)/baseFV*100) : null;
+    return { dw, fvAdj, drop, danger: drop !== null && drop < -30 };
+  });
+
+  // FCF deterioration
+  const fcfShocks = [-0.25, -0.50].map(pct => {
+    const newFCF = fcf * (1 + pct);
+    const fvAdj = simpleDCF(newFCF, wacc);
+    const cfDebt = debt > 0 ? newFCF / debt : null;
+    return { pct, newFCF, fvAdj, cfDebt, danger: cfDebt !== null && cfDebt < 0.05 };
+  });
+
+  // Overall stress result
+  const dangerCount = [...revenueShocks, ...marginShocks, ...waccShocks, ...fcfShocks].filter(s => s.danger).length;
+  const stressLabel = dangerCount === 0 ? 'RESILIENT' : dangerCount <= 2 ? 'MODERATE RISK' : 'HIGH RISK';
+  const stressCol   = dangerCount === 0 ? '#00a86b'   : dangerCount <= 2 ? '#ff9500'       : '#ff2d6b';
+  window._lastStressLabel = stressLabel;
+  window._lastStressCol   = stressCol;
+
+  const fmt = (v, dec=1, suffix='') => (v===null||isNaN(v)) ? '—' : v.toFixed(dec)+suffix;
+
+  const card = `
+  <div class="card" style="margin-top:1rem">
+    <div class="card-label">
+      Stress Tests
+      <span style="background:${stressCol};color:#fff;padding:3px 10px;border-radius:0;font-size:.62rem;font-weight:800;letter-spacing:.08em;font-family:var(--mono)">${stressLabel}</span>
+      <span style="font-size:.6rem;font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)">— thesis breaks if:</span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+
+      <!-- Revenue Shock -->
+      <div>
+        <div style="font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem">A · Revenue Shock</div>
+        <table style="width:100%;border-collapse:collapse;font-size:.75rem">
+          <tr style="border-bottom:1px solid rgba(0,0,0,.07)">
+            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:left;padding:4px 6px">Shock</th>
+            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:right;padding:4px 6px">New Rev</th>
+            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:right;padding:4px 6px">ICR</th>
+            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:right;padding:4px 6px">FV/share</th>
+          </tr>
+          ${revenueShocks.map(s => `<tr style="border-bottom:1px solid rgba(0,0,0,.05)${s.danger?';background:rgba(255,45,107,.04)':''}">
+            <td style="font-family:var(--mono);color:${s.danger?'#ff2d6b':'var(--ink)'};font-weight:700;padding:5px 6px">${(s.shock*100).toFixed(0)}%</td>
+            <td style="font-family:var(--mono);text-align:right;padding:5px 6px;color:var(--ink2)">${fmtBig(s.newRev)}</td>
+            <td style="font-family:var(--mono);text-align:right;padding:5px 6px;color:${s.icr&&s.icr<1.5?'#ff2d6b':'var(--ink2)'}">${fmt(s.icr)}x</td>
+            <td style="font-family:var(--mono);text-align:right;padding:5px 6px;color:${s.danger?'#ff2d6b':'var(--ink2)'}">${s.fvAdj?fmtNum(s.fvAdj,2):'—'}</td>
+          </tr>`).join('')}
+        </table>
+      </div>
+
+      <!-- Margin Compression -->
+      <div>
+        <div style="font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem">B · Margin Compression</div>
+        <table style="width:100%;border-collapse:collapse;font-size:.75rem">
+          <tr style="border-bottom:1px solid rgba(0,0,0,.07)">
+            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:left;padding:4px 6px">−pp</th>
+            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:right;padding:4px 6px">Gross M</th>
+            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:right;padding:4px 6px">Op M</th>
+            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:right;padding:4px 6px">FCF est.</th>
+          </tr>
+          ${marginShocks.map(s => `<tr style="border-bottom:1px solid rgba(0,0,0,.05)${s.danger?';background:rgba(255,45,107,.04)':''}">
+            <td style="font-family:var(--mono);color:${s.danger?'#ff2d6b':'var(--ink)'};font-weight:700;padding:5px 6px">${(s.pp*100).toFixed(0)}pp</td>
+            <td style="font-family:var(--mono);text-align:right;padding:5px 6px;color:var(--ink2)">${fmt(s.newGM*100,1,'%')}</td>
+            <td style="font-family:var(--mono);text-align:right;padding:5px 6px;color:${s.danger?'#ff2d6b':'var(--ink2)'}">${fmt(s.newOM*100,1,'%')}</td>
+            <td style="font-family:var(--mono);text-align:right;padding:5px 6px">${fmtBig(s.newFCF)}</td>
+          </tr>`).join('')}
+        </table>
+      </div>
+
+      <!-- WACC Sensitivity -->
+      <div>
+        <div style="font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem">C · WACC +Δ → DCF Impact</div>
+        <table style="width:100%;border-collapse:collapse;font-size:.75rem">
+          <tr style="border-bottom:1px solid rgba(0,0,0,.07)">
+            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:left;padding:4px 6px">WACC +</th>
+            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:right;padding:4px 6px">New WACC</th>
+            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:right;padding:4px 6px">FV/share</th>
+            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:right;padding:4px 6px">FV drop</th>
+          </tr>
+          ${waccShocks.map(s => `<tr style="border-bottom:1px solid rgba(0,0,0,.05)${s.danger?';background:rgba(255,45,107,.04)':''}">
+            <td style="font-family:var(--mono);color:${s.danger?'#ff2d6b':'var(--ink)'};font-weight:700;padding:5px 6px">+${(s.dw*100).toFixed(0)}%</td>
+            <td style="font-family:var(--mono);text-align:right;padding:5px 6px;color:var(--ink2)">${fmt((wacc+s.dw)*100,1,'%')}</td>
+            <td style="font-family:var(--mono);text-align:right;padding:5px 6px">${s.fvAdj?fmtNum(s.fvAdj,2):'—'}</td>
+            <td style="font-family:var(--mono);text-align:right;padding:5px 6px;color:${s.danger?'#ff2d6b':'var(--ink2)'}">${fmt(s.drop,1,'%')}</td>
+          </tr>`).join('')}
+        </table>
+      </div>
+
+      <!-- FCF Deterioration -->
+      <div>
+        <div style="font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem">D · FCF Deterioration</div>
+        <table style="width:100%;border-collapse:collapse;font-size:.75rem">
+          <tr style="border-bottom:1px solid rgba(0,0,0,.07)">
+            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:left;padding:4px 6px">FCF</th>
+            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:right;padding:4px 6px">New FCF</th>
+            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:right;padding:4px 6px">CF/Debt</th>
+            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:right;padding:4px 6px">FV/share</th>
+          </tr>
+          ${fcfShocks.map(s => `<tr style="border-bottom:1px solid rgba(0,0,0,.05)${s.danger?';background:rgba(255,45,107,.04)':''}">
+            <td style="font-family:var(--mono);color:${s.danger?'#ff2d6b':'var(--ink)'};font-weight:700;padding:5px 6px">${(s.pct*100).toFixed(0)}%</td>
+            <td style="font-family:var(--mono);text-align:right;padding:5px 6px;color:var(--ink2)">${fmtBig(s.newFCF)}</td>
+            <td style="font-family:var(--mono);text-align:right;padding:5px 6px;color:${s.danger?'#ff2d6b':'var(--ink2)'}">${fmt(s.cfDebt,2,'x')}</td>
+            <td style="font-family:var(--mono);text-align:right;padding:5px 6px">${s.fvAdj?fmtNum(s.fvAdj,2):'—'}</td>
+          </tr>`).join('')}
+        </table>
+      </div>
+
+    </div>
+  </div>`;
+
+  // Insert into DOM — find or create stress-tests container
+  let el = document.getElementById('stress-tests-card');
+  if(!el){
+    el = document.createElement('div');
+    el.id = 'stress-tests-card';
+    const dcfCard = document.getElementById('dcf-card');
+    if(dcfCard) dcfCard.parentNode.insertBefore(el, dcfCard);
+  }
+  el.innerHTML = card;
+}
+
+// Build valuation flags + PEG — shown below key metrics [brief spec]
+function buildValuationFlags(ks, fd){
+  const fpe = ks.forwardPE || 0;
+  const evEbitda = ks.enterpriseToEbitda || 0;
+  const trailPE  = ks.trailingPE || 0;
+  const epsGrowth = (ks.earningsQuarterlyGrowth || fd.earningsGrowth || 0);
+  const peg = (fpe > 0 && epsGrowth > 0) ? fpe / (epsGrowth * 100) : null;
+  const pbRatio = ks.priceToBook || 0;
+  const psRatio = ks.priceToSalesTrailing12Months || 0;
+
+  // Valuation signal
+  let valSig = 'FAIR', valCol = '#ff9500';
+  let valScore = 3;
+  if(fpe > 0 && fpe < 12 && evEbitda > 0 && evEbitda < 9){ valSig='UNDERVALUED'; valCol='#00a86b'; valScore=4.5; }
+  else if(fpe > 50 || evEbitda > 30){ valSig='OVERVALUED'; valCol='#ff2d6b'; valScore=1.5; }
+  else if(fpe > 0 && fpe <= 25 && evEbitda > 0 && evEbitda <= 18){ valSig='FAIR'; valCol='#ff9500'; valScore=3; }
+  else if(fpe > 25 || evEbitda > 18){ valSig='OVERVALUED'; valCol='#ff2d6b'; valScore=2; }
+  window._lastValuationScore = valScore;
+
+  const flags = [];
+  if(fpe > 60) flags.push(`<span style="background:rgba(255,45,107,.15);color:#ff2d6b;border:1px solid rgba(255,45,107,.3);padding:3px 10px;border-radius:4px;font-family:var(--mono);font-size:.65rem;font-weight:700">⚠ P/E ${fmtNum(fpe,1)}x — EXTREME (>60x)</span>`);
+  if(evEbitda > 50) flags.push(`<span style="background:rgba(255,45,107,.15);color:#ff2d6b;border:1px solid rgba(255,45,107,.3);padding:3px 10px;border-radius:4px;font-family:var(--mono);font-size:.65rem;font-weight:700">⚠ EV/EBITDA ${fmtNum(evEbitda,1)}x — EXTREME (>50x)</span>`);
+  if(peg !== null && peg > 3) flags.push(`<span style="background:rgba(255,149,0,.12);color:#ff9500;border:1px solid rgba(255,149,0,.3);padding:3px 10px;border-radius:4px;font-family:var(--mono);font-size:.65rem;font-weight:700">⚠ PEG ${peg.toFixed(2)} — expensive vs growth</span>`);
+
+  const pegLabel = peg !== null ? `<span style="font-family:var(--mono);font-size:.7rem;color:${peg<1?'#00a86b':peg<2?'#ff9500':'#ff2d6b'};font-weight:700">PEG ${peg.toFixed(2)} ${peg<1?'↓ underval':peg<2?'→ fair':'↑ pricey'}</span>` : '';
+
+  return `<div style="margin-top:.75rem;display:flex;flex-wrap:wrap;align-items:center;gap:.5rem">
+    <span style="display:inline-flex;align-items:center;padding:4px 12px;border-radius:0;font-family:var(--mono);font-size:.68rem;font-weight:800;letter-spacing:.08em;background:${valCol};color:#fff">VALUATION: ${valSig}</span>
+    ${pegLabel}
+    ${pbRatio>0?`<span style="font-family:var(--mono);font-size:.7rem;color:var(--muted)">P/B ${fmtNum(pbRatio,2)}x</span>`:''}
+    ${psRatio>0?`<span style="font-family:var(--mono);font-size:.7rem;color:var(--muted)">P/S ${fmtNum(psRatio,2)}x</span>`:''}
+    ${flags.join('')}
+  </div>`;
+}
+
 // Global period state
 let _currentPeriod = 'ttm';
 let _periodData = {};
