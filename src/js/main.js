@@ -1014,7 +1014,7 @@ function renderStressTests(fd, ks, meta){
   // Overall stress result
   const dangerCount = [...revenueShocks, ...marginShocks, ...waccShocks, ...fcfShocks].filter(s => s.danger).length;
   const stressLabel = dangerCount === 0 ? 'RESILIENT' : dangerCount <= 2 ? 'MODERATE RISK' : 'HIGH RISK';
-  const stressCol   = dangerCount === 0 ? '#00a86b'   : dangerCount <= 2 ? '#ff9500'       : '#ff2d6b';
+  const stressCol   = dangerCount === 0 ? '#059669'   : dangerCount <= 2 ? '#d97706'       : '#dc2626';
   window._lastStressLabel = stressLabel;
   window._lastStressCol   = stressCol;
 
