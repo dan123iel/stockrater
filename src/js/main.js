@@ -521,6 +521,7 @@ function renderCompanyHero(meta,fd,ks){
         <span class="price-badge">${change>=0?'+':''}${pct.toFixed(2)}%</span>
       </div>
       <div style="display:flex;gap:6px;margin-top:10px;justify-content:flex-end">
+        <button class="btn btn-sm" onclick="saveToPortfolio()" title="Save to Portfolio" style="background:var(--hot);color:#fff;border-color:var(--hot)">+ Portfolio</button>
         <button class="btn btn-sm" onclick="saveToWatchlist()" title="Add to Watchlist">+ Watchlist</button>
         <button class="btn btn-sm" onclick="compareCurrent()" title="Compare with peers">Compare</button>
       </div>
