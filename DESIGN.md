@@ -205,15 +205,24 @@ Jede neue Sektion folgt diesem Template:
 
 ## Farbpaletten-Referenz
 
+**Digital Culture Palette (aktiv):**
 ```js
-const PALETTES = {
-  home:     ['#ff2d6b','#ff6b00','#cc00ff','#ff0088'],
-  analysis: ['#4a1ae8','#2200aa','#6600ff','#3300cc'],
-  compare:  ['#2a0a40','#1a0050','#3d0070','#0a1a60'],
-  portfolio:['#0d0b2e','#001a40','#0a2a1a','#1a0a30'],
-  settings: ['#3d1060','#2a0050','#1a0a50','#400030'],
-  search:   ['#ff6b52','#ff9500','#ff4488','#ff6600']
-}
+--electric: #5b21f5   // Hauptlila — Nav aktiv, Chips, Akzente
+--lime:     #c8ff00   // Acid-Lime — aktive Tabs, Highlights
+--dc-bg:    #f0edf5   // Basis — fast weißes Lavendel
+--dc-ink:   #1a1028   // Dunkeltext
+--dc-mid:   #6b5a8a   // Muted/Labels
+--hot:      #ff2d6b   // Home-Section, Fehler
+--green:    #00a86b   // Positiv / Chart steigend
+--red:      #e0302a   // Negativ / Chart fallend
+--amber:    #e08000   // Neutral / Hold
 ```
 
-Jede Sektion greift zufällig auf ihre Palette zu — so ist jeder Aufruf anders, aber immer kohärent.
+**Regel: Eine Fläche = eine Farbe.**
+Result-Sektion: `#f0edf5` Hintergrund, `#5b21f5` Text/Akzente. Kein Farbwechsel zwischen Header und Content.
+
+**Dateien:**
+- `index.html <style>` — sämtliches CSS (kein Build-Step)
+- `src/js/main.js` — Chart-Render, Score-Logik, Farben in SVG
+- `src/css/` — leer, nicht genutzt
+- `DESIGN.md` — dieses Dokument
