@@ -743,7 +743,11 @@ function clearRating(){
   document.getElementById('r-ticker').value='';
   document.getElementById('rating-content').style.display='none';
   document.getElementById('rating-error').style.display='none';
+  document.getElementById('search-dropdown').style.display='none';
   currentCompany=null;
+  // clear search history so next search starts fresh
+  searchHistory=[];
+  localStorage.removeItem('sr_search_history');
 }
 
 // ==================== COMPANY HERO ====================
