@@ -605,7 +605,7 @@ let _searchDebounce = null;
 function renderSearchDropdown(query){
   const dd = document.getElementById('search-dropdown');
   if(!dd) return;
-  if(!query || query.length < 2){ dd.style.display='none'; return; }
+  if(!query || query.length < 1){ dd.style.display='none'; return; }
   clearTimeout(_searchDebounce);
   _searchDebounce = setTimeout(async () => {
     // Try Yahoo Finance search via worker
