@@ -1130,15 +1130,15 @@ function getQualSubs(){
 }
 
 // ==================== SCORECARD ====================
-// Weights: Ratios 70%, Mgmt 10%, Moat 5%, ESG 5% = 90% → normalize to 100%
-// Actually from your Excel: Ratios 70%, Mgmt 10%, Moat 5%, ESG 5% → total 90%
-// We keep your exact weights, total = weighted sum / 0.9 to normalize to 5.0
+// Weights: Financial 65%, Mgmt 12%, Moat 10%, ESG 8%, Valuation 5% = 100%
 function updateScorecard(){
   const rs=currentRatioScore||0;
   const {mgmt,moat,esg}=getQualSubs();
-  const total=rs*0.70+mgmt*0.10+moat*0.05+esg*0.05;
-  // normalize to 5.0 scale (weights sum to 0.9)
-  const normalized=total/0.90;
+  // New weights: Financial 65%, Management 12%, Moat 10%, ESG 8%, Valuation 5%
+  const valScore = window._lastValuationScore || 3.0;
+  const total=rs*0.65+mgmt*0.12+moat*0.10+esg*0.08+valScore*0.05;
+  // normalize to 5.0 scale (weights sum to 0.95)
+  const normalized=total/0.95;
 
   const arc=document.getElementById('gauge-arc');
   const circ=2*Math.PI*40;
