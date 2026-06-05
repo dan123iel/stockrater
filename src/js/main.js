@@ -622,20 +622,33 @@ function renderSearchDropdown(query){
         }
       }
     } catch(e){}
-    // Fallback: fuzzy match NAME_TO_TICKER
+    // Fallback: fuzzy match NAME_TO_TICKER — prefix match (e.g. "grupo m" → "GRUPO MEXICO")
     const q = query.toUpperCase().trim();
     const matches = [];
+    // 1) prefix: name starts with query
     for(const [name, tickers] of Object.entries(NAME_TO_TICKER)){
-      if(name.includes(q) || q.includes(name.slice(0,q.length))){
+      if(name.startsWith(q)){
         matches.push({ticker: tickers[0], name: name.charAt(0)+name.slice(1).toLowerCase()});
-        if(matches.length >= 6) break;
       }
     }
-    if(matches.length){
-      renderDropdownItems(dd, matches);
+    // 2) contains: query appears anywhere in name
+    for(const [name, tickers] of Object.entries(NAME_TO_TICKER)){
+      if(!name.startsWith(q) && name.includes(q)){
+        matches.push({ticker: tickers[0], name: name.charAt(0)+name.slice(1).toLowerCase()});
+      }
+    }
+    // 3) ticker starts with query
+    for(const [name, tickers] of Object.entries(NAME_TO_TICKER)){
+      const t = tickers[0].toUpperCase();
+      if(t.startsWith(q) && !matches.find(m=>m.ticker===tickers[0])){
+        matches.push({ticker: tickers[0], name: name.charAt(0)+name.slice(1).toLowerCase()});
+      }
+    }
+    const limited = matches.slice(0, 8);
+    if(limited.length){
+      renderDropdownItems(dd, limited);
     } else {
-      // Show as direct ticker attempt
-      renderDropdownItems(dd, [{ticker: query.toUpperCase(), name: 'Search for "'+query+'"'}]);
+      renderDropdownItems(dd, [{ticker: query.toUpperCase(), name: 'Search "'+query+'"'}]);
     }
   }, 250);
 }
