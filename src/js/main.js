@@ -513,6 +513,7 @@ function renderCompanyHero(meta,fd,ks){
         <span class="meta-chip">${meta.symbol||''}</span>
         ${meta.exchangeName?`<span class="meta-chip">${meta.exchangeName}</span>`:''}
         ${sector?`<span class="meta-chip">${sector}</span>`:''}
+        ${fd.industry?`<span class="meta-chip" style="opacity:.7">${fd.industry}</span>`:''}
         ${meta.currency?`<span class="meta-chip">${meta.currency}</span>`:''}
         ${isin?`<span class="meta-chip">${isin}</span>`:''}
         ${wkn?`<span class="meta-chip">${wkn}</span>`:''}
