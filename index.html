@@ -751,22 +751,35 @@ ul,ol{list-style:none}
      SECTION: ANALYSIS — #21
      ============================================================ -->
 <section class="section section-analysis" id="section-analysis">
-  <!-- Conic gradient blob [Happly/gethapply] -->
+  <!-- Conic gradient blob -->
   <div style="position:absolute;top:0;right:0;width:55vw;height:65vh;pointer-events:none;z-index:0;background:conic-gradient(from 45deg at 80% 0%, rgba(74,26,232,.2), rgba(255,107,82,.12), rgba(0,255,136,.08), rgba(102,0,255,.15), rgba(74,26,232,.2));filter:blur(40px);opacity:.7"></div>
   <div class="section-spacer"></div>
 
-  <div style="flex:1"></div>
+  <!-- Center headline — tells user what to do -->
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 2rem;position:relative;z-index:1">
+    <div style="font-family:var(--mono);font-size:.68rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:1rem">equity analysis engine</div>
+    <div style="font-size:clamp(2.5rem,7vw,5.5rem);font-weight:900;letter-spacing:-.05em;line-height:.9;color:#fff;margin-bottom:1.5rem">analyse any<br>stock.</div>
+    <div style="font-size:1rem;color:rgba(255,255,255,.45);max-width:400px;line-height:1.65;margin-bottom:2rem">Enter a ticker, ISIN, or company name below — get a full fundamental analysis in seconds.</div>
+    <div style="display:flex;gap:.75rem;flex-wrap:wrap;justify-content:center">
+      <span style="font-family:var(--mono);font-size:.68rem;color:rgba(255,255,255,.3);letter-spacing:.06em">try: AAPL</span>
+      <span style="color:rgba(255,255,255,.15)">·</span>
+      <span style="font-family:var(--mono);font-size:.68rem;color:rgba(255,255,255,.3);letter-spacing:.06em">SAP</span>
+      <span style="color:rgba(255,255,255,.15)">·</span>
+      <span style="font-family:var(--mono);font-size:.68rem;color:rgba(255,255,255,.3);letter-spacing:.06em">NVDA</span>
+      <span style="color:rgba(255,255,255,.15)">·</span>
+      <span style="font-family:var(--mono);font-size:.68rem;color:rgba(255,255,255,.3);letter-spacing:.06em">BMW.DE</span>
+    </div>
+  </div>
 
-  <!-- Search bar bottom like #21 -->
-  <div class="section-search" style="position:relative">
+  <!-- Search bar bottom -->
+  <div class="section-search" style="position:relative;z-index:1">
     <div id="rating-loading-inline" style="display:none;text-align:center;padding:1rem 0">
       <div class="spinner-ring" style="border-color:rgba(255,255,255,.2);border-top-color:var(--coral)"></div>
     </div>
     <div id="rating-error" style="display:none;padding:.5rem 0"></div>
-
     <div class="search-coral" id="analysis-search-bar">
       <input class="search-coral-input" id="r-ticker"
-        placeholder="search"
+        placeholder="search ticker, ISIN, company…"
         onkeydown="if(event.key==='Enter'){document.getElementById('search-dropdown').style.display='none';fetchCompany()}"
         onfocus="renderSearchDropdown('')"
         onblur="hideDropdown()">
