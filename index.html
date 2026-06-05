@@ -1228,7 +1228,7 @@ function renderPortfolioAnalysis() {
   // ── 2. Sector breakdown ──
   const sectorMap = {};
   pf.forEach(c => {
-    const s = c.sector || 'Unknown';
+    const s = (c.sector && c.sector.trim()) ? c.sector : 'No sector data';
     sectorMap[s] = (sectorMap[s] || 0) + 1;
   });
   const sortedSectors = Object.entries(sectorMap).sort((a,b) => b[1]-a[1]);
