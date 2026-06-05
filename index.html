@@ -1460,9 +1460,9 @@ function renderPortfolioAnalysis() {
   const metricsRow = document.getElementById('pf-metrics-row');
   if (metricsRow) {
     // Score color
-    const scoreCol = avgScore >= 3.5 ? '#00ff88' : avgScore >= 2.5 ? '#ff9500' : '#ff2d6b';
+    const scoreCol = avgScore >= 3.5 ? '#059669' : avgScore >= 2.5 ? '#d97706' : '#dc2626';
     const scoreLabel = avgScore >= 3.5 ? 'above average' : avgScore >= 2.5 ? 'average' : 'below average';
-    const divCol = divScore >= 60 ? '#00ff88' : divScore >= 40 ? '#ff9500' : sectors.length === 0 ? 'rgba(255,255,255,.3)' : '#ff2d6b';
+    const divCol = divScore >= 60 ? '#059669' : divScore >= 40 ? '#d97706' : sectors.length === 0 ? 'rgba(255,255,255,.3)' : '#dc2626';
     metricsRow.innerHTML = `
       <div style="padding:1.25rem 1.5rem;border-right:1px solid rgba(255,255,255,.08)">
         <div style="font-family:var(--mono);font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:.5rem;font-weight:600">Positions</div>
