@@ -420,9 +420,19 @@ ul,ol{list-style:none}
 .card:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.09)}
 .card-label{
   font-family:var(--mono);font-size:.6rem;font-weight:700;
-  letter-spacing:.14em;text-transform:uppercase;
+  letter-spacing:.15em;text-transform:uppercase;
   color:var(--muted);margin-bottom:1.25rem;
   display:flex;align-items:center;gap:8px;
+}
+/* Sharp-corner section badge [theoutline] */
+.card-label > span.badge{
+  display:inline-block;
+  background:var(--ink);color:#fff;
+  padding:3px 8px;
+  border-radius:var(--badge-r,0px);
+  font-size:.6rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  font-family:var(--mono);
 }
 .card-hot{border-left:4px solid var(--hot)}
 .card-electric{border-left:4px solid var(--electric)}
