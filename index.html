@@ -1213,19 +1213,32 @@ function renderPortfolioAnalysis() {
 
   const metricsRow = document.getElementById('pf-metrics-row');
   if (metricsRow) {
-    const metrics = [
-      { label: 'Positions',       val: n,                    sub: 'in portfolio' },
-      { label: 'Avg Score',       val: avgScore.toFixed(2),  sub: avgScore >= 3.5 ? '✓ above average' : avgScore >= 2.5 ? '~ average' : '⚠ below average' },
-      { label: 'Sectors',         val: sectors.length || '?', sub: sectors.length ? 'unique' : 're-analyse to load' },
-      { label: 'Diversification', val: sectors.length ? divScore + '%' : '—', sub: divLabel },
-    ];
-    const borderStyle = '1px solid rgba(255,255,255,.1)';
-    metricsRow.innerHTML = metrics.map(m => `
-      <div style="padding:1rem 1.2rem;border-right:${borderStyle};border-bottom:${borderStyle}">
-        <div style="font-family:var(--mono);font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:5px;font-weight:600">${m.label}</div>
-        <div style="font-size:1.4rem;font-weight:900;color:#fff;letter-spacing:-.04em;line-height:1">${m.val}</div>
-        <div style="font-family:var(--mono);font-size:.56rem;color:rgba(255,255,255,.4);margin-top:3px">${m.sub}</div>
-      </div>`).join('');
+    // Score color
+    const scoreCol = avgScore >= 3.5 ? '#00ff88' : avgScore >= 2.5 ? '#ff9500' : '#ff2d6b';
+    const scoreLabel = avgScore >= 3.5 ? 'above average' : avgScore >= 2.5 ? 'average' : 'below average';
+    const divCol = divScore >= 60 ? '#00ff88' : divScore >= 40 ? '#ff9500' : sectors.length === 0 ? 'rgba(255,255,255,.3)' : '#ff2d6b';
+    metricsRow.innerHTML = `
+      <div style="padding:1.25rem 1.5rem;border-right:1px solid rgba(255,255,255,.08)">
+        <div style="font-family:var(--mono);font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:.5rem;font-weight:600">Positions</div>
+        <div style="font-size:2.5rem;font-weight:900;color:#fff;letter-spacing:-.06em;line-height:1">${n}</div>
+        <div style="font-family:var(--mono);font-size:.6rem;color:rgba(255,255,255,.35);margin-top:.3rem">holdings</div>
+      </div>
+      <div style="padding:1.25rem 1.5rem;border-right:1px solid rgba(255,255,255,.08)">
+        <div style="font-family:var(--mono);font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:.5rem;font-weight:600">Avg Score</div>
+        <div style="font-size:2.5rem;font-weight:900;color:${scoreCol};letter-spacing:-.06em;line-height:1">${avgScore.toFixed(1)}</div>
+        <div style="font-family:var(--mono);font-size:.6rem;color:${scoreCol};opacity:.7;margin-top:.3rem">${scoreLabel}</div>
+      </div>
+      <div style="padding:1.25rem 1.5rem;border-right:1px solid rgba(255,255,255,.08)">
+        <div style="font-family:var(--mono);font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:.5rem;font-weight:600">Sectors</div>
+        <div style="font-size:2.5rem;font-weight:900;color:#fff;letter-spacing:-.06em;line-height:1">${sectors.length || '—'}</div>
+        <div style="font-family:var(--mono);font-size:.6rem;color:rgba(255,255,255,.35);margin-top:.3rem">${sectors.length ? sectors.slice(0,2).join(', ') + (sectors.length > 2 ? ` +${sectors.length-2}` : '') : 're-analyse to load'}</div>
+      </div>
+      <div style="padding:1.25rem 1.5rem">
+        <div style="font-family:var(--mono);font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:.5rem;font-weight:600">Diversification</div>
+        <div style="font-size:2.5rem;font-weight:900;color:${divCol};letter-spacing:-.06em;line-height:1">${sectors.length ? divScore + '%' : '—'}</div>
+        <div style="font-family:var(--mono);font-size:.6rem;color:${divCol};opacity:.7;margin-top:.3rem">${divLabel}</div>
+      </div>
+    `;
   }
 
   // ── 2. Sector breakdown ──
