@@ -1160,10 +1160,11 @@ function updateScorecard(){
   vEl.textContent=verdict;
 
   const rows=[
-    {label:'1. Financial Ratios',score:rs,weight:'70%'},
-    {label:'2. Management Quality',score:mgmt,weight:'10%'},
-    {label:'3. Moat / Competitive',score:moat,weight:'5%'},
-    {label:'4. ESG & Risk',score:esg,weight:'5%'}
+    {label:'1. Financial Ratios',score:rs,weight:'65%'},
+    {label:'2. Management Quality',score:mgmt,weight:'12%'},
+    {label:'3. Moat / Competitive',score:moat,weight:'10%'},
+    {label:'4. ESG & Risk',score:esg,weight:'8%'},
+    {label:'5. Valuation',score:valScore,weight:'5%'}
   ];
   const col=scoreColor(normalized);
   document.getElementById('scorecard-rows').innerHTML=rows.map(r=>{
