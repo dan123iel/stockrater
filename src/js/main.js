@@ -601,9 +601,60 @@ function addToHistory(ticker, name){
   renderSearchDropdown('');
 }
 
+let _searchDebounce = null;
 function renderSearchDropdown(query){
   const dd = document.getElementById('search-dropdown');
-  if(dd) dd.style.display='none';
+  if(!dd) return;
+  if(!query || query.length < 2){ dd.style.display='none'; return; }
+  clearTimeout(_searchDebounce);
+  _searchDebounce = setTimeout(async () => {
+    // Try Yahoo Finance search via worker
+    const w = getWorkerUrl();
+    try {
+      // Yahoo search endpoint — try it
+      const res = await fetch(`${w}/yahoo/search?q=${encodeURIComponent(query)}&limit=8`);
+      if(res.ok){
+        const data = await res.json();
+        const quotes = (data.quotes||data.results||[]).slice(0,8).filter(q=>q.symbol);
+        if(quotes.length){
+          renderDropdownItems(dd, quotes.map(q=>({ticker:q.symbol, name:q.shortname||q.longname||q.symbol, type:q.quoteType||''})));
+          return;
+        }
+      }
+    } catch(e){}
+    // Fallback: fuzzy match NAME_TO_TICKER
+    const q = query.toUpperCase().trim();
+    const matches = [];
+    for(const [name, tickers] of Object.entries(NAME_TO_TICKER)){
+      if(name.includes(q) || q.includes(name.slice(0,q.length))){
+        matches.push({ticker: tickers[0], name: name.charAt(0)+name.slice(1).toLowerCase()});
+        if(matches.length >= 6) break;
+      }
+    }
+    if(matches.length){
+      renderDropdownItems(dd, matches);
+    } else {
+      // Show as direct ticker attempt
+      renderDropdownItems(dd, [{ticker: query.toUpperCase(), name: 'Search for "'+query+'"'}]);
+    }
+  }, 250);
+}
+
+function renderDropdownItems(dd, items){
+  dd.innerHTML = items.map(item => `
+    <div class="search-dd-item" onmousedown="event.preventDefault();selectSearchItem('${item.ticker}')">
+      <span class="search-dd-ticker">${item.ticker}</span>
+      <span class="search-dd-name">${item.name||''}</span>
+      ${item.type ? `<span style="font-family:var(--mono);font-size:.6rem;color:var(--dc-mid);flex-shrink:0">${item.type}</span>` : ''}
+    </div>`).join('');
+  dd.style.display = 'block';
+}
+
+function selectSearchItem(ticker){
+  document.getElementById('search-dropdown').style.display='none';
+  const inp = document.getElementById('r-ticker');
+  if(inp){ inp.value=''; inp.blur(); }
+  fetchCompany(ticker);
 }
 
 function removeFromHistory(idx){
