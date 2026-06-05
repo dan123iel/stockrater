@@ -869,7 +869,8 @@ ul,ol{list-style:none}
       <input class="search-coral-input" id="r-ticker"
         placeholder="search ticker, ISIN, company…"
         onkeydown="if(event.key==='Enter'){document.getElementById('search-dropdown').style.display='none';fetchCompany()}"
-        onfocus="renderSearchDropdown('')"
+        oninput="renderSearchDropdown(this.value)"
+        onfocus="renderSearchDropdown(this.value)"
         onblur="hideDropdown()">
       <button class="search-coral-btn" onclick="fetchCompany()">analyse</button>
     </div>
