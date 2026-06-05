@@ -1204,9 +1204,9 @@ function renderPortfolioAnalysis() {
 
   // ── 1. Top metrics ──
   const avgScore   = pf.reduce((s,c) => s + (c.score||0), 0) / n;
-  const sectors    = [...new Set(pf.map(c => c.sector || 'Unknown').filter(Boolean))];
-  const divScore   = Math.round((sectors.length / Math.min(n, 8)) * 100);
-  const avgPrice   = pf.reduce((s,c) => s + (c.price||0), 0) / n;
+  const sectors    = [...new Set(pf.map(c => c.sector).filter(s => s && s.trim()))];
+  const divScore   = sectors.length === 0 ? 0 : Math.round((Math.min(sectors.length, 5) / 5) * 100);
+  const divLabel   = divScore >= 80 ? '✓ well diversified' : divScore >= 60 ? '~ moderate' : divScore >= 40 ? '⚠ low' : sectors.length === 0 ? '— no sector data yet' : '⚠ very low';
 
   const metricsRow = document.getElementById('pf-metrics-row');
   if (metricsRow) {
