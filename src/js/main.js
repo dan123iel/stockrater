@@ -1103,14 +1103,6 @@ function saveToWatchlist(){
   localStorage.setItem('sr_watchlist',JSON.stringify(watchlist));
   renderWatchlist();updateBadges();
   showToast(`${entry2.name} added to watchlist`,'#c8ff00');
-  const name=currentCompany.meta?.longName||currentCompany.meta?.shortName||currentCompany.ticker;
-  const entry={ticker:currentCompany.ticker,name,price:currentCompany.meta?.regularMarketPrice||0,
-    sector:currentCompany.fd?.sector||'',ts:Date.now()};
-  watchlist=watchlist.filter(w=>w.ticker!==entry.ticker);
-  watchlist.unshift(entry);
-  localStorage.setItem('sr_watchlist',JSON.stringify(watchlist));
-  renderWatchlist();updateBadges();
-  alert(`${entry.name} added to watchlist.`);
 }
 function saveTrade(){
   const entry={name:gv('t-name'),isin:gv('t-isin'),ticker:gv('t-ticker'),
