@@ -1320,7 +1320,7 @@ function renderRatioTable(sector, labels, ks){
           <span><span style="color:#059669;font-weight:700">★5</span> ≥${fmtThresh(sb.s5,bench)}</span>
           <span><span style="color:#5b21f5;font-weight:600">★4</span> ≥${fmtThresh(sb.s4,bench)}</span>
           <span><span style="color:#d97706">★3</span> ≥${fmtThresh(sb.s3,bench)}</span>
-          <span><span style="color:#e08000">★2</span> ≥${fmtThresh(sb.s2,bench)}</span>
+          <span><span style="color:#d97706">★2</span> ≥${fmtThresh(sb.s2,bench)}</span>
           <span style="color:#dc2626">★1</span>
         </span>`;
       } else {
