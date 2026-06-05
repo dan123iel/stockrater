@@ -186,21 +186,18 @@ ul,ol{list-style:none}
   font-weight:700;
 }
 
-/* Right CTA — Lupe */
+/* Right CTA — Lupe ohne Kreis */
 .tnav-search-btn{
   display:flex;align-items:center;justify-content:center;
-  width:32px;height:32px;
-  background:rgba(255,255,255,.1);
-  border:1px solid rgba(255,255,255,.15);
-  border-radius:var(--pill);
+  width:28px;height:28px;
+  background:none;border:none;padding:0;
   cursor:pointer;
-  color:rgba(255,255,255,.7);
-  font-size:1rem;
-  margin-left:.25rem;
-  transition:background .15s,color .15s;
+  color:rgba(255,255,255,.5);
+  margin-left:.5rem;
+  transition:color .15s;
   flex-shrink:0;
 }
-.tnav-search-btn:hover{background:rgba(255,255,255,.2);color:#fff}
+.tnav-search-btn:hover{color:#fff}
 
 /* Inline nav search — expands when active */
 .tnav-search-wrap{
