@@ -1147,12 +1147,12 @@ function buildValuationFlags(ks, fd){
   const psRatio = ks.priceToSalesTrailing12Months || 0;
 
   // Valuation signal
-  let valSig = 'FAIR', valCol = '#ff9500';
+  let valSig = 'FAIR', valCol = '#d97706';
   let valScore = 3;
-  if(fpe > 0 && fpe < 12 && evEbitda > 0 && evEbitda < 9){ valSig='UNDERVALUED'; valCol='#00a86b'; valScore=4.5; }
-  else if(fpe > 50 || evEbitda > 30){ valSig='OVERVALUED'; valCol='#ff2d6b'; valScore=1.5; }
-  else if(fpe > 0 && fpe <= 25 && evEbitda > 0 && evEbitda <= 18){ valSig='FAIR'; valCol='#ff9500'; valScore=3; }
-  else if(fpe > 25 || evEbitda > 18){ valSig='OVERVALUED'; valCol='#ff2d6b'; valScore=2; }
+  if(fpe > 0 && fpe < 12 && evEbitda > 0 && evEbitda < 9){ valSig='UNDERVALUED'; valCol='#059669'; valScore=4.5; }
+  else if(fpe > 50 || evEbitda > 30){ valSig='OVERVALUED'; valCol='#dc2626'; valScore=1.5; }
+  else if(fpe > 0 && fpe <= 25 && evEbitda > 0 && evEbitda <= 18){ valSig='FAIR'; valCol='#d97706'; valScore=3; }
+  else if(fpe > 25 || evEbitda > 18){ valSig='OVERVALUED'; valCol='#dc2626'; valScore=2; }
   window._lastValuationScore = valScore;
 
   const flags = [];
