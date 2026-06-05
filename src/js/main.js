@@ -1128,7 +1128,7 @@ function renderPortfolio(){
     return `<li class="company-li stagger-in" style="animation-delay:${i*35}ms;cursor:pointer" onclick="analyseFromList('${c.ticker}')">
       <div class="li-avatar" style="background:${bg};color:${col}">${(c.ticker||'?').slice(0,2)}</div>
       <div style="flex:1"><div class="li-name">${c.name||c.ticker}</div>
-      <div class="li-meta">${c.ticker}${c.sector?' · '+c.sector:''}${c.price?' · $'+fmtNum(c.price,2):''}</div></div>
+      <div class="li-meta">${c.ticker}${c.sector?' · <strong style="color:rgba(255,255,255,.7)">'+c.sector+'</strong>':''}${c.industry?' · '+c.industry:''}${c.price?' · $'+fmtNum(c.price,2):''}</div></div>
       <span class="li-score" style="background:${bg};color:${col}">${c.score.toFixed(2)} — ${c.verdict}</span>
       <button class="btn btn-ghost btn-sm btn-icon" onclick="event.stopPropagation();removePf(${i})">✕</button>
     </li>`;
