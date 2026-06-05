@@ -2296,6 +2296,19 @@ function renderMarketContext(meta, fd, ks, closes){
 
 // ==================== INIT ====================
 updateApiBadge();checkProxyWarnings();
+
+// Auto-backfill missing sector/industry for existing portfolio entries
+(function backfillSectors(){
+  let changed = false;
+  portfolio = portfolio.map(p => {
+    const s = p.sector || getSector(p.ticker);
+    const ind = p.industry || getIndustryHint(p.ticker);
+    if(s !== (p.sector||'') || ind !== (p.industry||'')) changed = true;
+    return {...p, sector:s, industry:ind};
+  });
+  if(changed) localStorage.setItem('sr_portfolio', JSON.stringify(portfolio));
+})();
+
 renderPortfolio();renderTrades();renderWatchlist();updateBadges();calcTrade();
 
 // ==================== TOAST NOTIFICATIONS ====================
