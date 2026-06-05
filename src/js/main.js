@@ -1253,47 +1253,61 @@ function renderRatioTable(sector, labels, ks){
 
   let rows='';
   for(const [cat,items] of Object.entries(cats)){
-    rows+=`<tr class="ratio-group-header"><td colspan="7">${cat}</td></tr>`;
+    rows+=`<tr class="ratio-group-header"><td colspan="5">${cat}</td></tr>`;
     for(const {k,val,bench,sc} of items){
-      const colT=scoreColor(sc);
-      const barWT=(sc/5)*100;
-      const displayed=fmtVal(val,bench);
-      const b5=bench.scale?(bench.s5*bench.scale).toFixed(0)+'%':bench.s5+(bench.fmt==='%'?'%':'x');
-      const scI=scoreRatioVsIndustry(val,k,sector);
-      const colI=scoreColor(scI);
-      const barWI=(scI/5)*100;
+      const colT = scoreColor(sc);
+      const displayed = fmtVal(val,bench);
+      const scI = scoreRatioVsIndustry(val,k,sector);
+      const colI = scoreColor(scI);
       const prevVal = prevVals ? prevVals[k] : null;
       const arrow = trendArrow(val, prevVal, bench.inv);
-      const markerW = 8; // % Breite des Marker-Abschnitts
-      const tFill = Math.max(0, barWT - markerW);
-      const sFill = Math.max(0, barWI - markerW);
+
+      // Build threshold display from bench — show sector thresholds
+      const sectorBench = getIndustryBench(sector);
+      const sb = sectorBench[k];
+      let thresholdHTML = '';
+      if(sb && sb.ranged){
+        thresholdHTML = `<span style="font-family:var(--mono);font-size:.62rem;color:var(--dc-mid)">optimal ${(sb.optLo*100).toFixed(0)}–${(sb.optHi*100).toFixed(0)}%</span>`;
+      } else if(sb){
+        // Format threshold values
+        const fmt5 = bench.scale ? (sb.s5*bench.scale).toFixed(0)+'%' : sb.s5 ? (bench.fmt==='%'?(sb.s5*100).toFixed(0)+'%':sb.s5.toFixed(2)+'x') : '—';
+        const fmt4 = bench.scale ? (sb.s4*bench.scale).toFixed(0)+'%' : sb.s4 ? (bench.fmt==='%'?(sb.s4*100).toFixed(0)+'%':sb.s4.toFixed(2)+'x') : '—';
+        thresholdHTML = `<span style="font-family:var(--mono);font-size:.62rem;color:var(--dc-mid)">
+          <span style="color:#00a86b;font-weight:700">★5≥${fmt5}</span>
+          <span style="margin:0 4px;opacity:.4">·</span>
+          <span style="color:#e08000">★4≥${fmt4}</span>
+        </span>`;
+      } else {
+        const b5=bench.scale?(bench.s5*bench.scale).toFixed(0)+'%':bench.s5+(bench.fmt==='%'?'%':'x');
+        thresholdHTML = `<span style="font-family:var(--mono);font-size:.62rem;color:var(--dc-mid)">≥${b5}</span>`;
+      }
+
+      // Compact score bar
+      const barW = (sc/5)*100;
+      const barI = (scI/5)*100;
+
       rows+=`<tr>
-        <td style="color:var(--text2)">${bench.label} ${arrow}</td>
-        <td style="font-family:var(--mono);font-weight:600">${displayed}</td>
-        <td style="font-family:var(--mono);font-size:.72rem;color:var(--text3)">≥${b5}</td>
-        <td style="width:40%;padding:8px 8px 8px 0">
-          <div style="position:relative;padding:14px 0 14px 0">
-            <!-- T label oben -->
-            <div style="position:absolute;top:0;left:${barWT}%;transform:translateX(-50%);font-size:.55rem;font-family:var(--mono);font-weight:700;background:#fff;border:1.5px solid #aaa;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;color:#333;z-index:2"
-                 title="Theory score">T</div>
-            <!-- T bar -->
-            <div style="height:5px;background:var(--bg4);border-radius:3px;overflow:visible;position:relative;margin-bottom:4px">
-              <div style="position:absolute;left:0;top:0;height:100%;width:${tFill}%;background:${colT};border-radius:3px 0 0 3px"></div>
-              <div style="position:absolute;left:${tFill}%;top:0;height:100%;width:${markerW}%;background:${colT};opacity:.5;border-radius:0 3px 3px 0"></div>
+        <td style="color:var(--dc-ink);font-size:.875rem">${bench.label} ${arrow}</td>
+        <td style="font-family:var(--mono);font-weight:700;font-size:.9rem;color:${colT}">${displayed}</td>
+        <td>${thresholdHTML}</td>
+        <td style="width:140px;padding:6px 8px 6px 0">
+          <div style="margin-bottom:4px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px">
+              <span style="font-family:var(--mono);font-size:.52rem;color:var(--dc-mid)">Theory</span>
+              <span style="font-family:var(--mono);font-size:.62rem;font-weight:700;color:${colT}">${sc}/5</span>
             </div>
-            <!-- S bar -->
-            <div style="height:5px;background:var(--bg4);border-radius:3px;overflow:visible;position:relative">
-              <div style="position:absolute;left:0;top:0;height:100%;width:${sFill}%;background:${colI};border-radius:3px 0 0 3px"></div>
-              <div style="position:absolute;left:${sFill}%;top:0;height:100%;width:${markerW}%;background:${colI};opacity:.5;border-radius:0 3px 3px 0"></div>
+            <div style="height:4px;background:rgba(91,33,245,.1);border-radius:2px;overflow:hidden">
+              <div style="height:100%;width:${barW}%;background:${colT};border-radius:2px;transition:width .5s var(--ease)"></div>
             </div>
-            <!-- S label unten -->
-            <div style="position:absolute;bottom:0;left:${barWI}%;transform:translateX(-50%);font-size:.55rem;font-family:var(--mono);font-weight:700;background:#fff;border:1.5px solid #aaa;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;color:#333;z-index:2"
-                 title="Sector score">S</div>
           </div>
-          <div style="display:flex;justify-content:flex-end;gap:8px;font-family:var(--mono);font-size:.72rem;font-weight:700;margin-top:2px">
-            <span style="color:${colT}">T ${sc}.0</span>
-            <span style="color:var(--text3)">·</span>
-            <span style="color:${colI}">S ${scI}.0</span>
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px">
+              <span style="font-family:var(--mono);font-size:.52rem;color:var(--dc-mid)">Sector</span>
+              <span style="font-family:var(--mono);font-size:.62rem;font-weight:700;color:${colI}">${scI}/5</span>
+            </div>
+            <div style="height:4px;background:rgba(91,33,245,.1);border-radius:2px;overflow:hidden">
+              <div style="height:100%;width:${barI}%;background:${colI};border-radius:2px;transition:width .5s var(--ease)"></div>
+            </div>
           </div>
         </td>
       </tr>`;
