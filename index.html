@@ -1179,8 +1179,145 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 /* ============================================================
-   FULLSCREEN LOADER — intercepts rating-loading show/hide
+   PORTFOLIO BUILDER — computes analysis from saved holdings
    ============================================================ */
+function renderPortfolioAnalysis() {
+  const wrap = document.getElementById('portfolio-analysis');
+  if (!wrap) return;
+
+  // Read portfolio from localStorage directly (freshest data)
+  const pf = JSON.parse(localStorage.getItem('sr_portfolio') || '[]');
+
+  if (pf.length < 2) { wrap.style.display = 'none'; return; }
+  wrap.style.display = 'block';
+
+  const n = pf.length;
+
+  // ── 1. Top metrics ──
+  const avgScore   = pf.reduce((s,c) => s + (c.score||0), 0) / n;
+  const sectors    = [...new Set(pf.map(c => c.sector || 'Unknown').filter(Boolean))];
+  const divScore   = Math.round((sectors.length / Math.min(n, 8)) * 100);
+  const avgPrice   = pf.reduce((s,c) => s + (c.price||0), 0) / n;
+
+  const metricsRow = document.getElementById('pf-metrics-row');
+  if (metricsRow) {
+    const metrics = [
+      { label: 'Positions',       val: n,                    sub: 'holdings' },
+      { label: 'Avg Score',       val: avgScore.toFixed(2),  sub: '/ 5.0' },
+      { label: 'Sectors',         val: sectors.length,       sub: 'unique' },
+      { label: 'Diversification', val: divScore + '%',        sub: divScore >= 60 ? '✓ good' : '⚠ low' },
+    ];
+    const borderStyle = '1px solid rgba(255,255,255,.1)';
+    metricsRow.innerHTML = metrics.map(m => `
+      <div style="padding:1rem 1.2rem;border-right:${borderStyle};border-bottom:${borderStyle}">
+        <div style="font-family:var(--mono);font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:5px;font-weight:600">${m.label}</div>
+        <div style="font-size:1.4rem;font-weight:900;color:#fff;letter-spacing:-.04em;line-height:1">${m.val}</div>
+        <div style="font-family:var(--mono);font-size:.56rem;color:rgba(255,255,255,.4);margin-top:3px">${m.sub}</div>
+      </div>`).join('');
+  }
+
+  // ── 2. Sector breakdown ──
+  const sectorMap = {};
+  pf.forEach(c => {
+    const s = c.sector || 'Unknown';
+    sectorMap[s] = (sectorMap[s] || 0) + 1;
+  });
+  const sortedSectors = Object.entries(sectorMap).sort((a,b) => b[1]-a[1]);
+
+  const SECTOR_COLORS = [
+    '#c8ff00','#00ff88','#00d4ff','#ff6b52','#ff2d6b',
+    '#a855f7','#f59e0b','#3b82f6','#10b981','#f97316'
+  ];
+
+  const sectorBars = document.getElementById('pf-sector-bars');
+  if (sectorBars) {
+    sectorBars.innerHTML = sortedSectors.map(([sec, cnt], i) => {
+      const pct = Math.round((cnt / n) * 100);
+      const color = SECTOR_COLORS[i % SECTOR_COLORS.length];
+      return `
+        <div style="margin-bottom:.65rem">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.3rem">
+            <span style="font-size:.82rem;font-weight:600;color:#fff">${sec}</span>
+            <span style="font-family:var(--mono);font-size:.72rem;color:rgba(255,255,255,.5)">${cnt} position${cnt>1?'s':''} · ${pct}%</span>
+          </div>
+          <div style="height:6px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden">
+            <div style="height:100%;width:${pct}%;background:${color};border-radius:99px;transition:width .6s cubic-bezier(.4,0,.2,1)"></div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  // ── 3. Verdict distribution ──
+  const verdictMap = { 'Strong Buy': 0, 'Buy': 0, 'Hold': 0, 'Avoid': 0 };
+  pf.forEach(c => { if (verdictMap[c.verdict] !== undefined) verdictMap[c.verdict]++; });
+
+  const verdictColors  = { 'Strong Buy':'#00ff88','Buy':'#c8ff00','Hold':'#ff9500','Avoid':'#ff2d6b' };
+  const verdictBar     = document.getElementById('pf-verdict-bar');
+  const verdictLegend  = document.getElementById('pf-verdict-legend');
+
+  if (verdictBar) {
+    verdictBar.innerHTML = Object.entries(verdictMap)
+      .filter(([,cnt]) => cnt > 0)
+      .map(([v, cnt]) => {
+        const pct = (cnt / n) * 100;
+        return `<div style="flex:${pct};background:${verdictColors[v]};min-width:${pct>0?4:0}px"></div>`;
+      }).join('');
+  }
+  if (verdictLegend) {
+    verdictLegend.innerHTML = Object.entries(verdictMap)
+      .filter(([,cnt]) => cnt > 0)
+      .map(([v, cnt]) => `
+        <span style="display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:.65rem;color:rgba(255,255,255,.6)">
+          <span style="width:8px;height:8px;border-radius:50%;background:${verdictColors[v]};display:inline-block"></span>
+          ${v} (${cnt})
+        </span>`).join('');
+  }
+
+  // ── 4. Risk warning ──
+  const riskWrap = document.getElementById('pf-risk-warning');
+  if (riskWrap) {
+    const warnings = [];
+    // Concentration risk
+    sortedSectors.forEach(([sec, cnt]) => {
+      const pct = (cnt / n) * 100;
+      if (pct >= 50 && n >= 3) warnings.push(`⚠ ${Math.round(pct)}% in ${sec} — sector concentration risk`);
+    });
+    // Too many Avoid
+    if (verdictMap['Avoid'] >= Math.ceil(n / 2)) warnings.push(`⚠ ${verdictMap['Avoid']} of ${n} positions rated Avoid`);
+    // Single position
+    if (n < 3) warnings.push('ℹ Add more positions for meaningful diversification analysis');
+
+    if (warnings.length > 0) {
+      riskWrap.style.display = 'block';
+      riskWrap.innerHTML = warnings.map(w => `
+        <div style="background:rgba(255,45,107,.15);border:1px solid rgba(255,45,107,.3);border-radius:10px;padding:.75rem 1rem;margin-bottom:.5rem;font-size:.82rem;color:rgba(255,200,200,.9);font-weight:500">
+          ${w}
+        </div>`).join('');
+    } else {
+      riskWrap.style.display = 'none';
+    }
+  }
+}
+
+// Hook into renderPortfolio — run analysis after every portfolio update
+const _origRenderPortfolio = window.renderPortfolio;
+if (typeof _origRenderPortfolio === 'function') {
+  window.renderPortfolio = function() {
+    _origRenderPortfolio();
+    renderPortfolioAnalysis();
+  };
+}
+// Also run on section scroll-into-view
+document.addEventListener('DOMContentLoaded', () => {
+  renderPortfolioAnalysis();
+});
+// Refresh when portfolio section is scrolled to
+const pfSection = document.getElementById('section-portfolio');
+if (pfSection) {
+  new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting) renderPortfolioAnalysis();
+  }, { threshold: 0.1 }).observe(pfSection);
+}
 (function(){
   const DOT_COUNT = 32;
   const loaderEl = document.getElementById('fullscreen-loader');
