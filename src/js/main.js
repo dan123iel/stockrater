@@ -693,6 +693,7 @@ async function fetchCompany(forceTicker){
   }
   const ticker = typeof resolved==='string' ? resolved : raw.toUpperCase();
   document.getElementById('r-ticker').value = '';
+  document.getElementById('search-dropdown').style.display='none';
   showProgress('start');
   showRatingLoading(true);
   document.getElementById('rating-error').style.display='none';
