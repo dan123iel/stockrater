@@ -1156,11 +1156,11 @@ function buildValuationFlags(ks, fd){
   window._lastValuationScore = valScore;
 
   const flags = [];
-  if(fpe > 60) flags.push(`<span style="background:rgba(255,45,107,.15);color:#ff2d6b;border:1px solid rgba(255,45,107,.3);padding:3px 10px;border-radius:4px;font-family:var(--mono);font-size:.65rem;font-weight:700">⚠ P/E ${fmtNum(fpe,1)}x — EXTREME (>60x)</span>`);
-  if(evEbitda > 50) flags.push(`<span style="background:rgba(255,45,107,.15);color:#ff2d6b;border:1px solid rgba(255,45,107,.3);padding:3px 10px;border-radius:4px;font-family:var(--mono);font-size:.65rem;font-weight:700">⚠ EV/EBITDA ${fmtNum(evEbitda,1)}x — EXTREME (>50x)</span>`);
-  if(peg !== null && peg > 3) flags.push(`<span style="background:rgba(255,149,0,.12);color:#ff9500;border:1px solid rgba(255,149,0,.3);padding:3px 10px;border-radius:4px;font-family:var(--mono);font-size:.65rem;font-weight:700">⚠ PEG ${peg.toFixed(2)} — expensive vs growth</span>`);
+  if(fpe > 60) flags.push(`<span style="background:rgba(220,38,38,.1);color:#dc2626;border:1px solid rgba(220,38,38,.25);padding:3px 10px;border-radius:4px;font-family:var(--mono);font-size:.65rem;font-weight:700">⚠ P/E ${fmtNum(fpe,1)}x — EXTREME (>60x)</span>`);
+  if(evEbitda > 50) flags.push(`<span style="background:rgba(220,38,38,.1);color:#dc2626;border:1px solid rgba(220,38,38,.25);padding:3px 10px;border-radius:4px;font-family:var(--mono);font-size:.65rem;font-weight:700">⚠ EV/EBITDA ${fmtNum(evEbitda,1)}x — EXTREME (>50x)</span>`);
+  if(peg !== null && peg > 3) flags.push(`<span style="background:rgba(217,119,6,.1);color:#d97706;border:1px solid rgba(217,119,6,.25);padding:3px 10px;border-radius:4px;font-family:var(--mono);font-size:.65rem;font-weight:700">⚠ PEG ${peg.toFixed(2)} — expensive vs growth</span>`);
 
-  const pegLabel = peg !== null ? `<span style="font-family:var(--mono);font-size:.7rem;color:${peg<1?'#00a86b':peg<2?'#ff9500':'#ff2d6b'};font-weight:700">PEG ${peg.toFixed(2)} ${peg<1?'↓ underval':peg<2?'→ fair':'↑ pricey'}</span>` : '';
+  const pegLabel = peg !== null ? `<span style="font-family:var(--mono);font-size:.7rem;color:${peg<1?'#059669':peg<2?'#d97706':'#dc2626'};font-weight:700">PEG ${peg.toFixed(2)} ${peg<1?'↓ underval':peg<2?'→ fair':'↑ pricey'}</span>` : '';
 
   return `<div style="margin-top:.75rem;display:flex;flex-wrap:wrap;align-items:center;gap:.5rem">
     <span style="display:inline-flex;align-items:center;padding:4px 12px;border-radius:0;font-family:var(--mono);font-size:.68rem;font-weight:800;letter-spacing:.08em;background:${valCol};color:#fff">VALUATION: ${valSig}</span>
