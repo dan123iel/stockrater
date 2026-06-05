@@ -1301,10 +1301,10 @@ function renderPortfolioAnalysis() {
   const riskWrap = document.getElementById('pf-risk-warning');
   if (riskWrap) {
     const warnings = [];
-    // Concentration risk
+    // Concentration risk — only warn for real sectors
     sortedSectors.forEach(([sec, cnt]) => {
       const pct = (cnt / n) * 100;
-      if (pct >= 50 && n >= 3) warnings.push(`⚠ ${Math.round(pct)}% in ${sec} — sector concentration risk`);
+      if (pct >= 50 && n >= 3) warnings.push(`⚠ ${Math.round(pct)}% concentration in <strong>${sec}</strong> — wenn dieser Sektor fällt, fällt dein Portfolio mit`);
     });
     // Too many Avoid
     if (verdictMap['Avoid'] >= Math.ceil(n / 2)) warnings.push(`⚠ ${verdictMap['Avoid']} of ${n} positions rated Avoid`);
