@@ -1006,89 +1006,103 @@ function renderStressTests(fd, ks, meta){
   const card = `
   <div class="card" style="margin-top:1rem">
     <div class="card-label">
-      Stress Tests
-      <span style="background:${stressCol};color:#fff;padding:3px 10px;border-radius:0;font-size:.62rem;font-weight:800;letter-spacing:.08em;font-family:var(--mono)">${stressLabel}</span>
-      <span style="font-size:.6rem;font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)">— thesis breaks if:</span>
+      🧪 What-If Scenarios
+      <span style="background:${stressCol};color:#fff;padding:3px 10px;border-radius:4px;font-size:.62rem;font-weight:800;letter-spacing:.08em;font-family:var(--mono)">${stressLabel}</span>
+    </div>
+    <div style="font-size:.82rem;color:var(--dc-mid);margin-bottom:1.5rem;line-height:1.6;max-width:700px">
+      These scenarios test how robust the investment thesis is. They answer: <em style="color:var(--dc-ink)">"What would have to go wrong for this to be a bad investment?"</em>
+      A <strong style="color:#00a86b">RESILIENT</strong> result means the company can absorb shocks. <strong style="color:#e0302a">HIGH RISK</strong> means even small setbacks could make the thesis break.
     </div>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem">
 
-      <!-- Revenue Shock -->
-      <div>
-        <div style="font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem">A · Revenue Shock</div>
-        <table style="width:100%;border-collapse:collapse;font-size:.75rem">
-          <tr style="border-bottom:1px solid rgba(0,0,0,.07)">
-            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:left;padding:4px 6px">Shock</th>
-            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:right;padding:4px 6px">New Rev</th>
-            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:right;padding:4px 6px">ICR</th>
-            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:right;padding:4px 6px">FV/share</th>
+      <div style="background:rgba(91,33,245,.04);border:1px solid rgba(91,33,245,.1);border-radius:12px;padding:1.25rem">
+        <div style="font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dc-mid);margin-bottom:.5rem">A · Revenue drops — does the company survive?</div>
+        <div style="font-size:.75rem;color:var(--dc-mid);margin-bottom:.85rem">Tests if the company can still pay interest and remain solvent if sales fall.</div>
+        <table style="width:100%;border-collapse:collapse;font-size:.78rem">
+          <tr style="border-bottom:1px solid rgba(91,33,245,.08)">
+            <th style="font-family:var(--mono);font-size:.54rem;color:var(--dc-mid);text-align:left;padding:4px 6px;font-weight:600">Revenue −</th>
+            <th style="font-family:var(--mono);font-size:.54rem;color:var(--dc-mid);text-align:right;padding:4px 6px;font-weight:600">New Revenue</th>
+            <th style="font-family:var(--mono);font-size:.54rem;color:var(--dc-mid);text-align:right;padding:4px 6px;font-weight:600">Interest Cover</th>
+            <th style="font-family:var(--mono);font-size:.54rem;color:var(--dc-mid);text-align:right;padding:4px 6px;font-weight:600">Fair Value</th>
           </tr>
-          ${revenueShocks.map(s => `<tr style="border-bottom:1px solid rgba(0,0,0,.05)${s.danger?';background:rgba(255,45,107,.04)':''}">
-            <td style="font-family:var(--mono);color:${s.danger?'#ff2d6b':'var(--ink)'};font-weight:700;padding:5px 6px">${(s.shock*100).toFixed(0)}%</td>
-            <td style="font-family:var(--mono);text-align:right;padding:5px 6px;color:var(--ink2)">${fmtBig(s.newRev)}</td>
-            <td style="font-family:var(--mono);text-align:right;padding:5px 6px;color:${s.icr&&s.icr<1.5?'#ff2d6b':'var(--ink2)'}">${fmt(s.icr)}x</td>
-            <td style="font-family:var(--mono);text-align:right;padding:5px 6px;color:${s.danger?'#ff2d6b':'var(--ink2)'}">${s.fvAdj?fmtNum(s.fvAdj,2):'—'}</td>
+          ${revenueShocks.map(s => `<tr style="border-bottom:1px solid rgba(91,33,245,.05)${s.danger?';background:rgba(224,48,42,.04)':''}">
+            <td style="font-family:var(--mono);color:${s.danger?'#e0302a':'var(--dc-ink)'};font-weight:700;padding:5px 6px">${(s.shock*100).toFixed(0)}%</td>
+            <td style="font-family:var(--mono);text-align:right;padding:5px 6px;color:var(--dc-mid);font-size:.75rem">${fmtBig(s.newRev)}</td>
+            <td style="font-family:var(--mono);text-align:right;padding:5px 6px;font-size:.75rem;color:${s.icr&&s.icr<1.5?'#e0302a':s.icr&&s.icr<3?'#e08000':'#00a86b'}">${fmt(s.icr)}x ${s.icr&&s.icr<1.5?'⚠':s.icr&&s.icr<3?'~':'✓'}</td>
+            <td style="font-family:var(--mono);text-align:right;padding:5px 6px;color:${s.danger?'#e0302a':'var(--dc-ink)'};font-size:.75rem">${s.fvAdj?fmtNum(s.fvAdj,2):'—'}</td>
           </tr>`).join('')}
         </table>
+        <div style="font-size:.7rem;color:var(--dc-mid);margin-top:.6rem">💡 Interest cover &lt;1.5x = danger: company can't pay interest from operations.</div>
       </div>
 
-      <!-- Margin Compression -->
-      <div>
-        <div style="font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem">B · Margin Compression</div>
-        <table style="width:100%;border-collapse:collapse;font-size:.75rem">
-          <tr style="border-bottom:1px solid rgba(0,0,0,.07)">
-            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:left;padding:4px 6px">−pp</th>
-            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:right;padding:4px 6px">Gross M</th>
-            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:right;padding:4px 6px">Op M</th>
-            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:right;padding:4px 6px">FCF est.</th>
+      <div style="background:rgba(91,33,245,.04);border:1px solid rgba(91,33,245,.1);border-radius:12px;padding:1.25rem">
+        <div style="font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dc-mid);margin-bottom:.5rem">B · Margins shrink — how much profit is left?</div>
+        <div style="font-size:.75rem;color:var(--dc-mid);margin-bottom:.85rem">Tests what happens if pricing power weakens or costs rise (competition, inflation).</div>
+        <table style="width:100%;border-collapse:collapse;font-size:.78rem">
+          <tr style="border-bottom:1px solid rgba(91,33,245,.08)">
+            <th style="font-family:var(--mono);font-size:.54rem;color:var(--dc-mid);text-align:left;padding:4px 6px;font-weight:600">Margin −</th>
+            <th style="font-family:var(--mono);font-size:.54rem;color:var(--dc-mid);text-align:right;padding:4px 6px;font-weight:600">Gross Margin</th>
+            <th style="font-family:var(--mono);font-size:.54rem;color:var(--dc-mid);text-align:right;padding:4px 6px;font-weight:600">Op. Margin</th>
+            <th style="font-family:var(--mono);font-size:.54rem;color:var(--dc-mid);text-align:right;padding:4px 6px;font-weight:600">FCF est.</th>
           </tr>
-          ${marginShocks.map(s => `<tr style="border-bottom:1px solid rgba(0,0,0,.05)${s.danger?';background:rgba(255,45,107,.04)':''}">
-            <td style="font-family:var(--mono);color:${s.danger?'#ff2d6b':'var(--ink)'};font-weight:700;padding:5px 6px">${(s.pp*100).toFixed(0)}pp</td>
-            <td style="font-family:var(--mono);text-align:right;padding:5px 6px;color:var(--ink2)">${fmt(s.newGM*100,1,'%')}</td>
-            <td style="font-family:var(--mono);text-align:right;padding:5px 6px;color:${s.danger?'#ff2d6b':'var(--ink2)'}">${fmt(s.newOM*100,1,'%')}</td>
-            <td style="font-family:var(--mono);text-align:right;padding:5px 6px">${fmtBig(s.newFCF)}</td>
+          ${marginShocks.map(s => `<tr style="border-bottom:1px solid rgba(91,33,245,.05)${s.danger?';background:rgba(224,48,42,.04)':''}">
+            <td style="font-family:var(--mono);color:${s.danger?'#e0302a':'var(--dc-ink)'};font-weight:700;padding:5px 6px">${(s.pp*100).toFixed(0)}pp</td>
+            <td style="font-family:var(--mono);text-align:right;padding:5px 6px;font-size:.75rem;color:var(--dc-mid)">${fmt(s.newGM*100,1,'%')}</td>
+            <td style="font-family:var(--mono);text-align:right;padding:5px 6px;font-size:.75rem;color:${s.danger?'#e0302a':'var(--dc-mid)'}">${fmt(s.newOM*100,1,'%')} ${s.danger?'⚠':''}</td>
+            <td style="font-family:var(--mono);text-align:right;padding:5px 6px;font-size:.75rem;color:var(--dc-ink)">${fmtBig(s.newFCF)}</td>
           </tr>`).join('')}
         </table>
+        <div style="font-size:.7rem;color:var(--dc-mid);margin-top:.6rem">💡 Operating margin &lt;0% means the company loses money on every unit sold.</div>
       </div>
 
-      <!-- WACC Sensitivity -->
-      <div>
-        <div style="font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem">C · WACC +Δ → DCF Impact</div>
-        <table style="width:100%;border-collapse:collapse;font-size:.75rem">
-          <tr style="border-bottom:1px solid rgba(0,0,0,.07)">
-            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:left;padding:4px 6px">WACC +</th>
-            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:right;padding:4px 6px">New WACC</th>
-            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:right;padding:4px 6px">FV/share</th>
-            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:right;padding:4px 6px">FV drop</th>
+      <div style="background:rgba(91,33,245,.04);border:1px solid rgba(91,33,245,.1);border-radius:12px;padding:1.25rem">
+        <div style="font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dc-mid);margin-bottom:.5rem">C · Interest rates rise — is the DCF still valid?</div>
+        <div style="font-size:.75rem;color:var(--dc-mid);margin-bottom:.85rem">Higher discount rates = lower fair value. Tests if valuation holds in a rate-rising environment.</div>
+        <table style="width:100%;border-collapse:collapse;font-size:.78rem">
+          <tr style="border-bottom:1px solid rgba(91,33,245,.08)">
+            <th style="font-family:var(--mono);font-size:.54rem;color:var(--dc-mid);text-align:left;padding:4px 6px;font-weight:600">Rate +</th>
+            <th style="font-family:var(--mono);font-size:.54rem;color:var(--dc-mid);text-align:right;padding:4px 6px;font-weight:600">New WACC</th>
+            <th style="font-family:var(--mono);font-size:.54rem;color:var(--dc-mid);text-align:right;padding:4px 6px;font-weight:600">Fair Value</th>
+            <th style="font-family:var(--mono);font-size:.54rem;color:var(--dc-mid);text-align:right;padding:4px 6px;font-weight:600">Value drop</th>
           </tr>
-          ${waccShocks.map(s => `<tr style="border-bottom:1px solid rgba(0,0,0,.05)${s.danger?';background:rgba(255,45,107,.04)':''}">
-            <td style="font-family:var(--mono);color:${s.danger?'#ff2d6b':'var(--ink)'};font-weight:700;padding:5px 6px">+${(s.dw*100).toFixed(0)}%</td>
-            <td style="font-family:var(--mono);text-align:right;padding:5px 6px;color:var(--ink2)">${fmt((wacc+s.dw)*100,1,'%')}</td>
-            <td style="font-family:var(--mono);text-align:right;padding:5px 6px">${s.fvAdj?fmtNum(s.fvAdj,2):'—'}</td>
-            <td style="font-family:var(--mono);text-align:right;padding:5px 6px;color:${s.danger?'#ff2d6b':'var(--ink2)'}">${fmt(s.drop,1,'%')}</td>
+          ${waccShocks.map(s => `<tr style="border-bottom:1px solid rgba(91,33,245,.05)${s.danger?';background:rgba(224,48,42,.04)':''}">
+            <td style="font-family:var(--mono);color:${s.danger?'#e0302a':'var(--dc-ink)'};font-weight:700;padding:5px 6px">+${(s.dw*100).toFixed(0)}%</td>
+            <td style="font-family:var(--mono);text-align:right;padding:5px 6px;font-size:.75rem;color:var(--dc-mid)">${fmt((wacc+s.dw)*100,1,'%')}</td>
+            <td style="font-family:var(--mono);text-align:right;padding:5px 6px;font-size:.75rem;color:var(--dc-ink)">${s.fvAdj?fmtNum(s.fvAdj,2):'—'}</td>
+            <td style="font-family:var(--mono);text-align:right;padding:5px 6px;font-size:.75rem;color:${s.danger?'#e0302a':s.drop&&s.drop<-15?'#e08000':'#00a86b'}">${fmt(s.drop,1,'%')} ${s.danger?'⚠':''}</td>
           </tr>`).join('')}
         </table>
+        <div style="font-size:.7rem;color:var(--dc-mid);margin-top:.6rem">💡 Value drop &gt;30% at +2% = fair value is rate-sensitive. Common for growth stocks.</div>
       </div>
 
-      <!-- FCF Deterioration -->
-      <div>
-        <div style="font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem">D · FCF Deterioration</div>
-        <table style="width:100%;border-collapse:collapse;font-size:.75rem">
-          <tr style="border-bottom:1px solid rgba(0,0,0,.07)">
-            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:left;padding:4px 6px">FCF</th>
-            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:right;padding:4px 6px">New FCF</th>
-            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:right;padding:4px 6px">CF/Debt</th>
-            <th style="font-family:var(--mono);font-size:.55rem;font-weight:600;color:var(--muted);text-align:right;padding:4px 6px">FV/share</th>
+      <div style="background:rgba(91,33,245,.04);border:1px solid rgba(91,33,245,.1);border-radius:12px;padding:1.25rem">
+        <div style="font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dc-mid);margin-bottom:.5rem">D · Cash flow drops — can dividends and debt be serviced?</div>
+        <div style="font-size:.75rem;color:var(--dc-mid);margin-bottom:.85rem">Free cash flow is the real money the company generates. Tests if it can keep paying back debt if FCF drops.</div>
+        <table style="width:100%;border-collapse:collapse;font-size:.78rem">
+          <tr style="border-bottom:1px solid rgba(91,33,245,.08)">
+            <th style="font-family:var(--mono);font-size:.54rem;color:var(--dc-mid);text-align:left;padding:4px 6px;font-weight:600">FCF −</th>
+            <th style="font-family:var(--mono);font-size:.54rem;color:var(--dc-mid);text-align:right;padding:4px 6px;font-weight:600">New FCF</th>
+            <th style="font-family:var(--mono);font-size:.54rem;color:var(--dc-mid);text-align:right;padding:4px 6px;font-weight:600">CF/Debt</th>
+            <th style="font-family:var(--mono);font-size:.54rem;color:var(--dc-mid);text-align:right;padding:4px 6px;font-weight:600">Fair Value</th>
           </tr>
-          ${fcfShocks.map(s => `<tr style="border-bottom:1px solid rgba(0,0,0,.05)${s.danger?';background:rgba(255,45,107,.04)':''}">
-            <td style="font-family:var(--mono);color:${s.danger?'#ff2d6b':'var(--ink)'};font-weight:700;padding:5px 6px">${(s.pct*100).toFixed(0)}%</td>
-            <td style="font-family:var(--mono);text-align:right;padding:5px 6px;color:var(--ink2)">${fmtBig(s.newFCF)}</td>
-            <td style="font-family:var(--mono);text-align:right;padding:5px 6px;color:${s.danger?'#ff2d6b':'var(--ink2)'}">${fmt(s.cfDebt,2,'x')}</td>
-            <td style="font-family:var(--mono);text-align:right;padding:5px 6px">${s.fvAdj?fmtNum(s.fvAdj,2):'—'}</td>
+          ${fcfShocks.map(s => `<tr style="border-bottom:1px solid rgba(91,33,245,.05)${s.danger?';background:rgba(224,48,42,.04)':''}">
+            <td style="font-family:var(--mono);color:${s.danger?'#e0302a':'var(--dc-ink)'};font-weight:700;padding:5px 6px">${(s.pct*100).toFixed(0)}%</td>
+            <td style="font-family:var(--mono);text-align:right;padding:5px 6px;font-size:.75rem;color:var(--dc-mid)">${fmtBig(s.newFCF)}</td>
+            <td style="font-family:var(--mono);text-align:right;padding:5px 6px;font-size:.75rem;color:${s.danger?'#e0302a':s.cfDebt&&s.cfDebt<0.1?'#e08000':'#00a86b'}">${fmt(s.cfDebt,2,'x')} ${s.danger?'⚠':''}</td>
+            <td style="font-family:var(--mono);text-align:right;padding:5px 6px;font-size:.75rem;color:var(--dc-ink)">${s.fvAdj?fmtNum(s.fvAdj,2):'—'}</td>
           </tr>`).join('')}
         </table>
+        <div style="font-size:.7rem;color:var(--dc-mid);margin-top:.6rem">💡 CF/Debt &lt;0.05x = the company would take 20+ years to repay debt from cash flow.</div>
       </div>
 
+    </div>
+
+    <div style="margin-top:1.25rem;padding:1rem 1.25rem;background:rgba(91,33,245,.05);border-radius:10px;border-left:3px solid var(--electric)">
+      <div style="font-family:var(--mono);font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dc-mid);margin-bottom:.4rem">Investment thesis holds if:</div>
+      <div style="font-size:.82rem;color:var(--dc-ink);line-height:1.65">
+        Revenue does not decline more than 20% · Operating margin stays above 0% · WACC does not rise more than 2% · FCF does not drop more than 50%
+      </div>
     </div>
   </div>`;
 
