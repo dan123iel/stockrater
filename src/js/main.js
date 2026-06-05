@@ -2592,8 +2592,8 @@ function renderPriceChart(closes, highs, lows, rangeKey){
   const isUp=last>=first;
   // Digital Culture Farben: Lila-Linie statt Grün/Rot
   const lineColor='#5b21f5';
-  const lineColorPos='#00a86b';
-  const lineColorNeg='#e0302a';
+  const lineColorPos='#059669';
+  const lineColorNeg='#dc2626';
   const chartColor = isUp ? lineColorPos : lineColorNeg;
   const ns='http://www.w3.org/2000/svg';
   svg.innerHTML='';
