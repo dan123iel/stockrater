@@ -301,6 +301,11 @@ function scoreRatioVsIndustry(val, key, sector){
   return 1;
 }
 
+// Sector-adaptive score using the new per-sector benchmarks
+function scoreRatioAdaptive(val, key, sector){
+  return scoreRatioVsIndustry(val, key, sector);
+}
+
 // ==================== RATIO BENCHMARKS (from your Excel) ====================
 // Each ratio: {label, fmt, inv(optional), groups per score 5→4→3→2→1}
 const RATIO_BENCH = {
