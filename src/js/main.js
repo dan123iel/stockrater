@@ -2243,3 +2243,31 @@ function renderMarketContext(meta, fd, ks, closes){
 // ==================== INIT ====================
 updateApiBadge();checkProxyWarnings();
 renderPortfolio();renderTrades();renderWatchlist();updateBadges();calcTrade();
+
+// ==================== TOAST NOTIFICATIONS ====================
+function showToast(msg, color='#00ff88') {
+  const existing = document.getElementById('vc-toast');
+  if (existing) existing.remove();
+  const t = document.createElement('div');
+  t.id = 'vc-toast';
+  t.textContent = msg;
+  t.style.cssText = `
+    position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);
+    background:${color};color:#0a0a0a;
+    padding:.85rem 1.75rem;border-radius:999px;
+    font-family:'DM Sans',sans-serif;font-size:.875rem;font-weight:700;
+    z-index:9999;opacity:0;transition:opacity .25s,transform .25s;
+    box-shadow:0 8px 32px rgba(0,0,0,.25);white-space:nowrap;
+    pointer-events:none;max-width:90vw;text-align:center;
+  `;
+  document.body.appendChild(t);
+  requestAnimationFrame(() => {
+    t.style.opacity = '1';
+    t.style.transform = 'translateX(-50%) translateY(0)';
+  });
+  setTimeout(() => {
+    t.style.opacity = '0';
+    t.style.transform = 'translateX(-50%) translateY(10px)';
+    setTimeout(() => t.remove(), 300);
+  }, 3000);
+}
