@@ -895,12 +895,39 @@ ul,ol{list-style:none}
 <section class="section section-portfolio" id="section-portfolio">
   <div class="section-eyebrow">My Holdings</div>
   <div class="section-title" style="margin-bottom:2rem">portfolio</div>
-  <div class="card card-tangerine">
-    <div class="card-label">Holdings</div>
+
+  <!-- Portfolio Analysis — auto-computed from holdings -->
+  <div id="portfolio-analysis" style="display:none;margin-bottom:1.5rem">
+    <div class="card" style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.15)">
+      <div class="card-label" style="color:rgba(255,255,255,.5)">Portfolio Analysis</div>
+
+      <!-- Top metrics row -->
+      <div id="pf-metrics-row" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:0;border:1px solid rgba(255,255,255,.12);border-radius:14px;overflow:hidden;margin-bottom:1.25rem"></div>
+
+      <!-- Sector breakdown -->
+      <div style="margin-bottom:1.25rem">
+        <div style="font-family:var(--mono);font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.85rem">Sector Exposure</div>
+        <div id="pf-sector-bars"></div>
+      </div>
+
+      <!-- Verdict distribution -->
+      <div style="margin-bottom:1.25rem">
+        <div style="font-family:var(--mono);font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.85rem">Signal Distribution</div>
+        <div id="pf-verdict-bar" style="display:flex;height:12px;border-radius:99px;overflow:hidden;gap:2px"></div>
+        <div id="pf-verdict-legend" style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:.65rem"></div>
+      </div>
+
+      <!-- Risk warning -->
+      <div id="pf-risk-warning" style="display:none"></div>
+    </div>
+  </div>
+
+  <div class="card card-tangerine" style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.15)">
+    <div class="card-label" style="color:rgba(255,255,255,.5)">Holdings</div>
     <ul class="company-list" id="portfolio-list"></ul>
   </div>
-  <div class="card card-electric">
-    <div class="card-label">Watchlist</div>
+  <div class="card card-electric" style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.15)">
+    <div class="card-label" style="color:rgba(255,255,255,.5)">Watchlist</div>
     <ul class="company-list" id="watchlist-list"></ul>
   </div>
   <!-- hidden for JS compat -->
