@@ -933,7 +933,8 @@ function renderRatios(fd,ks,meta,closes,highs,lows,summary){
       <div class="metric"><div class="metric-label">52W RANGE</div><div class="metric-value" style="font-size:.82rem">${fmtNum(meta.fiftyTwoWeekLow,0)} – ${fmtNum(meta.fiftyTwoWeekHigh,0)}</div><div class="metric-sub">${meta.currency||'USD'}</div></div>
       <div class="metric"><div class="metric-label">TOTAL ASSETS</div><div class="metric-value">${fmtBig(totalAssets)||'—'}</div><div class="metric-sub">${meta.currency||'USD'}</div></div>
       <div class="metric"><div class="metric-label">TOTAL EQUITY</div><div class="metric-value">${fmtBig(totalEquity)||'—'}</div><div class="metric-sub">${meta.currency||'USD'}</div></div>
-    </div>`;
+    </div>
+    ${buildValuationFlags(ks, fd)}`;
 
   // Render ratio table for current period
   renderRatioTable(sector, labels, ks);
