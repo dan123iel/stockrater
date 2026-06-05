@@ -438,20 +438,7 @@ function addToHistory(ticker, name){
 
 function renderSearchDropdown(query){
   const dd = document.getElementById('search-dropdown');
-  if(!dd) return;
-  const items = query
-    ? searchHistory.filter(h=>h.ticker.includes(query.toUpperCase())||h.name.toUpperCase().includes(query.toUpperCase()))
-    : searchHistory;
-  if(!items.length){ dd.style.display='none'; return; }
-  dd.innerHTML = items.map((h,i)=>`
-    <div class="search-dd-item" style="display:flex;align-items:center;justify-content:space-between" onmousedown="event.preventDefault();selectFromHistory('${h.ticker}')">
-      <div style="display:flex;align-items:center;gap:8px">
-        <span style="font-family:var(--mono);font-weight:700;font-size:.82rem">${h.ticker}</span>
-        <span style="color:var(--text2);font-size:.8rem">${h.name}</span>
-      </div>
-      <span onmousedown="event.stopPropagation();event.preventDefault();removeFromHistory(${i})" style="color:var(--text3);font-size:.8rem;padding:2px 6px;cursor:pointer;border-radius:3px;line-height:1" title="Remove">✕</span>
-    </div>`).join('');
-  dd.style.display='block';
+  if(dd) dd.style.display='none';
 }
 
 function removeFromHistory(idx){
