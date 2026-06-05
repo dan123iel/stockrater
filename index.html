@@ -398,16 +398,16 @@ ul,ol{list-style:none}
    RESULT SECTION — company name riesig + content
    ============================================================ */
 .result-header{
-  background:var(--blob-result);
-  padding:2.5rem 2.5rem 3rem;
+  background:var(--dc-bg);
+  padding:3rem 3rem 2rem;
   flex-shrink:0;
 }
 .result-company-name{
-  font-size:clamp(3rem,9vw,7rem);
+  font-size:clamp(2.5rem,7vw,5.5rem);
   font-weight:900;
-  letter-spacing:-.05em;
-  line-height:.88;
-  color:var(--electric);
+  letter-spacing:-.04em;
+  line-height:.9;
+  color:var(--dc-ink);
   margin-bottom:1.25rem;
   word-break:break-word;
 }
@@ -415,88 +415,109 @@ ul,ol{list-style:none}
   display:flex;justify-content:space-between;align-items:flex-end;
   flex-wrap:wrap;gap:1rem;
 }
-.result-chips{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
+.result-chips{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
 .result-chip{
-  background:var(--electric);color:var(--coral);
-  font-family:var(--mono);font-size:.72rem;font-weight:700;
-  padding:.4rem 1rem;border-radius:var(--pill);letter-spacing:.02em;
+  background:var(--electric);color:#fff;
+  font-family:var(--mono);font-size:.65rem;font-weight:700;
+  padding:.35rem .9rem;border-radius:var(--r);letter-spacing:.04em;
 }
 .result-price{
-  font-family:var(--mono);font-size:clamp(2rem,5vw,3.5rem);
-  font-weight:700;letter-spacing:-.05em;color:var(--electric);text-align:right;
+  font-family:var(--mono);font-size:clamp(2rem,5vw,3rem);
+  font-weight:700;letter-spacing:-.04em;color:var(--dc-ink);text-align:right;
 }
 .result-change{
-  font-family:var(--mono);font-size:.85rem;margin-top:.3rem;
-  color:rgba(74,26,232,.6);text-align:right;
+  font-family:var(--mono);font-size:.82rem;margin-top:.3rem;
+  text-align:right;
 }
+/* Result action buttons auf DC-BG */
+#result-action-btns button{
+  font-size:.82rem;
+}
+/* Content-Bereich: EINE Fläche — dc-bg, dunkler Text, weiße Cards */
 .result-content-area{
-  background:var(--section-analysis-color);
-  padding:2.5rem;flex:1;
+  background:var(--dc-bg);
+  padding:2rem 3rem 3rem;flex:1;
 }
-/* Cards im Result-Bereich — halbtransparent weiß auf Farbe */
+/* Cards auf hellem DC-BG: weiß mit leichtem Schatten */
 .result-content-area .card{
-  background:rgba(255,255,255,.1);
-  border:1px solid rgba(255,255,255,.15);
-  box-shadow:none;
-  color:#fff;
+  background:#fff;
+  border:1px solid rgba(91,33,245,.1);
+  box-shadow:0 2px 12px rgba(91,33,245,.06);
+  color:var(--dc-ink);
 }
 .result-content-area .card:hover{
-  background:rgba(255,255,255,.14);
+  border-color:rgba(91,33,245,.25);
   transform:translateY(-2px);
-  box-shadow:0 8px 32px rgba(0,0,0,.2);
+  box-shadow:0 6px 24px rgba(91,33,245,.1);
 }
-.result-content-area .card-label{color:rgba(255,255,255,.5)}
-.result-content-area .card-hot{border-left-color:var(--hot)}
-.result-content-area .card-electric{border-left-color:var(--lime)}
-.result-content-area .card-acid{border-left-color:var(--lime)}
-.result-content-area .card-tangerine{border-left-color:var(--amber)}
-/* Text im Result */
-.result-content-area .rtable td{color:rgba(255,255,255,.85);border-bottom-color:rgba(255,255,255,.08)}
-.result-content-area .rtable th{color:rgba(255,255,255,.4);border-bottom-color:rgba(255,255,255,.15)}
-.result-content-area .ratio-group-header td{background:rgba(255,255,255,.06);color:var(--lime)}
-.result-content-area .rtable tbody tr:hover td{background:rgba(255,255,255,.07)}
-.result-content-area .score-row{border-bottom-color:rgba(255,255,255,.08);color:rgba(255,255,255,.85)}
-.result-content-area .gauge-num{color:#fff}
-.result-content-area .gauge-denom{color:rgba(255,255,255,.4)}
-.result-content-area .section-label{color:var(--lime)}
-.result-content-area .section-label::after{background:rgba(255,255,255,.12)}
-.result-content-area .metric{background:rgba(255,255,255,.08);border-right-color:rgba(255,255,255,.08);border-bottom-color:rgba(255,255,255,.08)}
-.result-content-area .metric:hover{background:rgba(255,255,255,.13)}
-.result-content-area .metric-label{color:rgba(255,255,255,.4)}
-.result-content-area .metric-value{color:#fff}
-.result-content-area .metrics{border-color:rgba(255,255,255,.1)}
-.result-content-area .period-tab{border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.5)}
-.result-content-area .period-tab:hover{border-color:rgba(255,255,255,.5);color:#fff}
-.result-content-area .period-tab.active{background:var(--lime);color:var(--dc-ink);border-color:var(--lime)}
-.result-content-area .chart-range-btn{border-color:rgba(255,255,255,.15);color:rgba(255,255,255,.45)}
-.result-content-area .chart-range-btn:hover{border-color:#fff;color:#fff}
-.result-content-area .chart-range-btn.active{background:#fff;color:var(--electric);border-color:#fff}
-.result-content-area .qual-label{color:rgba(255,255,255,.85)}
-.result-content-area .qual-group-header{color:rgba(255,255,255,.4)}
-.result-content-area .qual-group-header::after{background:rgba(255,255,255,.12)}
-.result-content-area .qual-row{border-bottom-color:rgba(255,255,255,.08)}
-.result-content-area .dcf-grid{border-color:rgba(255,255,255,.1)}
-.result-content-area .dcf-metric{background:rgba(255,255,255,.08);border-right-color:rgba(255,255,255,.08);border-bottom-color:rgba(255,255,255,.08)}
-.result-content-area .dcf-metric:hover{background:rgba(255,255,255,.13)}
-.result-content-area .dcf-label{color:rgba(255,255,255,.4)}
-.result-content-area .dcf-val{color:#fff}
-.result-content-area .dcf-sub{color:rgba(255,255,255,.4)}
-.result-content-area .winner-table th{color:rgba(255,255,255,.4);border-bottom-color:rgba(255,255,255,.15)}
-.result-content-area .winner-table td{border-bottom-color:rgba(255,255,255,.08)}
-.result-content-area .winner-table tbody tr:hover td{background:rgba(255,255,255,.07)}
-.result-content-area .period-table th{color:rgba(255,255,255,.4);border-bottom-color:rgba(255,255,255,.15)}
-.result-content-area .period-table td{border-bottom-color:rgba(255,255,255,.08);color:rgba(255,255,255,.85)}
-.result-content-area .period-table td:first-child{color:rgba(255,255,255,.6)}
-.result-content-area .period-table tbody tr:hover td{background:rgba(255,255,255,.07)}
-.result-content-area .loading{color:rgba(255,255,255,.4)}
-.result-content-area .loading-text{color:rgba(255,255,255,.4)}
-.result-content-area .btn{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);color:#fff}
-.result-content-area .btn:hover{background:rgba(255,255,255,.2)}
-.result-content-area .btn-ghost{background:transparent;color:rgba(255,255,255,.35)}
-.result-content-area .field label{color:rgba(255,255,255,.4)}
-.result-content-area .field input,.result-content-area .field select{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.15);color:#fff}
-.result-content-area .tp-card{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.12)}
-.result-content-area .tp-card:hover{background:rgba(255,255,255,.14)}
+.result-content-area .card-label{color:var(--dc-mid)}
+.result-content-area .card-hot{border-left:4px solid var(--hot)}
+.result-content-area .card-electric{border-left:4px solid var(--electric)}
+.result-content-area .card-acid{border-left:4px solid var(--lime)}
+.result-content-area .card-tangerine{border-left:4px solid var(--amber)}
+/* Tabellen lesbar auf weiß */
+.result-content-area .rtable td{color:var(--dc-ink);border-bottom-color:rgba(91,33,245,.07)}
+.result-content-area .rtable th{color:var(--dc-mid);border-bottom-color:rgba(91,33,245,.15);font-size:.56rem}
+.result-content-area .ratio-group-header td{background:rgba(91,33,245,.04);color:var(--electric);font-size:.56rem}
+.result-content-area .rtable tbody tr:hover td{background:rgba(91,33,245,.03)}
+.result-content-area .score-row{border-bottom-color:rgba(91,33,245,.07);color:var(--dc-ink)}
+.result-content-area .score-weight{color:var(--dc-mid)}
+.result-content-area .gauge-num{color:var(--dc-ink)}
+.result-content-area .gauge-denom{color:var(--dc-mid)}
+.result-content-area .section-label{color:var(--electric)}
+.result-content-area .section-label::after{background:rgba(91,33,245,.1)}
+/* Metriken */
+.result-content-area .metric{background:#fff;border-right-color:rgba(91,33,245,.08);border-bottom-color:rgba(91,33,245,.08)}
+.result-content-area .metric:hover{background:rgba(91,33,245,.03)}
+.result-content-area .metric-label{color:var(--dc-mid);font-size:.54rem}
+.result-content-area .metric-value{color:var(--dc-ink)}
+.result-content-area .metrics{border-color:rgba(91,33,245,.12)}
+/* Tabs */
+.result-content-area .period-tab{border-color:rgba(91,33,245,.2);color:var(--dc-mid)}
+.result-content-area .period-tab:hover{border-color:var(--electric);color:var(--electric)}
+.result-content-area .period-tab.active{background:var(--electric);color:#fff;border-color:var(--electric)}
+.result-content-area .chart-range-btn{border-color:rgba(91,33,245,.15);color:var(--dc-mid)}
+.result-content-area .chart-range-btn:hover{border-color:var(--electric);color:var(--electric)}
+.result-content-area .chart-range-btn.active{background:var(--electric);color:#fff;border-color:var(--electric)}
+/* Qualitative */
+.result-content-area .qual-label{color:var(--dc-ink)}
+.result-content-area .qual-group-header{color:var(--dc-mid)}
+.result-content-area .qual-group-header::after{background:rgba(91,33,245,.1)}
+.result-content-area .qual-row{border-bottom-color:rgba(91,33,245,.07)}
+/* DCF */
+.result-content-area .dcf-grid{border-color:rgba(91,33,245,.12)}
+.result-content-area .dcf-metric{background:#fff;border-right-color:rgba(91,33,245,.08);border-bottom-color:rgba(91,33,245,.08)}
+.result-content-area .dcf-metric:hover{background:rgba(91,33,245,.03)}
+.result-content-area .dcf-label{color:var(--dc-mid);font-size:.54rem}
+.result-content-area .dcf-val{color:var(--dc-ink)}
+.result-content-area .dcf-sub{color:var(--dc-mid)}
+/* Tabellen compare/period */
+.result-content-area .winner-table th{color:var(--dc-mid);border-bottom-color:rgba(91,33,245,.15)}
+.result-content-area .winner-table td{border-bottom-color:rgba(91,33,245,.07);color:var(--dc-ink)}
+.result-content-area .winner-table tbody tr:hover td{background:rgba(91,33,245,.03)}
+.result-content-area .period-table th{color:var(--dc-mid);border-bottom-color:rgba(91,33,245,.15)}
+.result-content-area .period-table td{border-bottom-color:rgba(91,33,245,.07);color:var(--dc-ink)}
+.result-content-area .period-table td:first-child{color:var(--dc-mid)}
+.result-content-area .period-table tbody tr:hover td{background:rgba(91,33,245,.03)}
+/* Buttons auf dc-bg */
+.result-content-area .btn{background:#fff;border-color:rgba(91,33,245,.2);color:var(--dc-ink)}
+.result-content-area .btn:hover{border-color:var(--electric);color:var(--electric)}
+.result-content-area .btn-primary{background:var(--electric);color:#fff;border-color:var(--electric)}
+.result-content-area .btn-ghost{background:transparent;color:var(--dc-mid);border-color:rgba(91,33,245,.15)}
+/* Felder */
+.result-content-area .field label{color:var(--dc-mid)}
+.result-content-area .field input,.result-content-area .field select{background:var(--dc-bg);border-color:rgba(91,33,245,.15);color:var(--dc-ink)}
+.result-content-area .field input:focus,.result-content-area .field select:focus{border-color:var(--electric);box-shadow:0 0 0 3px rgba(91,33,245,.1)}
+.result-content-area .tp-card{background:var(--dc-bg);border-color:rgba(91,33,245,.1)}
+.result-content-area .tp-card:hover{border-color:rgba(91,33,245,.3);background:#fff}
+.result-content-area .tp-title{color:var(--dc-mid)}
+.result-content-area .tp-val{color:var(--dc-ink)}
+/* Loading/empty */
+.result-content-area .loading{color:var(--dc-mid)}
+.result-content-area .loading-text{color:var(--dc-mid)}
+/* Score-bars im result (besser lesbar) */
+.result-content-area .score-bar-wrap{background:rgba(91,33,245,.1)}
+.result-content-area .score-bar-wrap-sm{background:rgba(91,33,245,.1)}
 .result-content-area .tp-title{color:rgba(255,255,255,.4)}
 .result-content-area .tp-val{color:#fff}
 
