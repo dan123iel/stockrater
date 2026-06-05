@@ -1248,7 +1248,7 @@ function renderRatios(fd,ks,meta,closes,highs,lows,summary){
   // WACC lookup
   const waccInfo=getWaccInfo(fd);
   const stressLabel = window._lastStressLabel || '';
-  const stressCol   = window._lastStressCol   || '#ff9500';
+  const stressCol   = window._lastStressCol   || '#d97706';
   document.getElementById('sc-wacc').innerHTML=
     `WACC ${(waccInfo.wacc*100).toFixed(1)}%  ·  β ${waccInfo.beta}  ·  ${sector||'Unknown sector'}` +
     (stressLabel ? ` &nbsp;<span style="background:${stressCol};color:#fff;padding:2px 8px;border-radius:0;font-family:var(--mono);font-size:.58rem;font-weight:800;letter-spacing:.06em">${stressLabel}</span>` : '');
