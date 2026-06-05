@@ -1328,9 +1328,10 @@ function renderRatioTable(sector, labels, ks){
     </div>
     <table class="rtable">
       <thead><tr>
-        <th>Ratio</th><th>Value</th>
-        <th>Target ★5</th>
-        <th style="min-width:120px"><span title="T = Theory (Excel benchmarks), S = Sector (S&P 500 median)" style="cursor:help">Score <span style="font-size:.58rem;color:var(--text3)">T = theory  S = sector</span></span></th>
+        <th>Ratio</th>
+        <th>Value</th>
+        <th>Thresholds (sector-adjusted)</th>
+        <th style="min-width:140px">Score vs Theory · Sector</th>
       </tr></thead>
       <tbody>${rows}</tbody>
     </table>`;
