@@ -284,14 +284,20 @@ function getIndustryBench(sector){
 
 function scoreRatioVsIndustry(val, key, sector){
   const bench = getIndustryBench(sector);
-  const median = bench[key];
-  if(!median||!val) return 3;
-  const INVERTED = ['debtToEquity','debtRatio'];
-  const ratio = INVERTED.includes(key) ? median/val : val/median;
-  if(ratio>=1.5) return 5;
-  if(ratio>=1.15) return 4;
-  if(ratio>=0.85) return 3;
-  if(ratio>=0.60) return 2;
+  const b = bench[key];
+  if(!b || val === null || val === undefined || isNaN(val)) return 3;
+  // Range-based scoring (D/E and similar)
+  if(b.ranged){
+    if(val >= b.optLo && val <= b.optHi) return 5;
+    if(val < b.optLo) return val < b.optLo * 0.3 ? 2 : 3; // under-levered
+    if(val <= b.goodHi) return 4;
+    if(val <= b.warnHi) return 3;
+    return 2;
+  }
+  if(val >= b.s5) return 5;
+  if(val >= b.s4) return 4;
+  if(val >= b.s3) return 3;
+  if(val >= b.s2) return 2;
   return 1;
 }
 
