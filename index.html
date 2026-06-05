@@ -1537,7 +1537,7 @@ function renderPortfolioAnalysis() {
   const verdictMap = { 'Strong Buy': 0, 'Buy': 0, 'Hold': 0, 'Avoid': 0 };
   pf.forEach(c => { if (verdictMap[c.verdict] !== undefined) verdictMap[c.verdict]++; });
 
-  const verdictColors  = { 'Strong Buy':'#00ff88','Buy':'#c8ff00','Hold':'#ff9500','Avoid':'#ff2d6b' };
+  const verdictColors  = { 'Strong Buy':'#059669','Buy':'#c8ff00','Hold':'#d97706','Avoid':'#dc2626' };
   const verdictBar     = document.getElementById('pf-verdict-bar');
   const verdictLegend  = document.getElementById('pf-verdict-legend');
 
