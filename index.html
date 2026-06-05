@@ -412,12 +412,12 @@ ul,ol{list-style:none}
    CARDS
    ============================================================ */
 .card{
-  background:#fff;border:1.5px solid rgba(0,0,0,.08);
+  background:#fff;border:1.5px solid rgba(0,0,0,.07);
   border-radius:var(--r);padding:1.75rem 2rem;margin-bottom:1.25rem;
-  box-shadow:0 2px 16px rgba(0,0,0,.05);
-  transition:transform .2s cubic-bezier(.4,0,.2,1),box-shadow .2s;
+  box-shadow:0 1px 8px rgba(0,0,0,.04),0 4px 20px rgba(0,0,0,.03);
+  transition:transform .3s var(--ease),box-shadow .3s var(--ease);
 }
-.card:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.09)}
+.card:hover{transform:translateY(-3px);box-shadow:0 8px 40px rgba(0,0,0,.1)}
 .card-label{
   font-family:var(--mono);font-size:.6rem;font-weight:700;
   letter-spacing:.15em;text-transform:uppercase;
