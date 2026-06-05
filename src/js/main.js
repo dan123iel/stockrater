@@ -437,6 +437,10 @@ async function fetchCompany(forceTicker){
     const [summary,chart]=await Promise.all([yahooSummary(ticker),yahooChart(ticker,'1y')]);
     const fd=summary.financialData||{};
     const ks=summary.defaultKeyStatistics||{};
+    const ap=summary.assetProfile||{};
+    // Sector: try financialData first, then assetProfile (Yahoo often puts it there)
+    if(!fd.sector && ap.sector) fd.sector = ap.sector;
+    if(!fd.industry && ap.industry) fd.industry = ap.industry;
     const meta=chart.meta||{};
     const closes=chart.closes||[];
     const highs=chart.highs||[];
