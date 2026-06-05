@@ -189,19 +189,47 @@ ul,ol{list-style:none}
   font-weight:700;
 }
 
-/* Right CTA */
-.tnav-cta{
-  font-size:.8rem;
-  font-weight:600;
-  color:var(--acid);
-  padding:.35rem .5rem .35rem .75rem;
+/* Right CTA — Lupe */
+.tnav-search-btn{
+  display:flex;align-items:center;justify-content:center;
+  width:32px;height:32px;
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:var(--pill);
   cursor:pointer;
-  letter-spacing:-.01em;
+  color:rgba(255,255,255,.7);
+  font-size:1rem;
   margin-left:.25rem;
-  transition:opacity .15s;
-  user-select:none;
+  transition:background .15s,color .15s;
+  flex-shrink:0;
 }
-.tnav-cta:hover{opacity:.7}
+.tnav-search-btn:hover{background:rgba(255,255,255,.2);color:#fff}
+
+/* Inline nav search — expands when active */
+.tnav-search-wrap{
+  display:flex;align-items:center;
+  overflow:hidden;
+  max-width:0;
+  opacity:0;
+  transition:max-width .35s var(--ease),opacity .25s;
+  margin-left:.25rem;
+}
+.tnav-search-wrap.open{max-width:240px;opacity:1}
+.tnav-search-input{
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:var(--pill);
+  color:#fff;
+  font-size:.82rem;
+  font-family:'DM Sans',sans-serif;
+  font-weight:500;
+  padding:.32rem .9rem;
+  outline:none;
+  width:200px;
+  transition:border-color .15s,box-shadow .15s;
+}
+.tnav-search-input::placeholder{color:rgba(255,255,255,.35)}
+.tnav-search-input:focus{border-color:var(--acid);box-shadow:0 0 0 3px rgba(200,255,0,.15)}
 
 /* ============================================================
    SECTIONS — each is 100vh, stacked vertically
