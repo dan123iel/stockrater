@@ -49,6 +49,67 @@ const WACC_TABLE = {
   "Utility (Water)":{"beta":0.68,"wacc":0.0615}
 };
 
+// ==================== SECTOR LOOKUP (fallback when Yahoo doesn't return sector) ====================
+const SECTOR_MAP = {
+  // Technology
+  'AAPL':'Technology','MSFT':'Technology','GOOGL':'Technology','GOOG':'Technology',
+  'META':'Technology','NVDA':'Technology','AMD':'Technology','INTC':'Technology',
+  'QCOM':'Technology','AVGO':'Technology','TSM':'Technology','ASML':'Technology',
+  'SAP':'Technology','CRM':'Technology','ORCL':'Technology','ADBE':'Technology',
+  'CSCO':'Technology','IBM':'Technology','TXN':'Technology','MU':'Technology',
+  'AMAT':'Technology','LRCX':'Technology','KLAC':'Technology','MRVL':'Technology',
+  // Auto
+  'TSLA':'Consumer Cyclical','BMW.DE':'Consumer Cyclical','VOW3.DE':'Consumer Cyclical',
+  'MBG.DE':'Consumer Cyclical','TM':'Consumer Cyclical','HMC':'Consumer Cyclical',
+  'F':'Consumer Cyclical','GM':'Consumer Cyclical','STLA':'Consumer Cyclical',
+  // Finance
+  'JPM':'Financial Services','BAC':'Financial Services','GS':'Financial Services',
+  'MS':'Financial Services','WFC':'Financial Services','C':'Financial Services',
+  'BLK':'Financial Services','AXP':'Financial Services','V':'Financial Services',
+  'MA':'Financial Services','ALV.DE':'Financial Services','DBK.DE':'Financial Services',
+  'MUV2.DE':'Financial Services','CBK.DE':'Financial Services',
+  // Healthcare
+  'JNJ':'Healthcare','PFE':'Healthcare','MRK':'Healthcare','ABBV':'Healthcare',
+  'UNH':'Healthcare','LLY':'Healthcare','BMY':'Healthcare','AMGN':'Healthcare',
+  'GILD':'Healthcare','CVS':'Healthcare','SAN.DE':'Healthcare','BAYN.DE':'Healthcare',
+  // Energy
+  'XOM':'Energy','CVX':'Energy','SHEL':'Energy','BP':'Energy','TTE':'Energy',
+  'COP':'Energy','SLB':'Energy','EOG':'Energy','PSX':'Energy','MPC':'Energy',
+  // Consumer
+  'AMZN':'Consumer Cyclical','BABA':'Consumer Cyclical','PDD':'Consumer Cyclical',
+  'NKE':'Consumer Cyclical','MCD':'Consumer Cyclical','SBUX':'Consumer Cyclical',
+  'HD':'Consumer Cyclical','LOW':'Consumer Cyclical','TGT':'Consumer Cyclical',
+  'WMT':'Consumer Defensive','KO':'Consumer Defensive','PEP':'Consumer Defensive',
+  'PG':'Consumer Defensive','PM':'Consumer Defensive','MO':'Consumer Defensive',
+  'COST':'Consumer Defensive',
+  // Communication
+  'NFLX':'Communication Services','DIS':'Communication Services',
+  'CMCSA':'Communication Services','T':'Communication Services',
+  'VZ':'Communication Services','TMUS':'Communication Services',
+  'SPOT':'Communication Services',
+  // Industrial
+  'BA':'Industrials','CAT':'Industrials','GE':'Industrials','HON':'Industrials',
+  'MMM':'Industrials','UPS':'Industrials','FDX':'Industrials','LMT':'Industrials',
+  'RTX':'Industrials','DE':'Industrials','SIE.DE':'Industrials','AIR.DE':'Industrials',
+  // Other
+  'BRK.B':'Financial Services','BRK-B':'Financial Services',
+  'LUNR':'Industrials','IRDM':'Communication Services','SATS':'Communication Services',
+};
+
+const INDUSTRY_MAP = {
+  'AAPL':'Consumer Electronics','MSFT':'Software','GOOGL':'Internet Services',
+  'META':'Social Media','NVDA':'Semiconductors','AMD':'Semiconductors',
+  'SAP':'Enterprise Software','TSLA':'Electric Vehicles','BMW.DE':'Automobiles',
+  'ALV.DE':'Insurance','JPM':'Banking','GS':'Investment Banking',
+  'JNJ':'Pharmaceuticals','PFE':'Pharmaceuticals','AMZN':'E-Commerce',
+  'NFLX':'Streaming','DIS':'Entertainment','LUNR':'Space Technology',
+  'IRDM':'Satellite Communications','QCOM':'Semiconductors',
+  'MBG.DE':'Luxury Automobiles','VOW3.DE':'Automobiles',
+};
+
+function getSector(ticker){ return SECTOR_MAP[ticker] || SECTOR_MAP[ticker?.toUpperCase()] || ''; }
+function getIndustryHint(ticker){ return INDUSTRY_MAP[ticker] || INDUSTRY_MAP[ticker?.toUpperCase()] || ''; }
+
 // ==================== INDUSTRY BENCHMARKS (S&P 500 sector medians) ====================
 // Source: Damodaran sector averages, adjusted for mid-2024
 const INDUSTRY_BENCHMARKS = {
