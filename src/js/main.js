@@ -2819,7 +2819,7 @@ updateApiBadge();checkProxyWarnings();
 renderPortfolio();renderTrades();renderWatchlist();updateBadges();calcTrade();
 
 // ==================== TOAST NOTIFICATIONS ====================
-function showToast(msg, color='#00ff88') {
+function showToast(msg, color='#059669') {
   const existing = document.getElementById('vc-toast');
   if (existing) existing.remove();
   const t = document.createElement('div');
