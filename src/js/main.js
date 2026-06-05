@@ -1640,7 +1640,7 @@ function saveToPortfolio(){
   renderPortfolio();updateBadges();
   // trigger portfolio analysis refresh
   if(typeof renderPortfolioAnalysis==='function') renderPortfolioAnalysis();
-  showToast(`${entry.name} added to portfolio · Score ${normalized.toFixed(2)} · ${verdict}`,'#00ff88');
+  showToast(`${entry.name} added to portfolio · Score ${normalized.toFixed(2)} · ${verdict}`,'#059669');
 }
 function saveToWatchlist(){
   if(!currentCompany){alert('Please load a company first.');return;}
