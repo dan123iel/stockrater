@@ -1559,6 +1559,38 @@ if (pfSection) {
     obs2.observe(cmpLoading, {attributes:true, attributeFilter:['style']});
   }
 })();
+
+/* ============================================================
+   NAV INLINE SEARCH — Lupe togglet Suchfeld
+   ============================================================ */
+function toggleNavSearch(){
+  const wrap = document.getElementById('tnav-search-wrap');
+  const inp  = document.getElementById('tnav-ticker');
+  const isOpen = wrap.classList.contains('open');
+  if(isOpen){
+    closeNavSearch();
+  } else {
+    wrap.classList.add('open');
+    setTimeout(() => inp && inp.focus(), 50);
+  }
+}
+function closeNavSearch(){
+  const wrap = document.getElementById('tnav-search-wrap');
+  const inp  = document.getElementById('tnav-ticker');
+  wrap.classList.remove('open');
+  if(inp) inp.value = '';
+}
+function navSearch(){
+  const inp = document.getElementById('tnav-ticker');
+  const val = inp ? inp.value.trim() : '';
+  if(!val) return;
+  // Fill main search and trigger analysis
+  const mainInp = document.getElementById('r-ticker');
+  if(mainInp) mainInp.value = val;
+  closeNavSearch();
+  scrollToSection('analysis');
+  setTimeout(() => fetchCompany(val), 350);
+}
 </script>
 </body>
 </html>
