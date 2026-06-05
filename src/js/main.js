@@ -1374,8 +1374,8 @@ function renderRatioTable(sector, labels, ks){
       <thead><tr>
         <th>Ratio</th>
         <th>Value</th>
-        <th>Thresholds (sector-adjusted)</th>
-        <th style="min-width:140px">Score vs Theory · Sector</th>
+        <th>Sector Benchmarks (all 5 levels)</th>
+        <th style="min-width:140px">Score Theory · Sector</th>
       </tr></thead>
       <tbody>${rows}</tbody>
     </table>`;
