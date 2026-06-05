@@ -1211,10 +1211,10 @@ function renderPortfolioAnalysis() {
   const metricsRow = document.getElementById('pf-metrics-row');
   if (metricsRow) {
     const metrics = [
-      { label: 'Positions',       val: n,                    sub: 'holdings' },
-      { label: 'Avg Score',       val: avgScore.toFixed(2),  sub: '/ 5.0' },
-      { label: 'Sectors',         val: sectors.length,       sub: 'unique' },
-      { label: 'Diversification', val: divScore + '%',        sub: divScore >= 60 ? '✓ good' : '⚠ low' },
+      { label: 'Positions',       val: n,                    sub: 'in portfolio' },
+      { label: 'Avg Score',       val: avgScore.toFixed(2),  sub: avgScore >= 3.5 ? '✓ above average' : avgScore >= 2.5 ? '~ average' : '⚠ below average' },
+      { label: 'Sectors',         val: sectors.length || '?', sub: sectors.length ? 'unique' : 're-analyse to load' },
+      { label: 'Diversification', val: sectors.length ? divScore + '%' : '—', sub: divLabel },
     ];
     const borderStyle = '1px solid rgba(255,255,255,.1)';
     metricsRow.innerHTML = metrics.map(m => `
