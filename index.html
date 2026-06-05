@@ -313,23 +313,23 @@ ul,ol{list-style:none}
   flex-shrink:0;
 }
 
-/* Analysis search — coral bar like #21 */
+/* Analysis search — clean white bar on electric background */
 .search-coral{
   display:flex;
   align-items:center;
-  background:var(--section-search-color);
+  background:#fff;
   border-radius:var(--pill);
-  border:2px solid rgba(255,255,255,.15);
+  border:2px solid rgba(255,255,255,.3);
   padding:.5rem .5rem .5rem 1.75rem;
   transition:border-color .2s,box-shadow .2s;
 }
-.search-coral:focus-within{border-color:rgba(255,255,255,.5);box-shadow:0 0 0 4px rgba(255,107,82,.3)}
+.search-coral:focus-within{border-color:var(--lime);box-shadow:0 0 0 4px rgba(200,255,0,.2)}
 .search-coral-input{
   flex:1;background:transparent;border:none;outline:none;
-  font-size:1.5rem;font-weight:700;color:var(--electric);
+  font-size:1.5rem;font-weight:700;color:var(--dc-ink);
   letter-spacing:-.03em;
 }
-.search-coral-input::placeholder{color:rgba(74,26,232,.4);font-weight:500}
+.search-coral-input::placeholder{color:rgba(26,16,40,.35);font-weight:500}
 .search-coral-btn{
   background:var(--electric);color:#fff;
   border:none;border-radius:var(--pill);
