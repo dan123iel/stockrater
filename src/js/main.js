@@ -2468,32 +2468,44 @@ function renderPriceChart(closes, highs, lows, rangeKey){
   areaPath+=' L'+cx(n-1)+','+(H-pad.b)+' Z';
   const last=valid[valid.length-1], first=valid[0];
   const isUp=last>=first;
-  const lineColor=isUp?'#059669':'#dc2626';
+  // Digital Culture Farben: Lila-Linie statt Grün/Rot
+  const lineColor='#5b21f5';
+  const lineColorPos='#00a86b';
+  const lineColorNeg='#e0302a';
+  const chartColor = isUp ? lineColorPos : lineColorNeg;
   const ns='http://www.w3.org/2000/svg';
   svg.innerHTML='';
   const defs=document.createElementNS(ns,'defs');
   const grad=document.createElementNS(ns,'linearGradient');
   grad.id='chartGrad'; grad.setAttribute('x1','0');grad.setAttribute('y1','0');grad.setAttribute('x2','0');grad.setAttribute('y2','1');
-  const s1=document.createElementNS(ns,'stop');s1.setAttribute('offset','0%');s1.setAttribute('stop-color',lineColor);s1.setAttribute('stop-opacity','.15');
-  const s2=document.createElementNS(ns,'stop');s2.setAttribute('offset','100%');s2.setAttribute('stop-color',lineColor);s2.setAttribute('stop-opacity','0');
+  const s1=document.createElementNS(ns,'stop');s1.setAttribute('offset','0%');s1.setAttribute('stop-color',chartColor);s1.setAttribute('stop-opacity','.12');
+  const s2=document.createElementNS(ns,'stop');s2.setAttribute('offset','100%');s2.setAttribute('stop-color',chartColor);s2.setAttribute('stop-opacity','0');
   grad.appendChild(s1);grad.appendChild(s2);defs.appendChild(grad);svg.appendChild(defs);
   function addEl(tag,attrs){ const e=document.createElementNS(ns,tag); Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,String(v))); svg.appendChild(e); return e; }
-  function addTxt(x,y,t,fill,sz,anchor,fw){ const e=document.createElementNS(ns,'text'); e.setAttribute('x',x);e.setAttribute('y',y);e.setAttribute('fill',fill);e.setAttribute('font-size',sz);e.setAttribute('font-family','JetBrains Mono,monospace');e.setAttribute('text-anchor',anchor||'middle');if(fw)e.setAttribute('font-weight',fw);e.textContent=t;svg.appendChild(e); }
-  [0,.25,.5,.75,1].forEach(function(t){ var v=minV+t*priceRange,y=cy(v),lbl=v>=1000?v.toFixed(0):v.toFixed(2); addEl('line',{x1:pad.l,y1:y,x2:W-pad.r,y2:y,stroke:'rgba(0,0,0,.06)','stroke-width':1,'stroke-dasharray':'3,3'}); addTxt(pad.l-6,y+4,lbl,'rgba(0,0,0,.35)',9,'end'); });
-  addEl('line',{x1:pad.l,y1:pad.t,x2:pad.l,y2:H-pad.b,stroke:'rgba(0,0,0,.1)','stroke-width':1});
-  addEl('line',{x1:pad.l,y1:H-pad.b,x2:W-pad.r,y2:H-pad.b,stroke:'rgba(0,0,0,.1)','stroke-width':1});
-  addEl('path',{d:areaPath,fill:'url(#chartGrad)',opacity:.2});
-  addEl('path',{d:path,fill:'none',stroke:lineColor,'stroke-width':1.8,'stroke-linejoin':'round','stroke-linecap':'round'});
+  function addTxt(x,y,t,fill,sz,anchor,fw){ const e=document.createElementNS(ns,'text'); e.setAttribute('x',x);e.setAttribute('y',y);e.setAttribute('fill',fill);e.setAttribute('font-size',sz);e.setAttribute('font-family','DM Mono,monospace');e.setAttribute('text-anchor',anchor||'middle');if(fw)e.setAttribute('font-weight',fw);e.textContent=t;svg.appendChild(e); }
+  // Grid lines
+  [0,.25,.5,.75,1].forEach(function(t){ var v=minV+t*priceRange,y=cy(v),lbl=v>=1000?v.toFixed(0):v.toFixed(2); addEl('line',{x1:pad.l,y1:y,x2:W-pad.r,y2:y,stroke:'rgba(91,33,245,.06)','stroke-width':1,'stroke-dasharray':'3,4'}); addTxt(pad.l-6,y+4,lbl,'rgba(91,33,245,.35)',9,'end'); });
+  addEl('line',{x1:pad.l,y1:pad.t,x2:pad.l,y2:H-pad.b,stroke:'rgba(91,33,245,.1)','stroke-width':1});
+  addEl('line',{x1:pad.l,y1:H-pad.b,x2:W-pad.r,y2:H-pad.b,stroke:'rgba(91,33,245,.1)','stroke-width':1});
+  addEl('path',{d:areaPath,fill:'url(#chartGrad)',opacity:.8});
+  addEl('path',{d:path,fill:'none',stroke:chartColor,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'});
+  // X-axis labels
   var xLabMap={'1d':['Open','Mid','Now'],'5d':['5D ago','Mid','Today'],'1mo':['1M ago','2W','Today'],'6mo':['6M ago','3M','Today'],'ytd':['Jan','Mid','Today'],'1y':['12M ago','6M ago','Today'],'max':['Start','Mid','Today']};
   var xLabs=xLabMap[rangeKey]||['Start','Mid','Today'];
-  [0,.5,1].forEach(function(t,li){ var i=Math.floor(t*(n-1)); addTxt(cx(i),H-pad.b+14,xLabs[li],'rgba(0,0,0,.3)',9,'middle'); });
-  addEl('circle',{cx:cx(n-1),cy:cy(last),r:4,fill:lineColor,stroke:'white','stroke-width':2});
+  [0,.5,1].forEach(function(t,li){ var i=Math.floor(t*(n-1)); addTxt(cx(i),H-pad.b+14,xLabs[li],'rgba(91,33,245,.3)',9,'middle'); });
+  // End dot — oben rechts mit Abstand damit es nicht überschneidet
+  const endX=cx(n-1), endY=cy(last);
+  addEl('circle',{cx:endX,cy:endY,r:3.5,fill:chartColor,stroke:'white','stroke-width':2});
+  // Price label: rechts vom Punkt aber OBEN mit ausreichend Platz zur Linie
   const currency = currentCompany?.meta?.currency||'';
-  addTxt(cx(n-1)+10,cy(last)+4,last.toFixed(2)+(currency?' '+currency:''),lineColor,10,'start','600');
-  var minIdx=closes.indexOf(Math.min.apply(null,valid));
-  var maxIdx=closes.indexOf(Math.max.apply(null,valid));
-  if(minIdx>=0) addTxt(cx(minIdx),cy(Math.min.apply(null,valid))+14,Math.min.apply(null,valid).toFixed(2),'rgba(220,38,38,.6)',8,'middle');
-  if(maxIdx>=0) addTxt(cx(maxIdx),cy(Math.max.apply(null,valid))-6,Math.max.apply(null,valid).toFixed(2),'rgba(5,150,105,.6)',8,'middle');
+  const labelY = endY > H-pad.b-20 ? endY-10 : endY-8; // immer oberhalb des Punktes
+  addTxt(endX-2,labelY,last.toFixed(2)+(currency?' '+currency:''),chartColor,10,'end','700');
+  // Min/Max Labels — mit Padding damit sie nicht auf der Linie liegen
+  var minV2=Math.min.apply(null,valid), maxV2=Math.max.apply(null,valid);
+  var minIdx=closes.indexOf(minV2), maxIdx=closes.indexOf(maxV2);
+  // Min: unten + padding, Max: oben + padding
+  if(minIdx>=0){ const mx=cx(minIdx), my=cy(minV2); addTxt(mx,my+14,minV2.toFixed(2),'rgba(224,48,42,.55)',8,'middle'); }
+  if(maxIdx>=0){ const mx=cx(maxIdx), my=cy(maxV2); addTxt(mx,my-6,maxV2.toFixed(2),'rgba(0,168,107,.55)',8,'middle'); }
 }
 
 // ==================== MARGINS CHART ====================
