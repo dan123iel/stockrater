@@ -121,7 +121,7 @@ ul,ol{list-style:none}
 .page-progress{display:none}
 
 /* ============================================================
-   FIXED NAV — Pill, transparent/colored per section
+   FIXED NAV — 3-zone Locomotive style
    ============================================================ */
 .topnav{
   position:fixed;
@@ -131,34 +131,77 @@ ul,ol{list-style:none}
   z-index:500;
   display:flex;
   align-items:center;
-  gap:2px;
-  background:rgba(10,10,10,.4);
+  gap:0;
+  background:rgba(10,10,10,.45);
   backdrop-filter:blur(24px);
   -webkit-backdrop-filter:blur(24px);
   border-radius:var(--pill);
-  padding:.45rem .5rem;
+  padding:.5rem .75rem;
   border:1px solid rgba(255,255,255,.12);
   white-space:nowrap;
-  transition:background .5s ease;
+  transition:background .5s var(--ease);
 }
 
+/* Left zone: wordmark */
+.tnav-brand{
+  font-family:'DM Sans',sans-serif;
+  font-size:.8rem;
+  font-weight:700;
+  letter-spacing:-.02em;
+  color:rgba(255,255,255,.9);
+  padding:.3rem .75rem .3rem .25rem;
+  cursor:pointer;
+  margin-right:.25rem;
+}
+.tnav-brand sup{
+  font-size:.5rem;
+  letter-spacing:.06em;
+  color:var(--acid);
+  vertical-align:super;
+  font-weight:600;
+}
+
+/* Divider */
+.tnav-div{
+  width:1px;
+  height:16px;
+  background:rgba(255,255,255,.15);
+  flex-shrink:0;
+  margin:0 .25rem;
+}
+
+/* Center items */
 .tnav-item{
-  font-size:.82rem;
+  font-size:.8rem;
   font-weight:500;
-  color:rgba(255,255,255,.55);
-  padding:.38rem .9rem;
+  color:rgba(255,255,255,.45);
+  padding:.35rem .85rem;
   border-radius:var(--pill);
   cursor:pointer;
   transition:color .15s,background .15s;
   letter-spacing:-.01em;
   user-select:none;
 }
-.tnav-item:hover{color:rgba(255,255,255,.9)}
+.tnav-item:hover{color:rgba(255,255,255,.85)}
 .tnav-item.active{
-  background:rgba(255,255,255,.18);
+  background:rgba(255,255,255,.16);
   color:#fff;
   font-weight:700;
 }
+
+/* Right CTA */
+.tnav-cta{
+  font-size:.8rem;
+  font-weight:600;
+  color:var(--acid);
+  padding:.35rem .5rem .35rem .75rem;
+  cursor:pointer;
+  letter-spacing:-.01em;
+  margin-left:.25rem;
+  transition:opacity .15s;
+  user-select:none;
+}
+.tnav-cta:hover{opacity:.7}
 
 /* ============================================================
    SECTIONS — each is 100vh, stacked vertically
