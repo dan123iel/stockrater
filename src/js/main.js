@@ -1293,24 +1293,37 @@ function renderRatioTable(sector, labels, ks){
       const prevVal = prevVals ? prevVals[k] : null;
       const arrow = trendArrow(val, prevVal, bench.inv);
 
-      // Build threshold display from bench — show sector thresholds
+      // Build threshold display — all 5 levels from sector benchmarks
       const sectorBench = getIndustryBench(sector);
       const sb = sectorBench[k];
       let thresholdHTML = '';
+
+      function fmtThresh(raw, b){
+        if(raw === undefined || raw === null) return '—';
+        if(b.scale) return (raw * b.scale).toFixed(0) + '%';
+        if(b.fmt === '%') return (raw * 100).toFixed(0) + '%';
+        return raw.toFixed(2) + 'x';
+      }
+
       if(sb && sb.ranged){
-        thresholdHTML = `<span style="font-family:var(--mono);font-size:.62rem;color:var(--dc-mid)">optimal ${(sb.optLo*100).toFixed(0)}–${(sb.optHi*100).toFixed(0)}%</span>`;
+        thresholdHTML = `<span style="font-family:var(--mono);font-size:.6rem;line-height:1.7;color:var(--dc-mid)">
+          <span style="color:#059669;font-weight:700">★5</span> ${fmtThresh(sb.optLo,bench)}–${fmtThresh(sb.optHi,bench)} optimal
+          <span style="margin:0 3px;opacity:.35">·</span>
+          <span style="color:#d97706">★3</span> ≤${fmtThresh(sb.goodHi,bench)}
+          <span style="margin:0 3px;opacity:.35">·</span>
+          <span style="color:#dc2626">★1</span> &gt;${fmtThresh(sb.warnHi,bench)}
+        </span>`;
       } else if(sb){
-        // Format threshold values
-        const fmt5 = bench.scale ? (sb.s5*bench.scale).toFixed(0)+'%' : sb.s5 ? (bench.fmt==='%'?(sb.s5*100).toFixed(0)+'%':sb.s5.toFixed(2)+'x') : '—';
-        const fmt4 = bench.scale ? (sb.s4*bench.scale).toFixed(0)+'%' : sb.s4 ? (bench.fmt==='%'?(sb.s4*100).toFixed(0)+'%':sb.s4.toFixed(2)+'x') : '—';
-        thresholdHTML = `<span style="font-family:var(--mono);font-size:.62rem;color:var(--dc-mid)">
-          <span style="color:#00a86b;font-weight:700">★5≥${fmt5}</span>
-          <span style="margin:0 4px;opacity:.4">·</span>
-          <span style="color:#e08000">★4≥${fmt4}</span>
+        thresholdHTML = `<span style="font-family:var(--mono);font-size:.6rem;line-height:1.8;color:var(--dc-mid);display:flex;flex-wrap:wrap;gap:0 8px">
+          <span><span style="color:#059669;font-weight:700">★5</span> ≥${fmtThresh(sb.s5,bench)}</span>
+          <span><span style="color:#5b21f5;font-weight:600">★4</span> ≥${fmtThresh(sb.s4,bench)}</span>
+          <span><span style="color:#d97706">★3</span> ≥${fmtThresh(sb.s3,bench)}</span>
+          <span><span style="color:#e08000">★2</span> ≥${fmtThresh(sb.s2,bench)}</span>
+          <span style="color:#dc2626">★1</span>
         </span>`;
       } else {
-        const b5=bench.scale?(bench.s5*bench.scale).toFixed(0)+'%':bench.s5+(bench.fmt==='%'?'%':'x');
-        thresholdHTML = `<span style="font-family:var(--mono);font-size:.62rem;color:var(--dc-mid)">≥${b5}</span>`;
+        const b5 = bench.scale ? (bench.s5*bench.scale).toFixed(0)+'%' : bench.s5+(bench.fmt==='%'?'%':'x');
+        thresholdHTML = `<span style="font-family:var(--mono);font-size:.6rem;color:var(--dc-mid)">≥${b5}</span>`;
       }
 
       // Compact score bar
