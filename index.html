@@ -723,6 +723,15 @@ ul,ol{list-style:none}
     </div>
   </div>
 
+    <!-- Action buttons — direkt auf der coral Fläche -->
+    <div id="result-action-btns" style="margin-top:1.5rem;display:flex;gap:.75rem;flex-wrap:wrap">
+      <button onclick="saveToPortfolio()" style="background:var(--electric);color:var(--coral);border:none;border-radius:var(--pill);padding:.7rem 1.5rem;font-size:.9rem;font-weight:800;cursor:pointer;letter-spacing:-.02em;transition:opacity .15s">+ Portfolio</button>
+      <button onclick="saveToWatchlist()" style="background:rgba(74,26,232,.2);color:var(--electric);border:2px solid rgba(74,26,232,.3);border-radius:var(--pill);padding:.7rem 1.5rem;font-size:.9rem;font-weight:700;cursor:pointer;letter-spacing:-.02em;transition:all .15s">+ Watchlist</button>
+      <button onclick="document.getElementById('risk-engine-inline').style.display=document.getElementById('risk-engine-inline').style.display==='none'||document.getElementById('risk-engine-inline').style.display===''?'block':'none'" style="background:rgba(74,26,232,.15);color:rgba(74,26,232,.8);border:2px solid rgba(74,26,232,.2);border-radius:var(--pill);padding:.7rem 1.5rem;font-size:.9rem;font-weight:700;cursor:pointer;letter-spacing:-.02em;transition:all .15s">⚡ Risk Engine</button>
+      <button onclick="clearRating()" style="background:transparent;color:rgba(74,26,232,.5);border:2px solid rgba(74,26,232,.15);border-radius:var(--pill);padding:.7rem 1rem;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .15s">✕ clear</button>
+    </div>
+  </div>
+
   <!-- Hidden legacy div for JS compat -->
   <div id="company-hero" style="display:none"></div>
 
