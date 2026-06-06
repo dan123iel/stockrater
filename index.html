@@ -307,23 +307,23 @@ a{color:inherit;text-decoration:none}
 .search-acid-wrap{display:flex;gap:1rem;flex-wrap:wrap}
 .search-acid{
   display:flex;flex:1;min-width:200px;
-  align-items:center;background:rgba(255,255,255,.12);
-  border-radius:var(--pill);border:1.5px solid rgba(255,255,255,.2);
-  padding:.5rem .5rem .5rem 1.5rem;transition:border-color .2s;
+  align-items:center;background:#fff;
+  border-radius:var(--pill);border:2px solid var(--border);
+  padding:.5rem .5rem .5rem 1.5rem;transition:border-color .2s,box-shadow .2s;
 }
-.search-acid:focus-within{border-color:var(--lime)}
+.search-acid:focus-within{border-color:var(--purple);box-shadow:0 0 0 4px rgba(91,33,245,.1)}
 .search-acid-input{
   flex:1;background:transparent;border:none;outline:none;
-  font-size:1.2rem;font-weight:700;color:#fff;letter-spacing:-.03em;
+  font-size:1.2rem;font-weight:700;color:var(--ink);letter-spacing:-.03em;
 }
-.search-acid-input::placeholder{color:rgba(255,255,255,.3);font-weight:500}
+.search-acid-input::placeholder{color:rgba(26,16,40,.25);font-weight:500}
 .search-acid-btn{
-  background:#fff;color:var(--ink);border:none;border-radius:var(--pill);
+  background:var(--purple);color:#fff;border:none;border-radius:var(--pill);
   padding:.7rem 1.75rem;font-size:.9rem;font-weight:800;
   cursor:pointer;letter-spacing:-.02em;flex-shrink:0;
-  transition:opacity .15s,transform .1s;
+  transition:background .15s,transform .1s;
 }
-.search-acid-btn:hover{opacity:.9}
+.search-acid-btn:hover{background:var(--purple-dark)}
 .search-acid-btn:active{transform:scale(.97)}
 
 /* ============================================================
