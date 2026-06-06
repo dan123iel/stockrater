@@ -1177,7 +1177,7 @@ button:active:not(.home-cta):not(.search-btn):not(.search-coral-btn):not(.search
 
   </div><!-- /db-shell -->
 
-  <!-- Legacy compat — hidden, main.js writes here, we mirror to dashboard -->
+  <!-- Legacy compat — hidden sinks for main.js IDs already in dashboard tiles -->
   <div id="company-hero-band" style="display:none"></div>
   <div id="company-hero"      style="display:none"></div>
   <div id="result-name"       style="display:none"></div>
@@ -1188,15 +1188,8 @@ button:active:not(.home-cta):not(.search-btn):not(.search-coral-btn):not(.search
     <button onclick="saveToPortfolio()"></button>
     <button onclick="saveToWatchlist()"></button>
   </div>
-  <div class="result-content-area" id="rating-content" style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;overflow:hidden">
-    <div id="scorecard-card-legacy" style="display:none"></div>
-    <div id="market-context-card" style="display:none"><div id="market-context-content"></div></div>
-    <div id="period-card-legacy" style="display:none"><div id="period-content"></div></div>
-    <div id="charts-grid" style="display:none">
-      <div id="margins-card-legacy" style="display:none"><div id="margins-chart-content"></div></div>
-      <div id="financials-card-legacy" style="display:none"><div id="financials-chart-content"></div></div>
-    </div>
-  </div>
+  <!-- rating-content shown triggers our MutationObserver -->
+  <div id="rating-content" style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;overflow:hidden"></div>
 
 </section>
 
