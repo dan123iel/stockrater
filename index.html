@@ -1428,17 +1428,48 @@ window.quickSearch = function(ticker){
   setTimeout(()=>fetchCompany&&fetchCompany(ticker),300);
 };
 
-/* ── Result section ── */
+/* ── Dashboard: tile expand/collapse ── */
+var _dbExpanded = null;
+function dbExpand(id){
+  if(_dbExpanded===id) return;
+  _dbExpanded=id;
+  const grid=document.getElementById('db-grid');
+  if(grid) grid.classList.add('has-expanded');
+  document.querySelectorAll('.db-tile').forEach(t=>{
+    const tid=t.id.replace('dbt-','');
+    if(tid===id){
+      t.classList.add('expanded');
+      t.classList.remove('dimmed');
+    } else {
+      t.classList.remove('expanded');
+      t.classList.add('dimmed');
+    }
+  });
+  // Trigger chart resize if expanding chart tile
+  if(id==='chart') setTimeout(()=>window.dispatchEvent(new Event('resize')),420);
+}
+function dbCollapse(){
+  _dbExpanded=null;
+  const grid=document.getElementById('db-grid');
+  if(grid) grid.classList.remove('has-expanded');
+  document.querySelectorAll('.db-tile').forEach(t=>{
+    t.classList.remove('expanded','dimmed');
+  });
+}
+function dbToggleRisk(){
+  const r=document.getElementById('risk-engine-inline');
+  if(r) r.style.display=r.style.display==='none'||!r.style.display?'block':'none';
+}
+
+/* ── Result section / Dashboard data sync ── */
 (function(){
-  const resultSection = document.getElementById('section-result');
-  const band = document.getElementById('company-hero-band');
-  const content = document.getElementById('rating-content');
-  const loading = document.getElementById('rating-loading');
-  const nameEl  = document.getElementById('result-name');
-  const chipsEl = document.getElementById('result-chips');
-  const priceEl = document.getElementById('result-price');
-  const changeEl= document.getElementById('result-change');
-  const legacyHero = document.getElementById('company-hero');
+  const resultSection=document.getElementById('section-result');
+  const shell=document.getElementById('db-shell');
+  const loading=document.getElementById('rating-loading');
+  const content=document.getElementById('rating-content');
+  const legacyHero=document.getElementById('company-hero');
+
+  // Show dashboard when loading starts
   if(loading){
     new MutationObserver(()=>{
       if(loading.style.display!=='none'&&loading.style.display!==''){
@@ -1447,47 +1478,139 @@ window.quickSearch = function(ticker){
       }
     }).observe(loading,{attributes:true,attributeFilter:['style']});
   }
+
+  // Show dashboard when content ready
   if(content){
     new MutationObserver(()=>{
       if(content.style.display!=='none'&&content.style.display!==''){
         resultSection.style.display='flex';
-        if(band) band.style.display='block';
-        setTimeout(()=>resultSection.scrollIntoView({behavior:'smooth'}),150);
-        // Re-init scroll reveal for new cards
-        document.querySelectorAll('.result-content-area .card:not(.in)').forEach(el=>{
-          el.classList.add('reveal');
-          setTimeout(()=>el.classList.add('in'),50);
-        });
+        setTimeout(()=>{
+          resultSection.scrollIntoView({behavior:'smooth'});
+          if(shell){shell.classList.add('visible');}
+          dbSyncData();
+          // Mirror gauge arc to mini gauge
+          const arc=document.getElementById('gauge-arc');
+          const arcBig=document.getElementById('gauge-arc-big');
+          if(arc&&arcBig){
+            arcBig.setAttribute('stroke-dashoffset',arc.getAttribute('stroke-dashoffset')||'251.3');
+            arcBig.setAttribute('stroke',arc.getAttribute('stroke')||'');
+          }
+          // Mirror verdict to big tile
+          const vp=document.getElementById('verdict-pill');
+          const vpb=document.getElementById('verdict-pill-big');
+          if(vp&&vpb){vpb.className=vp.className;vpb.textContent=vp.textContent;}
+        },200);
       }
     }).observe(content,{attributes:true,attributeFilter:['style']});
   }
+
+  // Mirror legacy hero → dashboard topbar
   if(legacyHero){
     new MutationObserver(()=>{
       const n=legacyHero.querySelector('.company-name');
-      if(n&&nameEl) nameEl.textContent=n.textContent||'—';
       const p=legacyHero.querySelector('.price-big');
-      if(p&&priceEl) priceEl.textContent=p.textContent||'—';
-      const c=legacyHero.querySelector('.price-change');
-      if(c&&changeEl) changeEl.innerHTML=c.innerHTML;
+      const ch=legacyHero.querySelector('.price-change');
       const m=legacyHero.querySelector('.company-meta');
-      if(m&&chipsEl){
-        chipsEl.innerHTML='';
+      const dbName=document.getElementById('db-company-name');
+      const dbPrice=document.getElementById('db-price');
+      const dbChange=document.getElementById('db-change');
+      const dbChips=document.getElementById('db-chips');
+      if(n&&dbName) dbName.textContent=n.textContent||'—';
+      if(p&&dbPrice) dbPrice.textContent=p.textContent||'—';
+      if(ch&&dbChange) dbChange.innerHTML=ch.innerHTML||'';
+      if(m&&dbChips){
+        dbChips.innerHTML='';
         m.querySelectorAll('.meta-chip').forEach(chip=>{
           const d=document.createElement('div');
-          d.className='result-chip';
+          d.className='db-chip';
           d.textContent=chip.textContent;
-          chipsEl.appendChild(d);
+          dbChips.appendChild(d);
         });
       }
     }).observe(legacyHero,{childList:true,subtree:true});
   }
+
+  // Mirror result-name/price/change written directly by main.js
+  ['result-name','result-price','result-change'].forEach(src=>{
+    const el=document.getElementById(src);
+    if(!el) return;
+    new MutationObserver(()=>{
+      const dbName=document.getElementById('db-company-name');
+      const dbPrice=document.getElementById('db-price');
+      const dbChange=document.getElementById('db-change');
+      if(src==='result-name'&&dbName) dbName.textContent=el.textContent||'—';
+      if(src==='result-price'&&dbPrice) dbPrice.textContent=el.textContent||'—';
+      if(src==='result-change'&&dbChange) dbChange.innerHTML=el.innerHTML||'';
+    }).observe(el,{childList:true,subtree:true,characterData:true});
+  });
+
+  // clearRating override
   window._origClearRating=window.clearRating;
   window.clearRating=function(){
     if(typeof window._origClearRating==='function') window._origClearRating();
     if(resultSection) resultSection.style.display='none';
+    if(shell) shell.classList.remove('visible');
+    dbCollapse();
     scrollToSection('analysis');
   };
 })();
+
+/* Sync summary snippets from rendered content into tile summaries */
+function dbSyncData(){
+  // Market context summary
+  const mc=document.getElementById('market-context-content');
+  const mcs=document.getElementById('db-market-summary');
+  if(mc&&mcs&&mc.innerText.trim()){mcs.textContent=mc.innerText.slice(0,120)+(mc.innerText.length>120?'…':'');}
+
+  // DCF summary
+  const dcf=document.getElementById('dcf-content');
+  const dcfs=document.getElementById('db-dcf-summary');
+  if(dcf&&dcfs){
+    const verdict=dcf.querySelector('.dcf-verdict,.dcf-underval,.dcf-overval,.dcf-fair');
+    if(verdict) dcfs.textContent=verdict.innerText.slice(0,80);
+  }
+
+  // Ratios summary — first metric value
+  const km=document.getElementById('key-metrics');
+  const rs=document.getElementById('db-ratios-summary');
+  if(km&&rs){
+    const first=km.querySelector('.metric-value');
+    const second=km.querySelectorAll('.metric-value')[1];
+    if(first) rs.textContent=(first.closest('.metric')?.querySelector('.metric-label')?.innerText||'')+'  '+first.innerText+(second?' · '+(second.closest('.metric')?.querySelector('.metric-label')?.innerText||'')+' '+second.innerText:'');
+  }
+
+  // Show margins/financials tiles if content exists
+  const mgc=document.getElementById('margins-chart-content');
+  const fgc=document.getElementById('financials-chart-content');
+  if(mgc&&mgc.children.length){const t=document.getElementById('dbt-margins');if(t)t.style.display='';}
+  if(fgc&&fgc.children.length){const t=document.getElementById('dbt-financials');if(t)t.style.display='';}
+
+  // Draw mini sparkline from main chart SVG path
+  setTimeout(()=>{
+    const mainPath=document.querySelector('#price-chart-svg path[stroke]');
+    const miniSvg=document.getElementById('db-spark-svg');
+    if(mainPath&&miniSvg){
+      const clone=mainPath.cloneNode(true);
+      clone.setAttribute('stroke','var(--purple)');
+      clone.setAttribute('stroke-width','2');
+      clone.setAttribute('fill','none');
+      clone.setAttribute('vector-effect','non-scaling-stroke');
+      miniSvg.innerHTML='';
+      miniSvg.appendChild(clone);
+    }
+    // Also mini-chart in topbar
+    const miniTop=document.getElementById('db-mini-svg');
+    if(mainPath&&miniTop){
+      const c2=mainPath.cloneNode(true);
+      c2.setAttribute('stroke','var(--purple)');
+      c2.setAttribute('stroke-width','1.5');
+      c2.setAttribute('fill','none');
+      c2.setAttribute('vector-effect','non-scaling-stroke');
+      miniTop.innerHTML='';
+      miniTop.appendChild(c2);
+    }
+  },800);
+}
 
 /* ── Compare results ── */
 (function(){
