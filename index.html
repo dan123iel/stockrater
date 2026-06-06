@@ -252,8 +252,43 @@ a{color:inherit;text-decoration:none}
 .try-pills span{cursor:pointer;padding:.3rem .85rem;border-radius:999px;border:1px solid var(--border);transition:color .15s,border-color .15s,transform .15s var(--ease)}
 .try-pills span:hover{color:var(--purple);border-color:var(--purple);transform:scale(1.04)}
 
-/* Search bar */
-.section-search{padding:2rem 2.5rem 3rem;flex-shrink:0;position:relative;z-index:1}
+/* ── Global floating searchbar ── */
+.global-search{
+  position:fixed;bottom:1.75rem;left:50%;transform:translateX(-50%);
+  z-index:400;
+  width:min(720px,calc(100vw - 3rem));
+  display:flex;align-items:center;
+  background:#fff;border-radius:var(--pill);
+  border:2px solid var(--border);
+  padding:.45rem .45rem .45rem 1.5rem;
+  box-shadow:0 8px 40px rgba(26,16,40,.14),0 2px 8px rgba(26,16,40,.06);
+  transition:border-color .2s,box-shadow .2s,transform .3s var(--ease),opacity .3s;
+}
+.global-search:focus-within{
+  border-color:var(--purple);
+  box-shadow:0 0 0 4px rgba(91,33,245,.12),0 8px 40px rgba(26,16,40,.14);
+}
+.global-search-input{
+  flex:1;background:transparent;border:none;outline:none;
+  font-size:1.1rem;font-weight:600;color:var(--ink);letter-spacing:-.02em;
+  font-family:'DM Sans',sans-serif;
+}
+.global-search-input::placeholder{color:rgba(26,16,40,.3);font-weight:500}
+.global-search-btn{
+  background:var(--purple);color:#fff;border:none;border-radius:var(--pill);
+  padding:.65rem 1.6rem;font-size:.88rem;font-weight:800;
+  cursor:pointer;letter-spacing:-.02em;flex-shrink:0;
+  transition:background .15s,transform .1s var(--ease);
+}
+.global-search-btn:hover{background:var(--purple-dark)}
+.global-search-btn:active{transform:scale(.97)}
+/* hide on result section (dashboard takes over) */
+.global-search.hide{opacity:0;pointer-events:none;transform:translateX(-50%) translateY(16px)}
+@media(max-width:600px){
+  .global-search{bottom:1rem;width:calc(100vw - 2rem);padding:.35rem .35rem .35rem 1.1rem}
+  .global-search-input{font-size:.95rem}
+  .global-search-btn{padding:.55rem 1.1rem;font-size:.82rem}
+}
 .search-wrap{
   display:flex;align-items:center;
   background:#fff;border-radius:var(--pill);
