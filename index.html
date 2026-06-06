@@ -395,12 +395,13 @@ a{color:inherit;text-decoration:none}
 .card-acid{border-left:3px solid var(--lime)}
 .card-tangerine{border-left:3px solid var(--amber)}
 
-/* Cards in dark sections */
+/* Cards in light sections (portfolio, settings, compare now all on --bg) */
 .section-portfolio .card,.section-settings .card,.section-compare .card{
-  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#fff;box-shadow:none;
+  background:#fff;border:1px solid var(--border);color:var(--ink);
+  box-shadow:0 2px 8px rgba(26,16,40,.06);
 }
-.section-portfolio .card:hover,.section-settings .card:hover{background:rgba(255,255,255,.12);box-shadow:none}
-.section-portfolio .card-label,.section-settings .card-label{color:rgba(255,255,255,.4)}
+.section-portfolio .card:hover,.section-settings .card:hover{background:#fff;box-shadow:0 6px 24px rgba(91,33,245,.08)}
+.section-portfolio .card-label,.section-settings .card-label{color:var(--mid)}
 
 /* Result area card overrides */
 .result-content-area .card{background:#fff;border-color:rgba(91,33,245,.1);box-shadow:0 2px 12px rgba(91,33,245,.05)}
