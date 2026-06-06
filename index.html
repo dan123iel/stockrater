@@ -1315,25 +1315,25 @@ function renderPortfolioAnalysis(){
   if(mr){
     const sc=avgScore>=3.5?'#059669':avgScore>=2.5?'#d97706':'#dc2626';
     const sl=avgScore>=3.5?'above average':avgScore>=2.5?'average':'below average';
-    const dc=divScore>=60?'#059669':divScore>=40?'#d97706':sectors.length===0?'rgba(255,255,255,.3)':'#dc2626';
+    const dc=divScore>=60?'#059669':divScore>=40?'#d97706':sectors.length===0?'var(--mid)':'#dc2626';
     mr.innerHTML=`
-      <div style="padding:1.25rem 1.5rem;border-right:1px solid rgba(255,255,255,.08)">
-        <div style="font-family:var(--mono);font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:.5rem;font-weight:600">Positions</div>
-        <div style="font-size:2.5rem;font-weight:900;color:#fff;letter-spacing:-.06em;line-height:1">${n}</div>
-        <div style="font-family:var(--mono);font-size:.6rem;color:rgba(255,255,255,.3);margin-top:.3rem">holdings</div>
+      <div style="padding:1.25rem 1.5rem;border-right:1px solid var(--border)">
+        <div style="font-family:var(--mono);font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem;font-weight:600">Positions</div>
+        <div style="font-size:2.5rem;font-weight:900;color:var(--ink);letter-spacing:-.06em;line-height:1">${n}</div>
+        <div style="font-family:var(--mono);font-size:.6rem;color:var(--mid);margin-top:.3rem">holdings</div>
       </div>
-      <div style="padding:1.25rem 1.5rem;border-right:1px solid rgba(255,255,255,.08)">
-        <div style="font-family:var(--mono);font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:.5rem;font-weight:600">Avg Score</div>
+      <div style="padding:1.25rem 1.5rem;border-right:1px solid var(--border)">
+        <div style="font-family:var(--mono);font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem;font-weight:600">Avg Score</div>
         <div style="font-size:2.5rem;font-weight:900;color:${sc};letter-spacing:-.06em;line-height:1">${avgScore.toFixed(1)}</div>
         <div style="font-family:var(--mono);font-size:.6rem;color:${sc};opacity:.7;margin-top:.3rem">${sl}</div>
       </div>
-      <div style="padding:1.25rem 1.5rem;border-right:1px solid rgba(255,255,255,.08)">
-        <div style="font-family:var(--mono);font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:.5rem;font-weight:600">Sectors</div>
-        <div style="font-size:2.5rem;font-weight:900;color:#fff;letter-spacing:-.06em;line-height:1">${sectors.length||'—'}</div>
-        <div style="font-family:var(--mono);font-size:.6rem;color:rgba(255,255,255,.3);margin-top:.3rem">${sectors.length?sectors.slice(0,2).join(', ')+(sectors.length>2?` +${sectors.length-2}`:''):'re-analyse to load'}</div>
+      <div style="padding:1.25rem 1.5rem;border-right:1px solid var(--border)">
+        <div style="font-family:var(--mono);font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem;font-weight:600">Sectors</div>
+        <div style="font-size:2.5rem;font-weight:900;color:var(--ink);letter-spacing:-.06em;line-height:1">${sectors.length||'—'}</div>
+        <div style="font-family:var(--mono);font-size:.6rem;color:var(--mid);margin-top:.3rem">${sectors.length?sectors.slice(0,2).join(', ')+(sectors.length>2?` +${sectors.length-2}`:''):'re-analyse to load'}</div>
       </div>
       <div style="padding:1.25rem 1.5rem">
-        <div style="font-family:var(--mono);font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:.5rem;font-weight:600">Diversification</div>
+        <div style="font-family:var(--mono);font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem;font-weight:600">Diversification</div>
         <div style="font-size:2.5rem;font-weight:900;color:${dc};letter-spacing:-.06em;line-height:1">${sectors.length?divScore+'%':'—'}</div>
         <div style="font-family:var(--mono);font-size:.6rem;color:${dc};opacity:.7;margin-top:.3rem">${divLabel}</div>
       </div>`;
