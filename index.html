@@ -1128,8 +1128,8 @@ a{color:inherit;text-decoration:none}
     el.addEventListener('mouseenter', () => c.classList.add('hover'));
     el.addEventListener('mouseleave', () => c.classList.remove('hover'));
   });
-  // Dark cursor on dark sections
-  const darkSections = ['section-result','section-compare','section-portfolio','section-settings'];
+  // Dark cursor only on dark result header
+  const darkSections = ['section-result'];
   const darkObs = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if(e.isIntersecting) c.classList.add('dark');
@@ -1144,7 +1144,7 @@ a{color:inherit;text-decoration:none}
       if(e.isIntersecting) c.classList.remove('dark');
     });
   },{threshold:.3});
-  ['section-home','section-analysis'].forEach(id => {
+  ['section-home','section-analysis','section-compare','section-portfolio','section-settings'].forEach(id => {
     const el = document.getElementById(id);
     if(el) lightObs.observe(el);
   });
