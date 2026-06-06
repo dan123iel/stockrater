@@ -1177,8 +1177,8 @@ const navObs = new IntersectionObserver(entries => {
     document.querySelectorAll('.tnav-item').forEach(i => i.classList.remove('active'));
     const a = document.getElementById('tnav-'+id);
     if(a) a.classList.add('active');
-    // Nav mode
-    const darkIds = ['result','compare','portfolio','settings'];
+    // Nav mode — only result hero is dark now; compare/portfolio/settings are light
+    const darkIds = ['result'];
     if(darkIds.includes(id)){navEl.classList.add('dark-mode')}
     else{navEl.classList.remove('dark-mode')}
   });
