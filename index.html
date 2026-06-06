@@ -238,48 +238,48 @@ a{color:inherit;text-decoration:none}
 .search-wrap{
   display:flex;align-items:center;
   background:#fff;border-radius:var(--pill);
-  border:2px solid transparent;
+  border:2px solid var(--border);
   padding:.5rem .5rem .5rem 1.75rem;
   transition:border-color .2s,box-shadow .2s;
-  box-shadow:0 4px 24px rgba(0,0,0,.15);
+  box-shadow:0 2px 12px rgba(26,16,40,.06);
 }
-.search-wrap:focus-within{border-color:var(--lime);box-shadow:0 0 0 4px rgba(200,255,0,.2),0 4px 24px rgba(0,0,0,.15)}
+.search-wrap:focus-within{border-color:var(--purple);box-shadow:0 0 0 4px rgba(91,33,245,.1)}
 .search-input{
   flex:1;background:transparent;border:none;outline:none;
   font-size:1.4rem;font-weight:700;color:var(--ink);letter-spacing:-.03em;
 }
 .search-input::placeholder{color:rgba(26,16,40,.25);font-weight:500}
 .search-btn{
-  background:var(--ink);color:#fff;border:none;border-radius:var(--pill);
+  background:var(--purple);color:#fff;border:none;border-radius:var(--pill);
   padding:.75rem 2rem;font-size:.9rem;font-weight:800;
   cursor:pointer;letter-spacing:-.02em;flex-shrink:0;
   transition:background .15s,transform .1s var(--ease);
 }
-.search-btn:hover{background:var(--purple)}
+.search-btn:hover{background:var(--purple-dark)}
 .search-btn:active{transform:scale(.97)}
 
 /* Alias — main.js uses search-coral classes */
 .search-coral{
   display:flex;align-items:center;
   background:#fff;border-radius:var(--pill);
-  border:2px solid transparent;
+  border:2px solid var(--border);
   padding:.5rem .5rem .5rem 1.75rem;
   transition:border-color .2s,box-shadow .2s;
-  box-shadow:0 4px 24px rgba(0,0,0,.15);
+  box-shadow:0 2px 12px rgba(26,16,40,.06);
 }
-.search-coral:focus-within{border-color:var(--lime);box-shadow:0 0 0 4px rgba(200,255,0,.2),0 4px 24px rgba(0,0,0,.15)}
+.search-coral:focus-within{border-color:var(--purple);box-shadow:0 0 0 4px rgba(91,33,245,.1)}
 .search-coral-input{
   flex:1;background:transparent;border:none;outline:none;
   font-size:1.4rem;font-weight:700;color:var(--ink);letter-spacing:-.03em;
 }
 .search-coral-input::placeholder{color:rgba(26,16,40,.25);font-weight:500}
 .search-coral-btn{
-  background:var(--ink);color:#fff;border:none;border-radius:var(--pill);
+  background:var(--purple);color:#fff;border:none;border-radius:var(--pill);
   padding:.75rem 2rem;font-size:.9rem;font-weight:800;
   cursor:pointer;letter-spacing:-.02em;flex-shrink:0;
   transition:background .15s,transform .1s var(--ease);
 }
-.search-coral-btn:hover{background:var(--purple)}
+.search-coral-btn:hover{background:var(--purple-dark)}
 .search-coral-btn:active{transform:scale(.97)}
 
 /* Dropdown */
