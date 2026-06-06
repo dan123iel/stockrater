@@ -1455,7 +1455,7 @@ window.showPage = function(name){
 /* ── quickSearch ── */
 window.quickSearch = function(ticker){
   const inp = document.getElementById('r-ticker');
-  if(inp){inp.value=ticker}
+  if(inp) inp.value = ticker;
   scrollToSection('analysis');
   setTimeout(()=>fetchCompany&&fetchCompany(ticker),300);
 };
