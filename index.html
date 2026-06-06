@@ -1769,16 +1769,39 @@ function closeNavSearch(){
   w.classList.remove('open');
   if(i) i.value='';
 }
-function navSearch(){
-  const i=document.getElementById('tnav-ticker');
-  const v=i?i.value.trim():'';
-  if(!v) return;
-  const m=document.getElementById('r-ticker');
-  if(m) m.value=v;
-  closeNavSearch();
-  scrollToSection('analysis');
-  setTimeout(()=>fetchCompany&&fetchCompany(v),350);
-}
+/* ── Global floating search ── */
+(function(){
+  const gs = document.getElementById('global-search');
+  const gi = document.getElementById('global-ticker');
+  const ri = document.getElementById('r-ticker');
+
+  window.globalSearch = function(){
+    const v = gi ? gi.value.trim() : '';
+    if(!v) return;
+    if(ri) ri.value = v;
+    scrollToSection('analysis');
+    setTimeout(()=>{ if(typeof fetchCompany==='function') fetchCompany(v); }, 150);
+    if(gi) gi.value = '';
+  };
+
+  // Hide global search on result section (dashboard handles input)
+  const resultSec = document.getElementById('section-result');
+  if(resultSec && gs){
+    new IntersectionObserver(entries=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting) gs.classList.add('hide');
+        else gs.classList.remove('hide');
+      });
+    },{threshold:.15}).observe(resultSec);
+  }
+
+  // Cursor hover for global bar
+  if(gs){
+    const c=document.getElementById('cursor');
+    gs.addEventListener('mouseenter',()=>c&&c.classList.add('hover'));
+    gs.addEventListener('mouseleave',()=>c&&c.classList.remove('hover'));
+  }
+})();
 </script>
 </body>
 </html>
