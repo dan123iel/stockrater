@@ -850,6 +850,18 @@ button:active:not(.home-cta):not(.search-btn):not(.search-coral-btn):not(.search
 <!-- Custom cursor -->
 <div id="cursor"></div>
 
+<!-- Global floating search bar -->
+<div class="global-search" id="global-search">
+  <input class="global-search-input" id="global-ticker"
+    placeholder="search ticker, ISIN, company…"
+    onkeydown="if(event.key==='Enter'){globalSearch()}"
+    oninput="renderSearchDropdown(this.value,'global-dd')"
+    onfocus="renderSearchDropdown(this.value,'global-dd')"
+    onblur="setTimeout(hideDropdown,200)">
+  <button class="global-search-btn" onclick="globalSearch()">analyse</button>
+  <div class="search-dropdown" id="global-dd" style="bottom:calc(100% + 8px);top:auto;left:0;right:0;position:absolute"></div>
+</div>
+
 <!-- Fullscreen loader -->
 <div class="fullscreen-loader" id="fullscreen-loader">
   <div class="loader-row">
