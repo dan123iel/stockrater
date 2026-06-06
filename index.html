@@ -534,63 +534,63 @@ a{color:inherit;text-decoration:none}
 .section-portfolio .card:hover,.section-settings .card:hover{background:#fff;box-shadow:0 6px 24px rgba(91,33,245,.08)}
 .section-portfolio .card-label,.section-settings .card-label{color:var(--mid)}
 
-/* Result area card overrides */
-.result-content-area .card{background:#fff;border-color:rgba(91,33,245,.1);box-shadow:0 2px 12px rgba(91,33,245,.05)}
-.result-content-area .card:hover{border-color:rgba(91,33,245,.2);box-shadow:0 6px 24px rgba(91,33,245,.1)}
-.result-content-area .card-label{color:var(--mid)}
-.result-content-area .rtable td{color:var(--ink);border-bottom-color:rgba(91,33,245,.07)}
-.result-content-area .rtable th{color:var(--mid);border-bottom-color:rgba(91,33,245,.15);font-size:.56rem}
-.result-content-area .ratio-group-header td{background:rgba(91,33,245,.04);color:var(--purple);font-size:.56rem}
-.result-content-area .rtable tbody tr:hover td{background:rgba(91,33,245,.03)}
-.result-content-area .score-row{border-bottom-color:rgba(91,33,245,.07);color:var(--ink)}
-.result-content-area .score-weight{color:var(--mid)}
-.result-content-area .gauge-num{color:var(--ink)}
-.result-content-area .gauge-denom{color:var(--mid)}
-.result-content-area .section-label{color:var(--purple)}
-.result-content-area .section-label::after{background:rgba(91,33,245,.1)}
-.result-content-area .metric{background:#fff;border-right-color:rgba(91,33,245,.08);border-bottom-color:rgba(91,33,245,.08)}
-.result-content-area .metric:hover{background:rgba(91,33,245,.03)}
-.result-content-area .metric-label{color:var(--mid);font-size:.54rem}
-.result-content-area .metric-value{color:var(--ink)}
-.result-content-area .metrics{border-color:rgba(91,33,245,.12)}
-.result-content-area .period-tab{border-color:rgba(91,33,245,.2);color:var(--mid)}
-.result-content-area .period-tab:hover{border-color:var(--purple);color:var(--purple)}
-.result-content-area .period-tab.active{background:var(--purple);color:#fff;border-color:var(--purple)}
-.result-content-area .chart-range-btn{border-color:rgba(91,33,245,.15);color:var(--mid)}
-.result-content-area .chart-range-btn:hover{border-color:var(--purple);color:var(--purple)}
-.result-content-area .chart-range-btn.active{background:var(--purple);color:#fff;border-color:var(--purple)}
-.result-content-area .qual-label{color:var(--ink)}
-.result-content-area .qual-group-header{color:var(--mid)}
-.result-content-area .qual-group-header::after{background:rgba(91,33,245,.1)}
-.result-content-area .qual-row{border-bottom-color:rgba(91,33,245,.07)}
-.result-content-area .dcf-grid{border-color:rgba(91,33,245,.12)}
-.result-content-area .dcf-metric{background:#fff;border-right-color:rgba(91,33,245,.08);border-bottom-color:rgba(91,33,245,.08)}
-.result-content-area .dcf-metric:hover{background:rgba(91,33,245,.03)}
-.result-content-area .dcf-label{color:var(--mid);font-size:.54rem}
-.result-content-area .dcf-val{color:var(--ink)}
-.result-content-area .dcf-sub{color:var(--mid)}
-.result-content-area .winner-table th{color:var(--mid);border-bottom-color:rgba(91,33,245,.15)}
-.result-content-area .winner-table td{border-bottom-color:rgba(91,33,245,.07);color:var(--ink)}
-.result-content-area .winner-table tbody tr:hover td{background:rgba(91,33,245,.03)}
-.result-content-area .period-table th{color:var(--mid);border-bottom-color:rgba(91,33,245,.15)}
-.result-content-area .period-table td{border-bottom-color:rgba(91,33,245,.07);color:var(--ink)}
-.result-content-area .period-table td:first-child{color:var(--mid)}
-.result-content-area .period-table tbody tr:hover td{background:rgba(91,33,245,.03)}
-.result-content-area .btn{background:#fff;border-color:rgba(91,33,245,.2);color:var(--ink)}
-.result-content-area .btn:hover{border-color:var(--purple);color:var(--purple)}
-.result-content-area .btn-primary{background:var(--purple);color:#fff;border-color:var(--purple)}
-.result-content-area .btn-ghost{background:transparent;color:var(--mid);border-color:rgba(91,33,245,.15)}
-.result-content-area .field label{color:var(--mid)}
-.result-content-area .field input,.result-content-area .field select{background:var(--bg);border-color:rgba(91,33,245,.15);color:var(--ink)}
-.result-content-area .field input:focus,.result-content-area .field select:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(91,33,245,.1)}
-.result-content-area .tp-card{background:var(--bg);border-color:rgba(91,33,245,.1)}
-.result-content-area .tp-card:hover{border-color:rgba(91,33,245,.3);background:#fff}
-.result-content-area .tp-title{color:var(--mid)}
-.result-content-area .tp-val{color:var(--ink)}
-.result-content-area .loading{color:var(--mid)}
-.result-content-area .loading-text{color:var(--mid)}
-.result-content-area .score-bar-wrap{background:rgba(91,33,245,.1)}
-.result-content-area .score-bar-wrap-sm{background:rgba(91,33,245,.1)}
+/* Result area card overrides — applies to db-tile-full too */
+.result-content-area .card,.db-tile-full .card{background:#fff;border-color:rgba(91,33,245,.1);box-shadow:0 2px 12px rgba(91,33,245,.05)}
+.result-content-area .card:hover,.db-tile-full .card:hover{border-color:rgba(91,33,245,.2);box-shadow:0 6px 24px rgba(91,33,245,.1)}
+.result-content-area .card-label,.db-tile-full .card-label{color:var(--mid)}
+.result-content-area .rtable td,.db-tile-full .rtable td{color:var(--ink);border-bottom-color:rgba(91,33,245,.07)}
+.result-content-area .rtable th,.db-tile-full .rtable th{color:var(--mid);border-bottom-color:rgba(91,33,245,.15);font-size:.56rem}
+.result-content-area .ratio-group-header td,.db-tile-full .ratio-group-header td{background:rgba(91,33,245,.04);color:var(--purple);font-size:.56rem}
+.result-content-area .rtable tbody tr:hover td,.db-tile-full .rtable tbody tr:hover td{background:rgba(91,33,245,.03)}
+.result-content-area .score-row,.db-tile-full .score-row{border-bottom-color:rgba(91,33,245,.07);color:var(--ink)}
+.result-content-area .score-weight,.db-tile-full .score-weight{color:var(--mid)}
+.result-content-area .gauge-num,.db-tile-full .gauge-num{color:var(--ink)}
+.result-content-area .gauge-denom,.db-tile-full .gauge-denom{color:var(--mid)}
+.result-content-area .section-label,.db-tile-full .section-label{color:var(--purple)}
+.result-content-area .section-label::after,.db-tile-full .section-label::after{background:rgba(91,33,245,.1)}
+.result-content-area .metric,.db-tile-full .metric{background:#fff;border-right-color:rgba(91,33,245,.08);border-bottom-color:rgba(91,33,245,.08)}
+.result-content-area .metric:hover,.db-tile-full .metric:hover{background:rgba(91,33,245,.03)}
+.result-content-area .metric-label,.db-tile-full .metric-label{color:var(--mid);font-size:.54rem}
+.result-content-area .metric-value,.db-tile-full .metric-value{color:var(--ink)}
+.result-content-area .metrics,.db-tile-full .metrics{border-color:rgba(91,33,245,.12)}
+.result-content-area .period-tab,.db-tile-full .period-tab{border-color:rgba(91,33,245,.2);color:var(--mid)}
+.result-content-area .period-tab:hover,.db-tile-full .period-tab:hover{border-color:var(--purple);color:var(--purple)}
+.result-content-area .period-tab.active,.db-tile-full .period-tab.active{background:var(--purple);color:#fff;border-color:var(--purple)}
+.result-content-area .chart-range-btn,.db-tile-full .chart-range-btn{border-color:rgba(91,33,245,.15);color:var(--mid)}
+.result-content-area .chart-range-btn:hover,.db-tile-full .chart-range-btn:hover{border-color:var(--purple);color:var(--purple)}
+.result-content-area .chart-range-btn.active,.db-tile-full .chart-range-btn.active{background:var(--purple);color:#fff;border-color:var(--purple)}
+.result-content-area .qual-label,.db-tile-full .qual-label{color:var(--ink)}
+.result-content-area .qual-group-header,.db-tile-full .qual-group-header{color:var(--mid)}
+.result-content-area .qual-group-header::after,.db-tile-full .qual-group-header::after{background:rgba(91,33,245,.1)}
+.result-content-area .qual-row,.db-tile-full .qual-row{border-bottom-color:rgba(91,33,245,.07)}
+.result-content-area .dcf-grid,.db-tile-full .dcf-grid{border-color:rgba(91,33,245,.12)}
+.result-content-area .dcf-metric,.db-tile-full .dcf-metric{background:#fff;border-right-color:rgba(91,33,245,.08);border-bottom-color:rgba(91,33,245,.08)}
+.result-content-area .dcf-metric:hover,.db-tile-full .dcf-metric:hover{background:rgba(91,33,245,.03)}
+.result-content-area .dcf-label,.db-tile-full .dcf-label{color:var(--mid);font-size:.54rem}
+.result-content-area .dcf-val,.db-tile-full .dcf-val{color:var(--ink)}
+.result-content-area .dcf-sub,.db-tile-full .dcf-sub{color:var(--mid)}
+.result-content-area .winner-table th,.db-tile-full .winner-table th{color:var(--mid);border-bottom-color:rgba(91,33,245,.15)}
+.result-content-area .winner-table td,.db-tile-full .winner-table td{border-bottom-color:rgba(91,33,245,.07);color:var(--ink)}
+.result-content-area .winner-table tbody tr:hover td,.db-tile-full .winner-table tbody tr:hover td{background:rgba(91,33,245,.03)}
+.result-content-area .period-table th,.db-tile-full .period-table th{color:var(--mid);border-bottom-color:rgba(91,33,245,.15)}
+.result-content-area .period-table td,.db-tile-full .period-table td{border-bottom-color:rgba(91,33,245,.07);color:var(--ink)}
+.result-content-area .period-table td:first-child,.db-tile-full .period-table td:first-child{color:var(--mid)}
+.result-content-area .period-table tbody tr:hover td,.db-tile-full .period-table tbody tr:hover td{background:rgba(91,33,245,.03)}
+.result-content-area .btn,.db-tile-full .btn{background:#fff;border-color:rgba(91,33,245,.2);color:var(--ink)}
+.result-content-area .btn:hover,.db-tile-full .btn:hover{border-color:var(--purple);color:var(--purple)}
+.result-content-area .btn-primary,.db-tile-full .btn-primary{background:var(--purple);color:#fff;border-color:var(--purple)}
+.result-content-area .btn-ghost,.db-tile-full .btn-ghost{background:transparent;color:var(--mid);border-color:rgba(91,33,245,.15)}
+.result-content-area .field label,.db-tile-full .field label{color:var(--mid)}
+.result-content-area .field input,.result-content-area .field select,.db-tile-full .field input,.db-tile-full .field select{background:var(--bg);border-color:rgba(91,33,245,.15);color:var(--ink)}
+.result-content-area .field input:focus,.result-content-area .field select:focus,.db-tile-full .field input:focus,.db-tile-full .field select:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(91,33,245,.1)}
+.result-content-area .tp-card,.db-tile-full .tp-card{background:var(--bg);border-color:rgba(91,33,245,.1)}
+.result-content-area .tp-card:hover,.db-tile-full .tp-card:hover{border-color:rgba(91,33,245,.3);background:#fff}
+.result-content-area .tp-title,.db-tile-full .tp-title{color:var(--mid)}
+.result-content-area .tp-val,.db-tile-full .tp-val{color:var(--ink)}
+.result-content-area .loading,.db-tile-full .loading{color:var(--mid)}
+.result-content-area .loading-text,.db-tile-full .loading-text{color:var(--mid)}
+.result-content-area .score-bar-wrap,.db-tile-full .score-bar-wrap{background:rgba(91,33,245,.1)}
+.result-content-area .score-bar-wrap-sm,.db-tile-full .score-bar-wrap-sm{background:rgba(91,33,245,.1)}
 
 /* ============================================================
    METRICS
