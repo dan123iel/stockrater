@@ -924,62 +924,247 @@ button:active:not(.home-cta):not(.search-btn):not(.search-coral-btn):not(.search
 </section>
 
 <!-- ============================================================
-     RESULT
+     RESULT — Dashboard
      ============================================================ -->
 <section class="section section-result" id="section-result">
-  <!-- Loading state -->
-  <div id="rating-loading" style="display:none;background:var(--purple);padding:6rem 2.5rem;text-align:center">
+
+  <!-- Fullscreen loading overlay (reused by main.js) -->
+  <div id="rating-loading" style="display:none;position:fixed;inset:0;z-index:7000;background:var(--purple);flex-direction:column;align-items:center;justify-content:center">
     <div class="spinner-ring" style="border-color:rgba(255,255,255,.15);border-top-color:var(--lime);width:40px;height:40px;border-width:3px"></div>
     <div style="font-family:var(--mono);font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-top:1rem">Loading from Yahoo Finance…</div>
   </div>
 
-  <!-- Dark company hero -->
-  <div class="result-header" id="company-hero-band" style="display:none">
-    <div class="result-company-row">
-      <div>
-        <div class="result-company-name" id="result-name">—</div>
-        <div class="result-chips" id="result-chips"></div>
+  <!-- Dashboard shell -->
+  <div class="db-shell" id="db-shell">
+
+    <!-- Top bar -->
+    <div class="db-topbar">
+      <div class="db-company-pill" id="db-company-name">—</div>
+      <div class="db-mini-chart" id="db-mini-chart">
+        <svg id="db-mini-svg" viewBox="0 0 120 44" preserveAspectRatio="none"></svg>
       </div>
-      <div>
-        <div class="result-price" id="result-price">—</div>
-        <div class="result-change" id="result-change"></div>
+      <div class="db-price-block">
+        <div class="db-price" id="db-price">—</div>
+        <div class="db-change" id="db-change"></div>
+      </div>
+      <div class="db-chips" id="db-chips"></div>
+      <div class="db-actions">
+        <button class="db-btn" onclick="saveToPortfolio()">+ Portfolio</button>
+        <button class="db-btn" onclick="saveToWatchlist()">+ Watchlist</button>
+        <button class="db-btn db-btn-ghost" onclick="dbToggleRisk()">⚡ Risk</button>
+        <button class="db-btn db-btn-ghost" onclick="clearRating()">✕</button>
       </div>
     </div>
 
-    <!-- Action buttons -->
-    <div id="result-action-btns" style="margin-top:1.75rem;display:flex;gap:.6rem;flex-wrap:wrap">
-      <button onclick="saveToPortfolio()">+ Portfolio</button>
-      <button onclick="saveToWatchlist()">+ Watchlist</button>
-      <button onclick="document.getElementById('risk-engine-inline').style.display=document.getElementById('risk-engine-inline').style.display==='none'||!document.getElementById('risk-engine-inline').style.display?'block':'none'">⚡ Risk Engine</button>
-      <button onclick="clearRating()">✕ clear</button>
-    </div>
+    <!-- Tile grid -->
+    <div class="db-grid" id="db-grid">
 
-    <!-- Risk Engine -->
-    <div id="risk-engine-inline" style="display:none;margin-top:2rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,.1)">
-      <div style="font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:1.5rem">Risk Engine — Position Sizing</div>
-      <div class="search-coral" style="margin-bottom:1rem;max-width:560px;--bg:#0e0a1a">
-        <input class="search-coral-input" id="t-ticker" placeholder="ticker for trade data" onkeydown="if(event.key==='Enter')fetchTradeData()" style="color:#fff">
+      <!-- Tile: Scorecard -->
+      <div class="db-tile" id="dbt-scorecard" style="grid-column:span 3;grid-row:span 3" onclick="dbExpand('scorecard')">
+        <div class="db-tile-label">Scorecard</div>
+        <button class="db-tile-collapse" onclick="event.stopPropagation();dbCollapse()">↙ collapse</button>
+        <div class="db-tile-summary">
+          <div class="db-sc-mini">
+            <div class="gauge-wrap" style="width:72px;height:72px;flex-shrink:0">
+              <svg viewBox="0 0 110 110">
+                <circle cx="55" cy="55" r="40" fill="none" stroke="rgba(26,16,40,.06)" stroke-width="11"/>
+                <circle cx="55" cy="55" r="40" fill="none" stroke="url(#gaugeGrad)" stroke-width="11"
+                  stroke-dasharray="251.3" stroke-dashoffset="251.3" stroke-linecap="round"
+                  transform="rotate(-90 55 55)" id="gauge-arc"
+                  style="transition:stroke-dashoffset .9s cubic-bezier(.4,0,.2,1),stroke .4s"/>
+                <defs>
+                  <linearGradient id="gaugeGrad"  x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#d97706"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient>
+                  <linearGradient id="gaugeGreen" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#10b981"/></linearGradient>
+                  <linearGradient id="gaugeRed"   x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#dc2626"/><stop offset="100%" stop-color="#ef4444"/></linearGradient>
+                  <linearGradient id="gaugeAmber" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#d97706"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient>
+                </defs>
+                <g id="gauge-ticks"></g>
+              </svg>
+              <div class="gauge-center">
+                <div class="gauge-num" id="gauge-num">—</div>
+                <div class="gauge-denom">/ 5.0</div>
+              </div>
+            </div>
+            <div>
+              <div id="verdict-pill" class="verdict-pill verdict-hold">—</div>
+              <div id="db-sc-verdict" class="db-sc-verdict"></div>
+            </div>
+          </div>
+        </div>
+        <div class="db-tile-full" id="scorecard-card">
+          <div style="font-size:.78rem;color:var(--mid);margin-bottom:1rem;line-height:1.6;padding:.75rem 1rem;background:rgba(91,33,245,.05);border-radius:8px;border-left:3px solid var(--purple)">
+            Everything below — the ratios, DCF, management, moat, ESG — feeds into this single score. <strong style="color:var(--ink)">Financial Ratios (65%)</strong> drive the result most.
+          </div>
+          <div style="display:flex;gap:1.5rem;align-items:flex-start">
+            <div class="gauge-wrap" style="width:130px;height:130px;flex-shrink:0">
+              <svg viewBox="0 0 110 110">
+                <circle cx="55" cy="55" r="46" fill="none" stroke="rgba(26,16,40,.04)" stroke-width="1"/>
+                <circle cx="55" cy="55" r="40" fill="none" stroke="rgba(26,16,40,.06)" stroke-width="11"/>
+                <circle cx="55" cy="55" r="40" fill="none" stroke="url(#gaugeGrad2)" stroke-width="11"
+                  stroke-dasharray="251.3" stroke-dashoffset="251.3" stroke-linecap="round"
+                  transform="rotate(-90 55 55)" id="gauge-arc-big"
+                  style="transition:stroke-dashoffset .9s cubic-bezier(.4,0,.2,1),stroke .4s"/>
+                <defs>
+                  <linearGradient id="gaugeGrad2"  x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#d97706"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient>
+                </defs>
+              </svg>
+              <div class="gauge-center">
+                <div class="gauge-num" id="gauge-num-big">—</div>
+                <div class="gauge-denom">/ 5.0</div>
+              </div>
+            </div>
+            <div style="flex:1;min-width:0;padding-top:8px">
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+                <div id="verdict-pill-big" class="verdict-pill verdict-hold">—</div>
+                <div id="sc-wacc" style="font-size:.72rem;color:var(--mid);font-family:var(--mono)">WACC: —</div>
+              </div>
+              <div id="scorecard-rows"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tile: Market Context -->
+      <div class="db-tile" id="dbt-market" style="grid-column:span 5;grid-row:span 3" onclick="dbExpand('market')">
+        <div class="db-tile-label">Market Context</div>
+        <button class="db-tile-collapse" onclick="event.stopPropagation();dbCollapse()">↙ collapse</button>
+        <div class="db-tile-summary" id="db-market-summary" style="font-size:.82rem;color:var(--mid)">—</div>
+        <div class="db-tile-full" id="market-context-card">
+          <div id="market-context-content"></div>
+        </div>
+      </div>
+
+      <!-- Tile: Price Chart -->
+      <div class="db-tile" id="dbt-chart" style="grid-column:span 4;grid-row:span 3" onclick="dbExpand('chart')">
+        <div class="db-tile-label">Price Chart</div>
+        <button class="db-tile-collapse" onclick="event.stopPropagation();dbCollapse()">↙ collapse</button>
+        <div class="db-tile-summary">
+          <svg id="db-spark-svg" viewBox="0 0 200 60" style="width:100%;height:60px;display:block"></svg>
+        </div>
+        <div class="db-tile-full">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:1rem">
+            <div class="card-label" style="margin:0">Price Chart</div>
+            <div id="chart-range-tabs" style="display:flex;gap:3px;flex-wrap:wrap">
+              <button class="chart-range-btn" onclick="loadChartRange('1d')"  data-range="1d">1D</button>
+              <button class="chart-range-btn" onclick="loadChartRange('5d')"  data-range="5d">1W</button>
+              <button class="chart-range-btn" onclick="loadChartRange('1mo')" data-range="1mo">1M</button>
+              <button class="chart-range-btn" onclick="loadChartRange('6mo')" data-range="6mo">6M</button>
+              <button class="chart-range-btn" onclick="loadChartRange('ytd')" data-range="ytd">YTD</button>
+              <button class="chart-range-btn active" onclick="loadChartRange('1y')" data-range="1y">1Y</button>
+              <button class="chart-range-btn" onclick="loadChartRange('max')" data-range="max">Max</button>
+            </div>
+          </div>
+          <div style="position:relative" id="chart-wrap">
+            <svg id="price-chart-svg" viewBox="0 0 800 220" style="width:100%;overflow:visible;display:block"></svg>
+            <div id="chart-crosshair" style="display:none;position:absolute;top:0;left:0;pointer-events:none">
+              <div id="chart-vline" style="position:absolute;top:0;width:1px;background:rgba(26,16,40,.2);transition:left .04s"></div>
+              <div id="chart-tooltip" style="position:absolute;background:var(--ink);color:#fff;padding:4px 10px;border-radius:6px;font-size:.75rem;font-family:var(--mono);font-weight:600;white-space:nowrap;transform:translateX(-50%);top:-30px;pointer-events:none"></div>
+            </div>
+          </div>
+          <div id="chart-loading" style="display:none;text-align:center;padding:.5rem;font-size:.75rem;color:var(--mid);font-family:var(--mono)">Loading…</div>
+        </div>
+      </div>
+
+      <!-- Tile: Financial Ratios -->
+      <div class="db-tile" id="dbt-ratios" style="grid-column:span 5;grid-row:span 3" onclick="dbExpand('ratios')">
+        <div class="db-tile-label">Financial Ratios <span class="tag tag-live" style="font-size:.5rem">live</span></div>
+        <button class="db-tile-collapse" onclick="event.stopPropagation();dbCollapse()">↙ collapse</button>
+        <div class="db-tile-summary" id="db-ratios-summary" style="font-size:.8rem;color:var(--mid)">—</div>
+        <div class="db-tile-full">
+          <div id="key-metrics"></div>
+          <div id="ratio-table"></div>
+        </div>
+      </div>
+
+      <!-- Tile: Period Overview -->
+      <div class="db-tile" id="dbt-period" style="grid-column:span 4;grid-row:span 3" onclick="dbExpand('period')">
+        <div class="db-tile-label">Period Overview</div>
+        <button class="db-tile-collapse" onclick="event.stopPropagation();dbCollapse()">↙ collapse</button>
+        <div class="db-tile-summary" id="db-period-summary" style="font-size:.8rem;color:var(--mid)">TTM · Annual · Quarterly</div>
+        <div class="db-tile-full" id="period-card">
+          <div id="period-content"></div>
+        </div>
+      </div>
+
+      <!-- Tile: DCF / Intrinsic Value -->
+      <div class="db-tile" id="dbt-dcf" style="grid-column:span 3;grid-row:span 3" onclick="dbExpand('dcf')">
+        <div class="db-tile-label">Intrinsic Value <span class="tag tag-live" style="font-size:.5rem">DCF</span></div>
+        <button class="db-tile-collapse" onclick="event.stopPropagation();dbCollapse()">↙ collapse</button>
+        <div class="db-tile-summary" id="db-dcf-summary" style="font-size:.8rem;color:var(--mid)">—</div>
+        <div class="db-tile-full" id="dcf-card">
+          <div id="dcf-content"></div>
+        </div>
+      </div>
+
+      <!-- Tile: Qualitative -->
+      <div class="db-tile" id="dbt-qual" style="grid-column:span 5;grid-row:span 3" onclick="dbExpand('qual')">
+        <div class="db-tile-label">Qualitative Assessment</div>
+        <button class="db-tile-collapse" onclick="event.stopPropagation();dbCollapse()">↙ collapse</button>
+        <div class="db-tile-summary" id="db-qual-summary" style="font-size:.8rem;color:var(--mid)">Management · Moat · ESG</div>
+        <div class="db-tile-full">
+          <div class="qual-group">
+            <div class="qual-group-header">⚡ Management Quality</div>
+            <div id="qual-mgmt"></div>
+          </div>
+          <div class="qual-group" style="margin-top:.85rem">
+            <div class="qual-group-header">✏️ Moat &amp; Competitive Position</div>
+            <div id="qual-moat"></div>
+          </div>
+          <div class="qual-group" style="margin-top:.85rem">
+            <div class="qual-group-header">⚡✏️ ESG &amp; Risk</div>
+            <div id="qual-esg"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tile: Margins -->
+      <div class="db-tile" id="dbt-margins" style="grid-column:span 4;grid-row:span 2;display:none" onclick="dbExpand('margins')">
+        <div class="db-tile-label">Margin Profile <span class="tag tag-live" style="font-size:.5rem">live</span></div>
+        <button class="db-tile-collapse" onclick="event.stopPropagation();dbCollapse()">↙ collapse</button>
+        <div class="db-tile-summary" id="db-margins-summary" style="font-size:.8rem;color:var(--mid)">—</div>
+        <div class="db-tile-full" id="margins-card">
+          <div id="margins-chart-content"></div>
+        </div>
+      </div>
+
+      <!-- Tile: Financials -->
+      <div class="db-tile" id="dbt-financials" style="grid-column:span 4;grid-row:span 2;display:none" onclick="dbExpand('financials')">
+        <div class="db-tile-label">Key Financials <span class="tag tag-live" style="font-size:.5rem">live</span></div>
+        <button class="db-tile-collapse" onclick="event.stopPropagation();dbCollapse()">↙ collapse</button>
+        <div class="db-tile-summary" id="db-financials-summary" style="font-size:.8rem;color:var(--mid)">—</div>
+        <div class="db-tile-full" id="financials-card">
+          <div id="financials-chart-content"></div>
+        </div>
+      </div>
+
+    </div><!-- /db-grid -->
+
+    <!-- Risk Engine (collapsed panel below grid) -->
+    <div id="risk-engine-inline" style="display:none;background:#fff;border:1.5px solid var(--purple);border-radius:16px;padding:1.25rem">
+      <div style="font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--mid);margin-bottom:1.25rem">Risk Engine — Position Sizing</div>
+      <div class="search-coral" style="margin-bottom:1rem;max-width:560px">
+        <input class="search-coral-input" id="t-ticker" placeholder="ticker for trade data" onkeydown="if(event.key==='Enter')fetchTradeData()">
         <button class="search-coral-btn" onclick="fetchTradeData()">load</button>
       </div>
-      <div class="form-grid" style="background:rgba(255,255,255,.06);border-radius:var(--r);padding:1.25rem;margin-bottom:1rem">
-        <div class="field"><label style="color:rgba(255,255,255,.3)">Company</label><input id="t-name" type="text" placeholder="Company name" value="Alphabet A" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#fff"></div>
-        <div class="field"><label style="color:rgba(255,255,255,.3)">ISIN / WKN</label><input id="t-isin" type="text" placeholder="ISIN or WKN" value="A14Y6F" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#fff"></div>
+      <div class="form-grid" style="background:var(--bg);border-radius:var(--r);padding:1.25rem;margin-bottom:1rem">
+        <div class="field"><label>Company</label><input id="t-name" type="text" placeholder="Company name" value="Alphabet A"></div>
+        <div class="field"><label>ISIN / WKN</label><input id="t-isin" type="text" placeholder="ISIN or WKN" value="A14Y6F"></div>
       </div>
-      <div class="form-grid-3" style="background:rgba(255,255,255,.06);border-radius:var(--r);padding:1.25rem;margin-bottom:1rem">
-        <div class="field"><label style="color:rgba(255,255,255,.3)">Account (€)</label><input id="t-balance" type="number" value="209.75" step="0.01" oninput="calcTrade()" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#fff"></div>
-        <div class="field"><label style="color:rgba(255,255,255,.3)">Entry price</label><input id="t-ps" type="number" value="270.6" step="0.01" oninput="calcTrade()" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#fff"></div>
-        <div class="field"><label style="color:rgba(255,255,255,.3)">ATH (52w high)</label><input id="t-ath" type="number" value="350" step="0.01" oninput="calcTrade()" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#fff"></div>
+      <div class="form-grid-3" style="background:var(--bg);border-radius:var(--r);padding:1.25rem;margin-bottom:1rem">
+        <div class="field"><label>Account (€)</label><input id="t-balance" type="number" value="209.75" step="0.01" oninput="calcTrade()"></div>
+        <div class="field"><label>Entry price</label><input id="t-ps" type="number" value="270.6" step="0.01" oninput="calcTrade()"></div>
+        <div class="field"><label>ATH (52w high)</label><input id="t-ath" type="number" value="350" step="0.01" oninput="calcTrade()"></div>
       </div>
-      <div class="form-grid-3" style="background:rgba(255,255,255,.06);border-radius:var(--r);padding:1.25rem;margin-bottom:1rem">
-        <div class="field"><label style="color:rgba(255,255,255,.3)">Leverage entry</label><input id="t-pl" type="number" value="5.38" step="0.01" oninput="calcTrade()" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#fff"></div>
-        <div class="field"><label style="color:rgba(255,255,255,.3)">ATR 14</label><input id="t-atr" type="number" value="6.4" step="0.1" oninput="calcTrade()" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#fff"></div>
-        <div class="field"><label style="color:rgba(255,255,255,.3)">ATR multiplier</label><input id="t-atr-mult" type="number" value="2" step="0.1" oninput="calcTrade()" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#fff"></div>
+      <div class="form-grid-3" style="background:var(--bg);border-radius:var(--r);padding:1.25rem;margin-bottom:1rem">
+        <div class="field"><label>Leverage entry</label><input id="t-pl" type="number" value="5.38" step="0.01" oninput="calcTrade()"></div>
+        <div class="field"><label>ATR 14</label><input id="t-atr" type="number" value="6.4" step="0.1" oninput="calcTrade()"></div>
+        <div class="field"><label>ATR multiplier</label><input id="t-atr-mult" type="number" value="2" step="0.1" oninput="calcTrade()"></div>
       </div>
-      <div class="form-grid-3" style="background:rgba(255,255,255,.06);border-radius:var(--r);padding:1.25rem;margin-bottom:1rem">
-        <div class="field"><label style="color:rgba(255,255,255,.3)">Risk per trade (%)</label><input id="t-risk" type="number" value="0.2" step="0.01" oninput="calcTrade()" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#fff"></div>
-        <div class="field"><label style="color:rgba(255,255,255,.3)">SMA 200</label><input id="t-sma" type="number" value="226" step="0.01" oninput="calcTrade()" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#fff"></div>
-        <div class="field"><label style="color:rgba(255,255,255,.3)">Market filter</label>
-          <select id="t-mf" onchange="calcTrade()" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#fff">
+      <div class="form-grid-3" style="background:var(--bg);border-radius:var(--r);padding:1.25rem;margin-bottom:1rem">
+        <div class="field"><label>Risk per trade (%)</label><input id="t-risk" type="number" value="0.2" step="0.01" oninput="calcTrade()"></div>
+        <div class="field"><label>SMA 200</label><input id="t-sma" type="number" value="226" step="0.01" oninput="calcTrade()"></div>
+        <div class="field"><label>Market filter</label>
+          <select id="t-mf" onchange="calcTrade()">
             <option value="Y">Y — above SMA200</option>
             <option value="N">N — below SMA200</option>
           </select>
@@ -987,130 +1172,32 @@ button:active:not(.home-cta):not(.search-btn):not(.search-coral-btn):not(.search
       </div>
       <div style="margin-bottom:1rem"><div class="metrics" id="trade-metrics"></div><div id="trade-trend" style="margin-top:.75rem"></div></div>
       <div class="tp-grid" id="tp-grid" style="margin-bottom:1rem"></div>
-      <button class="btn btn-primary" onclick="saveTrade()">+ save trade</button>
+      <button class="btn btn-primary btn-sm" onclick="saveTrade()">+ save trade</button>
+    </div>
+
+  </div><!-- /db-shell -->
+
+  <!-- Legacy compat — hidden, main.js writes here, we mirror to dashboard -->
+  <div id="company-hero-band" style="display:none"></div>
+  <div id="company-hero"      style="display:none"></div>
+  <div id="result-name"       style="display:none"></div>
+  <div id="result-chips"      style="display:none"></div>
+  <div id="result-price"      style="display:none"></div>
+  <div id="result-change"     style="display:none"></div>
+  <div id="result-action-btns" style="display:none">
+    <button onclick="saveToPortfolio()"></button>
+    <button onclick="saveToWatchlist()"></button>
+  </div>
+  <div class="result-content-area" id="rating-content" style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;overflow:hidden">
+    <div id="scorecard-card-legacy" style="display:none"></div>
+    <div id="market-context-card" style="display:none"><div id="market-context-content"></div></div>
+    <div id="period-card-legacy" style="display:none"><div id="period-content"></div></div>
+    <div id="charts-grid" style="display:none">
+      <div id="margins-card-legacy" style="display:none"><div id="margins-chart-content"></div></div>
+      <div id="financials-card-legacy" style="display:none"><div id="financials-chart-content"></div></div>
     </div>
   </div>
 
-  <!-- Legacy compat -->
-  <div id="company-hero" style="display:none"></div>
-
-  <!-- Analysis content -->
-  <div class="result-content-area" id="rating-content" style="display:none">
-
-    <div class="card card-electric reveal" id="scorecard-card">
-      <div class="card-label">Scorecard <span style="font-weight:400;letter-spacing:0;text-transform:none">— overall rating 1–5</span></div>
-      <div style="font-size:.78rem;color:var(--mid);margin-bottom:1rem;line-height:1.6;padding:.75rem 1rem;background:rgba(91,33,245,.05);border-radius:8px;border-left:3px solid var(--purple)">
-        Everything below — the ratios, DCF, management, moat, ESG — feeds into this single score. <strong style="color:var(--ink)">Financial Ratios (65%)</strong> drive the result most.
-      </div>
-      <div style="display:flex;gap:1.5rem;align-items:flex-start">
-        <div class="gauge-wrap" style="width:130px;height:130px;flex-shrink:0">
-          <svg viewBox="0 0 110 110">
-            <circle cx="55" cy="55" r="46" fill="none" stroke="rgba(26,16,40,.04)" stroke-width="1"/>
-            <circle cx="55" cy="55" r="40" fill="none" stroke="rgba(26,16,40,.06)" stroke-width="11"/>
-            <circle cx="55" cy="55" r="40" fill="none" stroke="url(#gaugeGrad)" stroke-width="11"
-              stroke-dasharray="251.3" stroke-dashoffset="251.3" stroke-linecap="round"
-              transform="rotate(-90 55 55)" id="gauge-arc"
-              style="transition:stroke-dashoffset .9s cubic-bezier(.4,0,.2,1),stroke .4s"/>
-            <defs>
-              <linearGradient id="gaugeGrad"  x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#d97706"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient>
-              <linearGradient id="gaugeGreen" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#10b981"/></linearGradient>
-              <linearGradient id="gaugeRed"   x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#dc2626"/><stop offset="100%" stop-color="#ef4444"/></linearGradient>
-              <linearGradient id="gaugeAmber" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#d97706"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient>
-            </defs>
-            <g id="gauge-ticks"></g>
-          </svg>
-          <div class="gauge-center">
-            <div class="gauge-num" id="gauge-num">—</div>
-            <div class="gauge-denom">/ 5.0</div>
-          </div>
-        </div>
-        <div style="flex:1;min-width:0;padding-top:8px">
-          <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
-            <div id="verdict-pill" class="verdict-pill verdict-hold">—</div>
-            <div id="sc-wacc" style="font-size:.72rem;color:var(--mid);font-family:var(--mono)">WACC: —</div>
-          </div>
-          <div id="scorecard-rows"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card reveal" id="market-context-card" style="display:none">
-      <div class="card-label">Market Context <span style="font-weight:400;letter-spacing:0;text-transform:none">— price signals</span></div>
-      <div id="market-context-content"></div>
-    </div>
-
-    <div class="card card-electric reveal">
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:1rem">
-        <div class="card-label" style="margin:0">Price Chart</div>
-        <div id="chart-range-tabs" style="display:flex;gap:3px;flex-wrap:wrap">
-          <button class="chart-range-btn" onclick="loadChartRange('1d')"  data-range="1d">1D</button>
-          <button class="chart-range-btn" onclick="loadChartRange('5d')"  data-range="5d">1W</button>
-          <button class="chart-range-btn" onclick="loadChartRange('1mo')" data-range="1mo">1M</button>
-          <button class="chart-range-btn" onclick="loadChartRange('6mo')" data-range="6mo">6M</button>
-          <button class="chart-range-btn" onclick="loadChartRange('ytd')" data-range="ytd">YTD</button>
-          <button class="chart-range-btn active" onclick="loadChartRange('1y')" data-range="1y">1Y</button>
-          <button class="chart-range-btn" onclick="loadChartRange('max')" data-range="max">Max</button>
-        </div>
-      </div>
-      <div style="position:relative" id="chart-wrap">
-        <svg id="price-chart-svg" viewBox="0 0 800 220" style="width:100%;overflow:visible;display:block"></svg>
-        <div id="chart-crosshair" style="display:none;position:absolute;top:0;left:0;pointer-events:none">
-          <div id="chart-vline" style="position:absolute;top:0;width:1px;background:rgba(26,16,40,.2);transition:left .04s"></div>
-          <div id="chart-tooltip" style="position:absolute;background:var(--ink);color:#fff;padding:4px 10px;border-radius:6px;font-size:.75rem;font-family:var(--mono);font-weight:600;white-space:nowrap;transform:translateX(-50%);top:-30px;pointer-events:none"></div>
-        </div>
-      </div>
-      <div id="chart-loading" style="display:none;text-align:center;padding:.5rem;font-size:.75rem;color:var(--mid);font-family:var(--mono)">Loading…</div>
-    </div>
-
-    <div class="card reveal" id="period-card" style="display:none">
-      <div class="card-label">Period Overview <span class="tag tag-live">annual · quarterly · TTM</span></div>
-      <div id="period-content"></div>
-    </div>
-
-    <div class="card reveal">
-      <div class="card-label">Financial Ratios <span class="tag tag-live">live · Yahoo Finance</span></div>
-      <div id="key-metrics"></div>
-      <div id="ratio-table"></div>
-    </div>
-
-    <div class="card card-tangerine reveal">
-      <div class="card-label">Qualitative Assessment <span class="tag tag-auto">API auto-fill</span> <span class="tag tag-manual">manual override</span></div>
-      <div class="qual-group">
-        <div class="qual-group-header">⚡ Management Quality <span style="font-family:var(--mono);font-size:.55rem;color:rgba(0,168,107,.7);margin-left:4px;font-weight:600">auto-scored</span></div>
-        <div id="qual-mgmt"></div>
-      </div>
-      <div class="qual-group" style="margin-top:.85rem">
-        <div class="qual-group-header">✏️ Moat &amp; Competitive Position <span style="font-family:var(--mono);font-size:.55rem;color:rgba(224,128,0,.8);margin-left:4px;font-weight:600">manual</span></div>
-        <div id="qual-moat"></div>
-      </div>
-      <div class="qual-group" style="margin-top:.85rem">
-        <div class="qual-group-header">⚡✏️ ESG &amp; Risk <span style="font-family:var(--mono);font-size:.55rem;color:rgba(224,128,0,.8);margin-left:4px;font-weight:600">auto + manual</span></div>
-        <div id="qual-esg"></div>
-      </div>
-    </div>
-
-    <div class="card card-acid reveal" id="dcf-card">
-      <div class="card-label">Intrinsic Value <span class="tag tag-live">DCF · Yahoo Finance</span></div>
-      <div id="dcf-content"></div>
-    </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem" id="charts-grid">
-      <div class="card reveal" id="margins-card" style="display:none;margin-bottom:0">
-        <div class="card-label">Margin Profile <span class="tag tag-live">live</span></div>
-        <div id="margins-chart-content"></div>
-      </div>
-      <div class="card reveal" id="financials-card" style="display:none;margin-bottom:0">
-        <div class="card-label">Key Financials <span class="tag tag-live">live</span></div>
-        <div id="financials-chart-content"></div>
-      </div>
-    </div>
-
-    <div style="margin-bottom:2rem;display:flex;gap:8px">
-      <button class="btn btn-ghost btn-sm" onclick="clearRating()">✕ clear</button>
-      <button class="btn btn-sm" onclick="document.getElementById('risk-engine-inline').style.display=document.getElementById('risk-engine-inline').style.display==='none'?'block':'none'">⚡ risk engine</button>
-    </div>
-
-  </div>
 </section>
 
 <!-- ============================================================
