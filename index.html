@@ -951,22 +951,14 @@ button:active:not(.home-cta):not(.search-btn):not(.search-coral-btn):not(.search
     </div>
   </div>
 
-  <!-- Search bar bottom -->
-  <div class="section-search" style="position:relative">
-    <div id="rating-loading-inline" style="display:none;text-align:center;padding:1rem 0">
-      <div class="spinner-ring"></div>
+  <!-- Search bar — hidden, global sticky bar takes over. IDs kept for main.js compat. -->
+  <div class="section-search" style="display:none">
+    <div id="rating-loading-inline" style="display:none"></div>
+    <div id="rating-error"          style="display:none"></div>
+    <div id="analysis-search-bar">
+      <input id="r-ticker" type="hidden">
     </div>
-    <div id="rating-error" style="display:none;padding:.5rem 0"></div>
-    <div class="search-coral" id="analysis-search-bar">
-      <input class="search-coral-input" id="r-ticker"
-        placeholder="search ticker, ISIN, company…"
-        onkeydown="if(event.key==='Enter'){document.getElementById('search-dropdown').style.display='none';fetchCompany()}"
-        oninput="renderSearchDropdown(this.value)"
-        onfocus="renderSearchDropdown(this.value)"
-        onblur="hideDropdown()">
-      <button class="search-coral-btn" onclick="fetchCompany()">analyse</button>
-    </div>
-    <div class="search-dropdown" id="search-dropdown" style="bottom:calc(100% + 8px);top:auto"></div>
+    <div id="search-dropdown"       style="display:none"></div>
   </div>
 </section>
 
