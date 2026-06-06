@@ -1348,22 +1348,22 @@ function renderPortfolioAnalysis(){
       const pct=Math.round((cnt/n)*100);
       return`<div style="margin-bottom:.65rem">
         <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.3rem">
-          <span style="font-size:.82rem;font-weight:600;color:#fff">${sec}</span>
-          <span style="font-family:var(--mono);font-size:.7rem;color:rgba(255,255,255,.4)">${cnt} · ${pct}%</span>
+          <span style="font-size:.82rem;font-weight:600;color:var(--ink)">${sec}</span>
+          <span style="font-family:var(--mono);font-size:.7rem;color:var(--mid)">${cnt} · ${pct}%</span>
         </div>
-        <div style="height:5px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden">
+        <div style="height:5px;background:rgba(26,16,40,.08);border-radius:99px;overflow:hidden">
           <div style="height:100%;width:${pct}%;background:${COLORS[i%COLORS.length]};border-radius:99px;transition:width .6s cubic-bezier(.4,0,.2,1)"></div>
         </div>
       </div>`;
-    }).join('')+(noSectorCount>0?`<div style="font-family:var(--mono);font-size:.65rem;color:rgba(255,255,255,.25);margin-top:.5rem">ℹ ${noSectorCount} position${noSectorCount>1?'s':''} without sector data</div>`:'');
+    }).join('')+(noSectorCount>0?`<div style="font-family:var(--mono);font-size:.65rem;color:var(--mid);margin-top:.5rem">ℹ ${noSectorCount} position${noSectorCount>1?'s':''} without sector data</div>`:'');
   }
   const verdictMap={'Strong Buy':0,'Buy':0,'Hold':0,'Avoid':0};
   pf.forEach(c=>{if(verdictMap[c.verdict]!==undefined)verdictMap[c.verdict]++;});
-  const vColors={'Strong Buy':'#059669','Buy':'#c8ff00','Hold':'#d97706','Avoid':'#dc2626'};
+  const vColors={'Strong Buy':'#059669','Buy':'#5b21f5','Hold':'#d97706','Avoid':'#dc2626'};
   const vb=document.getElementById('pf-verdict-bar');
   if(vb) vb.innerHTML=Object.entries(verdictMap).filter(([,c])=>c>0).map(([v,c])=>`<div style="flex:${(c/n)*100};background:${vColors[v]};min-width:4px"></div>`).join('');
   const vl=document.getElementById('pf-verdict-legend');
-  if(vl) vl.innerHTML=Object.entries(verdictMap).filter(([,c])=>c>0).map(([v,c])=>`<span style="display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:.65rem;color:rgba(255,255,255,.5)"><span style="width:7px;height:7px;border-radius:50%;background:${vColors[v]};display:inline-block"></span>${v} (${c})</span>`).join('');
+  if(vl) vl.innerHTML=Object.entries(verdictMap).filter(([,c])=>c>0).map(([v,c])=>`<span style="display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:.65rem;color:var(--mid)"><span style="width:7px;height:7px;border-radius:50%;background:${vColors[v]};display:inline-block"></span>${v} (${c})</span>`).join('');
   const rw=document.getElementById('pf-risk-warning');
   if(rw){
     const warnings=[];
