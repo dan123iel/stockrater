@@ -1630,8 +1630,18 @@ function dbExpand(id){
       t.classList.add('dimmed');
     }
   });
-  // Trigger chart resize if expanding chart tile
-  if(id==='chart') setTimeout(()=>window.dispatchEvent(new Event('resize')),420);
+  // Trigger chart resize when chart tile expands
+  if(id==='chart'){
+    setTimeout(()=>{
+      window.dispatchEvent(new Event('resize'));
+      // Force chart redraw if available
+      if(typeof loadChartRange==='function'){
+        const activeBtn=document.querySelector('.chart-range-btn.active');
+        const range=activeBtn?activeBtn.getAttribute('data-range'):'1y';
+        loadChartRange(range);
+      }
+    },350);
+  }
 }
 function dbCollapse(){
   _dbExpanded=null;
