@@ -1764,33 +1764,53 @@ function dbToggleRisk(){
 
 /* Sync summary snippets from rendered content into tile summaries */
 function dbSyncData(){
+  // Intercept market-context-card display:block set by main.js — keep it hidden (tile-full handles it)
+  const mcCard=document.getElementById('market-context-card');
+  if(mcCard) mcCard.style.removeProperty('display');
+
   // Market context summary
-  const mc=document.getElementById('market-context-content');
-  const mcs=document.getElementById('db-market-summary');
-  if(mc&&mcs&&mc.innerText.trim()){mcs.textContent=mc.innerText.slice(0,120)+(mc.innerText.length>120?'…':'');}
+  setTimeout(()=>{
+    const mc=document.getElementById('market-context-content');
+    const mcs=document.getElementById('db-market-summary');
+    if(mc&&mcs&&mc.innerText.trim()){
+      mcs.textContent=mc.innerText.slice(0,140)+(mc.innerText.length>140?'…':'');
+    }
+  },300);
 
   // DCF summary
-  const dcf=document.getElementById('dcf-content');
-  const dcfs=document.getElementById('db-dcf-summary');
-  if(dcf&&dcfs){
-    const verdict=dcf.querySelector('.dcf-verdict,.dcf-underval,.dcf-overval,.dcf-fair');
-    if(verdict) dcfs.textContent=verdict.innerText.slice(0,80);
-  }
+  setTimeout(()=>{
+    const dcf=document.getElementById('dcf-content');
+    const dcfs=document.getElementById('db-dcf-summary');
+    if(dcf&&dcfs){
+      const verdict=dcf.querySelector('.dcf-verdict,.dcf-underval,.dcf-overval,.dcf-fair');
+      if(verdict) dcfs.textContent=verdict.innerText.slice(0,80);
+    }
+  },300);
 
-  // Ratios summary — first metric value
-  const km=document.getElementById('key-metrics');
-  const rs=document.getElementById('db-ratios-summary');
-  if(km&&rs){
-    const first=km.querySelector('.metric-value');
-    const second=km.querySelectorAll('.metric-value')[1];
-    if(first) rs.textContent=(first.closest('.metric')?.querySelector('.metric-label')?.innerText||'')+'  '+first.innerText+(second?' · '+(second.closest('.metric')?.querySelector('.metric-label')?.innerText||'')+' '+second.innerText:'');
-  }
+  // Ratios summary — first two metric values
+  setTimeout(()=>{
+    const km=document.getElementById('key-metrics');
+    const rs=document.getElementById('db-ratios-summary');
+    if(km&&rs){
+      const metrics=km.querySelectorAll('.metric');
+      const parts=[];
+      metrics.forEach((m,i)=>{
+        if(i>1) return;
+        const lbl=m.querySelector('.metric-label')?.innerText||'';
+        const val=m.querySelector('.metric-value')?.innerText||'';
+        if(lbl&&val) parts.push(`${lbl} ${val}`);
+      });
+      if(parts.length) rs.textContent=parts.join(' · ');
+    }
+  },400);
 
   // Show margins/financials tiles if content exists
-  const mgc=document.getElementById('margins-chart-content');
-  const fgc=document.getElementById('financials-chart-content');
-  if(mgc&&mgc.children.length){const t=document.getElementById('dbt-margins');if(t)t.style.display='';}
-  if(fgc&&fgc.children.length){const t=document.getElementById('dbt-financials');if(t)t.style.display='';}
+  setTimeout(()=>{
+    const mgc=document.getElementById('margins-chart-content');
+    const fgc=document.getElementById('financials-chart-content');
+    if(mgc&&mgc.children.length){const t=document.getElementById('dbt-margins');if(t)t.style.display='';}
+    if(fgc&&fgc.children.length){const t=document.getElementById('dbt-financials');if(t)t.style.display='';}
+  },500);
 
   // Draw mini sparkline from main chart SVG path
   setTimeout(()=>{
@@ -1805,7 +1825,6 @@ function dbSyncData(){
       miniSvg.innerHTML='';
       miniSvg.appendChild(clone);
     }
-    // Also mini-chart in topbar
     const miniTop=document.getElementById('db-mini-svg');
     if(mainPath&&miniTop){
       const c2=mainPath.cloneNode(true);
@@ -1816,7 +1835,7 @@ function dbSyncData(){
       miniTop.innerHTML='';
       miniTop.appendChild(c2);
     }
-  },800);
+  },1200);
 }
 
 /* ── Compare results ── */
