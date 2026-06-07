@@ -1532,26 +1532,7 @@ button:active:not(.home-cta):not(.search-btn):not(.search-coral-btn):not(.search
     el.addEventListener('mouseenter', () => c.classList.add('hover'));
     el.addEventListener('mouseleave', () => c.classList.remove('hover'));
   });
-  // Dark cursor only on dark result header
-  const darkSections = ['section-result'];
-  const darkObs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if(e.isIntersecting) c.classList.add('dark');
-    });
-  },{threshold:.3});
-  darkSections.forEach(id => {
-    const el = document.getElementById(id);
-    if(el) darkObs.observe(el);
-  });
-  const lightObs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if(e.isIntersecting) c.classList.remove('dark');
-    });
-  },{threshold:.3});
-  ['section-home','section-analysis','section-compare','section-portfolio','section-settings'].forEach(id => {
-    const el = document.getElementById(id);
-    if(el) lightObs.observe(el);
-  });
+  // Cursor is always purple — no dark mode for cursor anymore (all sections are light bg)
 })();
 
 /* ── Scroll reveal ── */
