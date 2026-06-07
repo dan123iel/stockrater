@@ -1711,9 +1711,10 @@ function dbToggleRisk(){
       const dbChange=document.getElementById('db-change');
       const dbChips=document.getElementById('db-chips');
       if(n&&dbName){
-        // Use innerText to get only visible text, skip avatar initials
-        const nameText=n.innerText||n.textContent||'';
-        dbName.textContent=nameText.trim()||'—';
+        // company-hero is display:none so innerText returns "". Use textContent but only direct text.
+        // .company-name is a simple div with just the name text
+        const nameText=n.textContent.trim();
+        if(nameText&&nameText!=='—') dbName.textContent=nameText;
       }
       if(p&&dbPrice) dbPrice.textContent=p.textContent||'—';
       if(ch&&dbChange){
