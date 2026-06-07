@@ -1710,15 +1710,27 @@ function dbToggleRisk(){
       const dbPrice=document.getElementById('db-price');
       const dbChange=document.getElementById('db-change');
       const dbChips=document.getElementById('db-chips');
-      if(n&&dbName) dbName.textContent=n.textContent||'—';
+      if(n&&dbName){
+        // Only take the text, not any child elements
+        dbName.textContent=n.textContent.trim()||'—';
+      }
       if(p&&dbPrice) dbPrice.textContent=p.textContent||'—';
-      if(ch&&dbChange) dbChange.innerHTML=ch.innerHTML||'';
+      if(ch&&dbChange){
+        // Keep only the text content of the change, strip nested elements
+        const changeText=ch.querySelectorAll('span');
+        if(changeText.length>=2){
+          const arrow=changeText[0].textContent;
+          const pct=changeText[1].textContent;
+          const isPos=ch.classList.contains('pos');
+          dbChange.innerHTML=`<span style="color:${isPos?'var(--green)':'var(--red)'}">${arrow} ${pct}</span>`;
+        }
+      }
       if(m&&dbChips){
         dbChips.innerHTML='';
         m.querySelectorAll('.meta-chip').forEach(chip=>{
           const d=document.createElement('div');
           d.className='db-chip';
-          d.textContent=chip.textContent;
+          d.textContent=chip.textContent.trim();
           dbChips.appendChild(d);
         });
       }
