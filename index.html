@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>vistaclara — equity analysis</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='0' fill='%235b21f5'/><text x='50%25' y='56%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='11' font-weight='900' fill='white'>vc</text></svg>" type="image/svg+xml">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g1' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%234f9eff'/><stop offset='60%25' stop-color='%235b21f5'/><stop offset='100%25' stop-color='%239b3dff'/></linearGradient></defs><path d='M20 2C16 8 10 10 10 17c0 5.5 4.5 10 10 10s10-4.5 10-10c0-7-5-10-10-15z' fill='url(%23g1)' opacity='.95'/><path d='M12 4C9 9 5 11 5 17c0 5.5 4.5 10 10 10' fill='url(%23g1)' opacity='.5'/></svg>" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,900&family=DM+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -51,18 +51,28 @@ a{color:inherit;text-decoration:none}
   --dark:   #0e0a1a;
 }
 
-/* ── Custom cursor ── */
+/* ── Custom cursor — ghost ring only, no pointer ever ── */
+*{cursor:none !important}
 #cursor{
-  position:fixed;width:10px;height:10px;
-  background:var(--purple);border-radius:50%;
+  position:fixed;
+  width:12px;height:12px;
+  border-radius:50%;
+  background:var(--purple);
   pointer-events:none;z-index:9999;
-  transition:transform .15s var(--ease),width .2s var(--ease),height .2s var(--ease),background .2s;
-  mix-blend-mode:multiply;
+  opacity:.8;
+  transition:width .18s var(--ease),height .18s var(--ease),opacity .2s,background .2s,transform .15s var(--ease);
   transform:translate(-50%,-50%);
+  will-change:left,top;
 }
-#cursor.hover{width:36px;height:36px;opacity:.35;background:var(--purple)}
-#cursor.dark{background:#fff;mix-blend-mode:normal}
-@media(pointer:coarse){#cursor{display:none}body{cursor:auto}}
+#cursor.hover{
+  width:48px;height:48px;
+  background:transparent;
+  border:2px solid var(--purple);
+  opacity:.28;
+}
+#cursor.dark{background:#fff}
+#cursor.dark.hover{border-color:#fff;background:transparent}
+@media(pointer:coarse){*{cursor:auto !important}#cursor{display:none}}
 
 /* ── Fullscreen loader ── */
 .fullscreen-loader{
@@ -178,6 +188,7 @@ a{color:inherit;text-decoration:none}
   mix-blend-mode:multiply;
 }
 @keyframes decoSpin{to{transform:rotate(360deg)}}
+@keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
 /* ── HOME ── */
 .section-home{background:var(--bg);padding-bottom:6rem}
@@ -189,18 +200,18 @@ a{color:inherit;text-decoration:none}
 }
 .home-ghost-word{
   display:block;
-  font-size:clamp(6rem,23vw,22rem);
-  font-weight:900;letter-spacing:-.05em;
+  font-size:clamp(4rem,16vw,16rem);
+  font-weight:900;letter-spacing:-.06em;
   color:rgba(91,33,245,.07);
   white-space:nowrap;
+  overflow:hidden;
 }
 
 /* ── ANALYSIS ── */
 .section-analysis{background:var(--bg);padding-bottom:6rem}
 
 /* ── RESULT ── */
-.section-result{background:var(--bg);display:none;flex-direction:column}
-
+.section-result{background:var(--bg);display:none;flex-direction:column;min-height:100vh;height:100vh;overflow:hidden}
 /* ── COMPARE ── */
 .section-compare{background:var(--bg)}
 
@@ -387,18 +398,18 @@ a{color:inherit;text-decoration:none}
 
 /* Outer lime-border container */
 .db-shell{
-  border:2px solid var(--lime);border-radius:24px;
-  padding:1.25rem;
-  display:flex;flex-direction:column;gap:1rem;
-  flex:1;
-  opacity:0;transform:translateY(32px);
-  transition:opacity .5s var(--ease),transform .5s var(--ease);
+  padding:.85rem 1.25rem;
+  display:flex;flex-direction:column;gap:.6rem;
+  flex:1;min-height:0;
+  opacity:0;transform:translateY(24px);
+  transition:opacity .45s var(--ease),transform .45s var(--ease);
 }
 .db-shell.visible{opacity:1;transform:none}
 
 /* Top bar */
 .db-topbar{
-  display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;
+  display:flex;align-items:center;gap:.6rem;flex-wrap:nowrap;
+  padding-top:3.5rem; /* space for fixed nav */
 }
 .db-company-pill{
   flex:1;min-width:0;
@@ -440,34 +451,48 @@ a{color:inherit;text-decoration:none}
 .db-grid{
   display:grid;
   grid-template-columns:repeat(12,1fr);
-  grid-auto-rows:minmax(60px,auto);
-  gap:.75rem;
-  transition:all .4s var(--ease);
+  grid-template-rows:calc((100vh - 11rem) * .5) calc((100vh - 11rem) * .5);
+  gap:.6rem;
+  flex:1;
+  min-height:0;
+  overflow:hidden;
+  align-content:start;
 }
+/* When a tile is expanded: it takes row 1 (full height), others collapse to row 2 strip */
+.db-grid.has-expanded{
+  grid-template-rows:calc(100vh - 12rem) 52px;
+}
+/* drag ghost */
+.db-tile.dragging{opacity:.35;transform:scale(.97);z-index:50;transition:none}
+.db-tile.drag-over{border-color:var(--lime) !important;background:rgba(200,255,0,.06)}
 
 /* Individual tile */
 .db-tile{
-  background:#fff;border:1.5px solid var(--purple);border-radius:18px;
-  padding:1.1rem 1.2rem;overflow:hidden;
+  background:#fff;border:1.5px solid rgba(91,33,245,.2);border-radius:16px;
+  padding:1rem 1.1rem;overflow:hidden;
   cursor:pointer;position:relative;
   transition:
-    grid-column .4s var(--ease),
-    grid-row .4s var(--ease),
+    grid-column .38s var(--ease),
+    grid-row .38s var(--ease),
     box-shadow .2s,
     border-color .2s,
     opacity .3s var(--ease),
-    transform .3s var(--ease);
+    transform .3s var(--ease),
+    min-height .3s var(--ease);
+  min-height:0;
 }
 .db-tile:hover{box-shadow:0 4px 24px rgba(91,33,245,.15);border-color:var(--purple)}
 .db-tile.expanded{
   grid-column:1/-1 !important;
+  grid-row:1 !important;
   cursor:default;
-  box-shadow:0 8px 40px rgba(91,33,245,.18);
-  border-color:var(--lime);
+  box-shadow:0 8px 40px rgba(91,33,245,.15);
+  border-color:var(--purple);
   z-index:10;
+  overflow-y:auto;
 }
 .db-tile.dimmed{
-  opacity:.45;transform:scale(.98);
+  opacity:.5;transform:scale(.97);
   pointer-events:none;
 }
 .db-tile-label{
@@ -500,15 +525,19 @@ a{color:inherit;text-decoration:none}
 /* Collapsed mini-tiles at bottom when one is expanded */
 .db-grid.has-expanded .db-tile:not(.expanded){
   grid-column:span 2 !important;
-  grid-row:auto !important;
-  min-height:52px;
-  padding:.6rem .8rem;
+  grid-row:2 !important;
+  min-height:48px;max-height:60px;
+  padding:.5rem .75rem;
+  overflow:hidden;
 }
 .db-grid.has-expanded .db-tile:not(.expanded) .db-tile-summary{
-  display:none;
+  display:none !important;
+}
+.db-grid.has-expanded .db-tile:not(.expanded) .db-tile-full{
+  display:none !important;
 }
 .db-grid.has-expanded .db-tile:not(.expanded) .db-tile-label{
-  margin-bottom:0;font-size:.55rem;
+  margin-bottom:0;font-size:.54rem;
 }
 
 /* Loading / legacy compat areas hidden inside dashboard */
@@ -877,12 +906,34 @@ button:active:not(.home-cta):not(.search-btn):not(.search-coral-btn):not(.search
      NAV
      ============================================================ -->
 <nav class="topnav" id="topnav">
-  <div class="tnav-brand" onclick="scrollToSection('home')">vistaclara<sup>®</sup></div>
+  <!-- Logo + brand -->
+  <div class="tnav-brand" onclick="scrollToSection('home')">
+    <svg width="18" height="20" viewBox="0 0 32 36" fill="none" style="display:inline-block;vertical-align:middle;margin-right:6px;flex-shrink:0">
+      <defs>
+        <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#4f9eff"/>
+          <stop offset="55%" stop-color="#5b21f5"/>
+          <stop offset="100%" stop-color="#9b3dff"/>
+        </linearGradient>
+        <linearGradient id="logoGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#7b6fff"/>
+          <stop offset="100%" stop-color="#c84dff"/>
+        </linearGradient>
+      </defs>
+      <!-- Right flame -->
+      <path d="M22 1C17 8 10 10 10 19c0 7 5.5 13 12 13s12-6 12-13C34 11 28 7 22 1z" fill="url(#logoGrad)" opacity=".95"/>
+      <!-- Left overlapping flame -->
+      <path d="M13 3C9 10 2 12 2 20c0 6.5 4.5 11.5 10 12.5" fill="url(#logoGrad2)" opacity=".55"/>
+    </svg>vistaclara<sup>®</sup>
+  </div>
   <div class="tnav-div"></div>
-  <div class="tnav-item active" id="tnav-analysis"  onclick="scrollToSection('analysis')">analysis</div>
-  <div class="tnav-item"        id="tnav-compare"   onclick="scrollToSection('compare')">compare</div>
+  <!-- markets: live market overview section -->
+  <div class="tnav-item" id="tnav-markets" onclick="scrollToSection('markets')" title="Markets overview">markets</div>
+  <div class="tnav-item active" id="tnav-analysis"  onclick="scrollToSection('analysis')">analytics</div>
+  <div class="tnav-item"        id="tnav-compare"   onclick="scrollToSection('compare')">comparison</div>
   <div class="tnav-item"        id="tnav-portfolio" onclick="scrollToSection('portfolio')">portfolio</div>
   <div class="tnav-div"></div>
+  <!-- Inline search -->
   <div class="tnav-search-wrap" id="tnav-search-wrap">
     <input class="tnav-search-input" id="tnav-ticker" placeholder="ticker or ISIN…"
       onkeydown="if(event.key==='Enter'){navSearch();}"
@@ -908,16 +959,15 @@ button:active:not(.home-cta):not(.search-btn):not(.search-coral-btn):not(.search
   <!-- Deco star -->
   <div class="deco-star">✦</div>
 
-  <!-- Ghost wordmark -->
+  <!-- Ghost wordmark — single full line -->
   <div class="home-ghost" style="z-index:0">
-    <span class="home-ghost-word">vista</span>
-    <span class="home-ghost-word" style="margin-top:-1.5vw">clara</span>
+    <span class="home-ghost-word" style="white-space:nowrap">vistaclara</span>
   </div>
 
   <div class="home-content" style="z-index:1">
     <div class="home-top">
       <div class="home-eyebrow">equity analysis engine</div>
-      <div class="home-headline">equity<br>analysis.<br>reimagined.</div>
+      <div class="home-headline" style="letter-spacing:-.06em">vistaclara</div>
       <div class="home-sub">Translate complexity into structure — turning financial noise into systems that think, learn, and evolve.</div>
       <button class="home-cta" onclick="scrollToSection('analysis')">
         <span class="home-cta-text">Start analysing</span>
@@ -999,7 +1049,7 @@ button:active:not(.home-cta):not(.search-btn):not(.search-coral-btn):not(.search
     <div class="db-grid" id="db-grid">
 
       <!-- Tile: Scorecard -->
-      <div class="db-tile" id="dbt-scorecard" style="grid-column:span 3;grid-row:span 3" onclick="dbExpand('scorecard')">
+      <div class="db-tile" id="dbt-scorecard" style="grid-column:span 3;grid-row:1" onclick="dbExpand('scorecard')">
         <div class="db-tile-label">Scorecard</div>
         <button class="db-tile-collapse" onclick="event.stopPropagation();dbCollapse()">↙ collapse</button>
         <div class="db-tile-summary">
@@ -1064,7 +1114,7 @@ button:active:not(.home-cta):not(.search-btn):not(.search-coral-btn):not(.search
       </div>
 
       <!-- Tile: Market Context -->
-      <div class="db-tile" id="dbt-market" style="grid-column:span 5;grid-row:span 3" onclick="dbExpand('market')">
+      <div class="db-tile" id="dbt-market" style="grid-column:span 5;grid-row:1" onclick="dbExpand('market')">
         <div class="db-tile-label">Market Context</div>
         <button class="db-tile-collapse" onclick="event.stopPropagation();dbCollapse()">↙ collapse</button>
         <div class="db-tile-summary" id="db-market-summary" style="font-size:.82rem;color:var(--mid)">—</div>
@@ -1074,7 +1124,7 @@ button:active:not(.home-cta):not(.search-btn):not(.search-coral-btn):not(.search
       </div>
 
       <!-- Tile: Price Chart -->
-      <div class="db-tile" id="dbt-chart" style="grid-column:span 4;grid-row:span 3" onclick="dbExpand('chart')">
+      <div class="db-tile" id="dbt-chart" style="grid-column:span 4;grid-row:1" onclick="dbExpand('chart')">
         <div class="db-tile-label">Price Chart</div>
         <button class="db-tile-collapse" onclick="event.stopPropagation();dbCollapse()">↙ collapse</button>
         <div class="db-tile-summary">
@@ -1105,7 +1155,7 @@ button:active:not(.home-cta):not(.search-btn):not(.search-coral-btn):not(.search
       </div>
 
       <!-- Tile: Financial Ratios -->
-      <div class="db-tile" id="dbt-ratios" style="grid-column:span 5;grid-row:span 3" onclick="dbExpand('ratios')">
+      <div class="db-tile" id="dbt-ratios" style="grid-column:span 4;grid-row:2" onclick="dbExpand('ratios')">
         <div class="db-tile-label">Financial Ratios <span class="tag tag-live" style="font-size:.5rem">live</span></div>
         <button class="db-tile-collapse" onclick="event.stopPropagation();dbCollapse()">↙ collapse</button>
         <div class="db-tile-summary" id="db-ratios-summary" style="font-size:.8rem;color:var(--mid)">—</div>
@@ -1116,7 +1166,7 @@ button:active:not(.home-cta):not(.search-btn):not(.search-coral-btn):not(.search
       </div>
 
       <!-- Tile: Period Overview -->
-      <div class="db-tile" id="dbt-period" style="grid-column:span 4;grid-row:span 3" onclick="dbExpand('period')">
+      <div class="db-tile" id="dbt-period" style="grid-column:span 4;grid-row:2" onclick="dbExpand('period')">
         <div class="db-tile-label">Period Overview</div>
         <button class="db-tile-collapse" onclick="event.stopPropagation();dbCollapse()">↙ collapse</button>
         <div class="db-tile-summary" id="db-period-summary" style="font-size:.8rem;color:var(--mid)">TTM · Annual · Quarterly</div>
@@ -1126,7 +1176,7 @@ button:active:not(.home-cta):not(.search-btn):not(.search-coral-btn):not(.search
       </div>
 
       <!-- Tile: DCF / Intrinsic Value -->
-      <div class="db-tile" id="dbt-dcf" style="grid-column:span 3;grid-row:span 3" onclick="dbExpand('dcf')">
+      <div class="db-tile" id="dbt-dcf" style="grid-column:span 4;grid-row:2" onclick="dbExpand('dcf')">
         <div class="db-tile-label">Intrinsic Value <span class="tag tag-live" style="font-size:.5rem">DCF</span></div>
         <button class="db-tile-collapse" onclick="event.stopPropagation();dbCollapse()">↙ collapse</button>
         <div class="db-tile-summary" id="db-dcf-summary" style="font-size:.8rem;color:var(--mid)">—</div>
@@ -1136,7 +1186,7 @@ button:active:not(.home-cta):not(.search-btn):not(.search-coral-btn):not(.search
       </div>
 
       <!-- Tile: Qualitative -->
-      <div class="db-tile" id="dbt-qual" style="grid-column:span 5;grid-row:span 3" onclick="dbExpand('qual')">
+      <div class="db-tile" id="dbt-qual" style="grid-column:span 12;grid-row:3;display:none" onclick="dbExpand('qual')">
         <div class="db-tile-label">Qualitative Assessment</div>
         <button class="db-tile-collapse" onclick="event.stopPropagation();dbCollapse()">↙ collapse</button>
         <div class="db-tile-summary" id="db-qual-summary" style="font-size:.8rem;color:var(--mid)">Management · Moat · ESG</div>
@@ -1157,7 +1207,7 @@ button:active:not(.home-cta):not(.search-btn):not(.search-coral-btn):not(.search
       </div>
 
       <!-- Tile: Margins -->
-      <div class="db-tile" id="dbt-margins" style="grid-column:span 4;grid-row:span 2;display:none" onclick="dbExpand('margins')">
+      <div class="db-tile" id="dbt-margins" style="display:none" onclick="dbExpand('margins')">
         <div class="db-tile-label">Margin Profile <span class="tag tag-live" style="font-size:.5rem">live</span></div>
         <button class="db-tile-collapse" onclick="event.stopPropagation();dbCollapse()">↙ collapse</button>
         <div class="db-tile-summary" id="db-margins-summary" style="font-size:.8rem;color:var(--mid)">—</div>
@@ -1167,7 +1217,7 @@ button:active:not(.home-cta):not(.search-btn):not(.search-coral-btn):not(.search
       </div>
 
       <!-- Tile: Financials -->
-      <div class="db-tile" id="dbt-financials" style="grid-column:span 4;grid-row:span 2;display:none" onclick="dbExpand('financials')">
+      <div class="db-tile" id="dbt-financials" style="display:none" onclick="dbExpand('financials')">
         <div class="db-tile-label">Key Financials <span class="tag tag-live" style="font-size:.5rem">live</span></div>
         <button class="db-tile-collapse" onclick="event.stopPropagation();dbCollapse()">↙ collapse</button>
         <div class="db-tile-summary" id="db-financials-summary" style="font-size:.8rem;color:var(--mid)">—</div>
@@ -1230,6 +1280,97 @@ button:active:not(.home-cta):not(.search-btn):not(.search-coral-btn):not(.search
   <!-- rating-content shown triggers our MutationObserver -->
   <div id="rating-content" style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;overflow:hidden"></div>
 
+</section>
+
+<!-- ============================================================
+     MARKETS
+     ============================================================ -->
+<section class="section section-markets" id="section-markets" style="background:var(--dark);padding:0;min-height:100vh;display:none;flex-direction:column">
+  <div class="section-spacer" style="height:6rem;flex-shrink:0"></div>
+  <div style="flex:1;padding:0 2.5rem 3rem;position:relative;z-index:1">
+    <!-- Glow -->
+    <div style="position:absolute;top:0;right:-10%;width:60vw;height:50vh;background:radial-gradient(ellipse,rgba(91,33,245,.18) 0%,transparent 65%);pointer-events:none;z-index:0"></div>
+    <div style="font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--purple);margin-bottom:.75rem;position:relative;z-index:1">live markets</div>
+    <div style="font-size:clamp(2rem,6vw,4rem);font-weight:900;letter-spacing:-.055em;line-height:.88;color:#fff;margin-bottom:2rem;position:relative;z-index:1">market<br><span style="color:var(--lime)">pulse.</span></div>
+
+    <!-- Scrolling news ticker -->
+    <div style="overflow:hidden;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--pill);padding:.55rem 1.25rem;margin-bottom:2rem;position:relative;z-index:1">
+      <div id="markets-ticker" style="display:flex;gap:3rem;white-space:nowrap;font-family:var(--mono);font-size:.72rem;color:rgba(255,255,255,.5);letter-spacing:.06em;animation:tickerScroll 40s linear infinite">
+        <span>S&amp;P 500 &nbsp;<span style="color:var(--lime)">▲ +0.42%</span></span>
+        <span style="opacity:.3">·</span>
+        <span>NASDAQ &nbsp;<span style="color:var(--lime)">▲ +0.61%</span></span>
+        <span style="opacity:.3">·</span>
+        <span>DAX &nbsp;<span style="color:#e0302a">▼ −0.18%</span></span>
+        <span style="opacity:.3">·</span>
+        <span>EUR/USD &nbsp;<span style="color:rgba(255,255,255,.7)">1.0842</span></span>
+        <span style="opacity:.3">·</span>
+        <span>BTC &nbsp;<span style="color:var(--lime)">▲ +2.3%</span></span>
+        <span style="opacity:.3">·</span>
+        <span>Gold &nbsp;<span style="color:#e08000">▲ +0.8%</span></span>
+        <span style="opacity:.3">·</span>
+        <span>10Y UST &nbsp;<span style="color:rgba(255,255,255,.7)">4.42%</span></span>
+        <span style="opacity:.3">·</span>
+        <span>VIX &nbsp;<span style="color:#e0302a">17.3</span></span>
+        <!-- duplicate for seamless loop -->
+        <span style="opacity:.3">·</span>
+        <span>S&amp;P 500 &nbsp;<span style="color:var(--lime)">▲ +0.42%</span></span>
+        <span style="opacity:.3">·</span>
+        <span>NASDAQ &nbsp;<span style="color:var(--lime)">▲ +0.61%</span></span>
+        <span style="opacity:.3">·</span>
+        <span>DAX &nbsp;<span style="color:#e0302a">▼ −0.18%</span></span>
+      </div>
+    </div>
+
+    <!-- Market cards grid -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;position:relative;z-index:1">
+      <!-- Index card -->
+      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:1.25rem;transition:border-color .2s" onmouseenter="this.style.borderColor='rgba(91,33,245,.5)'" onmouseleave="this.style.borderColor='rgba(255,255,255,.1)'">
+        <div style="font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:.5rem">Indices</div>
+        <div style="display:flex;flex-direction:column;gap:.65rem">
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="color:rgba(255,255,255,.7);font-size:.85rem;font-weight:600">S&amp;P 500</span><span style="font-family:var(--mono);font-size:.82rem;color:#00a86b">+0.42%</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="color:rgba(255,255,255,.7);font-size:.85rem;font-weight:600">NASDAQ</span><span style="font-family:var(--mono);font-size:.82rem;color:#00a86b">+0.61%</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="color:rgba(255,255,255,.7);font-size:.85rem;font-weight:600">DAX</span><span style="font-family:var(--mono);font-size:.82rem;color:#e0302a">−0.18%</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="color:rgba(255,255,255,.7);font-size:.85rem;font-weight:600">STOXX 50</span><span style="font-family:var(--mono);font-size:.82rem;color:#00a86b">+0.29%</span></div>
+        </div>
+      </div>
+      <!-- Rates card -->
+      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:1.25rem;transition:border-color .2s" onmouseenter="this.style.borderColor='rgba(91,33,245,.5)'" onmouseleave="this.style.borderColor='rgba(255,255,255,.1)'">
+        <div style="font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:.5rem">Rates &amp; FX</div>
+        <div style="display:flex;flex-direction:column;gap:.65rem">
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="color:rgba(255,255,255,.7);font-size:.85rem;font-weight:600">10Y UST</span><span style="font-family:var(--mono);font-size:.82rem;color:rgba(255,255,255,.6)">4.42%</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="color:rgba(255,255,255,.7);font-size:.85rem;font-weight:600">EUR/USD</span><span style="font-family:var(--mono);font-size:.82rem;color:rgba(255,255,255,.6)">1.0842</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="color:rgba(255,255,255,.7);font-size:.85rem;font-weight:600">DXY</span><span style="font-family:var(--mono);font-size:.82rem;color:#e0302a">−0.31%</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="color:rgba(255,255,255,.7);font-size:.85rem;font-weight:600">VIX</span><span style="font-family:var(--mono);font-size:.82rem;color:#e08000">17.3</span></div>
+        </div>
+      </div>
+      <!-- Commodities card -->
+      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:1.25rem;transition:border-color .2s" onmouseenter="this.style.borderColor='rgba(91,33,245,.5)'" onmouseleave="this.style.borderColor='rgba(255,255,255,.1)'">
+        <div style="font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:.5rem">Commodities</div>
+        <div style="display:flex;flex-direction:column;gap:.65rem">
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="color:rgba(255,255,255,.7);font-size:.85rem;font-weight:600">Gold</span><span style="font-family:var(--mono);font-size:.82rem;color:#00a86b">+0.80%</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="color:rgba(255,255,255,.7);font-size:.85rem;font-weight:600">WTI Oil</span><span style="font-family:var(--mono);font-size:.82rem;color:#e0302a">−1.12%</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="color:rgba(255,255,255,.7);font-size:.85rem;font-weight:600">BTC</span><span style="font-family:var(--mono);font-size:.82rem;color:#00a86b">+2.30%</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="color:rgba(255,255,255,.7);font-size:.85rem;font-weight:600">Silver</span><span style="font-family:var(--mono);font-size:.82rem;color:#00a86b">+0.55%</span></div>
+        </div>
+      </div>
+      <!-- Coming soon card -->
+      <div style="background:rgba(91,33,245,.1);border:1px solid rgba(91,33,245,.3);border-radius:16px;padding:1.25rem;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:160px">
+        <div style="font-size:1.5rem;margin-bottom:.5rem">✦</div>
+        <div style="font-family:var(--mono);font-size:.65rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--purple);margin-bottom:.35rem">Live news feed</div>
+        <div style="font-size:.8rem;color:rgba(255,255,255,.35);line-height:1.5">Real-time financial<br>news — coming soon</div>
+      </div>
+    </div>
+
+    <!-- Quick analyse from markets -->
+    <div style="margin-top:2rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;position:relative;z-index:1">
+      <div style="font-size:.82rem;color:rgba(255,255,255,.4);font-family:var(--mono)">Quick analyse →</div>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <span onclick="scrollToSection('analysis');setTimeout(()=>quickSearch('SPY'),200)" style="font-family:var(--mono);font-size:.7rem;padding:.3rem .85rem;border-radius:999px;border:1px solid rgba(91,33,245,.4);color:rgba(255,255,255,.6);cursor:pointer;transition:all .15s" onmouseenter="this.style.borderColor='var(--purple)';this.style.color='#fff'" onmouseleave="this.style.borderColor='rgba(91,33,245,.4)';this.style.color='rgba(255,255,255,.6)'">SPY</span>
+        <span onclick="scrollToSection('analysis');setTimeout(()=>quickSearch('QQQ'),200)" style="font-family:var(--mono);font-size:.7rem;padding:.3rem .85rem;border-radius:999px;border:1px solid rgba(91,33,245,.4);color:rgba(255,255,255,.6);cursor:pointer;transition:all .15s" onmouseenter="this.style.borderColor='var(--purple)';this.style.color='#fff'" onmouseleave="this.style.borderColor='rgba(91,33,245,.4)';this.style.color='rgba(255,255,255,.6)'">QQQ</span>
+        <span onclick="scrollToSection('analysis');setTimeout(()=>quickSearch('GLD'),200)" style="font-family:var(--mono);font-size:.7rem;padding:.3rem .85rem;border-radius:999px;border:1px solid rgba(91,33,245,.4);color:rgba(255,255,255,.6);cursor:pointer;transition:all .15s" onmouseenter="this.style.borderColor='var(--purple)';this.style.color='#fff'" onmouseleave="this.style.borderColor='rgba(91,33,245,.4)';this.style.color='rgba(255,255,255,.6)'">GLD</span>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- ============================================================
@@ -1376,11 +1517,17 @@ button:active:not(.home-cta):not(.search-btn):not(.search-coral-btn):not(.search
 (function(){
   const c = document.getElementById('cursor');
   if(!c) return;
-  document.addEventListener('mousemove', e => {
-    c.style.left = e.clientX + 'px';
-    c.style.top  = e.clientY + 'px';
-  });
-  document.querySelectorAll('button,a,[onclick],.tnav-item,.company-li,.try-pills span').forEach(el => {
+  // Smooth with lerp
+  let cx=window.innerWidth/2, cy=window.innerHeight/2;
+  let tx=cx, ty=cy;
+  document.addEventListener('mousemove', e => { tx=e.clientX; ty=e.clientY; });
+  (function loop(){
+    cx+=(tx-cx)*.18; cy+=(ty-cy)*.18;
+    c.style.left=cx+'px'; c.style.top=cy+'px';
+    requestAnimationFrame(loop);
+  })();
+  // Hover = bigger ring
+  document.querySelectorAll('button,a,[onclick],.tnav-item,.company-li,.try-pills span,.db-tile').forEach(el => {
     el.addEventListener('mouseenter', () => c.classList.add('hover'));
     el.addEventListener('mouseleave', () => c.classList.remove('hover'));
   });
@@ -1420,8 +1567,13 @@ button:active:not(.home-cta):not(.search-btn):not(.search-coral-btn):not(.search
 })();
 
 /* ── Nav ── */
-const SECTIONS = ['home','analysis','compare','portfolio','settings'];
+const SECTIONS = ['home','analysis','markets','compare','portfolio','settings'];
 function scrollToSection(id){
+  // Markets section needs to be shown (it's a flex display)
+  if(id==='markets'){
+    const m=document.getElementById('section-markets');
+    if(m) m.style.display='flex';
+  }
   const el = document.getElementById('section-'+id);
   if(el) el.scrollIntoView({behavior:'smooth'});
 }
@@ -1434,7 +1586,7 @@ const navObs = new IntersectionObserver(entries => {
     const a = document.getElementById('tnav-'+id);
     if(a) a.classList.add('active');
     // Nav mode — only result hero is dark now; compare/portfolio/settings are light
-    const darkIds = ['result'];
+    const darkIds = ['result','markets'];
     if(darkIds.includes(id)){navEl.classList.add('dark-mode')}
     else{navEl.classList.remove('dark-mode')}
   });
@@ -1801,6 +1953,96 @@ function closeNavSearch(){
     gs.addEventListener('mouseenter',()=>c&&c.classList.add('hover'));
     gs.addEventListener('mouseleave',()=>c&&c.classList.remove('hover'));
   }
+})();
+
+/* ── Markets toast (coming soon) ── */
+function showMarketsToast(){
+  let t=document.getElementById('markets-toast');
+  if(!t){
+    t=document.createElement('div');
+    t.id='markets-toast';
+    t.style.cssText='position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-family:var(--mono);font-size:.74rem;font-weight:700;letter-spacing:.1em;padding:.75rem 1.5rem;border-radius:999px;z-index:9000;box-shadow:0 8px 32px rgba(0,0,0,.25);white-space:nowrap;opacity:0;transition:opacity .2s var(--ease);pointer-events:none';
+    document.body.appendChild(t);
+  }
+  t.textContent='markets — live news feed coming soon ✦';
+  t.style.opacity='1';
+  clearTimeout(t._tid);
+  t._tid=setTimeout(()=>{t.style.opacity='0';},2800);
+}
+/* ── navSearch helper ── */
+function navSearch(){
+  const i=document.getElementById('tnav-ticker');
+  const v=i?i.value.trim():'';
+  if(!v) return;
+  const m=document.getElementById('r-ticker');
+  if(m) m.value=v;
+  closeNavSearch();
+  scrollToSection('analysis');
+  setTimeout(()=>fetchCompany&&fetchCompany(v),350);
+}
+/* ── Tile drag-to-reorder ── */
+(function(){
+  function initDrag(){
+    document.querySelectorAll('.db-tile').forEach(tile=>{
+      if(tile.dataset.dragInit) return;
+      tile.dataset.dragInit='1';
+      tile.setAttribute('draggable','true');
+      tile.addEventListener('dragstart',e=>{
+        if(tile.classList.contains('expanded')){e.preventDefault();return;}
+        window._dragSrc=tile;
+        tile.classList.add('dragging');
+        e.dataTransfer.effectAllowed='move';
+      });
+      tile.addEventListener('dragend',()=>{
+        tile.classList.remove('dragging');
+        document.querySelectorAll('.db-tile').forEach(t=>t.classList.remove('drag-over'));
+        window._dragSrc=null;
+      });
+      tile.addEventListener('dragover',e=>{
+        e.preventDefault();
+        const src=window._dragSrc;
+        if(src&&tile!==src&&!tile.classList.contains('expanded')){
+          document.querySelectorAll('.db-tile').forEach(t=>t.classList.remove('drag-over'));
+          tile.classList.add('drag-over');
+        }
+      });
+      tile.addEventListener('dragleave',()=>tile.classList.remove('drag-over'));
+      tile.addEventListener('drop',e=>{
+        e.preventDefault();
+        tile.classList.remove('drag-over');
+        const src=window._dragSrc;
+        if(!src||src===tile) return;
+        const grid=tile.parentNode;
+        // Swap DOM order
+        const srcNext=src.nextSibling;
+        const tilePrev=tile.previousSibling;
+        if(srcNext===tile){
+          grid.insertBefore(src,tile.nextSibling);
+        } else {
+          grid.insertBefore(tile,src);
+          if(srcNext) grid.insertBefore(src,srcNext);
+          else grid.appendChild(src);
+        }
+        // Swap inline grid-column/row styles
+        const getStyle=(el,prop)=>{const m=(el.getAttribute('style')||'').match(new RegExp(prop+':\s*([^;]+)'));return m?m[1].trim():''};
+        const setStyle=(el,col,row)=>{
+          let s=(el.getAttribute('style')||'').replace(/grid-column:[^;]*;?/g,'').replace(/grid-row:[^;]*;?/g,'').trim();
+          if(col) s=`grid-column:${col};`+s;
+          if(row) s=`grid-row:${row};`+s;
+          el.setAttribute('style',s.trim());
+        };
+        const srcCol=getStyle(src,'grid-column'), srcRow=getStyle(src,'grid-row');
+        const dstCol=getStyle(tile,'grid-column'), dstRow=getStyle(tile,'grid-row');
+        setStyle(src,dstCol,dstRow);
+        setStyle(tile,srcCol,srcRow);
+      });
+    });
+  }
+  document.addEventListener('DOMContentLoaded',initDrag);
+  setTimeout(initDrag,800);
+  // Re-init when dashboard becomes visible
+  const shell=document.getElementById('db-shell');
+  if(shell){new MutationObserver(()=>{if(shell.classList.contains('visible'))setTimeout(initDrag,300)}).observe(shell,{attributes:true,attributeFilter:['class']});}
 })();
 </script>
 </body>
