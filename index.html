@@ -49,7 +49,7 @@
 }
 
 /* ===== RESET & BASE ===== */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; cursor: none !important; }
 html { font-size: 16px; scroll-behavior: smooth; }
 body {
   background: var(--bg);
@@ -59,11 +59,10 @@ body {
   line-height: 1.6;
   min-height: 100vh;
   overflow-x: hidden;
-  cursor: none;
 }
-button { cursor: none; border: none; background: none; font-family: inherit; color: inherit; }
-input, select { font-family: inherit; cursor: none; }
-a { color: inherit; text-decoration: none; cursor: none; }
+button { border: none; background: none; font-family: inherit; color: inherit; }
+input, select { font-family: inherit; }
+a { color: inherit; text-decoration: none; }
 
 /* ===== CUSTOM CURSOR ===== */
 #cursor-dot {
@@ -72,26 +71,25 @@ a { color: inherit; text-decoration: none; cursor: none; }
   background: #5b21f5;
   border-radius: 50%;
   pointer-events: none;
-  z-index: 9999;
+  z-index: 99999;
   left: -20px; top: -20px;
   transform: translate(-50%, -50%);
-  transition: opacity 0.2s;
   will-change: left, top;
 }
 #cursor-ring {
   position: fixed;
   width: 34px; height: 34px;
-  border: 1.5px solid rgba(91,33,245,0.3);
+  border: 1.5px solid rgba(91,33,245,0.35);
   border-radius: 50%;
   pointer-events: none;
-  z-index: 9998;
+  z-index: 99998;
   left: -20px; top: -20px;
   transform: translate(-50%, -50%);
-  transition: width 0.2s, height 0.2s, border-color 0.2s;
+  transition: width 0.18s, height 0.18s, border-color 0.18s;
   will-change: left, top;
 }
 [data-theme="dark"] #cursor-dot { background: #7c6cfc; }
-[data-theme="dark"] #cursor-ring { border-color: rgba(124,108,252,0.3); }
+[data-theme="dark"] #cursor-ring { border-color: rgba(124,108,252,0.35); }
 
 /* ===== NAV — futara floating pill ===== */
 #nav {
