@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>futara — Market Intelligence</title>
+<title>futara</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g1' x1='0%25' y1='0%25' x2='50%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2330c0e0'/%3E%3Cstop offset='50%25' stop-color='%233b6ef5'/%3E%3Cstop offset='100%25' stop-color='%239b30d0'/%3E%3C/linearGradient%3E%3ClinearGradient id='g2' x1='50%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2330c0e0'/%3E%3Cstop offset='60%25' stop-color='%233b6ef5'/%3E%3Cstop offset='100%25' stop-color='%239b30d0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M55 5 C45 25 25 30 25 58 C25 76 37 90 55 90 C73 90 85 76 85 58 C85 30 65 20 55 5Z' fill='url(%23g1)' opacity='0.9'/%3E%3Cpath d='M35 10 C22 32 5 38 5 60 C5 76 16 88 32 90' fill='url(%23g2)' opacity='0.65'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
@@ -58,12 +59,37 @@ body {
   line-height: 1.6;
   min-height: 100vh;
   overflow-x: hidden;
+  cursor: none;
 }
-button { cursor: pointer; border: none; background: none; font-family: inherit; color: inherit; }
-input, select { font-family: inherit; }
-a { color: inherit; text-decoration: none; }
+button { cursor: none; border: none; background: none; font-family: inherit; color: inherit; }
+input, select { font-family: inherit; cursor: none; }
+a { color: inherit; text-decoration: none; cursor: none; }
 
-/* ===== NAV — Vistaclara floating pill ===== */
+/* ===== CUSTOM CURSOR ===== */
+#cursor-dot {
+  position: fixed;
+  width: 12px; height: 12px;
+  background: var(--accent);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease, opacity 0.2s;
+}
+#cursor-ring {
+  position: fixed;
+  width: 36px; height: 36px;
+  border: 1.5px solid rgba(91,33,245,0.35);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: transform 0.18s ease, width 0.2s, height 0.2s, border-color 0.2s;
+}
+[data-theme="dark"] #cursor-dot { background: #7c6cfc; }
+[data-theme="dark"] #cursor-ring { border-color: rgba(124,108,252,0.35); }
+
+/* ===== NAV — futara floating pill ===== */
 #nav {
   position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
   z-index: 100;
@@ -1110,43 +1136,56 @@ input[type=range]::-webkit-slider-thumb:hover { box-shadow: 0 0 0 4px var(--acce
 /* Modal / Search overlay */
 #search-modal {
   position: fixed; inset: 0; z-index: 200;
-  background: rgba(0,0,0,0.7);
-  backdrop-filter: blur(8px);
+  background: rgba(240,237,245,0.6);
+  backdrop-filter: blur(12px);
   display: none;
   align-items: flex-start;
   justify-content: center;
-  padding-top: 120px;
+  padding-top: 100px;
 }
+[data-theme="dark"] #search-modal { background: rgba(14,10,26,0.7); }
 #search-modal.open { display: flex; }
 .search-modal-box {
-  width: 560px;
-  background: var(--bg-2);
-  border: 1px solid var(--border-mid);
-  border-radius: var(--r-lg);
-  overflow: hidden;
-  box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+  width: 520px;
+  background: var(--bg);
+  border: 2px solid var(--accent);
+  border-radius: 999px;
+  overflow: visible;
+  box-shadow: 0 8px 48px rgba(91,33,245,0.15);
+  display: flex; align-items: center;
+  padding: 0 8px 0 20px;
+  height: 52px;
+  position: relative;
 }
-.sm-input-wrap { display: flex; align-items: center; gap: 10px; padding: 14px 18px; }
+.sm-input-wrap { display: flex; align-items: center; gap: 10px; flex: 1; }
 .sm-input {
   flex: 1; background: none; border: none; outline: none;
-  font-size: 16px; color: var(--text);
+  font-size: 15px; color: var(--text);
   font-family: var(--font-body);
 }
 .sm-input::placeholder { color: var(--text-3); }
-.sm-divider { height: 1px; background: var(--border); }
-.sm-results { padding: 8px; }
+.sm-divider { display: none; }
+.sm-results {
+  position: absolute; top: calc(100% + 10px); left: 0; right: 0;
+  background: var(--bg);
+  border: 1px solid var(--border-mid);
+  border-radius: var(--r-lg);
+  padding: 8px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  z-index: 201;
+}
 .sm-result-item {
   display: flex; align-items: center; gap: 12px;
   padding: 10px 12px;
   border-radius: var(--r);
-  cursor: pointer;
+  cursor: none;
   transition: background 0.1s;
 }
 .sm-result-item:hover { background: var(--bg-4); }
 .sri-sym { font-size: 14px; font-weight: 700; font-family: var(--font-mono); width: 60px; }
 .sri-name { flex: 1; font-size: 13px; color: var(--text-2); }
 .sri-type { font-size: 11px; color: var(--text-3); font-family: var(--font-mono); }
-.sm-hint { padding: 10px 16px; font-size: 11px; color: var(--text-3); border-top: 1px solid var(--border); font-family: var(--font-mono); }
+.sm-hint { display: none; }
 
 /* Footer */
 footer {
@@ -1189,21 +1228,25 @@ footer a:hover { color: var(--text-2); }
 <!-- NAV logo pill (left) -->
 <div id="nav-logo-pill" onclick="showPage('home')">
   <a class="nav-logo">
-    <svg width="26" height="26" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Futara blue flame logo -->
+    <svg width="28" height="28" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <linearGradient id="lg1" x1="22" y1="1" x2="22" y2="32" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#7b6fff"/>
-          <stop offset="100%" stop-color="#c84dff"/>
+        <linearGradient id="fl1" x1="0%" y1="0%" x2="50%" y2="100%">
+          <stop offset="0%" stop-color="#30c0e0"/>
+          <stop offset="50%" stop-color="#3b6ef5"/>
+          <stop offset="100%" stop-color="#9b30d0"/>
         </linearGradient>
-        <linearGradient id="lg2" x1="8" y1="3" x2="8" y2="33" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#7b6fff"/>
-          <stop offset="100%" stop-color="#c84dff"/>
+        <linearGradient id="fl2" x1="50%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#30c0e0"/>
+          <stop offset="60%" stop-color="#3b6ef5"/>
+          <stop offset="100%" stop-color="#9b30d0"/>
         </linearGradient>
       </defs>
-      <path d="M22 1C17 8 10 10 10 19c0 7 5.5 13 12 13s12-6 12-13C34 11 28 7 22 1z" fill="url(#lg1)" opacity=".95"/>
-      <path d="M13 3C9 10 2 12 2 20c0 6.5 4.5 11.5 10 12.5" fill="url(#lg2)" opacity=".55"/>
+      <path d="M55 5 C45 25 25 30 25 58 C25 76 37 90 55 90 C73 90 85 76 85 58 C85 30 65 20 55 5Z" fill="url(#fl1)" opacity="0.9"/>
+      <path d="M35 10 C22 32 5 38 5 60 C5 76 16 88 32 90" stroke="url(#fl2)" stroke-width="0" fill="url(#fl2)" opacity="0.65"
+        d="M35 10 C22 32 5 38 5 60 C5 76 16 88 32 90 C20 82 14 72 14 60 C14 40 28 34 40 14Z"/>
     </svg>
-    vistaclara<sup>®</sup>
+    fut<span style="color:#5b21f5">a</span>ra
   </a>
 </div>
 
@@ -1237,12 +1280,17 @@ footer a:hover { color: var(--text-2); }
 <div id="search-modal" onclick="closeSearch(event)">
   <div class="search-modal-box">
     <div class="sm-input-wrap">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input class="sm-input" placeholder="Search by ticker or company name…" id="sm-input" oninput="filterSearch(this.value)" onkeydown="handleSearchKey(event)">
+      <input class="sm-input" placeholder="ticker or ISIN…" id="sm-input" oninput="filterSearch(this.value)" onkeydown="handleSearchKey(event)" autofocus>
     </div>
+    <!-- lila Punkt rechts -->
+    <div style="width:10px;height:10px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-right:6px;"></div>
+    <!-- Suchen-Button -->
+    <button class="nav-search-btn" style="margin-left:0;" onclick="handleSearchKey({key:'Enter',target:document.getElementById('sm-input')})">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    </button>
     <div class="sm-divider"></div>
     <div class="sm-results" id="sm-results"></div>
-    <div class="sm-hint">↑↓ navigate &nbsp;·&nbsp; ↵ open analytics &nbsp;·&nbsp; esc close</div>
+    <div class="sm-hint"></div>
   </div>
 </div>
 
@@ -1256,7 +1304,7 @@ footer a:hover { color: var(--text-2); }
 
 <!-- ============ HOME ============ -->
 <div class="page active page-home-bg" id="page-home">
-  <!-- Vistaclara background deco -->
+  <!-- background deco -->
   <div class="dot-grid" style="top:4rem;right:2.5rem;width:160px;height:160px;opacity:.6"></div>
   <div class="dot-grid" style="bottom:8rem;left:2rem;width:100px;height:100px;opacity:.35"></div>
   <div class="deco-blob"></div>
@@ -1395,7 +1443,7 @@ footer a:hover { color: var(--text-2); }
     <div class="fl">
       <a>About</a><a>Methodology</a><a>API Docs</a><a>Terms</a><a>Privacy</a>
     </div>
-    <div>vistaclara · 2026</div>
+    <div>futara · 2026</div>
   </footer>
   </div><!-- end z-index wrapper -->
 </div>
@@ -2808,7 +2856,38 @@ document.querySelectorAll('.toggle-btn').forEach(btn => {
   window.addEventListener('resize', () => {
     if (currentPage === 'analytics') drawPriceChart(currentTicker);
   });
+
+  // Custom cursor
+  const dot = document.getElementById('cursor-dot');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx + 'px';
+    dot.style.top  = my + 'px';
+  });
+  (function animRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top  = ry + 'px';
+    requestAnimationFrame(animRing);
+  })();
+  document.querySelectorAll('button, a, input, [onclick]').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      ring.style.width = '48px'; ring.style.height = '48px';
+      ring.style.borderColor = 'rgba(91,33,245,0.6)';
+    });
+    el.addEventListener('mouseleave', () => {
+      ring.style.width = '36px'; ring.style.height = '36px';
+      ring.style.borderColor = 'rgba(91,33,245,0.35)';
+    });
+  });
 })();
 </script>
+
+<!-- cursor elements -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
 </body>
 </html>
