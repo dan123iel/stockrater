@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,17 +10,17 @@
 <style>
 /* ===== DESIGN TOKENS ===== */
 :root {
-  --bg: #0a0a0c;
-  --bg-2: #111115;
-  --bg-3: #17171d;
-  --bg-4: #1e1e26;
-  --border: rgba(255,255,255,0.07);
-  --border-mid: rgba(255,255,255,0.12);
-  --text: #f0eff5;
-  --text-2: rgba(240,239,245,0.6);
-  --text-3: rgba(240,239,245,0.35);
-  --accent: #7c6cfc;
-  --accent-glow: rgba(124,108,252,0.18);
+  --bg: #f0edf5;
+  --bg-2: #e8e4f0;
+  --bg-3: #dedad8;
+  --bg-4: #d4d0ce;
+  --border: rgba(26,16,40,0.08);
+  --border-mid: rgba(26,16,40,0.14);
+  --text: #1a1028;
+  --text-2: rgba(26,16,40,0.6);
+  --text-3: rgba(26,16,40,0.35);
+  --accent: #5b21f5;
+  --accent-glow: rgba(91,33,245,0.15);
   --green: #2dca72;
   --green-dim: rgba(45,202,114,0.15);
   --red: #fc5050;
@@ -33,18 +33,18 @@
   --font-body: 'DM Sans', sans-serif;
   --font-mono: 'DM Mono', monospace;
 }
-[data-theme="light"] {
-  --bg: #f5f4f0;
-  --bg-2: #eeecea;
-  --bg-3: #e6e4e0;
-  --bg-4: #dddbd6;
-  --border: rgba(0,0,0,0.08);
-  --border-mid: rgba(0,0,0,0.14);
-  --text: #14131a;
-  --text-2: rgba(20,19,26,0.6);
-  --text-3: rgba(20,19,26,0.35);
-  --accent: #5748e8;
-  --accent-glow: rgba(87,72,232,0.12);
+[data-theme="dark"] {
+  --bg: #0e0a1a;
+  --bg-2: #141020;
+  --bg-3: #1a1528;
+  --bg-4: #221c32;
+  --border: rgba(255,255,255,0.07);
+  --border-mid: rgba(255,255,255,0.12);
+  --text: #f0eff5;
+  --text-2: rgba(240,239,245,0.6);
+  --text-3: rgba(240,239,245,0.35);
+  --accent: #7c6cfc;
+  --accent-glow: rgba(124,108,252,0.18);
 }
 
 /* ===== RESET & BASE ===== */
@@ -63,80 +63,127 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 input, select { font-family: inherit; }
 a { color: inherit; text-decoration: none; }
 
-/* ===== NAV ===== */
+/* ===== NAV — Vistaclara floating pill ===== */
 #nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  height: 56px;
+  position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+  z-index: 100;
+  height: 52px;
   display: flex; align-items: center;
-  padding: 0 24px;
-  background: rgba(10,10,12,0.85);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
+  padding: 0 8px 0 16px;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(18px);
+  border-radius: 999px;
+  box-shadow: 0 2px 24px rgba(26,16,40,.10), 0 0 0 1px rgba(26,16,40,.07);
   gap: 0;
+  width: auto;
+  min-width: 0;
 }
-[data-theme="light"] #nav { background: rgba(245,244,240,0.85); }
+[data-theme="dark"] #nav {
+  background: rgba(30,28,42,0.92);
+  box-shadow: 0 2px 24px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.07);
+}
+
+/* logo */
 .nav-logo {
-  font-family: var(--font-display);
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: -0.04em;
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
   color: var(--text);
-  margin-right: 40px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding-right: 4px;
 }
-.nav-logo span { color: var(--accent); }
-.nav-links { display: flex; gap: 4px; flex: 1; }
+.nav-logo svg { flex-shrink: 0; }
+.nav-logo sup { font-size: 8px; vertical-align: super; opacity: .5; }
+
+/* divider */
+.nav-div {
+  width: 1px; height: 22px;
+  background: rgba(26,16,40,.12);
+  margin: 0 10px;
+  flex-shrink: 0;
+}
+[data-theme="dark"] .nav-div { background: rgba(255,255,255,.12); }
+
+/* links */
+.nav-links { display: flex; gap: 2px; align-items: center; }
 .nav-link {
-  padding: 6px 14px;
+  padding: 6px 13px;
   font-size: 13px;
   font-weight: 400;
-  color: var(--text-2);
-  border-radius: var(--r);
+  color: rgba(26,16,40,.55);
+  border-radius: 999px;
   transition: all 0.15s;
-  letter-spacing: 0.01em;
-}
-.nav-link:hover { color: var(--text); background: rgba(255,255,255,0.06); }
-.nav-link.active { color: var(--text); background: rgba(255,255,255,0.08); font-weight: 500; }
-[data-theme="light"] .nav-link:hover { background: rgba(0,0,0,0.05); }
-[data-theme="light"] .nav-link.active { background: rgba(0,0,0,0.07); }
-
-.nav-actions { display: flex; align-items: center; gap: 8px; }
-.nav-search {
-  display: flex; align-items: center; gap: 8px;
-  padding: 7px 14px;
-  background: var(--bg-3);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  font-size: 13px;
-  color: var(--text-3);
+  letter-spacing: 0.005em;
+  white-space: nowrap;
   cursor: pointer;
-  transition: all 0.15s;
-  min-width: 200px;
+  background: none; border: none; font-family: var(--font-body);
 }
-.nav-search:hover { border-color: var(--border-mid); color: var(--text-2); }
-.nav-search svg { opacity: 0.5; flex-shrink: 0; }
-.nav-search span { flex: 1; }
-.nav-search kbd {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  padding: 2px 6px;
-  background: var(--bg-4);
-  border-radius: 4px;
-  color: var(--text-3);
+[data-theme="dark"] .nav-link { color: rgba(240,239,245,.45); }
+.nav-link:hover { color: var(--text); background: rgba(26,16,40,.06); }
+[data-theme="dark"] .nav-link:hover { color: #fff; background: rgba(255,255,255,.08); }
+.nav-link.active {
+  background: var(--accent);
+  color: #fff !important;
+  font-weight: 600;
 }
-.btn-icon {
+
+/* search button */
+.nav-search-btn {
   width: 34px; height: 34px;
   display: flex; align-items: center; justify-content: center;
-  border-radius: var(--r);
-  color: var(--text-2);
-  transition: all 0.15s;
+  border-radius: 50%;
+  background: var(--text);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-left: 6px;
+  transition: transform .15s, opacity .15s;
 }
-.btn-icon:hover { background: rgba(255,255,255,0.07); color: var(--text); }
-[data-theme="light"] .btn-icon:hover { background: rgba(0,0,0,0.06); }
+[data-theme="dark"] .nav-search-btn { background: rgba(255,255,255,.15); }
+.nav-search-btn:hover { transform: scale(1.08); opacity: .85; }
 
 /* ===== PAGES ===== */
-#app { padding-top: 56px; }
-.page { display: none; min-height: calc(100vh - 56px); }
+#app { padding-top: 80px; }
+.page { display: none; min-height: calc(100vh - 80px); }
 .page.active { display: block; }
+
+/* ===== HOME BG — dot-grid & deco ===== */
+.page-home-bg {
+  position: relative;
+  overflow: hidden;
+}
+.dot-grid {
+  position: absolute; pointer-events: none; user-select: none;
+  background-image: radial-gradient(circle, rgba(91,33,245,.22) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+[data-theme="dark"] .dot-grid {
+  background-image: radial-gradient(circle, rgba(124,108,252,.18) 1px, transparent 1px);
+}
+.deco-star {
+  position: absolute; right: 6vw; top: 30%;
+  font-size: clamp(4rem,10vw,8rem);
+  color: #c8ff00;
+  animation: decoSpin 20s linear infinite;
+  pointer-events: none; user-select: none; line-height: 1; z-index: 0;
+  mix-blend-mode: multiply;
+}
+[data-theme="dark"] .deco-star { mix-blend-mode: screen; color: #c8ff00; }
+@keyframes decoSpin { to { transform: rotate(360deg) } }
+.deco-blob {
+  position: absolute; top: -10%; right: -5%;
+  width: 55vw; height: 65vh;
+  background: radial-gradient(ellipse, rgba(91,33,245,.12) 0%, transparent 65%);
+  pointer-events: none; z-index: 0;
+}
+[data-theme="dark"] .deco-blob {
+  background: radial-gradient(ellipse, rgba(91,33,245,.22) 0%, transparent 65%);
+}
 
 /* ===== TICKER TAPE ===== */
 #ticker-tape {
@@ -1092,26 +1139,35 @@ footer a:hover { color: var(--text-2); }
 
 <!-- NAV -->
 <nav id="nav">
-  <a class="nav-logo" onclick="showPage('home')">fut<span>a</span>ra</a>
+  <a class="nav-logo" onclick="showPage('home')">
+    <!-- Vistaclara flame logo -->
+    <svg width="26" height="26" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="lg1" x1="22" y1="1" x2="22" y2="32" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#7b6fff"/>
+          <stop offset="100%" stop-color="#c84dff"/>
+        </linearGradient>
+        <linearGradient id="lg2" x1="8" y1="3" x2="8" y2="33" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#7b6fff"/>
+          <stop offset="100%" stop-color="#c84dff"/>
+        </linearGradient>
+      </defs>
+      <path d="M22 1C17 8 10 10 10 19c0 7 5.5 13 12 13s12-6 12-13C34 11 28 7 22 1z" fill="url(#lg1)" opacity=".95"/>
+      <path d="M13 3C9 10 2 12 2 20c0 6.5 4.5 11.5 10 12.5" fill="url(#lg2)" opacity=".55"/>
+    </svg>
+    vistaclara<sup>®</sup>
+  </a>
+  <div class="nav-div"></div>
   <div class="nav-links">
-    <a class="nav-link active" id="nav-markets" onclick="showPage('markets')">markets</a>
-    <a class="nav-link" id="nav-analytics" onclick="showPage('analytics-start')">analytics</a>
-    <a class="nav-link" id="nav-comparison" onclick="showPage('comparison')">comparison</a>
-    <a class="nav-link" id="nav-portfolio" onclick="showPage('portfolio')">portfolio</a>
+    <button class="nav-link active" id="nav-markets" onclick="showPage('markets')">markets</button>
+    <button class="nav-link" id="nav-analytics" onclick="showPage('analytics-start')">analytics</button>
+    <button class="nav-link" id="nav-comparison" onclick="showPage('comparison')">comparison</button>
+    <button class="nav-link" id="nav-portfolio" onclick="showPage('portfolio')">portfolio</button>
   </div>
-  <div class="nav-actions">
-    <button class="nav-search" onclick="openSearch()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <span>Search ticker…</span>
-      <kbd>⌘K</kbd>
-    </button>
-    <button class="btn-icon tt" data-tip="Toggle theme" onclick="toggleTheme()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-    </button>
-    <button class="btn-icon" onclick="showPage('profile')">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    </button>
-  </div>
+  <div class="nav-div"></div>
+  <button class="nav-search-btn" onclick="openSearch()" title="Search (⌘K)">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+  </button>
 </nav>
 
 <!-- SEARCH MODAL -->
@@ -1136,7 +1192,13 @@ footer a:hover { color: var(--text-2); }
 <div id="app">
 
 <!-- ============ HOME ============ -->
-<div class="page active" id="page-home">
+<div class="page active page-home-bg" id="page-home">
+  <!-- Vistaclara background deco -->
+  <div class="dot-grid" style="top:4rem;right:2.5rem;width:160px;height:160px;opacity:.6"></div>
+  <div class="dot-grid" style="bottom:8rem;left:2rem;width:100px;height:100px;opacity:.35"></div>
+  <div class="deco-blob"></div>
+  <div class="deco-star">✦</div>
+  <div style="position:relative;z-index:1;">
   <div class="hero">
     <div>
       <div class="hero-label">Market Intelligence Platform</div>
@@ -1270,8 +1332,9 @@ footer a:hover { color: var(--text-2); }
     <div class="fl">
       <a>About</a><a>Methodology</a><a>API Docs</a><a>Terms</a><a>Privacy</a>
     </div>
-    <div>futara v2.6.1 · 2026</div>
+    <div>vistaclara · 2026</div>
   </footer>
+  </div><!-- end z-index wrapper -->
 </div>
 
 <!-- ============ MARKETS ============ -->
@@ -2667,10 +2730,12 @@ document.querySelectorAll('.toggle-btn').forEach(btn => {
 
 // ===== INIT =====
 (function init() {
-  const savedTheme = localStorage.getItem('theme') || 'dark';
+  const savedTheme = localStorage.getItem('theme') || 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
-  document.getElementById('theme-dark-btn').classList.toggle('active', savedTheme === 'dark');
-  document.getElementById('theme-light-btn').classList.toggle('active', savedTheme === 'light');
+  const darkBtn = document.getElementById('theme-dark-btn');
+  const lightBtn = document.getElementById('theme-light-btn');
+  if (darkBtn) darkBtn.classList.toggle('active', savedTheme === 'dark');
+  if (lightBtn) lightBtn.classList.toggle('active', savedTheme === 'light');
 
   buildTape();
   buildMarketPulse();
