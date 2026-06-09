@@ -29,7 +29,7 @@
   --amber: #f0a842;
   --amber-dim: rgba(240,168,66,0.12);
   --r: 999px;
-  --r-lg: 999px;
+  --r-lg: 16px;
   --font-display: 'Space Grotesk', sans-serif;
   --font-body: 'Space Grotesk', sans-serif;
   --font-mono: 'DM Mono', monospace;
@@ -403,7 +403,7 @@ body::after {
   overflow: hidden;
   transition: border-color 0.2s;
 }
-.home-card:hover { border-color: var(--border-mid); }
+.home-card:hover { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
 .card-header {
   padding: 16px 20px 12px;
   display: flex; align-items: center; justify-content: space-between;
@@ -483,7 +483,9 @@ body::after {
   background: var(--bg-2);
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
+.panel:hover { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
 .panel-head {
   display: flex; align-items: center; justify-content: space-between;
   padding: 14px 20px;
