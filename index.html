@@ -7,7 +7,7 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g1' x1='0%25' y1='0%25' x2='50%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2330c0e0'/%3E%3Cstop offset='50%25' stop-color='%233b6ef5'/%3E%3Cstop offset='100%25' stop-color='%239b30d0'/%3E%3C/linearGradient%3E%3ClinearGradient id='g2' x1='50%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2330c0e0'/%3E%3Cstop offset='60%25' stop-color='%233b6ef5'/%3E%3Cstop offset='100%25' stop-color='%239b30d0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M55 5 C45 25 25 30 25 58 C25 76 37 90 55 90 C73 90 85 76 85 58 C85 30 65 20 55 5Z' fill='url(%23g1)' opacity='0.9'/%3E%3Cpath d='M35 10 C22 32 5 38 5 60 C5 76 16 88 32 90' fill='url(%23g2)' opacity='0.65'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
 <style>
 /* ===== DESIGN TOKENS ===== */
 :root {
@@ -28,10 +28,10 @@
   --red-dim: rgba(252,80,80,0.12);
   --amber: #f0a842;
   --amber-dim: rgba(240,168,66,0.12);
-  --r: 8px;
-  --r-lg: 14px;
-  --font-display: 'Syne', sans-serif;
-  --font-body: 'DM Sans', sans-serif;
+  --r: 999px;
+  --r-lg: 999px;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Space Grotesk', sans-serif;
   --font-mono: 'DM Mono', monospace;
 }
 [data-theme="dark"] {
@@ -80,9 +80,19 @@ a { color: inherit; text-decoration: none; }
 #cursor-ring { display: none; }
 [data-theme="dark"] #cursor-dot { background: #7c6cfc; }
 
-/* ===== NAV — futara floating pill ===== */
+/* ===== TICKER TAPE — ganz oben, fixed ===== */
+#ticker-tape {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 101;
+  height: 34px;
+  overflow: hidden;
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--border);
+}
+[data-theme="light"] #ticker-tape { background: rgba(232,228,240,0.95); }
+
+/* ===== NAV — unter Ticker-Tape ===== */
 #nav {
-  position: fixed; top: 25px; left: 50%; transform: translateX(-50%);
+  position: fixed; top: 42px; left: 50%; transform: translateX(-50%);
   z-index: 100;
   height: 46px;
   display: flex; align-items: center;
@@ -102,7 +112,7 @@ a { color: inherit; text-decoration: none; }
 
 /* logo — separate left pill */
 #nav-logo-pill {
-  position: fixed; top: 25px; left: 24px; z-index: 100;
+  position: fixed; top: 42px; left: 24px; z-index: 100;
   height: 46px;
   display: flex; align-items: center;
   padding: 0 20px;
@@ -133,7 +143,7 @@ a { color: inherit; text-decoration: none; }
 
 /* right icons pill */
 #nav-right-pill {
-  position: fixed; top: 25px; right: 24px; z-index: 100;
+  position: fixed; top: 42px; right: 24px; z-index: 100;
   height: 46px;
   display: flex; align-items: center;
   padding: 0 8px;
@@ -220,11 +230,27 @@ a { color: inherit; text-decoration: none; }
 .nav-search-btn:hover { transform: scale(1.08); opacity: .85; }
 
 /* ===== PAGES ===== */
-#app { padding-top: 88px; }
-.page { display: none; min-height: calc(100vh - 88px); }
+#app { padding-top: 100px; }
+.page { display: none; min-height: calc(100vh - 100px); }
 .page.active { display: block; }
 
-/* ===== HOME BG — dot-grid & deco ===== */
+/* ===== GLOBAL BACKGROUND — alle Seiten ===== */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: -1;
+  background-image: radial-gradient(circle, rgba(91,33,245,.18) 1px, transparent 1px);
+  background-size: 26px 26px;
+  pointer-events: none;
+}
+body::after {
+  content: '';
+  position: fixed; top: -10vh; right: -8vw; z-index: -1;
+  width: 55vw; height: 65vh;
+  background: radial-gradient(ellipse, rgba(91,33,245,.1) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+/* ===== HOME PAGE extra deco ===== */
 .page-home-bg {
   position: relative;
   overflow: hidden;
@@ -1132,17 +1158,20 @@ input[type=range]::-webkit-slider-thumb:hover { box-shadow: 0 0 0 4px var(--acce
 
 /* Modal / Search overlay — kein Fullscreen, direkt zentriert oben */
 #search-modal {
-  position: fixed; inset: 0; z-index: 200;
+  position: fixed;
+  top: 42px; right: 0; left: auto;
+  z-index: 200;
   background: transparent;
   display: none;
   align-items: flex-start;
-  justify-content: center;
-  padding-top: 18px;
+  justify-content: flex-end;
+  padding-top: 0;
+  padding-right: 24px;
   pointer-events: none;
 }
 #search-modal.open { display: flex; }
 .search-modal-box {
-  width: 480px;
+  width: 420px;
   background: var(--bg);
   border: 2px solid var(--accent);
   border-radius: 999px;
@@ -1277,7 +1306,7 @@ footer a:hover { color: var(--text-2); }
 </div>
 
 <!-- TICKER TAPE (appears on markets/home) -->
-<div id="ticker-tape" style="display:none;">
+<div id="ticker-tape">
   <div class="ticker-inner" id="tape-inner"></div>
 </div>
 
@@ -1295,7 +1324,7 @@ footer a:hover { color: var(--text-2); }
   <div class="hero">
     <div>
       <div class="hero-label">Market Intelligence Platform</div>
-      <h1 class="hero-title">Dive deeper into<br><em>market intel.</em></h1>
+      <h1 class="hero-title">Dive deeper<br>into <em>market</em><br><span style="color:var(--lime)">intel.</span></h1>
       <p class="hero-subtitle">Analyze ratios, intrinsic value, and risk in real-time. Algorithmic scorecards powered by Damodaran-WACC benchmarks and live FMP data.</p>
       <div class="search-hero">
         <input type="text" placeholder="Search stock, crypto, or ETF…" id="hero-search" onkeydown="heroSearchKey(event)">
@@ -2430,8 +2459,8 @@ function showPage(page) {
   if (navId) document.getElementById(navId)?.classList.add('active');
 
   // Show/hide ticker tape
-  const showTape = ['home', 'markets'].includes(page);
-  document.getElementById('ticker-tape').style.display = showTape ? 'block' : 'none';
+  // Ticker tape immer sichtbar auf allen Seiten
+  document.getElementById('ticker-tape').style.display = 'block';
   
   window.scrollTo(0, 0);
 }
