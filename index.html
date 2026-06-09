@@ -80,19 +80,19 @@ a { color: inherit; text-decoration: none; }
 #cursor-ring { display: none; }
 [data-theme="dark"] #cursor-dot { background: #7c6cfc; }
 
-/* ===== TICKER TAPE — ganz oben, fixed ===== */
+/* ===== TICKER TAPE — dunkel, schmal, fein ===== */
 #ticker-tape {
   position: fixed; top: 0; left: 0; right: 0; z-index: 101;
-  height: 34px;
+  height: 30px;
   overflow: hidden;
-  background: var(--bg-2);
-  border-bottom: 1px solid var(--border);
+  background: #0e0a1a;
+  border-bottom: 1px solid rgba(160,140,255,0.12);
 }
-[data-theme="light"] #ticker-tape { background: rgba(232,228,240,0.95); }
+[data-theme="light"] #ticker-tape { background: #1a1228; }
 
 /* ===== NAV — unter Ticker-Tape ===== */
 #nav {
-  position: fixed; top: 42px; left: 50%; transform: translateX(-50%);
+  position: fixed; top: 38px; left: 50%; transform: translateX(-50%);
   z-index: 100;
   height: 46px;
   display: flex; align-items: center;
@@ -112,7 +112,7 @@ a { color: inherit; text-decoration: none; }
 
 /* logo — separate left pill */
 #nav-logo-pill {
-  position: fixed; top: 42px; left: 24px; z-index: 100;
+  position: fixed; top: 38px; left: 24px; z-index: 100;
   height: 46px;
   display: flex; align-items: center;
   padding: 0 20px;
@@ -143,7 +143,7 @@ a { color: inherit; text-decoration: none; }
 
 /* right icons pill */
 #nav-right-pill {
-  position: fixed; top: 42px; right: 24px; z-index: 100;
+  position: fixed; top: 38px; right: 24px; z-index: 100;
   height: 46px;
   display: flex; align-items: center;
   padding: 0 8px;
@@ -230,8 +230,8 @@ a { color: inherit; text-decoration: none; }
 .nav-search-btn:hover { transform: scale(1.08); opacity: .85; }
 
 /* ===== PAGES ===== */
-#app { padding-top: 100px; }
-.page { display: none; min-height: calc(100vh - 100px); }
+#app { padding-top: 96px; }
+.page { display: none; min-height: calc(100vh - 96px); }
 .page.active { display: block; }
 
 /* ===== GLOBAL BACKGROUND — alle Seiten ===== */
@@ -295,26 +295,28 @@ body::after {
   display: flex; gap: 0; align-items: center;
   height: 100%;
   white-space: nowrap;
-  animation: tickerScroll 60s linear infinite;
+  animation: tickerScroll 80s linear infinite;
 }
 @keyframes tickerScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 .ticker-item {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 0 24px;
-  font-size: 12px;
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 0 40px;
+  font-size: 11px;
   font-family: var(--font-mono);
-  border-right: 1px solid var(--border);
+  border-right: 1px solid rgba(160,140,255,0.1);
   height: 100%;
+  color: rgba(240,237,245,0.6);
 }
-.ticker-symbol { font-weight: 500; color: var(--text); }
-.ticker-price { color: var(--text-2); }
+.ticker-symbol { font-weight: 600; color: rgba(240,237,245,0.85); letter-spacing: 0.02em; }
+.ticker-price { color: rgba(240,237,245,0.5); }
+.ticker-change { font-weight: 500; }
 .ticker-change.up { color: var(--green); }
 .ticker-change.dn { color: var(--red); }
 
 /* ===== HOME PAGE ===== */
 .hero {
   padding: 100px 60px 80px;
-  max-width: 1400px; margin: 0 auto;
+  max-width: 100%; margin: 0;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 60px;
@@ -350,10 +352,10 @@ body::after {
   display: flex;
   background: var(--bg-3);
   border: 1px solid var(--border-mid);
-  border-radius: var(--r-lg);
+  border-radius: 999px;
   overflow: hidden;
   transition: border-color 0.15s, box-shadow 0.15s;
-  max-width: 520px;
+  max-width: 540px;
 }
 .search-hero:focus-within {
   border-color: var(--accent);
@@ -361,13 +363,13 @@ body::after {
 }
 .search-hero input {
   flex: 1; background: none; border: none; outline: none;
-  padding: 14px 18px;
-  font-size: 15px; color: var(--text);
+  padding: 13px 20px;
+  font-size: 14px; color: var(--text);
   font-family: var(--font-body);
 }
 .search-hero input::placeholder { color: var(--text-3); }
 .search-hero button {
-  padding: 10px 18px; margin: 6px;
+  padding: 10px 22px; margin: 5px;
   background: var(--accent);
   color: #fff;
   border-radius: 8px;
@@ -390,7 +392,7 @@ body::after {
 
 /* Home dashboard grid */
 .home-grid {
-  max-width: 1400px; margin: 0 auto;
+  max-width: 100%; margin: 0;
   padding: 0 60px 80px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -471,7 +473,7 @@ body::after {
 
 /* ===== MARKETS PAGE ===== */
 .markets-layout {
-  max-width: 1400px; margin: 0 auto;
+  max-width: 100%; margin: 0;
   padding: 32px 48px;
   display: grid;
   grid-template-columns: 320px 1fr;
@@ -570,7 +572,7 @@ body::after {
 
 /* ===== ANALYTICS PAGE ===== */
 .analytics-layout {
-  max-width: 1400px; margin: 0 auto;
+  max-width: 100%; margin: 0;
   padding: 32px 48px;
 }
 
@@ -792,7 +794,7 @@ input[type=range]::-webkit-slider-thumb:hover { box-shadow: 0 0 0 4px var(--acce
 
 /* ===== COMPARISON PAGE ===== */
 .comparison-layout {
-  max-width: 1400px; margin: 0 auto;
+  max-width: 100%; margin: 0;
   padding: 32px 48px;
 }
 .comp-setup {
@@ -904,7 +906,7 @@ input[type=range]::-webkit-slider-thumb:hover { box-shadow: 0 0 0 4px var(--acce
 
 /* ===== PORTFOLIO PAGE ===== */
 .portfolio-layout {
-  max-width: 1400px; margin: 0 auto;
+  max-width: 100%; margin: 0;
   padding: 32px 48px;
 }
 .portfolio-header {
@@ -1088,7 +1090,7 @@ input[type=range]::-webkit-slider-thumb:hover { box-shadow: 0 0 0 4px var(--acce
   display: flex;
   background: var(--bg-2);
   border: 1px solid var(--border-mid);
-  border-radius: var(--r-lg);
+  border-radius: 999px;
   overflow: hidden;
   margin-bottom: 32px;
   transition: border-color 0.15s, box-shadow 0.15s;
@@ -1161,7 +1163,7 @@ input[type=range]::-webkit-slider-thumb:hover { box-shadow: 0 0 0 4px var(--acce
 /* Modal / Search overlay — kein Fullscreen, direkt zentriert oben */
 #search-modal {
   position: fixed;
-  top: 42px; right: 0; left: auto;
+  top: 38px; right: 0; left: auto;
   z-index: 200;
   background: transparent;
   display: none;
@@ -1223,10 +1225,13 @@ input[type=range]::-webkit-slider-thumb:hover { box-shadow: 0 0 0 4px var(--acce
 /* Footer */
 footer {
   border-top: 1px solid var(--border);
-  padding: 24px 60px;
-  max-width: 1400px; margin: 0 auto;
+  padding: 20px 48px;
+  max-width: 100%; margin: 0;
   display: flex; align-items: center; justify-content: space-between;
-  font-size: 12px; color: var(--text-3);
+  font-size: 11px; color: var(--text-3);
+  position: relative;
+  background-image: radial-gradient(circle, rgba(91,33,245,.15) 1px, transparent 1px);
+  background-size: 26px 26px;
 }
 footer .fl { display: flex; gap: 20px; }
 footer a { transition: color 0.15s; }
