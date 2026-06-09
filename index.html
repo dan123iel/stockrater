@@ -474,12 +474,15 @@ body::after {
 /* ===== MARKETS PAGE ===== */
 .markets-layout {
   max-width: 100%; margin: 0;
-  padding: 32px 48px;
+  padding: 24px 32px;
   display: grid;
-  grid-template-columns: 320px 1fr;
-  gap: 24px;
+  grid-template-columns: 280px 1fr;
+  gap: 20px;
+  height: calc(100vh - 96px);
+  overflow: hidden;
 }
-.markets-left { display: flex; flex-direction: column; gap: 16px; }
+.markets-left { display: flex; flex-direction: column; gap: 12px; overflow-y: auto; }
+.markets-right { display: flex; flex-direction: column; gap: 0; overflow: hidden; }
 .markets-right { display: flex; flex-direction: column; gap: 16px; }
 .panel {
   background: var(--bg-2);
@@ -1160,67 +1163,85 @@ input[type=range]::-webkit-slider-thumb:hover { box-shadow: 0 0 0 4px var(--acce
 }
 .expand-btn:hover { color: var(--text); background: var(--bg-4); }
 
-/* Modal / Search overlay — kein Fullscreen, direkt zentriert oben */
-#search-modal {
-  position: fixed;
-  top: 38px; right: 0; left: auto;
-  z-index: 200;
-  background: transparent;
-  display: none;
-  align-items: flex-start;
-  justify-content: flex-end;
-  padding-top: 0;
-  padding-right: 24px;
-  pointer-events: none;
-}
-#search-modal.open { display: flex; }
-.search-modal-box {
-  width: 420px;
-  background: var(--bg);
-  border: 2px solid var(--accent);
-  border-radius: 999px;
-  overflow: visible;
-  box-shadow: 0 8px 40px rgba(91,33,245,0.18);
+/* ===== NAV INLINE SEARCH (expandiert nach rechts) ===== */
+#nav-search-wrap {
   display: flex; align-items: center;
-  padding: 0 8px 0 20px;
-  height: 48px;
+  overflow: hidden;
+  max-width: 0; opacity: 0;
+  transition: max-width 0.35s cubic-bezier(.16,1,.3,1), opacity 0.25s;
   position: relative;
-  pointer-events: all;
 }
-[data-theme="dark"] .search-modal-box {
-  background: var(--bg-2);
-  box-shadow: 0 8px 40px rgba(91,33,245,0.25);
+#nav-search-wrap.open { max-width: 280px; opacity: 1; }
+#nav-search-input {
+  background: none; border: none; outline: none;
+  font-size: 13px; color: var(--text); font-family: var(--font-body);
+  width: 240px; padding: 0 12px;
 }
-.sm-input-wrap { display: flex; align-items: center; gap: 10px; flex: 1; }
-.sm-input {
-  flex: 1; background: none; border: none; outline: none;
-  font-size: 14px; color: var(--text);
-  font-family: var(--font-body);
-}
-.sm-input::placeholder { color: var(--text-3); }
-.sm-divider { display: none; }
-.sm-results {
+#nav-search-input::placeholder { color: var(--text-3); }
+[data-theme="dark"] #nav-search-input { color: #fff; }
+
+/* Search dropdown under nav */
+#nav-search-dropdown {
   position: absolute; top: calc(100% + 8px); left: 0; right: 0;
   background: var(--bg);
   border: 1px solid var(--border-mid);
-  border-radius: var(--r-lg);
+  border-radius: 16px;
   padding: 6px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
   z-index: 201;
+  display: none;
+  min-width: 280px;
 }
-[data-theme="dark"] .sm-results { background: var(--bg-2); }
+[data-theme="dark"] #nav-search-dropdown { background: var(--bg-2); }
+#nav-search-dropdown.open { display: block; }
 .sm-result-item {
   display: flex; align-items: center; gap: 12px;
-  padding: 10px 12px;
-  border-radius: var(--r);
-  cursor: none;
-  transition: background 0.1s;
+  padding: 9px 12px; border-radius: 999px; transition: background 0.1s;
 }
 .sm-result-item:hover { background: var(--bg-4); }
 .sri-sym { font-size: 13px; font-weight: 700; font-family: var(--font-mono); width: 56px; color: var(--accent); }
 .sri-name { flex: 1; font-size: 13px; color: var(--text-2); }
 .sri-type { font-size: 10px; color: var(--text-3); font-family: var(--font-mono); }
-.sm-hint { display: none; }
+
+/* News modal overlay */
+#news-modal {
+  position: fixed; inset: 0; z-index: 300;
+  background: rgba(14,10,26,0.75); backdrop-filter: blur(10px);
+  display: none; align-items: center; justify-content: center;
+}
+[data-theme="light"] #news-modal { background: rgba(240,237,245,0.8); }
+#news-modal.open { display: flex; }
+.news-modal-box {
+  width: min(720px, 92vw); max-height: 80vh;
+  background: var(--bg-2); border: 1px solid var(--border-mid);
+  border-radius: 20px; overflow: hidden;
+  display: flex; flex-direction: column;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.4);
+}
+.news-modal-img { width: 100%; height: 200px; object-fit: cover; }
+.news-modal-body { padding: 24px; overflow-y: auto; flex: 1; }
+.news-modal-source { font-size: 11px; color: var(--accent); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+.news-modal-title { font-size: 20px; font-weight: 700; line-height: 1.3; margin-bottom: 12px; }
+.news-modal-summary { font-size: 14px; color: var(--text-2); line-height: 1.7; }
+.news-modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+
+/* News card grid */
+.news-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 12px;
+}
+.news-card {
+  background: var(--bg-2); border: 1px solid var(--border);
+  border-radius: 16px; overflow: hidden;
+  transition: border-color 0.15s, transform 0.15s;
+  cursor: pointer;
+}
+.news-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.news-card-img { width: 100%; height: 140px; object-fit: cover; background: var(--bg-3); }
+.news-card-body { padding: 12px 14px; }
+.news-card-source { font-size: 10px; color: var(--accent); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 5px; }
+.news-card-title { font-size: 13px; font-weight: 600; line-height: 1.4; color: var(--text); }
+.news-card-time { font-size: 10px; color: var(--text-3); font-family: var(--font-mono); margin-top: 6px; }
 
 /* Footer */
 footer {
@@ -1276,7 +1297,15 @@ footer a:hover { color: var(--text-2); }
     <button class="nav-link" id="nav-comparison" onclick="showPage('comparison')">comparison</button>
   </div>
   <div class="nav-div"></div>
-  <button class="nav-search-btn" onclick="openSearch()" title="Search (⌘K)">
+  <!-- Inline search — expandiert nach rechts -->
+  <div id="nav-search-wrap">
+    <input id="nav-search-input" placeholder="ticker or ISIN…"
+      oninput="navFilterSearch(this.value)"
+      onkeydown="navSearchKey(event)"
+      onblur="setTimeout(()=>{ document.getElementById('nav-search-dropdown').classList.remove('open'); if(!this.value) closeNavSearch(); },200)">
+    <div id="nav-search-dropdown"></div>
+  </div>
+  <button class="nav-search-btn" id="nav-search-toggle" onclick="toggleNavSearch()" title="Search (⌘K)">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
   </button>
 </nav>
@@ -1294,21 +1323,20 @@ footer a:hover { color: var(--text-2); }
   </button>
 </div>
 
-<!-- SEARCH MODAL -->
-<div id="search-modal" onclick="closeSearch(event)">
-  <div class="search-modal-box">
-    <div class="sm-input-wrap">
-      <input class="sm-input" placeholder="ticker or ISIN…" id="sm-input" oninput="filterSearch(this.value)" onkeydown="handleSearchKey(event)" autofocus>
+<!-- NEWS MODAL -->
+<div id="news-modal" onclick="if(event.target===this)closeNewsModal()">
+  <div class="news-modal-box">
+    <img id="news-modal-img" class="news-modal-img" src="" alt="" onerror="this.style.display='none'">
+    <div class="news-modal-body">
+      <div class="news-modal-source" id="news-modal-source"></div>
+      <div class="news-modal-title" id="news-modal-title"></div>
+      <div class="news-modal-summary" id="news-modal-summary"></div>
     </div>
-    <!-- lila Punkt rechts -->
-    <div style="width:10px;height:10px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-right:6px;"></div>
-    <!-- Suchen-Button -->
-    <button class="nav-search-btn" style="margin-left:0;" onclick="handleSearchKey({key:'Enter',target:document.getElementById('sm-input')})">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    </button>
-    <div class="sm-divider"></div>
-    <div class="sm-results" id="sm-results"></div>
-    <div class="sm-hint"></div>
+    <div class="news-modal-footer">
+      <span style="font-size:11px;color:var(--text-3);" id="news-modal-time"></span>
+      <a id="news-modal-link" href="#" target="_blank" class="btn-primary" style="font-size:12px;padding:7px 16px;">Read full article →</a>
+      <button onclick="closeNewsModal()" style="font-size:12px;color:var(--text-3);padding:7px 12px;">Close</button>
+    </div>
   </div>
 </div>
 
@@ -1544,29 +1572,22 @@ footer a:hover { color: var(--text-2); }
       </div>
     </div>
 
-    <div class="markets-right">
-      <!-- Live feed header -->
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-        <div>
-          <div style="font-family:var(--font-display);font-size:22px;font-weight:800;letter-spacing:-0.04em;">Market Intel Feed</div>
-          <div style="font-size:12px;color:var(--text-3);margin-top:2px;">Real-time pulse & news</div>
-        </div>
-        <span style="font-size:11px;font-family:var(--font-mono);color:var(--green);">● Live stream</span>
+    <div class="markets-right" style="display:flex;flex-direction:column;">
+      <!-- Hero headline -->
+      <div style="margin-bottom:16px;flex-shrink:0;">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.18em;color:var(--accent);margin-bottom:8px;">Live Markets</div>
+        <div style="font-family:var(--font-display);font-size:clamp(32px,3.5vw,52px);font-weight:700;line-height:0.95;letter-spacing:-0.04em;">market<br><span style="color:var(--lime)">pulse.</span></div>
       </div>
-
       <!-- Filter pills -->
-      <div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;">
-        <button class="toggle-btn active" style="font-size:11px;">All</button>
-        <button class="toggle-btn" style="font-size:11px;">Macro</button>
-        <button class="toggle-btn" style="font-size:11px;">Ticker Intel</button>
-        <button class="toggle-btn" style="font-size:11px;">Corporate</button>
-        <button class="toggle-btn" style="font-size:11px;">Dividends</button>
+      <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;flex-shrink:0;align-items:center;">
+        <button class="toggle-btn active" style="font-size:11px;" onclick="filterNews('general',this)">All</button>
+        <button class="toggle-btn" style="font-size:11px;" onclick="filterNews('forex',this)">Macro</button>
+        <button class="toggle-btn" style="font-size:11px;" onclick="filterNews('merger',this)">M&A</button>
+        <button class="toggle-btn" style="font-size:11px;" onclick="filterNews('crypto',this)">Crypto</button>
+        <span style="margin-left:auto;font-size:10px;font-family:var(--font-mono);color:var(--green);">● Live</span>
       </div>
-
-      <div class="panel">
-        <div id="markets-news-feed" style="padding:0 20px;">
-          <div style="padding:20px 0;text-align:center;font-size:12px;color:var(--text-3);">Loading news…</div>
-        </div>
+      <div id="markets-news-feed" style="flex:1;overflow-y:auto;">
+        <div style="padding:20px 0;text-align:center;font-size:12px;color:var(--text-3);">Loading news…</div>
       </div>
     </div>
   </div>
@@ -2539,46 +2560,74 @@ function buildMarketPulse() {
 }
 
 // ===== FINNHUB NEWS =====
-async function loadMarketsNews() {
+let _currentNewsCategory = 'general';
+let _currentNewsArticles = [];
+
+async function loadMarketsNews(category) {
+  category = category || _currentNewsCategory;
+  _currentNewsCategory = category;
   const el = document.getElementById('markets-news-feed');
   if (!el) return;
+  el.innerHTML = '<div style="padding:20px 0;text-align:center;font-size:12px;color:var(--text-3);">Loading…</div>';
   try {
-    const res = await fetch(`https://finnhub.io/api/v1/news?category=general&minId=0&token=${FINNHUB_KEY}`);
+    const res = await fetch(`https://finnhub.io/api/v1/news?category=${category}&token=${FINNHUB_KEY}`);
     const articles = await res.json();
     if (!Array.isArray(articles) || !articles.length) throw new Error('no data');
-    el.innerHTML = articles.slice(0, 12).map(a => {
-      const time = new Date(a.datetime * 1000).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+    _currentNewsArticles = articles;
+    el.innerHTML = '<div class="news-grid">' + articles.slice(0, 12).map((a, i) => {
       const date = new Date(a.datetime * 1000).toLocaleDateString([], {month:'short', day:'numeric'});
-      return `<div class="news-item" style="padding:14px 0;">
-        <div class="news-time">${date} · ${time} · <span style="color:var(--accent)">${a.source}</span></div>
-        <div class="news-title" style="margin-top:5px;">
-          <a href="${a.url}" target="_blank" style="color:var(--text);text-decoration:none;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text)'">${a.headline}</a>
+      const time = new Date(a.datetime * 1000).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+      const img = a.image ? `<img class="news-card-img" src="${a.image}" alt="" onerror="this.style.display='none'">` : `<div class="news-card-img" style="display:flex;align-items:center;justify-content:center;font-size:28px;background:var(--bg-3);">📰</div>`;
+      return `<div class="news-card" onclick="openNewsModal(${i})">
+        ${img}
+        <div class="news-card-body">
+          <div class="news-card-source">${a.source}</div>
+          <div class="news-card-title">${a.headline}</div>
+          <div class="news-card-time">${date} · ${time}</div>
         </div>
-        ${a.summary ? `<div style="font-size:11px;color:var(--text-3);margin-top:4px;line-height:1.5;">${a.summary.substring(0,120)}…</div>` : ''}
       </div>`;
-    }).join('');
+    }).join('') + '</div>';
   } catch(e) {
-    el.innerHTML = '<div style="padding:20px 0;text-align:center;font-size:12px;color:var(--text-3);">News unavailable — check API key in Settings</div>';
+    el.innerHTML = '<div style="padding:20px;text-align:center;font-size:12px;color:var(--text-3);">News temporarily unavailable</div>';
   }
 }
 
+function filterNews(category, btn) {
+  document.querySelectorAll('.markets-right .toggle-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  loadMarketsNews(category);
+}
+
+function openNewsModal(idx) {
+  const a = _currentNewsArticles[idx];
+  if (!a) return;
+  const modal = document.getElementById('news-modal');
+  const img = document.getElementById('news-modal-img');
+  if (a.image) { img.src = a.image; img.style.display = ''; }
+  else img.style.display = 'none';
+  document.getElementById('news-modal-source').textContent = a.source;
+  document.getElementById('news-modal-title').textContent = a.headline;
+  document.getElementById('news-modal-summary').textContent = a.summary || '';
+  document.getElementById('news-modal-time').textContent = new Date(a.datetime * 1000).toLocaleString();
+  document.getElementById('news-modal-link').href = a.url;
+  modal.classList.add('open');
+}
+function closeNewsModal() { document.getElementById('news-modal').classList.remove('open'); }
+
 async function loadTickerNews(sym) {
-  // Called from renderNews widget
   const el = document.getElementById('ticker-news-list');
   if (!el) return;
-  const now = Math.floor(Date.now()/1000);
-  const from = now - 60*60*24*7; // last 7 days
+  const now = new Date().toISOString().split('T')[0];
+  const from = new Date(Date.now() - 7*24*3600*1000).toISOString().split('T')[0];
   try {
-    const res = await fetch(`https://finnhub.io/api/v1/company-news?symbol=${sym}&from=${new Date(from*1000).toISOString().split('T')[0]}&to=${new Date().toISOString().split('T')[0]}&token=${FINNHUB_KEY}`);
+    const res = await fetch(`https://finnhub.io/api/v1/company-news?symbol=${sym}&from=${from}&to=${now}&token=${FINNHUB_KEY}`);
     const articles = await res.json();
     if (!Array.isArray(articles) || !articles.length) throw new Error('no data');
-    el.innerHTML = articles.slice(0, 6).map(a => {
+    el.innerHTML = articles.slice(0, 5).map(a => {
       const date = new Date(a.datetime * 1000).toLocaleDateString([], {month:'short', day:'numeric'});
       return `<div style="padding:9px 0;border-bottom:1px solid var(--border);">
-        <div style="font-size:10px;color:var(--text-3);margin-bottom:3px;">${date} · ${a.source}</div>
-        <div style="font-size:12px;line-height:1.5;">
-          <a href="${a.url}" target="_blank" style="color:var(--text);text-decoration:none;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text)'">${a.headline}</a>
-        </div>
+        <div style="font-size:10px;color:var(--text-3);margin-bottom:3px;">${date} · <span style="color:var(--accent)">${a.source}</span></div>
+        <a href="${a.url}" target="_blank" style="font-size:12px;color:var(--text);text-decoration:none;line-height:1.5;display:block;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text)'">${a.headline}</a>
       </div>`;
     }).join('');
   } catch(e) {
@@ -2586,12 +2635,85 @@ async function loadTickerNews(sym) {
   }
 }
 
+// ===== NAV INLINE SEARCH =====
+let _navSearchDebounce = null;
+function toggleNavSearch() {
+  const wrap = document.getElementById('nav-search-wrap');
+  const inp = document.getElementById('nav-search-input');
+  if (wrap.classList.contains('open')) {
+    closeNavSearch();
+  } else {
+    wrap.classList.add('open');
+    setTimeout(() => inp && inp.focus(), 80);
+  }
+}
+function closeNavSearch() {
+  const wrap = document.getElementById('nav-search-wrap');
+  const inp = document.getElementById('nav-search-input');
+  wrap.classList.remove('open');
+  if (inp) inp.value = '';
+  const dd = document.getElementById('nav-search-dropdown');
+  if (dd) dd.classList.remove('open');
+}
+function navSearchKey(e) {
+  if (e.key === 'Escape') closeNavSearch();
+  if (e.key === 'Enter') {
+    const v = e.target.value.trim().toUpperCase();
+    if (v) { closeNavSearch(); openTicker(v); }
+  }
+}
+function navFilterSearch(q) {
+  clearTimeout(_navSearchDebounce);
+  const dd = document.getElementById('nav-search-dropdown');
+  if (!q) { dd.classList.remove('open'); return; }
+  const local = SEARCH_DB.filter(x =>
+    x.sym.toLowerCase().includes(q.toLowerCase()) ||
+    x.name.toLowerCase().includes(q.toLowerCase())
+  ).slice(0, 6);
+  renderNavDropdown(local);
+  _navSearchDebounce = setTimeout(async () => {
+    try {
+      const w = getWorkerUrl();
+      const res = await fetch(`${w}/yahoo/search?q=${encodeURIComponent(q)}&limit=8`);
+      if (!res.ok) return;
+      const data = await res.json();
+      const quotes = (data.quotes || data.results || []).filter(r => r.symbol).slice(0, 8)
+        .map(r => ({ sym: r.symbol, name: r.shortname || r.longname || r.symbol, type: r.quoteType || 'Stock' }));
+      if (quotes.length) renderNavDropdown(quotes);
+    } catch(e) {}
+  }, 250);
+}
+function renderNavDropdown(items) {
+  const dd = document.getElementById('nav-search-dropdown');
+  if (!items.length) { dd.classList.remove('open'); return; }
+  dd.innerHTML = items.map(x => `
+    <div class="sm-result-item" onmousedown="event.preventDefault();closeNavSearch();openTicker('${x.sym}')">
+      <span class="sri-sym">${x.sym}</span>
+      <span class="sri-name">${x.name}</span>
+      <span class="sri-type">${x.type}</span>
+    </div>`).join('');
+  dd.classList.add('open');
+}
+
+// Legacy openSearch — jetzt toggleNavSearch
+function openSearch() { toggleNavSearch(); }
+function closeSearch(e) { if (e.target.id === 'search-modal') closeNavSearch(); }
+function filterSearch(q) { navFilterSearch(q); }
+function renderSearchResults(items) { renderNavDropdown(items); }
+function selectResult(sym) { closeNavSearch(); openTicker(sym); }
+function handleSearchKey(e) { navSearchKey(e); }
+
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); toggleNavSearch(); }
+  if (e.key === 'Escape') { closeNavSearch(); closeNewsModal(); }
+});
+
 // ===== WORKER (Yahoo proxy) =====
 function getWorkerUrl() {
   return (localStorage.getItem('sr_workerurl') || 'https://fragrant-wave-6bd7.d-lenz-contact.workers.dev').replace(/\/+$/, '');
 }
 
-// ===== SEARCH =====
+// ===== SEARCH DB =====
 const SEARCH_DB = [
   {sym:'NVDA', name:'Nvidia Corporation', type:'Stock'},
   {sym:'AAPL', name:'Apple Inc.', type:'Stock'},
@@ -2607,79 +2729,6 @@ const SEARCH_DB = [
   {sym:'LLY', name:'Eli Lilly', type:'Stock'},
   {sym:'BTC-USD', name:'Bitcoin USD', type:'Crypto'},
 ];
-
-let _searchDebounce = null;
-
-function openSearch() {
-  document.getElementById('search-modal').classList.add('open');
-  const inp = document.getElementById('sm-input');
-  inp.value = '';
-  inp.focus();
-  renderSearchResults([]);
-}
-function closeSearch(e) {
-  if (e.target.id === 'search-modal') document.getElementById('search-modal').classList.remove('open');
-}
-
-function filterSearch(q) {
-  clearTimeout(_searchDebounce);
-  if (!q) { renderSearchResults([]); return; }
-
-  // Immediate local fallback while Yahoo loads
-  const local = SEARCH_DB.filter(x =>
-    x.sym.toLowerCase().includes(q.toLowerCase()) ||
-    x.name.toLowerCase().includes(q.toLowerCase())
-  ).slice(0, 6);
-  renderSearchResults(local);
-
-  // Debounced Yahoo Finance search via worker
-  _searchDebounce = setTimeout(async () => {
-    try {
-      const w = getWorkerUrl();
-      const res = await fetch(`${w}/yahoo/search?q=${encodeURIComponent(q)}&limit=8`);
-      if (!res.ok) return;
-      const data = await res.json();
-      const quotes = (data.quotes || data.results || [])
-        .filter(r => r.symbol)
-        .slice(0, 8)
-        .map(r => ({
-          sym: r.symbol,
-          name: r.shortname || r.longname || r.symbol,
-          type: r.quoteType || 'Stock'
-        }));
-      if (quotes.length) renderSearchResults(quotes);
-    } catch(e) {/* keep local results on error */}
-  }, 250);
-}
-
-function renderSearchResults(items) {
-  const el = document.getElementById('sm-results');
-  if (!items.length) {
-    el.innerHTML = '<div style="padding:16px;font-size:13px;color:var(--text-3);">Type a ticker or company name…</div>';
-    return;
-  }
-  el.innerHTML = items.map(x => `
-    <div class="sm-result-item" onclick="selectResult('${x.sym}')">
-      <span class="sri-sym">${x.sym}</span>
-      <span class="sri-name">${x.name}</span>
-      <span class="sri-type">${x.type}</span>
-    </div>`).join('');
-}
-function selectResult(sym) {
-  document.getElementById('search-modal').classList.remove('open');
-  openTicker(sym);
-}
-function handleSearchKey(e) {
-  if (e.key === 'Escape') document.getElementById('search-modal').classList.remove('open');
-  if (e.key === 'Enter') {
-    const v = e.target.value.trim().toUpperCase();
-    if (v) { document.getElementById('search-modal').classList.remove('open'); openTicker(v); }
-  }
-}
-document.addEventListener('keydown', e => {
-  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openSearch(); }
-  if (e.key === 'Escape') document.getElementById('search-modal').classList.remove('open');
-});
 
 // ===== OPEN TICKER =====
 function openTicker(sym) {
@@ -2945,7 +2994,7 @@ document.querySelectorAll('.toggle-btn').forEach(btn => {
 
   buildTape();
   buildMarketPulse();
-  showPage('markets');
+  showPage('home');
 
   // Resize chart if analytics page becomes active
   window.addEventListener('resize', () => {
