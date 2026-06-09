@@ -1564,31 +1564,8 @@ footer a:hover { color: var(--text-2); }
       </div>
 
       <div class="panel">
-        <div class="panel-body" style="padding:0 20px;">
-          <div class="news-item">
-            <div class="news-time">10:15 AM</div>
-            <span class="news-tag tag-macro">Macro Alert</span>
-            <div class="news-title">US Core CPI Inflation MoM comes in hot at 0.3% vs 0.2% expected — volatility expected across rate-sensitive sectors</div>
-            <div class="news-impact">Impact: High · Source: BLS</div>
-          </div>
-          <div class="news-item">
-            <div class="news-time">09:45 AM</div>
-            <span class="news-tag tag-ticker">Ticker Intel · NVDA</span>
-            <div class="news-title">Institutional block buying orders detected at $201.50 support level — trend looks validated</div>
-            <div style="margin-top:8px;"><button class="btn-secondary" style="font-size:11px;padding:5px 12px;" onclick="openTicker('NVDA')">Open NVDA Analysis →</button></div>
-          </div>
-          <div class="news-item">
-            <div class="news-time">08:30 AM</div>
-            <span class="news-tag tag-catalyst">Corporate Catalyst</span>
-            <div class="news-title">ECB Press Conference begins — Lagarde speaks on rate cut timelines for Q3 2026</div>
-            <div class="news-impact">Impact: Medium</div>
-          </div>
-          <div class="news-item">
-            <div class="news-time">07:00 AM</div>
-            <span class="news-tag tag-dividend">Dividend</span>
-            <div class="news-title">MSFT declares quarterly dividend of $0.85 per share — ex-date July 17</div>
-            <div class="news-impact">Impact: Low · Routine</div>
-          </div>
+        <div id="markets-news-feed" style="padding:0 20px;">
+          <div style="padding:20px 0;text-align:center;font-size:12px;color:var(--text-3);">Loading news…</div>
         </div>
       </div>
     </div>
@@ -1997,15 +1974,8 @@ footer a:hover { color: var(--text-2); }
               <div class="sentiment-neu" style="width:18%"></div>
               <div class="sentiment-bear" style="width:10%"></div>
             </div>
-            <div class="news-item" style="padding:10px 0;">
-              <span class="news-tag tag-ticker" style="font-size:9px;">Press Release · Today</span>
-              <div class="news-title" style="font-size:12px;">Futara Analytics launches enterprise AI core chip</div>
-              <div style="font-size:10px;color:var(--green);margin-top:4px;">Impact 9.4/10 · Highly Positive</div>
-            </div>
-            <div class="news-item" style="padding:10px 0;">
-              <span class="news-tag tag-macro" style="font-size:9px;">Market Rumor · Yesterday</span>
-              <div class="news-title" style="font-size:12px;">Institutional accumulation detected via block trades at support</div>
-              <div style="font-size:10px;color:var(--green);margin-top:4px;">High Traffic · Bullish</div>
+            <div id="ticker-news-list">
+              <div style="font-size:11px;color:var(--text-3);padding:8px 0;">Loading news…</div>
             </div>
           </div>
         </div>
@@ -2468,46 +2438,152 @@ function showPage(page) {
   // Show/hide ticker tape
   // Ticker tape immer sichtbar auf allen Seiten
   document.getElementById('ticker-tape').style.display = 'block';
+
+  // Load live data per page
+  if (page === 'markets') setTimeout(loadMarketsNews, 100);
   
   window.scrollTo(0, 0);
 }
 
-// ===== TICKER TAPE =====
-const tapeData = [
-  {sym:'S&P 500', price:'5,420.10', chg:'+0.4%', up:true},
-  {sym:'NASDAQ', price:'18,650', chg:'+1.2%', up:true},
-  {sym:'NVDA', price:'$205.10', chg:'+46.51%', up:true},
-  {sym:'AAPL', price:'$182.10', chg:'+1.2%', up:true},
-  {sym:'BTC/USD', price:'$68,400', chg:'−0.8%', up:false},
-  {sym:'EUR/USD', price:'1.0910', chg:'0.0%', up:null},
-  {sym:'TSLA', price:'$175.20', chg:'−3.4%', up:false},
-  {sym:'MSFT', price:'$431.20', chg:'+0.8%', up:true},
-  {sym:'AMD', price:'$160.40', chg:'+3.1%', up:true},
-  {sym:'META', price:'$511.80', chg:'−0.5%', up:false},
-];
+// ===== FINNHUB =====
+const FINNHUB_KEY = 'd8k2199r01qjgd6qgrugd8k2199r01qjgd6qgrv0';
+const TAPE_SYMBOLS = ['NVDA','AAPL','MSFT','TSLA','AMD','META','AMZN','GOOGL','JPM','NFLX'];
+let tapeQuotes = {}; // sym -> {price, chg, pct}
+let finnhubWS = null;
 
+// ===== TICKER TAPE — Finnhub WebSocket =====
 function buildTape() {
   const inner = document.getElementById('tape-inner');
-  const all = [...tapeData, ...tapeData]; // duplicate for seamless loop
-  inner.innerHTML = all.map(t => `
-    <div class="ticker-item">
-      <span class="ticker-symbol">${t.sym}</span>
-      <span class="ticker-price">${t.price}</span>
-      <span class="ticker-change ${t.up === true ? 'up' : t.up === false ? 'dn' : ''}">${t.chg}</span>
-    </div>
-  `).join('');
+  if (!inner) return;
+  renderTape(inner);
+  connectFinnhubWS(inner);
+}
+
+function renderTape(inner) {
+  const fallback = {
+    'NVDA':{price:'205.10',chg:'+4.62',pct:'+2.30%',up:true},
+    'AAPL':{price:'182.10',chg:'+1.20',pct:'+0.66%',up:true},
+    'MSFT':{price:'431.20',chg:'+3.40',pct:'+0.79%',up:true},
+    'TSLA':{price:'175.20',chg:'-6.10',pct:'-3.36%',up:false},
+    'AMD': {price:'160.40',chg:'+4.80',pct:'+3.10%',up:true},
+    'META':{price:'511.80',chg:'-2.50',pct:'-0.49%',up:false},
+    'AMZN':{price:'185.40',chg:'+1.10',pct:'+0.60%',up:true},
+    'GOOGL':{price:'175.80',chg:'+1.30',pct:'+0.74%',up:true},
+    'JPM': {price:'201.50',chg:'+0.80',pct:'+0.40%',up:true},
+    'NFLX':{price:'680.20',chg:'+5.10',pct:'+0.75%',up:true},
+  };
+  const items = TAPE_SYMBOLS.map(sym => {
+    const q = tapeQuotes[sym] || fallback[sym] || {price:'—',chg:'0',pct:'0%',up:null};
+    return `<div class="ticker-item" id="tape-${sym}">
+      <span class="ticker-symbol">${sym}</span>
+      <span class="ticker-price">$${q.price}</span>
+      <span class="ticker-change ${q.up===true?'up':q.up===false?'dn':''}">${q.up===true?'▲':'▼'} ${q.pct}</span>
+    </div>`;
+  });
+  const html = [...items,...items].join('');
+  inner.innerHTML = html;
+}
+
+function connectFinnhubWS(inner) {
+  if (finnhubWS) { try { finnhubWS.close(); } catch(e){} }
+  try {
+    finnhubWS = new WebSocket(`wss://ws.finnhub.io?token=${FINNHUB_KEY}`);
+    finnhubWS.onopen = () => {
+      TAPE_SYMBOLS.forEach(sym => finnhubWS.send(JSON.stringify({type:'subscribe', symbol:sym})));
+    };
+    finnhubWS.onmessage = e => {
+      try {
+        const msg = JSON.parse(e.data);
+        if (msg.type === 'trade' && msg.data) {
+          msg.data.forEach(trade => {
+            const sym = trade.s;
+            const price = trade.p.toFixed(2);
+            const prev = tapeQuotes[sym];
+            const prevPrice = prev ? parseFloat(prev.price) : trade.p;
+            const chg = (trade.p - prevPrice).toFixed(2);
+            const pct = ((trade.p - prevPrice) / prevPrice * 100).toFixed(2) + '%';
+            tapeQuotes[sym] = { price, chg, pct, up: trade.p >= prevPrice };
+            // Update DOM directly without full re-render
+            ['tape-'+sym, 'tape-'+sym+'_2'].forEach(id => {
+              const el = document.getElementById(id);
+              if (el) {
+                el.querySelector('.ticker-price').textContent = '$' + price;
+                const chgEl = el.querySelector('.ticker-change');
+                chgEl.textContent = (trade.p >= prevPrice ? '▲ ' : '▼ ') + Math.abs(parseFloat(pct)).toFixed(2) + '%';
+                chgEl.className = 'ticker-change ' + (trade.p >= prevPrice ? 'up' : 'dn');
+              }
+            });
+          });
+        }
+      } catch(err){}
+    };
+    finnhubWS.onerror = () => { /* silently use fallback */ };
+  } catch(e) {}
 }
 
 function buildMarketPulse() {
   const el = document.getElementById('market-pulse-list');
   if (!el) return;
-  el.innerHTML = tapeData.slice(0,4).map(t => `
-    <div class="stock-row" style="border-bottom:1px solid var(--border);">
-      <div class="sr-info"><div class="sr-sym">${t.sym}</div></div>
-      <span class="sr-price val-mono">${t.price}</span>
-      <span class="sr-chg ${t.up === true ? 'up' : t.up === false ? 'dn' : ''}">${t.chg}</span>
-    </div>
-  `).join('');
+  const syms = ['NVDA','AAPL','TSLA','MSFT','AMD'];
+  el.innerHTML = syms.map(sym => {
+    const q = tapeQuotes[sym];
+    const price = q ? '$'+q.price : '—';
+    const pct = q ? q.pct : '—';
+    const cls = q ? (q.up ? 'up' : 'dn') : '';
+    return `<div class="stock-row" style="padding:9px 16px;">
+      <div class="sr-info"><div class="sr-sym">${sym}</div></div>
+      <span class="sr-price val-mono" style="font-size:12px;">${price}</span>
+      <span class="sr-chg ${cls}">${pct}</span>
+    </div>`;
+  }).join('');
+}
+
+// ===== FINNHUB NEWS =====
+async function loadMarketsNews() {
+  const el = document.getElementById('markets-news-feed');
+  if (!el) return;
+  try {
+    const res = await fetch(`https://finnhub.io/api/v1/news?category=general&minId=0&token=${FINNHUB_KEY}`);
+    const articles = await res.json();
+    if (!Array.isArray(articles) || !articles.length) throw new Error('no data');
+    el.innerHTML = articles.slice(0, 12).map(a => {
+      const time = new Date(a.datetime * 1000).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+      const date = new Date(a.datetime * 1000).toLocaleDateString([], {month:'short', day:'numeric'});
+      return `<div class="news-item" style="padding:14px 0;">
+        <div class="news-time">${date} · ${time} · <span style="color:var(--accent)">${a.source}</span></div>
+        <div class="news-title" style="margin-top:5px;">
+          <a href="${a.url}" target="_blank" style="color:var(--text);text-decoration:none;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text)'">${a.headline}</a>
+        </div>
+        ${a.summary ? `<div style="font-size:11px;color:var(--text-3);margin-top:4px;line-height:1.5;">${a.summary.substring(0,120)}…</div>` : ''}
+      </div>`;
+    }).join('');
+  } catch(e) {
+    el.innerHTML = '<div style="padding:20px 0;text-align:center;font-size:12px;color:var(--text-3);">News unavailable — check API key in Settings</div>';
+  }
+}
+
+async function loadTickerNews(sym) {
+  // Called from renderNews widget
+  const el = document.getElementById('ticker-news-list');
+  if (!el) return;
+  const now = Math.floor(Date.now()/1000);
+  const from = now - 60*60*24*7; // last 7 days
+  try {
+    const res = await fetch(`https://finnhub.io/api/v1/company-news?symbol=${sym}&from=${new Date(from*1000).toISOString().split('T')[0]}&to=${new Date().toISOString().split('T')[0]}&token=${FINNHUB_KEY}`);
+    const articles = await res.json();
+    if (!Array.isArray(articles) || !articles.length) throw new Error('no data');
+    el.innerHTML = articles.slice(0, 6).map(a => {
+      const date = new Date(a.datetime * 1000).toLocaleDateString([], {month:'short', day:'numeric'});
+      return `<div style="padding:9px 0;border-bottom:1px solid var(--border);">
+        <div style="font-size:10px;color:var(--text-3);margin-bottom:3px;">${date} · ${a.source}</div>
+        <div style="font-size:12px;line-height:1.5;">
+          <a href="${a.url}" target="_blank" style="color:var(--text);text-decoration:none;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text)'">${a.headline}</a>
+        </div>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    if (el) el.innerHTML = '<div style="font-size:11px;color:var(--text-3);padding:8px 0;">News unavailable</div>';
+  }
 }
 
 // ===== WORKER (Yahoo proxy) =====
@@ -2642,6 +2718,7 @@ async function loadTickerData(sym) {
     }
 
     updateAnalyticsUI(sym, quoteData);
+    setTimeout(() => loadTickerNews(sym), 200);
   } catch(e) {
     updateAnalyticsUI(sym, null);
   }
