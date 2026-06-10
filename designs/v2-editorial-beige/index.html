@@ -600,6 +600,8 @@ footer a:hover{color:var(--ink)}
     var ni = document.getElementById(navId);
     if (ni) ni.classList.add('on');
     window.scrollTo(0, 0);
+    if (pgId === 'profile' || page === 'profile') { var _t=0; var _iv=setInterval(function(){ if(typeof initProfilePage==='function'){ clearInterval(_iv); initProfilePage(); } if(++_t>20) clearInterval(_iv); },100); }
+    if (pgId === 'markets' || page === 'markets') { var _t2=0; var _iv2=setInterval(function(){ if(typeof loadMarketsNews==='function'){ clearInterval(_iv2); loadMarketsNews(); } if(++_t2>20) clearInterval(_iv2); },100); }
     if (pgId === 'analytics') setTimeout(function(){ if(window.drawChart) drawChart(); }, 60);
   };
   window.G = window.showPage;
@@ -607,5 +609,17 @@ footer a:hover{color:var(--ink)}
   setTimeout(function(){ window.showPage('analytics'); }, 50);
 })();
 </script>
+
+<div id="news-modal" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);align-items:center;justify-content:center">
+  <div style="background:var(--bg,#fff);color:var(--ink,#000);max-width:680px;width:90%;max-height:85vh;overflow-y:auto;border-radius:16px;padding:28px;position:relative">
+    <button onclick="closeNewsModal()" style="position:absolute;top:16px;right:16px;background:transparent;border:none;font-size:22px;cursor:pointer;opacity:.5;color:inherit">✕</button>
+    <img id="news-modal-img" style="width:100%;border-radius:10px;margin-bottom:16px;max-height:220px;object-fit:cover" src="" alt="">
+    <div id="news-modal-source" style="font-size:11px;opacity:.5;margin-bottom:6px;text-transform:uppercase;letter-spacing:.1em"></div>
+    <div id="news-modal-title" style="font-size:1.2rem;font-weight:700;line-height:1.4;margin-bottom:10px"></div>
+    <div id="news-modal-summary" style="font-size:13px;line-height:1.7;opacity:.7;margin-bottom:14px"></div>
+    <div id="news-modal-time" style="font-size:11px;opacity:.4;margin-bottom:14px"></div>
+    <a id="news-modal-link" href="#" target="_blank" style="font-size:12px;font-weight:700;text-decoration:none;opacity:.7">Read full article →</a>
+  </div>
+</div>
 </body>
 </html>
