@@ -705,12 +705,36 @@ function v2SetTheme(t) {
   var lb = document.getElementById('v2-light-btn');
   if (db) { db.classList.toggle('on', t==='dark'); }
   if (lb) { lb.classList.toggle('on', t==='light'); }
-  // Update cursor color
   var C = document.getElementById('C');
   if (C) C.style.background = t==='dark' ? '#f0ede8' : '#000';
 }
-// Restore saved theme
 (function(){ var t=localStorage.getItem('v2_theme'); if(t) v2SetTheme(t); })();
+
+function v2EditTicker() {
+  localStorage.removeItem('tape_onboarding_done');
+  if (typeof showTapeOnboarding === 'function') showTapeOnboarding();
+}
+
+function v2UpdateTickerSummary() {
+  var el = document.getElementById('v2-ticker-summary');
+  if (!el) return;
+  var portfolio = [];
+  try { portfolio = JSON.parse(localStorage.getItem('sr_portfolio') || '[]').map(function(p){ return p.sym; }); } catch(e) {}
+  var onboarding = [];
+  try { onboarding = JSON.parse(localStorage.getItem('tape_symbols') || '[]'); } catch(e) {}
+  var all = [...new Set([...portfolio, ...onboarding])].slice(0, 12);
+  el.textContent = all.length === 0
+    ? 'No symbols selected — click Edit to personalise'
+    : all.join(', ') + ' · ' + all.length + ' symbols live';
+}
+
+// Wrap showPage to call summary update when profile opens
+var _v2ShowPage = window.showPage;
+window.showPage = function(page) {
+  _v2ShowPage(page);
+  if (page === 'profile') setTimeout(v2UpdateTickerSummary, 100);
+};
+window.G = window.showPage;
 </script>
 </body>
 </html>
