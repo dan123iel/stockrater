@@ -434,12 +434,15 @@ function renderTape(inner, syms) {
 }
 }
 
-function connectFinnhubWS(inner) {
+function connectFinnhubWS(inner, syms) {
   if (finnhubWS) { try { finnhubWS.close(); } catch(e){} }
   try {
     finnhubWS = new WebSocket(`wss://ws.finnhub.io?token=${FINNHUB_KEY}`);
     finnhubWS.onopen = () => {
-      TAPE_SYMBOLS.forEach(sym => finnhubWS.send(JSON.stringify({type:'subscribe', symbol:sym})));
+      syms.forEach(sym => {
+        const fsym = sym === 'BTC' ? 'BINANCE:BTCUSDT' : sym === 'ETH' ? 'BINANCE:ETHUSDT' : sym;
+        finnhubWS.send(JSON.stringify({type:'subscribe', symbol: fsym}));
+      });
     };
     finnhubWS.onmessage = e => {
       try {
