@@ -181,11 +181,29 @@ footer a:hover{color:var(--ink)}
     <a id="n-comparison" onclick="G('comparison')">Comparison</a>
   </div>
   <div class="nr">
-    <button class="btn2" style="gap:5px" onclick="G('portfolio')">
-      <svg width="13" height="13" viewBox="0 0 20 20" fill="none"><rect x="2" y="6" width="16" height="12" rx="2.5" stroke="currentColor" stroke-width="1.6"/><path d="M7 6V5a3 3 0 016 0v1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-      Portfolio
+    <!-- Search -->
+    <div id="v2-search-wrap" style="position:relative;display:flex;align-items:center">
+      <input id="v2-search-input" type="text" placeholder="ticker or ISIN..."
+        style="width:0;opacity:0;padding:0;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);outline:none;transition:all .25s ease;border-radius:999px"
+        onkeydown="if(event.key==='Enter'){var v=this.value.trim().toUpperCase();if(v&&typeof openTicker==='function')openTicker(v);else if(v){G('analytics');}}"
+      >
+      <button id="v2-search-btn" onclick="v2ToggleSearch()"
+        style="width:34px;height:34px;border-radius:50%;background:var(--ink);border:none;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--bg)" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+    </div>
+    <!-- Portfolio briefcase -->
+    <button onclick="G('portfolio')" title="Portfolio"
+      style="width:34px;height:34px;border-radius:50%;background:transparent;border:1.5px solid var(--bdr);display:flex;align-items:center;justify-content:center;transition:all .15s"
+      onmouseover="this.style.borderColor='var(--ink)'" onmouseout="this.style.borderColor='var(--bdr)'">
+      <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="var(--ink)" stroke-width="1.6"><rect x="2" y="6" width="16" height="12" rx="2.5"/><path d="M7 6V5a3 3 0 016 0v1" stroke-linecap="round"/></svg>
     </button>
-    <button class="btn" onclick="G('profile')">Profile </button>
+    <!-- Profile -->
+    <button onclick="G('profile')" title="Profile"
+      style="width:34px;height:34px;border-radius:50%;background:transparent;border:1.5px solid var(--bdr);display:flex;align-items:center;justify-content:center;transition:all .15s"
+      onmouseover="this.style.borderColor='var(--ink)'" onmouseout="this.style.borderColor='var(--bdr)'">
+      <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="var(--ink)" stroke-width="1.6"><circle cx="10" cy="7" r="3.2"/><path d="M3 17c0-3.31 3.13-6 7-6s7 2.69 7 6" stroke-linecap="round"/></svg>
+    </button>
   </div>
 </nav>
 
