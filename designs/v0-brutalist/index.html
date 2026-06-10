@@ -451,30 +451,71 @@
     window.G = window.showPage;
     window.navigateTo = window.showPage;
 
-    // Ticker strip
-    var ticks = [
-      {s:'AAPL', p:'$182.10', c:'+1.20%', u:1},
-      {s:'MSFT', p:'$431.20', c:'+0.79%', u:1},
-      {s:'TSLA', p:'$175.20', c:'−3.36%', u:0},
-      {s:'AMD',  p:'$160.40', c:'+3.10%', u:1},
-      {s:'BTC',  p:'$68,400', c:'−0.80%', u:0},
-      {s:'S&P',  p:'5,420',   c:'+0.42%', u:1},
-      {s:'META', p:'$511.80', c:'−0.49%', u:0},
-      {s:'NVDA', p:'$205.10', c:'+46.51%',u:1},
-      {s:'GOOGL',p:'$175.80', c:'+0.74%', u:1},
-      {s:'JPM',  p:'$201.50', c:'+0.40%', u:1},
-    ];
-    var strip = document.getElementById('ticker-strip');
-    if (strip) {
-      strip.innerHTML = [...ticks, ...ticks].map(function(t) {
-        var col = t.u ? '#22c55e' : '#ef4444';
+    // Ticker strip — Finnhub WebSocket live data
+    var SYMS = ['AAPL','MSFT','TSLA','AMD','BTC','NVDA','META','GOOGL','JPM','NFLX'];
+    var FALLBACK = {
+      'AAPL': {p:'182.10', c:'+1.20%', u:1},
+      'MSFT': {p:'431.20', c:'+0.79%', u:1},
+      'TSLA': {p:'175.20', c:'−3.36%', u:0},
+      'AMD':  {p:'160.40', c:'+3.10%', u:1},
+      'BTC':  {p:'68,400', c:'−0.80%', u:0},
+      'NVDA': {p:'205.10', c:'+46.51%',u:1},
+      'META': {p:'511.80', c:'−0.49%', u:0},
+      'GOOGL':{p:'175.80', c:'+0.74%', u:1},
+      'JPM':  {p:'201.50', c:'+0.40%', u:1},
+      'NFLX': {p:'680.20', c:'+0.75%', u:1},
+    };
+    var quotes = {};
+
+    function renderStrip() {
+      var strip = document.getElementById('ticker-strip');
+      if (!strip) return;
+      var items = SYMS.map(function(s) {
+        var q = quotes[s] || FALLBACK[s] || {p:'—', c:'—', u:null};
+        var col = q.u === 1 ? '#22c55e' : q.u === 0 ? '#ef4444' : '#888';
+        var sym = s === 'BTC' ? 'BTC/USD' : s;
         return '<div style="display:inline-flex;align-items:center;gap:10px;padding:0 28px;height:34px;border-right:1px solid rgba(255,255,255,.05);font-family:\'Space Mono\',monospace;font-size:.7rem">'
-          + '<span style="font-weight:700;color:#f4f4f5">' + t.s + '</span>'
-          + '<span style="color:rgba(255,255,255,.35)">' + t.p + '</span>'
-          + '<span style="color:' + col + ';font-weight:700">' + t.c + '</span>'
+          + '<span style="font-weight:700;color:#f4f4f5">' + sym + '</span>'
+          + '<span style="color:rgba(255,255,255,.35)">$' + q.p + '</span>'
+          + '<span style="color:' + col + ';font-weight:700">' + q.c + '</span>'
           + '</div>';
-      }).join('');
+      });
+      // duplicate for seamless loop
+      strip.innerHTML = items.join('') + items.join('');
     }
+
+    renderStrip();
+
+    // Connect Finnhub WebSocket for live updates
+    var FKEY = 'd8k2199r01qjgd6qgrugd8k2199r01qjgd6qgrv0';
+    try {
+      var ws = new WebSocket('wss://ws.finnhub.io?token=' + FKEY);
+      ws.onopen = function() {
+        SYMS.forEach(function(s) {
+          ws.send(JSON.stringify({type:'subscribe', symbol: s === 'BTC' ? 'BINANCE:BTCUSDT' : s}));
+        });
+      };
+      ws.onmessage = function(e) {
+        try {
+          var msg = JSON.parse(e.data);
+          if (msg.type === 'trade' && msg.data) {
+            msg.data.forEach(function(t) {
+              var sym = t.s === 'BINANCE:BTCUSDT' ? 'BTC' : t.s;
+              if (!SYMS.includes(sym)) return;
+              var prev = quotes[sym] ? parseFloat(quotes[sym].p.replace(',','')) : t.p;
+              var pct = ((t.p - prev) / prev * 100);
+              quotes[sym] = {
+                p: t.p > 1000 ? t.p.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,',') : t.p.toFixed(2),
+                c: (pct >= 0 ? '+' : '') + pct.toFixed(2) + '%',
+                u: t.p >= prev ? 1 : 0
+              };
+            });
+            renderStrip();
+          }
+        } catch(err){}
+      };
+      ws.onerror = function(){};
+    } catch(err){}
 
     setTimeout(function(){ navigateTo('home'); }, 50);
   })();
