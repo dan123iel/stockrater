@@ -474,6 +474,32 @@
     };
     window.G = window.showPage;
     window.navigateTo = window.showPage;
+
+    // Ticker strip
+    var ticks = [
+      {s:'AAPL', p:'$182.10', c:'+1.20%', u:1},
+      {s:'MSFT', p:'$431.20', c:'+0.79%', u:1},
+      {s:'TSLA', p:'$175.20', c:'−3.36%', u:0},
+      {s:'AMD',  p:'$160.40', c:'+3.10%', u:1},
+      {s:'BTC',  p:'$68,400', c:'−0.80%', u:0},
+      {s:'S&P',  p:'5,420',   c:'+0.42%', u:1},
+      {s:'META', p:'$511.80', c:'−0.49%', u:0},
+      {s:'NVDA', p:'$205.10', c:'+46.51%',u:1},
+      {s:'GOOGL',p:'$175.80', c:'+0.74%', u:1},
+      {s:'JPM',  p:'$201.50', c:'+0.40%', u:1},
+    ];
+    var strip = document.getElementById('ticker-strip');
+    if (strip) {
+      strip.innerHTML = [...ticks, ...ticks].map(function(t) {
+        var col = t.u ? '#22c55e' : '#ef4444';
+        return '<div style="display:inline-flex;align-items:center;gap:10px;padding:0 28px;height:34px;border-right:1px solid rgba(255,255,255,.05);font-family:\'Space Mono\',monospace;font-size:.7rem">'
+          + '<span style="font-weight:700;color:#f4f4f5">' + t.s + '</span>'
+          + '<span style="color:rgba(255,255,255,.35)">' + t.p + '</span>'
+          + '<span style="color:' + col + ';font-weight:700">' + t.c + '</span>'
+          + '</div>';
+      }).join('');
+    }
+
     setTimeout(function(){ navigateTo('home'); }, 50);
   })();
   </script>
