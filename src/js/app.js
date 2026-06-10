@@ -267,6 +267,7 @@ function showPage(page) {
   if (tape) tape.style.display = 'block';
 
   if (page === 'markets') setTimeout(loadMarketsNews, 100);
+  if (page === 'profile') setTimeout(initProfilePage, 50);
 
   window.scrollTo(0, 0);
 }
