@@ -459,28 +459,23 @@ select{background:var(--b3);border:1px solid var(--bdr);border-radius:10px;paddi
 <script src="../../src/js/app.js"></script>
 <script>
 (function(){
-  window.showPage=function(page){
-    document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
-    document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
-    var pg=document.getElementById('pg-'+page);if(pg)pg.classList.add('on');
-    var nm={markets:'n-markets',analytics:'n-analytics',comparison:'n-comparison'};
-    var ni=nm[page];if(ni){var el=document.getElementById(ni);if(el)el.classList.add('on');}
-    var hbg=document.getElementById('hbg');if(hbg)hbg.style.display=page==='home'?'block':'none';
-    window.scrollTo(0,0);
-    if(page==='analytics')setTimeout(drawChart,60);
+  var PAGE_MAP = {};
+  var NAV_MAP  = {};
+  window.showPage = function(page) {
+    var pgId = PAGE_MAP[page] || page;
+    document.querySelectorAll('.pg').forEach(function(p){ p.classList.remove('on'); });
+    document.querySelectorAll('.ni').forEach(function(n){ n.classList.remove('on'); });
+    var pg = document.getElementById('pg-' + pgId);
+    if (pg) pg.classList.add('on');
+    var navId = NAV_MAP[page] || NAV_MAP[pgId] || 'n-' + page;
+    var ni = document.getElementById(navId);
+    if (ni) ni.classList.add('on');
+    window.scrollTo(0, 0);
+    if (pgId === 'analytics') setTimeout(function(){ if(window.drawChart) drawChart(); }, 60);
   };
-  window.G=window.showPage;
-  // tape uses id="ti"
-  var td=[{s:'S&P 500',p:'5,420',c:'+0.4%',u:1},{s:'NASDAQ',p:'18,650',c:'+1.2%',u:1},{s:'NVDA',p:'$205.10',c:'+46.51%',u:1},{s:'AAPL',p:'$182.10',c:'+1.2%',u:1},{s:'BTC',p:'$68,400',c:'−0.8%',u:0},{s:'TSLA',p:'$175.20',c:'−3.4%',u:0},{s:'MSFT',p:'$431.20',c:'+0.8%',u:1},{s:'AMD',p:'$160.40',c:'+3.1%',u:1}];
-  var ti=document.getElementById('ti');
-  if(ti)ti.innerHTML=[...td,...td].map(t=>'<div class="tc"><span style="font-weight:500;color:var(--ink)">'+t.s+'</span><span style="color:var(--mid)">'+t.p+'</span><span style="color:'+(t.u?'var(--G)':'var(--R)')+'">'+t.c+'</span></div>').join('');
-  // cursor
-  var C=document.getElementById('cur');
-  if(C){document.addEventListener('mousemove',e=>{C.style.left=e.clientX+'px';C.style.top=e.clientY+'px'});document.addEventListener('mouseover',e=>{C.classList.toggle('h',!!e.target.closest('button,a,[onclick],.ni,.c,.dt,.hmi,.wi,.sb,.tb'))});document.addEventListener('mousedown',()=>C.style.transform='translate(-50%,-50%) scale(.75)');document.addEventListener('mouseup',()=>C.style.transform='translate(-50%,-50%)');}
-  // chart bridges id="cc"
-  window.drawChart=function(){var cv=document.getElementById('cc')||document.getElementById('price-chart-canvas');if(!cv)return;var ctx=cv.getContext('2d'),dpr=devicePixelRatio||1,W=cv.offsetWidth,H=140;cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+'px';cv.style.height=H+'px';ctx.scale(dpr,dpr);var pts=[],v=160;for(var i=0;i<80;i++){v+=(Math.sin(i*.3)*.3+(Math.random()-.41))*v*.022;pts.push(Math.max(40,v));}var mn=Math.min(...pts)*.97,mx=Math.max(...pts)*1.03,tx=i=>(i/(pts.length-1))*(W-16)+8,ty=v=>H-6-((v-mn)/(mx-mn))*(H-14),sma=pts.slice(0,50).reduce((a,b)=>a+b)/50;ctx.beginPath();ctx.strokeStyle='rgba(111,94,245,.3)';ctx.lineWidth=1;ctx.setLineDash([4,3]);ctx.moveTo(8,ty(sma));ctx.lineTo(W-8,ty(sma));ctx.stroke();ctx.setLineDash([]);var g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'rgba(45,202,114,.2)');g.addColorStop(1,'rgba(45,202,114,0)');ctx.beginPath();pts.forEach((v,i)=>i?ctx.lineTo(tx(i),ty(v)):ctx.moveTo(tx(i),ty(v)));ctx.lineTo(tx(pts.length-1),H);ctx.lineTo(8,H);ctx.closePath();ctx.fillStyle=g;ctx.fill();ctx.beginPath();ctx.strokeStyle='#2dca72';ctx.lineWidth=2;ctx.lineJoin='round';pts.forEach((v,i)=>i?ctx.lineTo(tx(i),ty(v)):ctx.moveTo(tx(i),ty(v)));ctx.stroke();ctx.beginPath();ctx.arc(tx(pts.length-1),ty(pts[pts.length-1]),4,0,Math.PI*2);ctx.fillStyle='#2dca72';ctx.fill();};
-  window.addEventListener('resize',()=>{if(document.getElementById('pg-analytics')?.classList.contains('on'))drawChart();});
-  setTimeout(()=>G('analytics'),50);
+  window.G = window.showPage;
+  
+  setTimeout(function(){ window.showPage('analytics'); }, 50);
 })();
 </script>
 </body>

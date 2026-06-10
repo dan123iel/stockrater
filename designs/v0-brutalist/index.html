@@ -321,29 +321,26 @@
   </section>
 
   <script src="../../src/js/app.js"></script>
-  <script>
-  (function() {
-    const VIEWS = ['home','analytics','markets','comparison','portfolio','profile'];
-
-    window.showPage = function(page) {
-      VIEWS.forEach(function(id) {
-        var v = document.getElementById('view-' + id);
-        var n = document.getElementById('btn-nav-' + id);
-        if (v) v.classList.remove('active-page');
-        if (n) n.classList.remove('active-nav');
-      });
-      var av = document.getElementById('view-' + page);
-      var an = document.getElementById('btn-nav-' + page);
-      if (av) av.classList.add('active-page');
-      if (an) an.classList.add('active-nav');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-
-    window.G = window.showPage;
-    window.navigateTo = window.showPage;
-
-    setTimeout(function() { navigateTo('home'); }, 50);
-  })();
-  </script>
+<script>
+(function(){
+  var PAGE_MAP = {};
+  var NAV_MAP  = {};
+  window.showPage = function(page) {
+    var pgId = PAGE_MAP[page] || page;
+    document.querySelectorAll('.page-section').forEach(function(p){ p.classList.remove('active-page'); });
+    document.querySelectorAll('[id^='btn-nav-']').forEach(function(n){ n.classList.remove('active-nav'); });
+    var pg = document.getElementById('view-' + pgId);
+    if (pg) pg.classList.add('active-page');
+    var navId = NAV_MAP[page] || NAV_MAP[pgId] || 'btn-nav-' + page;
+    var ni = document.getElementById(navId);
+    if (ni) ni.classList.add('active-nav');
+    window.scrollTo(0, 0);
+    if (pgId === 'analytics') setTimeout(function(){ if(window.drawChart) drawChart(); }, 60);
+  };
+  window.G = window.showPage;
+  window.navigateTo = window.showPage;
+  setTimeout(function(){ window.showPage('home'); }, 50);
+})();
+</script>
 </body>
 </html>

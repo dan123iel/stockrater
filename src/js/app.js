@@ -718,6 +718,164 @@ function toggleApiKey() {
   if (el) el.textContent = apiKeyRevealed ? (stored || '(no key set)') : '•••••••••••••••••••••••••••';
 }
 
+// ===== PROFILE PAGE =====
+function initProfilePage() {
+  const profile = getStrategyProfile();
+
+  // Find the profile container — works across all designs
+  const container = document.getElementById('strategy-profile-ui')
+    || document.getElementById('pg-profile')
+    || document.getElementById('view-profile');
+  if (!container) return;
+
+  // Check if already rendered
+  if (container.querySelector('.sp-rendered')) return;
+
+  const weights = getEffectiveWeights(profile);
+
+  const html = `<div class="sp-rendered" style="margin-top:24px">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;opacity:.5;margin-bottom:16px">Strategy Profile</div>
+
+    <!-- Investor Type -->
+    <div style="margin-bottom:20px">
+      <div style="font-size:12px;opacity:.6;margin-bottom:8px">Investment Focus</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap" id="sp-focus-btns">
+        ${['value','growth','dividend','momentum'].map(f => `
+          <button onclick="spSetFocus('${f}')" id="sp-focus-${f}"
+            style="padding:6px 16px;border-radius:999px;border:1px solid currentColor;font-size:12px;font-weight:600;cursor:pointer;background:${profile.focus===f?'var(--ink,#000)':'transparent'};color:${profile.focus===f?'var(--bg,#fff)':'inherit'};opacity:${profile.focus===f?'1':'.5'};transition:all .15s">
+            ${f.charAt(0).toUpperCase()+f.slice(1)}
+          </button>`).join('')}
+      </div>
+      <div id="sp-focus-desc" style="font-size:11px;opacity:.5;margin-top:8px">${spFocusDesc(profile.focus)}</div>
+    </div>
+
+    <!-- Horizon -->
+    <div style="margin-bottom:20px">
+      <div style="font-size:12px;opacity:.6;margin-bottom:8px">Investment Horizon</div>
+      <div style="display:flex;gap:8px" id="sp-horizon-btns">
+        ${['short','medium','long'].map(h => `
+          <button onclick="spSetHorizon('${h}')" id="sp-horizon-${h}"
+            style="padding:6px 16px;border-radius:999px;border:1px solid currentColor;font-size:12px;font-weight:600;cursor:pointer;background:${profile.horizon===h?'var(--ink,#000)':'transparent'};color:${profile.horizon===h?'var(--bg,#fff)':'inherit'};opacity:${profile.horizon===h?'1':'.5'};transition:all .15s">
+            ${h.charAt(0).toUpperCase()+h.slice(1)}
+          </button>`).join('')}
+      </div>
+    </div>
+
+    <!-- Risk -->
+    <div style="margin-bottom:24px">
+      <div style="font-size:12px;opacity:.6;margin-bottom:8px">Risk Tolerance</div>
+      <div style="display:flex;gap:8px" id="sp-risk-btns">
+        ${['conservative','moderate','aggressive'].map(r => `
+          <button onclick="spSetRisk('${r}')" id="sp-risk-${r}"
+            style="padding:6px 16px;border-radius:999px;border:1px solid currentColor;font-size:12px;font-weight:600;cursor:pointer;background:${profile.risk===r?'var(--ink,#000)':'transparent'};color:${profile.risk===r?'var(--bg,#fff)':'inherit'};opacity:${profile.risk===r?'1':'.5'};transition:all .15s">
+            ${r.charAt(0).toUpperCase()+r.slice(1)}
+          </button>`).join('')}
+      </div>
+    </div>
+
+    <!-- Weight Sliders -->
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;opacity:.5;margin-bottom:14px">Score Weights (auto-adjusted by focus)</div>
+    ${[
+      ['ratios',    'Financial Ratios'],
+      ['management','Management'],
+      ['moat',      'Moat & Competitive'],
+      ['esg',       'ESG & Risk'],
+      ['valuation', 'Valuation / DCF']
+    ].map(([k,label]) => `
+      <div style="margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px">
+          <span style="opacity:.7">${label}</span>
+          <span id="sp-w-val-${k}" style="font-weight:700">${weights[k]}%</span>
+        </div>
+        <input type="range" id="sp-w-${k}" min="0" max="80" value="${weights[k]}"
+          oninput="spUpdateWeight('${k}', this.value)"
+          style="width:100%;height:3px;accent-color:var(--accent,var(--P,#6f5ef5))">
+      </div>`).join('')}
+
+    <div style="font-size:11px;opacity:.4;margin-top:4px" id="sp-weight-total">Total: ${Object.values(weights).reduce((a,b)=>a+b,0)}%</div>
+    <button onclick="spResetWeights()" style="margin-top:14px;padding:7px 18px;border-radius:999px;border:1px solid currentColor;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;background:transparent;cursor:pointer;opacity:.6">Reset to Focus Defaults</button>
+  </div>`;
+
+  container.insertAdjacentHTML('beforeend', html);
+}
+
+function spFocusDesc(focus) {
+  return {
+    value:    'Rewards low P/E, penalises high multiples. Boosts Ratios & Valuation weights.',
+    growth:   'Rewards revenue growth, tolerates high multiples. Boosts Ratios & Moat.',
+    dividend: 'Rewards yield and payout consistency. Boosts ESG & Valuation.',
+    momentum: 'Rewards trend strength and market position. Boosts Moat, reduces Ratios.'
+  }[focus] || '';
+}
+
+function spSetFocus(focus) {
+  const p = getStrategyProfile(); p.focus = focus; saveStrategyProfile(p);
+  // Update buttons
+  ['value','growth','dividend','momentum'].forEach(f => {
+    const btn = document.getElementById('sp-focus-' + f);
+    if (!btn) return;
+    btn.style.background = f === focus ? 'var(--ink,#000)' : 'transparent';
+    btn.style.color      = f === focus ? 'var(--bg,#fff)'  : 'inherit';
+    btn.style.opacity    = f === focus ? '1' : '.5';
+  });
+  const desc = document.getElementById('sp-focus-desc');
+  if (desc) desc.textContent = spFocusDesc(focus);
+  // Refresh weight sliders to show new auto-weights
+  const w = getEffectiveWeights(p);
+  ['ratios','management','moat','esg','valuation'].forEach(k => {
+    const sl = document.getElementById('sp-w-' + k); if (sl) sl.value = w[k];
+    const vl = document.getElementById('sp-w-val-' + k); if (vl) vl.textContent = w[k] + '%';
+  });
+  const tot = document.getElementById('sp-weight-total');
+  if (tot) tot.textContent = 'Total: ' + Object.values(w).reduce((a,b)=>a+b,0) + '%';
+}
+
+function spSetHorizon(horizon) {
+  const p = getStrategyProfile(); p.horizon = horizon; saveStrategyProfile(p);
+  ['short','medium','long'].forEach(h => {
+    const btn = document.getElementById('sp-horizon-' + h); if (!btn) return;
+    btn.style.background = h === horizon ? 'var(--ink,#000)' : 'transparent';
+    btn.style.color      = h === horizon ? 'var(--bg,#fff)'  : 'inherit';
+    btn.style.opacity    = h === horizon ? '1' : '.5';
+  });
+}
+
+function spSetRisk(risk) {
+  const p = getStrategyProfile(); p.risk = risk; saveStrategyProfile(p);
+  ['conservative','moderate','aggressive'].forEach(r => {
+    const btn = document.getElementById('sp-risk-' + r); if (!btn) return;
+    btn.style.background = r === risk ? 'var(--ink,#000)' : 'transparent';
+    btn.style.color      = r === risk ? 'var(--bg,#fff)'  : 'inherit';
+    btn.style.opacity    = r === risk ? '1' : '.5';
+  });
+}
+
+function spUpdateWeight(key, val) {
+  const p = getStrategyProfile();
+  if (!p.scoreWeights) p.scoreWeights = {};
+  p.scoreWeights[key] = parseInt(val);
+  saveStrategyProfile(p);
+  const vl = document.getElementById('sp-w-val-' + key);
+  if (vl) vl.textContent = val + '%';
+  // Update total display
+  const w = getEffectiveWeights(p);
+  const tot = document.getElementById('sp-weight-total');
+  if (tot) tot.textContent = 'Total: ' + Object.values(w).reduce((a,b)=>a+b,0) + '%';
+}
+
+function spResetWeights() {
+  const p = getStrategyProfile();
+  delete p.scoreWeights;
+  saveStrategyProfile(p);
+  const w = getEffectiveWeights(p);
+  ['ratios','management','moat','esg','valuation'].forEach(k => {
+    const sl = document.getElementById('sp-w-' + k); if (sl) sl.value = w[k];
+    const vl = document.getElementById('sp-w-val-' + k); if (vl) vl.textContent = w[k] + '%';
+  });
+  const tot = document.getElementById('sp-weight-total');
+  if (tot) tot.textContent = 'Total: ' + Object.values(w).reduce((a,b)=>a+b,0) + '%';
+}
+
 // ===== MISC =====
 function addToPortfolio() { alert(`${currentTicker} added to portfolio!`); }
 function scrollToSection(id) { document.getElementById(id)?.scrollIntoView({behavior:'smooth', block:'start'}); }

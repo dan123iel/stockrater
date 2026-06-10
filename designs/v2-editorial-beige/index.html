@@ -155,7 +155,7 @@ footer a:hover{color:var(--ink)}
 </nav>
 
 <!--  HOME  -->
-<div class="pg on" id="pg-home" style="padding-top:58px">
+<div class="pg" id="pg-home" style="padding-top:58px">
   <div style="padding:80px 3rem 60px;max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1fr 400px;gap:80px;align-items:center">
     <div>
       <div style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--mid);margin-bottom:20px;display:flex;align-items:center;gap:10px"><span style="display:block;width:22px;height:1px;background:var(--mid)"></span>Market Intelligence Platform</div>
@@ -279,7 +279,7 @@ footer a:hover{color:var(--ink)}
 </div>
 
 <!--  ANALYTICS  -->
-<div class="pg" id="pg-analytics" style="padding-top:58px;display:block">
+<div class="pg" id="pg-analytics" style="padding-top:58px">
   <!-- hero strip -->
   <div style="border-bottom:1px solid var(--bdr);padding:32px 3rem 24px;max-width:1400px;margin:0 auto;display:flex;align-items:flex-start;justify-content:space-between">
     <div>
@@ -565,27 +565,23 @@ footer a:hover{color:var(--ink)}
 <script src="../../src/js/app.js"></script>
 <script>
 (function(){
-  window.showPage=function(page){
-    document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
-    document.querySelectorAll('.nc a').forEach(a=>a.classList.remove('on'));
-    var pg=document.getElementById('pg-'+page);if(pg)pg.classList.add('on');
-    var nm={markets:'n-markets',analytics:'n-analytics',comparison:'n-comparison'};
-    var ni=nm[page];if(ni){var el=document.getElementById(ni);if(el)el.classList.add('on');}
-    window.scrollTo(0,0);
-    if(page==='analytics')setTimeout(drawChart,60);
+  var PAGE_MAP = {};
+  var NAV_MAP  = {};
+  window.showPage = function(page) {
+    var pgId = PAGE_MAP[page] || page;
+    document.querySelectorAll('.pg').forEach(function(p){ p.classList.remove('on'); });
+    document.querySelectorAll('.nc a').forEach(function(n){ n.classList.remove('on'); });
+    var pg = document.getElementById('pg-' + pgId);
+    if (pg) pg.classList.add('on');
+    var navId = NAV_MAP[page] || NAV_MAP[pgId] || 'n-' + page;
+    var ni = document.getElementById(navId);
+    if (ni) ni.classList.add('on');
+    window.scrollTo(0, 0);
+    if (pgId === 'analytics') setTimeout(function(){ if(window.drawChart) drawChart(); }, 60);
   };
-  window.G=window.showPage;
-  // marquee uses id="mq"
-  var ticks=['NVDA +46.51%','AAPL +1.20%','MSFT +0.80%','AMD +3.10%','BTC −0.80%','TSLA −3.40%','S&P 500 +0.40%','NASDAQ +1.20%'];
-  var mq=document.getElementById('mq');
-  if(mq)mq.innerHTML=[...ticks,...ticks].map(t=>'<div class="mi"><div class="mi-dot"></div>'+t+'</div>').join('');
-  // cursor
-  var C=document.getElementById('C');
-  if(C){document.addEventListener('mousemove',e=>{C.style.left=e.clientX+'px';C.style.top=e.clientY+'px'});document.addEventListener('mouseover',e=>{var t=e.target;if(t.tagName==='INPUT'){C.classList.add('t');C.classList.remove('h');}else if(t.closest('button,a,[onclick],.dt,.nc a,.bento>div,.ir,.tb')){C.classList.add('h');C.classList.remove('t');}else{C.classList.remove('h','t');}});document.addEventListener('mousedown',()=>C.style.transform='translate(-50%,-50%) scale(.72)');document.addEventListener('mouseup',()=>C.style.transform='translate(-50%,-50%)');}
-  // chart bridges id="cc"
-  window.drawChart=function(){var cv=document.getElementById('cc')||document.getElementById('price-chart-canvas');if(!cv)return;var ctx=cv.getContext('2d'),dpr=devicePixelRatio||1,W=cv.offsetWidth,H=140;cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+'px';cv.style.height=H+'px';ctx.scale(dpr,dpr);var pts=[],v=150;for(var i=0;i<80;i++){v+=(Math.sin(i*.28)*.35+(Math.random()-.41))*v*.022;pts.push(Math.max(40,v));}var mn=Math.min(...pts)*.97,mx=Math.max(...pts)*1.03,tx=i=>(i/(pts.length-1))*(W-14)+7,ty=v=>H-5-((v-mn)/(mx-mn))*(H-12),sma=pts.slice(0,50).reduce((a,b)=>a+b)/50;ctx.beginPath();ctx.strokeStyle='rgba(13,13,13,.15)';ctx.lineWidth=1;ctx.setLineDash([4,4]);ctx.moveTo(7,ty(sma));ctx.lineTo(W-7,ty(sma));ctx.stroke();ctx.setLineDash([]);var g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'rgba(26,110,60,.15)');g.addColorStop(1,'rgba(26,110,60,0)');ctx.beginPath();pts.forEach((v,i)=>i?ctx.lineTo(tx(i),ty(v)):ctx.moveTo(tx(i),ty(v)));ctx.lineTo(tx(pts.length-1),H);ctx.lineTo(7,H);ctx.closePath();ctx.fillStyle=g;ctx.fill();ctx.beginPath();ctx.strokeStyle='#1a6e3c';ctx.lineWidth=1.8;ctx.lineJoin='round';pts.forEach((v,i)=>i?ctx.lineTo(tx(i),ty(v)):ctx.moveTo(tx(i),ty(v)));ctx.stroke();ctx.beginPath();ctx.arc(tx(pts.length-1),ty(pts[pts.length-1]),4,0,Math.PI*2);ctx.fillStyle='#1a6e3c';ctx.fill();};
-  window.addEventListener('resize',()=>{if(document.getElementById('pg-analytics')?.classList.contains('on'))drawChart();});
-  setTimeout(()=>G('analytics'),50);
+  window.G = window.showPage;
+  
+  setTimeout(function(){ window.showPage('analytics'); }, 50);
 })();
 </script>
 </body>
