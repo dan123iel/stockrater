@@ -728,6 +728,32 @@ function v2SetTheme(t) {
 }
 (function(){ var t=localStorage.getItem('v2_theme'); if(t) v2SetTheme(t); })();
 
+// Search toggle
+var _v2SearchOpen = false;
+function v2ToggleSearch() {
+  _v2SearchOpen = !_v2SearchOpen;
+  var inp = document.getElementById('v2-search-input');
+  if (_v2SearchOpen) {
+    inp.style.width = '180px';
+    inp.style.opacity = '1';
+    inp.style.padding = '6px 14px';
+    inp.style.border = '1.5px solid var(--bdr)';
+    inp.style.marginRight = '6px';
+    inp.style.background = 'var(--bg)';
+    setTimeout(function(){ inp.focus(); }, 50);
+  } else {
+    inp.style.width = '0';
+    inp.style.opacity = '0';
+    inp.style.padding = '0';
+    inp.style.border = 'none';
+    inp.style.marginRight = '0';
+    inp.value = '';
+  }
+}
+document.addEventListener('click', function(e) {
+  if (_v2SearchOpen && !e.target.closest('#v2-search-wrap')) v2ToggleSearch();
+});
+
 function v2EditTicker() {
   localStorage.removeItem('tape_onboarding_done');
   if (typeof showTapeOnboarding === 'function') showTapeOnboarding();
