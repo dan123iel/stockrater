@@ -414,11 +414,11 @@ function openNewsModal(idx) {
   set('news-modal-time', new Date(a.datetime * 1000).toLocaleString());
   const link = document.getElementById('news-modal-link');
   if (link) link.href = a.url;
-  modal.classList.add('open');
+  modal.classList.add('is-open');
 }
 function closeNewsModal() {
   const modal = document.getElementById('news-modal');
-  if (modal) modal.classList.remove('open');
+  if (modal) modal.classList.remove('is-open');
 }
 
 async function loadTickerNews(sym) {
@@ -449,16 +449,16 @@ function toggleNavSearch() {
   const wrap = document.getElementById('nav-search-wrap');
   const inp = document.getElementById('nav-search-input');
   if (!wrap) return;
-  if (wrap.classList.contains('open')) { closeNavSearch(); }
-  else { wrap.classList.add('open'); setTimeout(() => inp && inp.focus(), 80); }
+  if (wrap.classList.contains('is-open')) { closeNavSearch(); }
+  else { wrap.classList.add('is-open'); setTimeout(() => inp && inp.focus(), 80); }
 }
 function closeNavSearch() {
   const wrap = document.getElementById('nav-search-wrap');
   const inp = document.getElementById('nav-search-input');
   const dd = document.getElementById('nav-search-dropdown');
-  if (wrap) wrap.classList.remove('open');
+  if (wrap) wrap.classList.remove('is-open');
   if (inp) inp.value = '';
-  if (dd) dd.classList.remove('open');
+  if (dd) dd.classList.remove('is-open');
 }
 function navSearchKey(e) {
   if (e.key === 'Escape') closeNavSearch();
@@ -470,7 +470,7 @@ function navSearchKey(e) {
 function navFilterSearch(q) {
   clearTimeout(_navSearchDebounce);
   const dd = document.getElementById('nav-search-dropdown');
-  if (!q) { if (dd) dd.classList.remove('open'); return; }
+  if (!q) { if (dd) dd.classList.remove('is-open'); return; }
   const local = SEARCH_DB.filter(x =>
     x.sym.toLowerCase().includes(q.toLowerCase()) ||
     x.name.toLowerCase().includes(q.toLowerCase())
@@ -491,14 +491,14 @@ function navFilterSearch(q) {
 function renderNavDropdown(items) {
   const dd = document.getElementById('nav-search-dropdown');
   if (!dd) return;
-  if (!items.length) { dd.classList.remove('open'); return; }
+  if (!items.length) { dd.classList.remove('is-open'); return; }
   dd.innerHTML = items.map(x => `
     <div class="sm-result-item" onmousedown="event.preventDefault();closeNavSearch();openTicker('${x.sym}')">
       <span class="sri-sym">${x.sym}</span>
       <span class="sri-name">${x.name}</span>
       <span class="sri-type">${x.type}</span>
     </div>`).join('');
-  dd.classList.add('open');
+  dd.classList.add('is-open');
 }
 
 // Legacy aliases
