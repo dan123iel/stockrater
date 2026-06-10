@@ -1,385 +1,769 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>futara — air</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Mono:wght@300;400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>vistaclara  editorial</title>
+<link href="https://fonts.googleapis.com/css2?family=Editorial+New:ital,wght@0,200;0,400;1,200;1,400&family=Inter:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+*{margin:0;padding:0;box-sizing:border-box;cursor:none!important}
+:root{
+  --bg:#f2efe9;--ink:#0d0d0d;--mid:#6b6b6b;--soft:#c8c4bb;
+  --accent:#1a1a1a;--lime:#c8ff00;--border:rgba(13,13,13,.1);
+  --serif:'Georgia',serif;
 
-/* ─── CRITICAL LAYOUT (must be in every design) ─────────────── */
-*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; cursor:none!important; }
-html { font-size:16px; }
-body { overflow-x:hidden; min-height:100vh; }
+/* CURSOR */
+#C{position:fixed;width:10px;height:10px;background:var(--ink);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s,border-radius .2s,mix-blend-mode .2s;mix-blend-mode:difference}
+#C.h{width:40px;height:40px;border-radius:50%}
+#C.t{width:3px;height:24px;border-radius:2px}
 
-/* Tape: fixed top strip */
-.f-tape { position:fixed!important; top:0; left:0; right:0; z-index:101; height:30px; overflow:hidden; }
-.f-tape-inner { display:flex; height:100%; white-space:nowrap; animation:tapeScroll 80s linear infinite; }
-@keyframes tapeScroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-.f-tape-item { display:inline-flex; align-items:center; gap:10px; height:100%; flex-shrink:0; }
+body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;font-size:14px;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
 
-/* Nav logo: fixed left */
-.f-nav-logo-wrap { position:fixed!important; top:38px; left:24px; z-index:100; height:46px; display:flex; align-items:center; padding:0 18px; backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); border-radius:999px; cursor:pointer; }
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:0 3rem;height:64px;background:var(--bg);border-bottom:1px solid var(--border)}
+.nav-logo{font-size:16px;font-weight:600;letter-spacing:-.04em;display:flex;align-items:center;gap:8px}
+.nav-logo svg{flex-shrink:0}
+.nav-links{display:flex;gap:2rem;font-size:13px;color:var(--mid)}
+.nav-links a{transition:color .15s}
+.nav-links a:hover,.nav-links a.on{color:var(--ink)}
+.nav-links a.on{font-weight:500}
+.nav-cta{background:var(--ink);color:#fff;padding:9px 22px;border-radius:999px;font-size:13px;font-weight:500;transition:background .15s}
+.nav-cta:hover{background:#333}
 
-/* Nav center: fixed center */
-#nav.f-nav { position:fixed!important; top:38px; left:50%; transform:translateX(-50%); z-index:100; height:46px; display:flex; align-items:center; padding:0 7px; backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); border-radius:999px; white-space:nowrap; }
-.f-nav-links { display:flex; gap:2px; align-items:center; }
-.f-nav-divider { width:1px; height:20px; margin:0 4px; flex-shrink:0; }
-.f-nav-search-wrap { display:flex; align-items:center; overflow:hidden; max-width:0; opacity:0; transition:max-width .35s cubic-bezier(.16,1,.3,1), opacity .25s; position:relative; }
-.f-nav-search-wrap.is-open { max-width:280px; opacity:1; }
-.f-nav-search-input { background:none; border:none; outline:none; width:240px; padding:0 12px; }
-.f-nav-search-dropdown { position:absolute; top:calc(100% + 8px); left:0; right:0; padding:6px; z-index:201; display:none; }
-.f-nav-search-dropdown.is-open { display:block; }
-.f-nav-search-btn { width:30px; height:30px; display:flex; align-items:center; justify-content:center; border-radius:50%; border:none; cursor:pointer; flex-shrink:0; margin-left:6px; }
+/* PAGES */
+.page{display:none}
+.page.on{display:block}
 
-/* Nav right: fixed right */
-.f-nav-right { position:fixed!important; top:38px; right:24px; z-index:100; height:46px; display:flex; align-items:center; padding:0 8px; gap:0; backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); border-radius:999px; }
-.f-nav-btn { width:34px; height:34px; display:flex; align-items:center; justify-content:center; border-radius:50%; border:none; cursor:pointer; flex-shrink:0; }
+/* HERO */
+.hero{padding:120px 3rem 80px;max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1fr 420px;gap:80px;align-items:start}
+.hero-eye{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mid);margin-bottom:24px;display:flex;align-items:center;gap:10px}
+.hero-eye::before{content:'';display:block;width:24px;height:1px;background:var(--mid)}
+.hero-h{font-family:var(--serif);font-size:clamp(3.5rem,7vw,6rem);font-weight:400;line-height:.96;letter-spacing:-.03em;margin-bottom:28px}
+.hero-h em{font-style:italic;color:var(--mid)}
+.hero-p{font-size:15px;line-height:1.75;color:var(--mid);max-width:460px;margin-bottom:36px;font-weight:300}
+.btn-pill{display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:#fff;padding:13px 26px;border-radius:999px;font-size:14px;font-weight:500;transition:all .15s;border:none}
+.btn-pill:hover{background:#333;transform:translateY(-1px)}
+.btn-outline{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--ink);padding:13px 26px;border-radius:999px;font-size:14px;font-weight:500;transition:all .15s;border:1.5px solid var(--ink)}
+.btn-outline:hover{background:var(--ink);color:#fff}
+.hero-right{position:relative}
+.hero-card{background:var(--ink);color:#fff;border-radius:20px;overflow:hidden;padding:28px}
+.hero-stat{font-family:var(--serif);font-size:3.5rem;font-weight:400;letter-spacing:-.05em;line-height:1;margin-bottom:4px}
+.hero-stat-l{font-size:12px;color:rgba(255,255,255,.5);letter-spacing:.08em;text-transform:uppercase}
+.hero-ticker{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:13px}
+.hero-ticker:last-child{border-bottom:none}
 
-/* App: push content below nav */
-#app { padding-top:96px; position:relative; z-index:1; }
+/* MARQUEE */
+.marquee-wrap{border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;padding:14px 0;margin:0 0 0}
+.marquee{display:flex;gap:0;white-space:nowrap;animation:mq 30s linear infinite}
+@keyframes mq{to{transform:translateX(-50%)}}
+.mq-item{padding:0 40px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mid);border-right:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.mq-dot{width:4px;height:4px;border-radius:50%;background:var(--mid)}
 
-/* Pages: hidden by default */
-.f-page { display:none; min-height:calc(100vh - 96px); }
-.f-page.is-active { display:block; animation:fadeUp .22s ease; }
-@keyframes fadeUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+/* SECTIONS */
+section{padding:80px 3rem}
+.sec-max{max-width:1400px;margin:0 auto}
+.sec-label{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mid);margin-bottom:40px;display:flex;align-items:center;gap:10px}
+.sec-label::before{content:'';display:block;width:16px;height:1px;background:var(--mid)}
 
-/* Cursor */
-#cursor-dot { position:fixed; border-radius:50%; pointer-events:none; z-index:99999; left:-20px; top:-20px; transform:translate(-50%,-50%); width:10px; height:10px; will-change:left,top; }
+/* BENTO GRID (markets) */
+.bento{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5px;background:var(--border)}
+.bento>*{background:var(--bg)}
+.bento-cell{padding:28px;display:flex;flex-direction:column;gap:12px;transition:background .2s}
+.bento-cell:hover{background:#ebe8e1}
+.bento-full{grid-column:1/-1;padding:32px}
+.bento-half{grid-column:span 2}
+.cell-sym{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;letter-spacing:.04em}
+.cell-price{font-family:var(--serif);font-size:2.4rem;font-weight:400;letter-spacing:-.04em;line-height:1}
+.cell-chg{font-size:12px;font-family:'DM Mono',monospace;display:flex;align-items:center;gap:6px;margin-top:auto}
+.g{color:#1a8a4a}.r{color:#c0392b}.mid{color:var(--mid)}
+.pill-tag{display:inline-block;padding:3px 10px;border-radius:999px;font-size:10px;font-weight:500;letter-spacing:.06em;text-transform:uppercase}
+.tg{background:rgba(26,138,74,.1);color:#1a8a4a}.tr{background:rgba(192,57,43,.08);color:#c0392b}
+.ta{background:rgba(107,107,107,.1);color:var(--mid)}.tp{background:rgba(13,13,13,.07);color:var(--ink)}
 
-/* Modal: hidden by default */
-.f-modal { position:fixed; inset:0; z-index:300; display:none; align-items:center; justify-content:center; backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); }
-.f-modal.is-open { display:flex; }
-.f-modal-box { width:min(720px,92vw); max-height:80vh; overflow:hidden; display:flex; flex-direction:column; }
-.f-modal-img { width:100%; height:200px; object-fit:cover; }
-.f-modal-body { padding:24px; overflow-y:auto; flex:1; }
-.f-modal-footer { padding:16px 24px; display:flex; align-items:center; justify-content:space-between; gap:10px; }
+/* ANALYTICS HERO */
+.an-hero{border-bottom:1px solid var(--border);padding:100px 3rem 48px;max-width:1400px;margin:0 auto}
+.an-sym{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mid);margin-bottom:12px;font-family:'DM Mono',monospace}
+.an-price{font-family:var(--serif);font-size:clamp(3rem,7vw,6rem);font-weight:400;letter-spacing:-.04em;line-height:1}
+.an-chg{font-size:16px;font-family:'DM Mono',monospace;margin-top:10px}
+.an-actions{display:flex;gap:10px;margin-top:24px}
 
-/* Sliders */
-input[type=range] { width:100%; height:3px; -webkit-appearance:none; appearance:none; border-radius:2px; outline:none; }
-input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:14px; height:14px; border-radius:50%; cursor:pointer; }
+/* DOCK */
+.dock{display:flex;border-bottom:1px solid var(--border);overflow-x:auto;padding:0 3rem}
+.dock::-webkit-scrollbar{height:0}
+.dt{padding:20px 24px;border-right:1px solid var(--border);min-width:130px;transition:background .15s;flex-shrink:0}
+.dt:hover{background:#ebe8e1}
+.dt.on{background:var(--ink);color:#fff}
+.dt-l{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid);margin-bottom:6px}
+.dt.on .dt-l{color:rgba(255,255,255,.5)}
+.dt-v{font-family:var(--serif);font-size:1.5rem;font-weight:400;letter-spacing:-.04em;line-height:1}
+.dt-s{font-size:10px;font-family:'DM Mono',monospace;margin-top:4px;color:var(--mid)}
+.dt.on .dt-s{color:rgba(255,255,255,.5)}
 
-/* Tables */
-.f-table { width:100%; border-collapse:collapse; }
-.f-table th { text-align:left; padding:6px 8px; }
-.f-table td { padding:9px 8px; }
-.f-table td:first-child { font-weight:500; }
+/* WIDGET GRID */
+.widgets{padding:32px 3rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1.5px;background:var(--border)}
+.wg>*{background:var(--bg)}
+.wg{background:var(--border);display:grid;gap:1.5px}
+.w{padding:28px;background:var(--bg);display:flex;flex-direction:column;gap:14px}
+.w-lbl{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--mid)}
+.w-big{font-family:var(--serif);font-size:3rem;font-weight:400;letter-spacing:-.05em;color:#1a8a4a;line-height:1}
+.w-verdict{font-size:10px;letter-spacing:.18em;text-transform:uppercase;padding:4px 12px;border:1px solid #1a8a4a;border-radius:999px;color:#1a8a4a;display:inline-block;margin-top:4px}
 
-/* Search results */
-.sm-result-item { display:flex; align-items:center; gap:12px; padding:9px 12px; transition:background .1s; cursor:pointer; }
-.sri-sym { font-weight:700; width:56px; flex-shrink:0; }
-.sri-name { flex:1; }
-.sri-type { flex-shrink:0; }
+/* BAR ROW */
+.br{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px}
+.br:last-child{border-bottom:none}
+.br-lbl{flex:1;color:var(--mid)}
+.br-pct{font-size:9px;color:var(--soft);min-width:28px;text-align:right}
+.br-wrap{width:80px;height:2px;background:var(--border);border-radius:1px;overflow:hidden}
+.br-fill{height:100%;background:var(--ink);border-radius:1px;transition:width .8s cubic-bezier(.16,1,.3,1)}
+.br-val{font-family:'DM Mono',monospace;font-size:11px;min-width:36px;text-align:right}
 
-/* Dock */
-.f-dock { display:flex; gap:10px; overflow-x:auto; padding-bottom:4px; margin-bottom:24px; }
-.f-dock::-webkit-scrollbar { height:0; }
-.f-dock-tab { flex-shrink:0; padding:10px 14px; min-width:110px; cursor:pointer; transition:all .15s; }
-.f-dock-label { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; margin-bottom:4px; }
+/* CHART */
+.chart-area{height:140px;position:relative}
 
-/* Analytics rows */
-.f-analytics-row { display:grid; gap:14px; margin-bottom:14px; }
-.f-analytics-row--3col { grid-template-columns:1fr 1fr 1fr; }
-.f-analytics-row--2col-wide { grid-template-columns:2fr 1fr; }
-.f-analytics-row--2col { grid-template-columns:1fr 1fr; }
+/* COMPARE */
+.cmp-slots{display:grid;grid-template-columns:1fr 40px 1fr 40px 1fr 160px;gap:12px;align-items:end;padding:36px 3rem;border-bottom:1px solid var(--border);max-width:1400px;margin:0 auto}
+.slot-box{border-bottom:2px solid var(--ink);padding:8px 0}
+.slot-l{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--mid);margin-bottom:8px}
+.slot-inp{font-family:var(--serif);font-size:1.8rem;font-weight:400;letter-spacing:-.04em;background:transparent;border:none;outline:none;color:var(--ink);width:100%}
+.cmp-vs{font-family:var(--serif);font-size:1.5rem;font-weight:400;color:var(--mid);text-align:center;padding-bottom:8px}
+.cmp-table{max-width:1400px;margin:0 auto;padding:0 3rem 60px}
+.ct{width:100%;border-collapse:collapse;font-size:13px}
+.ct th{text-align:left;padding:12px 16px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--mid);border-bottom:2px solid var(--ink)}
+.ct td{padding:14px 16px;border-bottom:1px solid var(--border);color:var(--mid)}
+.ct td:first-child{color:var(--ink);font-weight:500}
+.ct tr:hover td{background:rgba(13,13,13,.02)}
+.ct-sec{padding:10px 16px;font-size:9px;letter-spacing:.2em;text-transform:uppercase;background:var(--ink);color:#fff}
 
-/* Markets layout */
-.f-markets-layout { padding:24px 3rem; max-width:1400px; margin:0 auto; display:grid; grid-template-columns:280px 1fr; gap:20px; height:calc(100vh - 96px); overflow:hidden; }
-.f-markets-left { display:flex; flex-direction:column; gap:12px; overflow-y:auto; }
-.f-markets-right { display:flex; flex-direction:column; overflow:hidden; }
-.f-news-filters { display:flex; gap:6px; margin-bottom:12px; flex-wrap:wrap; align-items:center; flex-shrink:0; }
-.f-news-feed { flex:1; overflow-y:auto; }
-.f-news-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:12px; }
-.f-news-card { overflow:hidden; cursor:pointer; transition:border-color .15s, transform .15s; }
-.f-news-card-img { width:100%; height:140px; object-fit:cover; display:block; }
-.f-news-card-body { padding:12px 14px; }
+/* PORTFOLIO */
+.port-header{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5px;background:var(--border);margin-bottom:1.5px}
+.ph{padding:28px;background:var(--bg)}
+.ph-l{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid);margin-bottom:8px}
+.ph-v{font-family:var(--serif);font-size:2.2rem;font-weight:400;letter-spacing:-.04em;line-height:1}
+.ph-s{font-size:12px;font-family:'DM Mono',monospace;margin-top:5px}
+.port-grid{display:grid;grid-template-columns:2fr 1fr;gap:1.5px;background:var(--border)}
+.port-grid>*{background:var(--bg)}
+.ht{width:100%;border-collapse:collapse;font-size:13px}
+.ht th{text-align:left;padding:10px 20px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mid);border-bottom:1px solid var(--border)}
+.ht td{padding:14px 20px;border-bottom:1px solid var(--border);color:var(--mid)}
+.ht td:first-child{color:var(--ink)}
+.ht tr:last-child td{border-bottom:none}
+.ht tr:hover td{background:rgba(13,13,13,.02)}
 
-/* Hero */
-.f-hero { padding:80px 3rem 60px; max-width:1400px; margin:0 auto; display:grid; grid-template-columns:1fr 420px; gap:80px; align-items:center; }
-@media(max-width:900px) { .f-hero,.f-analytics-row--3col,.f-analytics-row--2col-wide,.f-analytics-row--2col { grid-template-columns:1fr; } }
-.f-home-grid { padding:0 3rem 80px; max-width:1400px; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
-.f-ticker-hero { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:22px; padding-bottom:20px; }
-.f-ticker-actions { display:flex; gap:8px; margin-top:6px; }
-.f-score-wrap { text-align:center; padding:16px 0; }
-.f-score-breakdown { margin-top:16px; }
-.f-score-row { display:flex; align-items:center; gap:8px; padding:7px 0; }
-.f-score-row-label { flex:1; }
-.f-score-bar { width:80px; height:3px; border-radius:2px; overflow:hidden; flex-shrink:0; }
-.f-score-bar-fill { height:100%; border-radius:2px; }
-.f-chart-area { position:relative; overflow:hidden; height:160px; }
-.f-chart-area canvas { width:100%; height:100%; display:block; }
-.f-dcf-prices { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:14px; }
-.f-sliders { margin-top:10px; }
-.f-slider-row { margin:10px 0; }
-.f-slider-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; font-size:12px; }
-.f-stresstest { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-top:12px; }
-.f-peer-bar { display:flex; align-items:center; gap:10px; margin:8px 0; font-size:12px; }
-.f-peer-sym { font-family:var(--font-mono,monospace); font-weight:700; width:44px; flex-shrink:0; }
-.f-peer-track { flex:1; height:22px; overflow:hidden; }
-.f-peer-fill { height:100%; display:flex; align-items:center; padding-left:8px; font-size:11px; font-weight:700; color:#fff; transition:width .6s; }
-.f-insider-row { display:flex; align-items:center; gap:8px; padding:9px 0; font-size:12px; }
-.f-insider-info { flex:1; }
-.f-stats-mini { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px; }
-.f-ownership-stats { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:14px; }
-.f-div-bar-row { display:flex; align-items:center; gap:8px; margin:5px 0; font-size:11px; }
-.f-div-bar { height:7px; border-radius:2px; }
-.f-tab-group { display:flex; gap:4px; }
-.f-tab { cursor:pointer; transition:all .15s; }
-.f-portfolio-layout { max-width:1400px; margin:0 auto; padding:24px 3rem; }
-.f-portfolio-header-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
-.f-portfolio-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:16px; }
-.f-portfolio-grid { display:grid; grid-template-columns:2fr 1fr; gap:16px; }
-.f-alloc-list { margin-top:8px; }
-.f-alloc-item { display:flex; align-items:center; gap:8px; padding:5px 0; font-size:12px; }
-.f-alloc-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
-.f-leverage-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
-.f-leverage-levels { display:flex; gap:16px; margin-top:8px; font-size:11px; }
-.f-profile-layout { max-width:700px; margin:0 auto; padding:28px 3rem; }
-.f-setting-row { display:flex; align-items:center; justify-content:space-between; padding:11px 0; }
-.f-toggle-group { display:flex; gap:4px; }
-.f-toggle { cursor:pointer; transition:all .15s; }
-.f-api-field { display:flex; align-items:center; gap:10px; padding:10px 14px; margin-top:8px; }
-.f-api-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
-.f-comp-setup { display:flex; gap:12px; align-items:end; margin-bottom:28px; padding:20px; }
-.f-comp-slot { flex:1; }
-.f-comp-vs { padding-bottom:4px; flex-shrink:0; }
-.f-comp-table-head { display:grid; grid-template-columns:200px 1fr 1fr 1fr; }
-.f-comp-col-header { padding:14px 18px; }
-.f-comp-sym { font-size:15px; font-weight:800; }
-.f-comp-row { display:grid; grid-template-columns:200px 1fr 1fr 1fr; }
-.f-comp-cell { padding:10px 18px; font-size:12px; }
-.f-battles-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
-.f-battle-icon { font-size:18px; margin-bottom:7px; }
-.f-battle-title { font-size:13px; font-weight:700; margin-bottom:4px; }
-.f-heatmap { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; padding:14px 18px; }
-.f-heatmap-cell { padding:9px 8px; text-align:center; cursor:pointer; font-weight:700; }
-.f-sector-row { display:flex; align-items:center; gap:10px; margin:6px 0; font-size:12px; }
-.f-sector-name { width:90px; }
-.f-sector-track { flex:1; height:3px; border-radius:2px; overflow:hidden; }
-.f-sector-fill { height:100%; border-radius:2px; }
-.f-watch-item,.f-stock-row { display:flex; align-items:center; gap:10px; padding:9px 0; cursor:pointer; }
-.f-watch-sym,.f-stock-sym { font-weight:700; width:50px; flex-shrink:0; }
-.f-stock-rank { font-size:11px; width:14px; flex-shrink:0; }
-.f-stock-info { flex:1; }
-.f-stock-name,.f-hold-sym+div { font-size:11px; }
-.f-stock-price,.f-stock-chg { font-size:12px; font-family:var(--font-mono,monospace); }
-.f-stock-chg { min-width:68px; text-align:right; font-weight:600; }
-.f-recent-pills { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:28px; }
-.f-recent-pill { padding:9px 18px; cursor:pointer; transition:all .15s; text-align:center; }
-.f-recent-sym { font-size:14px; font-weight:700; font-family:var(--font-mono,monospace); }
-.f-recent-score { font-size:11px; margin-top:2px; }
-.f-sectors-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; text-align:left; }
-.f-sector-card { padding:14px; cursor:pointer; transition:all .15s; }
-.f-sector-card-icon { font-size:18px; margin-bottom:6px; }
-.f-sector-card-name { font-size:13px; font-weight:600; }
-.f-sector-card-top { font-size:11px; margin-top:5px; font-weight:500; }
-.f-analytics-layout { max-width:1400px; margin:0 auto; padding:28px 3rem; }
-.f-analytics-start { max-width:760px; margin:0 auto; padding:60px 3rem; text-align:center; }
-.f-comparison-layout { max-width:1400px; margin:0 auto; padding:24px 3rem; }
-.f-comp-table { overflow:hidden; margin-bottom:20px; }
-.f-footer { padding:20px 3rem; max-width:1400px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; font-size:12px; background-image:radial-gradient(circle,rgba(91,33,245,.15) 1px,transparent 1px); background-size:28px 28px; }
-.f-footer-links { display:flex; gap:18px; }
-.f-home-deco-grid,.f-home-deco-blob,.f-home-deco-star { position:absolute; pointer-events:none; }
-.f-home-deco-grid { inset:0; background-size:26px 26px; }
-.f-home-deco-star { right:6vw; top:32%; font-size:clamp(4rem,9vw,7rem); animation:decoSpin 20s linear infinite; user-select:none; line-height:1; }
-@keyframes decoSpin { to{transform:rotate(360deg)} }
-.f-home-content { position:relative; z-index:1; }
-.f-page--home { position:relative; overflow:hidden; }
-.f-search-bar { display:flex; max-width:540px; overflow:hidden; transition:border-color .15s, box-shadow .15s; }
-.f-search-bar-input { flex:1; background:none; border:none; outline:none; padding:13px 20px; }
-.f-quick-tickers { display:flex; gap:7px; flex-wrap:wrap; margin-top:14px; }
-.f-loading-screen { text-align:center; padding:80px 0; }
-.f-loading-bar-wrap { width:200px; height:3px; border-radius:2px; margin:16px auto; overflow:hidden; }
-.f-loading-bar { height:100%; border-radius:2px; animation:loadAnim 1.5s ease-in-out infinite; }
-@keyframes loadAnim { 0%{width:0;margin-left:0}50%{width:60%;margin-left:20%}100%{width:0;margin-left:100%} }
-.f-sentiment-bar { display:flex; height:4px; border-radius:3px; overflow:hidden; margin:8px 0; }
-.f-sentiment-legend { display:flex; gap:14px; font-size:11px; }
-.f-hero-sub { max-width:460px; margin-bottom:32px; font-weight:300; line-height:1.7; }
-.f-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.16em; margin-bottom:6px; display:block; }
-.f-live-dot { font-size:10px; }
-.f-loading { padding:20px; text-align:center; font-size:12px; opacity:.5; }
-.f-insight { padding:10px 12px; font-size:12px; line-height:1.6; margin-top:10px; }
-.f-badge { display:inline-flex; padding:2px 8px; border-radius:999px; font-size:9px; font-weight:800; font-family:var(--font-mono,monospace); }
-.f-score-explanation { margin-top:12px; padding:10px 12px; font-size:12px; line-height:1.6; }
-.f-insider-sentiment { padding:7px 10px; font-size:12px; margin-bottom:12px; }
-.is-up { color:var(--f-up,#2dca72)!important; }
-.is-dn { color:var(--f-dn,#fc5050)!important; }
-.f-warn { color:var(--f-warn,#f0a842); }
-.f-mono { font-family:var(--font-mono,'DM Mono',monospace); }
-.f-muted { color:var(--f-muted,#888); }
+/* ALLOC DONUT */
+.donut-wrap{padding:28px;display:flex;flex-direction:column;gap:20px}
+.alloc-r{display:flex;align-items:center;gap:10px;font-size:13px}
+.alloc-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 
-/* ═══ V3 — MINIMALIST AIR ══════════════════════════════════
-   Near-white background, almost no color, just weight and space.
-   Cormorant Garamond for display. Ultra-thin lines only.
-   ══════════════════════════════════════════════════════════ */
+/* LEVERAGE CARD */
+.lev{border:1.5px solid var(--ink);border-radius:14px;padding:18px;margin-bottom:12px}
+.lev-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.lev-sym{font-family:'DM Mono',monospace;font-size:14px;font-weight:500}
+.lev-ret{font-family:var(--serif);font-size:1.8rem;font-weight:400;letter-spacing:-.04em;color:#1a8a4a}
+.lev-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;font-size:11px}
+.lev-item{color:var(--mid)}
+.lev-item span{font-family:'DM Mono',monospace;color:var(--ink);font-weight:500}
 
-:root {
-  --bg:#fafaf8; --bg-2:#f2f1ee; --bg-3:#e8e7e3; --bg-4:#dddbd6;
-  --border:rgba(10,10,10,.08); --border-mid:rgba(10,10,10,.15);
-  --text:#0a0a0a; --text-2:#888; --text-3:#bbb;
-  --accent:#0a0a0a; --accent-2:#333;
-  --green:#2a7a4a; --green-dim:rgba(42,122,74,.1);
-  --red:#c03030; --red-dim:rgba(192,48,48,.08);
-  --amber:#8a6800; --amber-dim:rgba(138,104,0,.1);
-  --lime:#c8ff00;
-  --r:0px; --r-lg:0px;
-  --font-display:'Cormorant Garamond',serif;
-  --font-body:'Inter',sans-serif;
-  --font-mono:'DM Mono',monospace;
-  --f-bg:#fafaf8; --f-bg-2:#f2f1ee; --f-bg-3:#e8e7e3; --f-bg-4:#dddbd6;
-  --f-text:#0a0a0a; --f-muted:#888; --f-accent:#0a0a0a;
-  --f-up:#2a7a4a; --f-dn:#c03030; --f-warn:#8a6800;
-}
+/* PROFILE */
+.pro-max{max-width:700px;margin:0 auto;padding:100px 3rem 60px}
+.pro-sec{border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:16px}
+.pro-sh{padding:14px 22px;border-bottom:1px solid var(--border);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--mid)}
+.pro-sb{padding:20px 22px}
+.pro-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)}
+.pro-row:last-child{border-bottom:none}
+.pro-l{font-size:14px;font-weight:500}
+.pro-d{font-size:11px;color:var(--mid);margin-top:2px}
+.tog-pair{display:flex;gap:4px}
+.tog{padding:6px 14px;border-radius:999px;border:1.5px solid var(--border);font-size:12px;font-weight:500;background:transparent;color:var(--mid);transition:all .15s}
+.tog.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.tog:hover:not(.on){border-color:var(--ink);color:var(--ink)}
+.api-box{display:flex;align-items:center;gap:10px;padding:12px 16px;background:#ebe8e1;border-radius:10px;margin-top:10px}
+.api-dot{width:7px;height:7px;border-radius:50%;background:#1a8a4a;flex-shrink:0}
+.api-txt{flex:1;font-family:'DM Mono',monospace;font-size:12px;color:var(--mid)}
+.badge{padding:4px 12px;border:1.5px solid var(--border);border-radius:999px;font-size:11px;font-weight:500;font-family:'DM Mono',monospace;color:var(--mid)}
 
-body { background:var(--bg); color:var(--text); font-family:var(--font-body); font-size:13px; font-weight:300; }
+/* NEWS STRIP */
+.news-strip{border-top:1px solid var(--border)}
+.news-item{display:grid;grid-template-columns:120px 1fr 120px;gap:20px;align-items:start;padding:20px 3rem;border-bottom:1px solid var(--border);max-width:1400px;margin:0 auto;transition:background .15s}
+.news-item:hover{background:#ebe8e1}
+.ni-time{font-size:11px;font-family:'DM Mono',monospace;color:var(--mid);padding-top:2px}
+.ni-title{font-size:14px;line-height:1.6}
+.ni-tag{text-align:right}
 
-/* Cursor: tiny ink dot */
-#cursor-dot { width:8px; height:8px; background:var(--text); }
-#cursor-dot:hover { transform:translate(-50%,-50%) scale(.5); }
+/* DUELS */
+.duels{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5px;background:var(--border)}
+.duel{padding:28px;background:var(--bg);transition:background .15s}
+.duel:hover{background:#ebe8e1}
+.duel-icon{font-size:1.5rem;margin-bottom:10px}
+.duel-title{font-family:var(--serif);font-size:1.4rem;font-weight:400;letter-spacing:-.03em;margin-bottom:4px}
+.duel-tickers{font-size:11px;font-family:'DM Mono',monospace;color:var(--mid)}
+.duel-tag{font-size:10px;letter-spacing:.12em;text-transform:uppercase;margin-top:10px;color:var(--mid)}
 
-/* Nav: invisible, only lines */
-.f-nav-logo-wrap,#nav.f-nav,.f-nav-right {
-  background:rgba(250,250,248,.97);
-  border:1px solid rgba(10,10,10,.1);
-  box-shadow:none;
-}
-.f-nav-item { color:rgba(10,10,10,.4); font-weight:300; letter-spacing:.08em; text-transform:uppercase; font-size:11px; }
-.f-nav-item:hover { color:var(--text); background:none; text-decoration:none; border-bottom:1px solid var(--text); border-radius:0; padding-bottom:4px; }
-.f-nav-item.is-active { background:var(--text); color:#fff; border-radius:0; }
-.f-nav-divider { background:rgba(10,10,10,.1); }
-.f-nav-search-btn { background:transparent; border:1px solid rgba(10,10,10,.15); border-radius:0; color:var(--text-2); }
-.f-nav-search-input { color:var(--text); font-weight:300; }
-.f-nav-search-dropdown { background:var(--bg); border-color:var(--text); border-radius:0; box-shadow:2px 2px 0 var(--text); }
-.f-nav-btn { background:var(--text); color:#fff; border-radius:0; }
-.f-nav-btn--profile { background:transparent; border:1px solid rgba(10,10,10,.15); color:var(--text-2); border-radius:0; }
-.f-nav-logo-text { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:300; letter-spacing:.06em; color:var(--text); }
-.f-nav-logo-accent { font-style:italic; }
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:32px 3rem;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--mid)}
+footer .fl{display:flex;gap:24px}
+footer a:hover{color:var(--ink)}
 
-/* Tape: thin dark line */
-.f-tape { background:#0a0a0a; border-bottom:1px solid rgba(255,255,255,.05); height:28px; }
-.f-tape-item { font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.4); padding:0 24px; }
-.f-tape-sym { color:rgba(255,255,255,.75); }
+/* SECTION BENTO feed */
+.feed-cell{padding:28px;background:var(--bg);display:flex;flex-direction:column;gap:8px;border-right:1.5px solid var(--border)}
+.feed-cell:last-child{border-right:none}
 
-/* Cards: just borders, no fill */
-.f-card { background:transparent; border:1px solid var(--border); border-radius:0; box-shadow:none; }
-.f-card:hover { border-color:var(--text); box-shadow:none; transform:none; background:transparent; }
-.f-card-head { border-bottom:1px solid var(--border); }
-.f-card-title { font-size:8px; letter-spacing:.24em; color:var(--text-3); }
+/* STRESS */
+.stress{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:16px}
+.st{padding:12px;border:1px solid var(--border);border-radius:10px}
+.st-l{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mid);margin-bottom:5px}
+.st-v{font-family:var(--serif);font-size:1.5rem;font-weight:400;letter-spacing:-.04em}
 
-/* Buttons: underline only */
-.f-btn-primary { background:var(--text); color:#fff; border-radius:0; font-family:inherit; font-weight:400; letter-spacing:.1em; text-transform:uppercase; font-size:11px; padding:10px 24px; }
-.f-btn-secondary { background:transparent; border:none; border-bottom:1px solid var(--text); border-radius:0; color:var(--text); padding:0 0 2px 0; font-size:11px; letter-spacing:.1em; text-transform:uppercase; }
-.f-btn-secondary:hover { background:transparent; color:var(--text); border-color:var(--text); }
-.f-btn-ghost { background:transparent; border:none; border-bottom:1px solid rgba(10,10,10,.15); border-radius:0; color:var(--text-2); font-size:10px; letter-spacing:.1em; text-transform:uppercase; padding:0 0 2px 0; }
-.f-btn-ghost:hover,.f-btn-ghost.is-active { color:var(--text); border-bottom-color:var(--text); }
+/* INSIDER ROW */
+.ins-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
+.ins-row:last-child{border-bottom:none}
+.ins-type{padding:3px 8px;border-radius:4px;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;flex-shrink:0}
+.ins-buy{background:rgba(26,138,74,.1);color:#1a8a4a}
+.ins-sell{background:rgba(192,57,43,.08);color:#c0392b}
+.ins-name{flex:1}
+.ins-pos{font-size:11px;color:var(--mid)}
 
-/* Headlines: Cormorant, light weight */
-.f-hero-title { font-family:'Cormorant Garamond',serif; font-weight:300; font-size:clamp(4rem,8vw,8rem); letter-spacing:-.01em; }
-.f-hero-title em { font-style:italic; color:var(--text-2); }
-.f-hero-accent { font-style:italic; color:var(--text-2); }
-.f-markets-title { font-family:'Cormorant Garamond',serif; font-weight:300; font-size:clamp(3rem,5vw,5rem); }
-.f-section-title { font-family:'Cormorant Garamond',serif; font-weight:300; font-size:2.5rem; letter-spacing:-.02em; }
-.f-dock-val { font-family:'Cormorant Garamond',serif; font-weight:300; font-size:1.6rem; }
-.f-ticker-price { font-family:'Cormorant Garamond',serif; font-weight:300; font-size:clamp(3rem,6vw,5.5rem); letter-spacing:-.02em; }
-.f-port-stat-val { font-family:'Cormorant Garamond',serif; font-weight:300; font-size:2.2rem; }
-.f-hero-price { font-family:'Cormorant Garamond',serif; font-weight:300; }
-.f-dcf-price { font-family:'Cormorant Garamond',serif; font-weight:300; font-size:2.5rem; }
-.f-comp-vs { font-family:'Cormorant Garamond',serif; font-weight:300; font-size:1.5rem; }
+/* PEER BAR */
+.pb-row{display:flex;align-items:center;gap:12px;margin:8px 0;font-size:12px}
+.pb-sym{font-family:'DM Mono',monospace;font-weight:500;width:44px;font-size:12px}
+.pb-track{flex:1;height:20px;background:#ebe8e1;border-radius:3px;overflow:hidden}
+.pb-fill{height:100%;display:flex;align-items:center;padding-left:10px;font-size:11px;font-family:'DM Mono',monospace;font-weight:600;color:#fff;transition:width .8s cubic-bezier(.16,1,.3,1)}
+.pb-main{background:var(--ink)}
+.pb-comp{background:#888;color:var(--ink)}
+.pb-neg{background:rgba(192,57,43,.15);color:#c0392b}
 
-/* Score */
-.f-score-num { font-family:'Cormorant Garamond',serif; font-weight:300; font-size:5rem; color:var(--green); }
-.f-score-verdict { background:transparent; color:var(--green); border:1px solid var(--green); border-radius:0; font-size:8px; letter-spacing:.2em; }
-.f-score-bar { background:rgba(10,10,10,.1); height:1px; }
-.f-score-bar-fill { background:var(--text); height:1px; }
-.f-score-bar-fill--warn { background:var(--amber); }
-
-/* Deco */
-.f-home-deco-star { mix-blend-mode:multiply; color:#c8ff00; opacity:.25; }
-.f-home-deco-grid { background-image:radial-gradient(circle,rgba(10,10,10,.06) 1px,transparent 1px); }
-.f-home-deco-blob { opacity:.3; }
-
-/* Tables: hairlines */
-.f-table th { color:var(--text-3); border-bottom:1px solid var(--text); font-size:8px; letter-spacing:.2em; }
-.f-table td { border-bottom:1px solid var(--border); color:var(--text-2); }
-.f-table td:first-child { color:var(--text); font-weight:400; }
-.f-table tr:hover td { background:var(--bg-2); }
-
-/* Badges: just text, bordered box */
-.f-badge { border-radius:0; border:1px solid rgba(10,10,10,.15); background:transparent; font-size:8px; letter-spacing:.08em; }
-.f-badge--good { border-color:rgba(42,122,74,.3); color:var(--green); background:transparent; }
-.f-badge--fair { border-color:rgba(138,104,0,.3); color:var(--amber); background:transparent; }
-.f-badge--elite { border-color:rgba(10,10,10,.15); color:var(--text-2); background:transparent; }
-.f-badge--danger { border-color:rgba(192,48,48,.3); color:var(--red); background:transparent; }
-
-/* Misc */
-.f-insight { background:var(--bg-2); border-left:1px solid var(--text); border-radius:0; color:var(--text-2); }
-.f-search-bar { background:transparent; border:none; border-bottom:1px solid var(--border); border-radius:0; }
-.f-search-bar:focus-within { border-bottom-color:var(--text); box-shadow:none; }
-.f-search-bar-input { color:var(--text); font-weight:300; font-size:14px; }
-.f-peer-fill--main { background:var(--text); }
-.f-peer-fill--comp { background:rgba(10,10,10,.3); color:#fff; }
-.f-peer-track { background:rgba(10,10,10,.08); border-radius:0; height:1px; }
-.f-peer-fill { height:1px; color:transparent; font-size:0; }
-.f-comp-setup,.f-battle-card { background:transparent; border:1px solid var(--border); border-radius:0; }
-.f-comp-table { background:transparent; border:1px solid var(--border); border-radius:0; }
-.f-comp-table-head { background:var(--bg-2); border-bottom:1px solid var(--text); }
-.f-comp-row--actions { background:var(--bg-2); }
-.f-comp-section { background:var(--text); color:#fff; font-size:8px; letter-spacing:.2em; }
-.f-comp-best { background:rgba(42,122,74,.04); }
-.f-select { background:transparent; border:none; border-bottom:1px solid var(--border); border-radius:0; color:var(--text); font-weight:300; }
-.f-toggle { border-color:var(--border); color:var(--text-2); border-radius:0; font-size:10px; letter-spacing:.1em; text-transform:uppercase; }
-.f-toggle.is-active { background:var(--text); color:#fff; border-color:var(--text); }
-.f-api-field { background:var(--bg-2); border:1px solid var(--border); border-radius:0; }
-.f-profile-section { background:transparent; border:1px solid var(--border); border-radius:0; }
-.f-profile-section-head { color:var(--text-3); border-bottom:1px solid var(--text); font-size:8px; letter-spacing:.2em; }
-.f-setting-row { border-bottom:1px solid var(--border); }
-.f-leverage-card { background:rgba(42,122,74,.04); border:1px solid rgba(42,122,74,.2); border-radius:0; }
-.f-heatmap-cell { border-radius:0; }
-.f-heatmap-cell.is-up { background:rgba(42,122,74,.08); }
-.f-heatmap-cell.is-dn { background:rgba(192,48,48,.06); }
-.f-dock-tab { background:transparent; border:none; border-right:1px solid var(--border); border-radius:0; padding:20px 28px; min-width:120px; }
-.f-dock-tab.is-active { background:var(--text); color:#fff; }
-.f-dock-tab.is-active .f-dock-label { color:rgba(255,255,255,.4); }
-.f-dock-label { font-size:8px; letter-spacing:.2em; text-transform:uppercase; color:var(--text-3); }
-.f-modal-box { background:var(--bg); border:1px solid var(--text); border-radius:0; box-shadow:4px 4px 0 rgba(10,10,10,.2); }
-.f-modal-footer { border-top:1px solid var(--border); }
-.f-modal-source { color:var(--text); font-size:9px; letter-spacing:.2em; text-transform:uppercase; }
-.f-news-card { background:transparent; border:1px solid var(--border); border-radius:0; }
-.f-news-card:hover { border-color:var(--text); box-shadow:2px 2px 0 var(--text); transform:none; }
-.f-news-card-source { color:var(--text); font-size:9px; letter-spacing:.16em; text-transform:uppercase; }
-.f-news-card-title { font-weight:400; }
-.f-tab { border:none; border-bottom:1px solid var(--border); border-radius:0; font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--text-2); padding:4px 0; margin-right:12px; }
-.f-tab.is-active { border-bottom-color:var(--text); color:var(--text); background:transparent; }
-.f-comp-input { background:transparent; border:none; border-bottom:1px solid var(--text); border-radius:0; font-family:'Cormorant Garamond',serif; font-size:2rem; font-weight:300; color:var(--text); padding:6px 0; }
-.f-recent-pill { background:transparent; border:1px solid var(--border); border-radius:0; }
-.f-recent-pill:hover { box-shadow:2px 2px 0 var(--text); }
-.f-sector-card { background:transparent; border:1px solid var(--border); border-radius:0; }
-.f-sector-card:hover { box-shadow:2px 2px 0 var(--text); transform:none; border-color:var(--text); background:transparent; }
-.f-div-bar { background:var(--text); height:1px; border-radius:0; }
-.f-stat-mini { background:var(--bg-2); border-radius:0; }
-.f-stress-item { background:var(--bg-2); border:1px solid var(--border); border-radius:0; }
-.f-dcf-price--fair { color:var(--green); }
-.f-chart-note { background:transparent; border-left:1px solid var(--green); border-radius:0; padding-left:10px; color:var(--green); }
-.f-chart-note::before { content:"— "; }
-.f-insider-sentiment { background:transparent; border-left:1px solid var(--green); color:var(--green); }
-.f-footer { background:none; border-top:1px solid var(--border); }
-.f-loading-bar { background:var(--text); }
-.f-sentiment-bar { height:1px; }
-.f-sentiment-bar-bull { background:var(--green); }
-.f-sentiment-bar-neu { background:var(--amber); }
-.f-sentiment-bar-bear { background:var(--red); }
-.f-score-row { border-bottom:1px solid var(--border); }
-.f-dock { border-bottom:1px solid var(--border); }
-.f-watch-item,.f-stock-row { border-bottom:1px solid var(--border); }
-.f-alloc-item { border-bottom:1px solid var(--border); }
-
+/* DIV BARS */
+.div-row{display:flex;align-items:center;gap:10px;font-size:12px;margin:4px 0}
+.div-yr{font-family:'DM Mono',monospace;color:var(--mid);width:32px}
+.div-bar{flex:1;height:6px;background:var(--ink);border-radius:2px}
+.div-valfont-family:'DM Mono',monospace
 </style>
 </head>
 <body>
-<div id="app"></div>
-<script src="../../src/js/templates.js"></script>
+
+<div id="C"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" onclick="show('home')">
+    <svg width="16" height="16" viewBox="0 0 28 28" fill="none"><path d="M14 1L27 26H1Z" fill="#0d0d0d"/><circle cx="14" cy="20" r="3.5" fill="#c8ff00"/></svg>
+    vistaclara
+  </div>
+  <div class="nav-links">
+    <a id="nl-markets" onclick="show('markets')">Markets</a>
+    <a id="nl-analytics" class="on" onclick="show('analytics')">Analytics</a>
+    <a id="nl-compare" onclick="show('compare')">Comparison</a>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <button class="btn-outline" style="padding:7px 18px;font-size:13px" onclick="show('portfolio')">
+      <svg width="14" height="14" viewBox="0 0 20 20" fill="none"><rect x="2" y="6" width="16" height="12" rx="2.5" stroke="currentColor" stroke-width="1.6"/><path d="M7 6V5a3 3 0 016 0v1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      Portfolio
+    </button>
+    <button class="nav-cta" onclick="show('profile')">Profile </button>
+  </div>
+</nav>
+
+<!--  HOME  -->
+<div class="page on" id="pg-home">
+  <div class="hero">
+    <div>
+      <div class="hero-eye">Market Intelligence Platform</div>
+      <h1 class="hero-h">Deep <em>market</em><br>intelligence<br>for everyone.</h1>
+      <p class="hero-p">Algorithmic scorecards, DCF valuation and live ratio analysis  powered by real-time data and Damodaran-WACC benchmarks.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <button class="btn-pill" onclick="show('analytics')">Start Analysing </button>
+        <button class="btn-outline" onclick="show('markets')">Live Markets</button>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:24px;flex-wrap:wrap">
+        <span onclick="show('analytics')" style="padding:6px 14px;border:1px solid var(--border);border-radius:999px;font-size:12px;font-family:'DM Mono',monospace;color:var(--mid);cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='var(--ink)';this.style.color='var(--ink)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--mid)'">NVDA</span>
+        <span onclick="show('analytics')" style="padding:6px 14px;border:1px solid var(--border);border-radius:999px;font-size:12px;font-family:'DM Mono',monospace;color:var(--mid);cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='var(--ink)';this.style.color='var(--ink)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--mid)'">AAPL</span>
+        <span onclick="show('analytics')" style="padding:6px 14px;border:1px solid var(--border);border-radius:999px;font-size:12px;font-family:'DM Mono',monospace;color:var(--mid);cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='var(--ink)';this.style.color='var(--ink)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--mid)'">MSFT</span>
+        <span onclick="show('analytics')" style="padding:6px 14px;border:1px solid var(--border);border-radius:999px;font-size:12px;font-family:'DM Mono',monospace;color:var(--mid);cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='var(--ink)';this.style.color='var(--ink)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--mid)'">TSLA</span>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-card">
+        <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:20px">Market Pulse · Live</div>
+        <div class="hero-ticker"><span>NVDA</span><span>$205.10</span><span class="g">+46.51%</span></div>
+        <div class="hero-ticker"><span>AAPL</span><span>$182.10</span><span class="g">+1.20%</span></div>
+        <div class="hero-ticker"><span>BTC</span><span>$68,400</span><span class="r">0.80%</span></div>
+        <div class="hero-ticker"><span>MSFT</span><span>$431.20</span><span class="g">+0.80%</span></div>
+        <div style="margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.1)">
+          <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:10px">Sentiment Pulse</div>
+          <div style="display:flex;height:4px;border-radius:2px;overflow:hidden;margin-bottom:8px"><div style="width:72%;background:#1a8a4a"></div><div style="width:18%;background:#888"></div><div style="width:10%;background:#c0392b"></div></div>
+          <div style="display:flex;gap:14px;font-size:11px;font-family:'DM Mono',monospace"><span class="g">72% Bull</span><span style="color:rgba(255,255,255,.4)">18% Neutral</span><span class="r">10% Bear</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Marquee -->
+  <div class="marquee-wrap">
+    <div class="marquee" id="mq"></div>
+  </div>
+
+  <!-- Feature Grid -->
+  <section>
+    <div class="sec-max">
+      <div class="sec-label">What we offer</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5px;background:var(--border)">
+        <div class="bento-cell" onclick="show('analytics')" style="cursor:pointer;border-right:1.5px solid var(--border)">
+          <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid)">01</div>
+          <div style="font-family:var(--serif);font-size:1.8rem;font-weight:400;letter-spacing:-.03em;margin-top:auto">Algorithmic<br>Scorecard</div>
+          <div style="font-size:13px;color:var(--mid);line-height:1.65">10-ratio weighted scoring system with Damodaran-WACC benchmarks. STRONG BUY to AVOID in seconds.</div>
+        </div>
+        <div class="bento-cell" onclick="show('analytics')" style="cursor:pointer;border-right:1.5px solid var(--border)">
+          <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid)">02</div>
+          <div style="font-family:var(--serif);font-size:1.8rem;font-weight:400;letter-spacing:-.03em;margin-top:auto">DCF Stresstest<br>Engine</div>
+          <div style="font-size:13px;color:var(--mid);line-height:1.65">Real-time intrinsic value sliders. Adjust growth, margin and WACC to simulate worst- and best-case scenarios.</div>
+        </div>
+        <div class="bento-cell" onclick="show('compare')" style="cursor:pointer">
+          <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid)">03</div>
+          <div style="font-family:var(--serif);font-size:1.8rem;font-weight:400;letter-spacing:-.03em;margin-top:auto">Peer-to-Peer<br>Comparison</div>
+          <div style="font-size:13px;color:var(--mid);line-height:1.65">Side-by-side matrix across scorecard, DCF, margins and technicals. Up to 3 assets simultaneously.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="fl"><a>About</a><a>Methodology</a><a>API Docs</a><a>Terms</a><a>Privacy</a></div>
+    <div>vistaclara © 2026</div>
+  </footer>
+</div>
+
+<!--  MARKETS  -->
+<div class="page" id="pg-markets">
+  <!-- Bento grid -->
+  <div style="padding:80px 3rem 0;max-width:1400px;margin:0 auto">
+    <div class="sec-label">Global Markets</div>
+    <div style="font-family:var(--serif);font-size:clamp(2.5rem,6vw,4.5rem);font-weight:400;letter-spacing:-.04em;margin-bottom:40px">Market Overview</div>
+  </div>
+
+  <!-- Big bento -->
+  <div style="max-width:1400px;margin:0 auto;padding:0 3rem">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.5px;background:var(--border);margin-bottom:1.5px">
+      <div class="bento-cell" style="border-right:none">
+        <div class="cell-sym g">NVDA</div>
+        <div class="cell-price">$205.10</div>
+        <div class="cell-chg"><span class="tg pill-tag">+46.51%</span><span style="font-size:11px;color:var(--mid)"> SMA 200</span></div>
+      </div>
+      <div class="bento-cell" style="border-right:none">
+        <div class="cell-sym g">AAPL</div>
+        <div class="cell-price">$182.10</div>
+        <div class="cell-chg"><span class="tg pill-tag">+1.20%</span></div>
+      </div>
+      <div class="bento-cell" style="border-right:none">
+        <div class="cell-sym r">BTC</div>
+        <div class="cell-price">$68,400</div>
+        <div class="cell-chg"><span class="tr pill-tag">0.80%</span><span style="font-size:11px;color:var(--mid)"> SMA 200</span></div>
+      </div>
+      <div class="bento-cell">
+        <div class="cell-sym g">MSFT</div>
+        <div class="cell-price">$431.20</div>
+        <div class="cell-chg"><span class="tg pill-tag">+0.80%</span></div>
+      </div>
+    </div>
+    <!-- Sector + news row -->
+    <div style="display:grid;grid-template-columns:1fr 2fr;gap:1.5px;background:var(--border)">
+      <!-- Sectors -->
+      <div style="background:var(--bg);padding:28px">
+        <div class="sec-label" style="margin-bottom:20px"> Sector Rotation</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;align-items:center;gap:12px;font-size:13px"><span style="width:110px;color:var(--mid)">Tech & AI</span><div class="br-wrap" style="flex:1;height:3px"><div class="br-fill" style="width:78%;background:#1a8a4a"></div></div><span class="g" style="font-family:'DM Mono',monospace;font-size:12px;min-width:42px;text-align:right">+4.6%</span></div>
+          <div style="display:flex;align-items:center;gap:12px;font-size:13px"><span style="width:110px;color:var(--mid)">Financials</span><div class="br-wrap" style="flex:1;height:3px"><div class="br-fill" style="width:42%"></div></div><span style="font-family:'DM Mono',monospace;font-size:12px;min-width:42px;text-align:right;color:var(--mid)">+2.1%</span></div>
+          <div style="display:flex;align-items:center;gap:12px;font-size:13px"><span style="width:110px;color:var(--mid)">Healthcare</span><div class="br-wrap" style="flex:1;height:3px"><div class="br-fill" style="width:28%;background:#888"></div></div><span style="font-family:'DM Mono',monospace;font-size:12px;min-width:42px;text-align:right;color:var(--mid)">+1.4%</span></div>
+          <div style="display:flex;align-items:center;gap:12px;font-size:13px"><span style="width:110px;color:var(--mid)">Energy</span><div class="br-wrap" style="flex:1;height:3px"><div class="br-fill" style="width:20%;background:#c0392b"></div></div><span class="r" style="font-family:'DM Mono',monospace;font-size:12px;min-width:42px;text-align:right">1.2%</span></div>
+        </div>
+        <div style="margin-top:24px">
+          <div class="sec-label" style="margin-bottom:14px"> Heatmap</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
+            <div style="padding:8px;background:#1a8a4a0f;border-radius:8px;text-align:center"><div style="font-size:10px;font-family:'DM Mono',monospace;font-weight:500">NVDA</div><div style="font-size:12px;font-family:'DM Mono',monospace;font-weight:600;color:#1a8a4a">+4.6%</div></div>
+            <div style="padding:8px;background:#1a8a4a0f;border-radius:8px;text-align:center"><div style="font-size:10px;font-family:'DM Mono',monospace;font-weight:500">AAPL</div><div style="font-size:12px;font-family:'DM Mono',monospace;font-weight:600;color:#1a8a4a">+1.2%</div></div>
+            <div style="padding:8px;background:#1a8a4a0f;border-radius:8px;text-align:center"><div style="font-size:10px;font-family:'DM Mono',monospace;font-weight:500">AMD</div><div style="font-size:12px;font-family:'DM Mono',monospace;font-weight:600;color:#1a8a4a">+3.1%</div></div>
+            <div style="padding:8px;background:#c0392b08;border-radius:8px;text-align:center"><div style="font-size:10px;font-family:'DM Mono',monospace;font-weight:500">TSLA</div><div style="font-size:12px;font-family:'DM Mono',monospace;font-weight:600;color:#c0392b">3.4%</div></div>
+            <div style="padding:8px;background:#c0392b08;border-radius:8px;text-align:center"><div style="font-size:10px;font-family:'DM Mono',monospace;font-weight:500">META</div><div style="font-size:12px;font-family:'DM Mono',monospace;font-weight:600;color:#c0392b">0.5%</div></div>
+            <div style="padding:8px;background:#c0392b08;border-radius:8px;text-align:center"><div style="font-size:10px;font-family:'DM Mono',monospace;font-weight:500">BTC</div><div style="font-size:12px;font-family:'DM Mono',monospace;font-weight:600;color:#c0392b">0.8%</div></div>
+          </div>
+        </div>
+      </div>
+      <!-- News feed -->
+      <div style="background:var(--bg)">
+        <div style="padding:20px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+          <div class="sec-label" style="margin-bottom:0">Intel Feed</div>
+          <span style="font-size:11px;font-family:'DM Mono',monospace;color:#1a8a4a;display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#1a8a4a;animation:pulse 1.5s ease-in-out infinite"></span>Live</span>
+        </div>
+        <style>@keyframes pulse{0%,100%{opacity:1}50%opacity:.3</style>
+        <div class="news-item" style="padding:18px 28px"><div class="ni-time">10:15 AM</div><div><span class="pill-tag tr" style="margin-bottom:6px;display:inline-block">Macro Alert</span><div class="ni-title">US Core CPI 0.3% MoM  hot vs expected. Volatility spike across rate-sensitive assets.</div></div><div class="ni-tag"><span class="badge">High Impact</span></div></div>
+        <div class="news-item" style="padding:18px 28px"><div class="ni-time">09:45 AM</div><div><span class="pill-tag tg" style="margin-bottom:6px;display:inline-block">NVDA Intel</span><div class="ni-title">Institutional block buying at $201.50 support. Uptrend continuation vs SMA 200 confirmed.</div><div style="margin-top:8px"><button class="btn-outline" style="font-size:11px;padding:5px 12px" onclick="show('analytics')">Open Analytics </button></div></div><div class="ni-tag"></div></div>
+        <div class="news-item" style="padding:18px 28px"><div class="ni-time">08:30 AM</div><div><span class="pill-tag ta" style="margin-bottom:6px;display:inline-block">Corporate</span><div class="ni-title">ECB Press Conference  Lagarde on rate cut timelines Q3 2026.</div></div><div class="ni-tag"><span class="badge">Med Impact</span></div></div>
+        <div class="news-item" style="padding:18px 28px"><div class="ni-time">07:00 AM</div><div><span class="pill-tag tp" style="margin-bottom:6px;display:inline-block">Dividend</span><div class="ni-title">MSFT declares $0.85/share quarterly dividend  ex-date July 17.</div></div><div class="ni-tag"></div></div>
+      </div>
+    </div>
+  </div>
+  <footer style="margin-top:60px"><div class="fl"><a>About</a><a>Methodology</a><a>Privacy</a></div><div>vistaclara © 2026</div></footer>
+</div>
+
+<!--  ANALYTICS  -->
+<div class="page" id="pg-analytics" style="display:block">
+  <!-- Hero strip -->
+  <div class="an-hero">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between">
+      <div>
+        <div class="an-sym">NVDA · NASDAQ · Semiconductor</div>
+        <div class="an-price">$205.10</div>
+        <div class="an-chg g">+$4.62  (+2.30%)</div>
+        <div style="font-size:12px;color:var(--mid);margin-top:6px;font-family:'DM Mono',monospace">Nvidia Corporation</div>
+      </div>
+      <div class="an-actions">
+        <button class="btn-pill" onclick="show('portfolio')">+ Portfolio</button>
+        <button class="btn-outline">+ Watchlist</button>
+        <button class="btn-outline" onclick="show('compare')">Compare</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Context dock -->
+  <div class="dock">
+    <div class="dt on"><div class="dt-l">Scorecard</div><div class="dt-v">4.57</div><div class="dt-s">STRONG BUY</div></div>
+    <div class="dt"><div class="dt-l">Ratios</div><div class="dt-v">16.2×</div><div class="dt-s">P/E · Cheap</div></div>
+    <div class="dt"><div class="dt-l">Valuation</div><div class="dt-v">$245</div><div class="dt-s">MoS +19.4%</div></div>
+    <div class="dt"><div class="dt-l">Chart</div><div class="dt-v"> Up</div><div class="dt-s">SMA 200 </div></div>
+    <div class="dt"><div class="dt-l">Market</div><div class="dt-v">1.25×</div><div class="dt-s">Beta</div></div>
+    <div class="dt"><div class="dt-l">Financials</div><div class="dt-v">$253B</div><div class="dt-s">Q1/25 Rev.</div></div>
+  </div>
+
+  <!-- Widgets -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5px;background:var(--border);padding:0">
+    <!-- Scorecard -->
+    <div class="w" style="border-right:none">
+      <div class="w-lbl">Scorecard</div>
+      <div style="text-align:center;padding:20px 0">
+        <div class="w-big">4.57</div>
+        <div style="font-family:var(--serif);font-size:1rem;color:var(--mid)">/5.0</div>
+        <div class="w-verdict">Strong Buy</div>
+        <div style="font-size:11px;color:var(--mid);margin-top:10px;font-family:'DM Mono',monospace">WACC: 9.4% · Beta: 1.25</div>
+      </div>
+      <div class="br"><span class="br-lbl">Financial Ratios</span><span class="br-pct">65%</span><div class="br-wrap"><div class="br-fill" style="width:84%"></div></div><span class="br-val">4.2/5</span></div>
+      <div class="br"><span class="br-lbl">Management</span><span class="br-pct">12%</span><div class="br-wrap"><div class="br-fill" style="width:40%;background:#888"></div></div><span class="br-val">2.0/5</span></div>
+      <div class="br"><span class="br-lbl">Moat</span><span class="br-pct">10%</span><div class="br-wrap"><div class="br-fill" style="width:60%"></div></div><span class="br-val">3.0/5</span></div>
+      <div class="br"><span class="br-lbl">ESG & Risk</span><span class="br-pct">8%</span><div class="br-wrap"><div class="br-fill" style="width:80%"></div></div><span class="br-val">4.0/5</span></div>
+      <div class="br"><span class="br-lbl">Valuation/DCF</span><span class="br-pct">5%</span><div class="br-wrap"><div class="br-fill" style="width:40%;background:#888"></div></div><span class="br-val">2.0/5</span></div>
+    </div>
+    <!-- Chart -->
+    <div class="w" style="border-right:none">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div class="w-lbl">Price Chart</div>
+        <div style="display:flex;gap:4px">
+          <button class="tog on" style="font-size:9px;padding:3px 8px">1M</button>
+          <button class="tog" style="font-size:9px;padding:3px 8px">6M</button>
+          <button class="tog" style="font-size:9px;padding:3px 8px">1Y</button>
+        </div>
+      </div>
+      <canvas id="chartc" style="width:100%;display:block" height="140"></canvas>
+      <div style="padding:10px 12px;border:1px solid #1a8a4a20;border-radius:8px;font-size:12px;color:#1a8a4a;background:#1a8a4a08"> Strong Uptrend  8.7% above 200-day MA</div>
+    </div>
+    <!-- Ratios -->
+    <div class="w">
+      <div class="w-lbl">Key Financial Ratios</div>
+      <table class="ct" style="font-size:12px">
+        <thead><tr><th style="padding:6px 0">Metric</th><th>Current</th><th>Sector</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>P/E Ratio</td><td style="font-family:'DM Mono',monospace">16.2×</td><td style="font-family:'DM Mono',monospace;color:var(--mid)">21.1×</td><td><span class="pill-tag tg">Cheap</span></td></tr>
+          <tr><td>EV/EBITDA</td><td style="font-family:'DM Mono',monospace">29.7×</td><td style="font-family:'DM Mono',monospace;color:var(--mid)">27.2×</td><td><span class="pill-tag ta">Fair</span></td></tr>
+          <tr><td>Gross Margin</td><td style="font-family:'DM Mono',monospace">74.1%</td><td style="font-family:'DM Mono',monospace;color:var(--mid)">52.3%</td><td><span class="pill-tag tp">Elite</span></td></tr>
+          <tr><td>Oper. Margin</td><td style="font-family:'DM Mono',monospace">65.6%</td><td style="font-family:'DM Mono',monospace;color:var(--mid)">38.0%</td><td><span class="pill-tag tp">Elite</span></td></tr>
+          <tr><td>Net Margin</td><td style="font-family:'DM Mono',monospace">63.0%</td><td style="font-family:'DM Mono',monospace;color:var(--mid)">31.4%</td><td><span class="pill-tag tp">Elite</span></td></tr>
+          <tr><td>Rev. Growth</td><td style="font-family:'DM Mono',monospace;color:#1a8a4a">+85.2%</td><td style="font-family:'DM Mono',monospace;color:var(--mid)"></td><td><span class="pill-tag tp">Hyper</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Row 2 -->
+  <div style="display:grid;grid-template-columns:2fr 1fr;gap:1.5px;background:var(--border)">
+    <!-- DCF -->
+    <div class="w" style="border-right:none">
+      <div class="w-lbl">Intrinsic Value & Stresstest</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:16px">
+        <div><div style="font-size:11px;color:var(--mid);margin-bottom:6px">Current Price</div><div style="font-family:var(--serif);font-size:2.5rem;font-weight:400;letter-spacing:-.04em">$205.10</div></div>
+        <div><div style="font-size:11px;color:var(--mid);margin-bottom:6px">Fair Value (DCF)</div><div style="font-family:var(--serif);font-size:2.5rem;font-weight:400;letter-spacing:-.04em;color:#1a8a4a">$245.00</div><div style="font-size:12px;font-family:'DM Mono',monospace;color:#1a8a4a;margin-top:4px">MoS: +19.4% Underpriced</div></div>
+      </div>
+      <div style="margin:10px 0"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:12px;color:var(--mid)">Revenue Growth (5Y)</span><span style="font-size:12px;font-family:'DM Mono',monospace">8.5%</span></div><input type="range" min="1" max="20" value="8.5" step=".5" style="width:100%;accent-color:var(--ink)"></div>
+      <div style="margin:10px 0"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:12px;color:var(--mid)">Operating Margin</span><span style="font-size:12px;font-family:'DM Mono',monospace">65.6%</span></div><input type="range" min="20" max="80" value="65.6" step=".5" style="width:100%;accent-color:var(--ink)"></div>
+      <div style="margin:10px 0"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:12px;color:var(--mid)">WACC</span><span style="font-size:12px;font-family:'DM Mono',monospace">9.4%</span></div><input type="range" min="5" max="18" value="9.4" step=".1" style="width:100%;accent-color:var(--ink)"></div>
+      <div class="stress">
+        <div class="st"><div class="st-l">Worst Case</div><div class="st-v r">$182</div><div style="font-size:11px;font-family:'DM Mono',monospace;color:#c0392b">11%</div></div>
+        <div class="st"><div class="st-l">Base Case</div><div class="st-v g">$245</div><div style="font-size:11px;font-family:'DM Mono',monospace;color:#1a8a4a">+19%</div></div>
+        <div class="st"><div class="st-l">Best Case</div><div class="st-v g">$298</div><div style="font-size:11px;font-family:'DM Mono',monospace;color:#1a8a4a">+45%</div></div>
+      </div>
+    </div>
+    <!-- Peers -->
+    <div class="w">
+      <div class="w-lbl">Peer Performance (YTD)</div>
+      <div class="pb-row"><span class="pb-sym g">NVDA</span><div class="pb-track"><div class="pb-fill pb-main" style="width:80%">+46.5%</div></div></div>
+      <div class="pb-row"><span class="pb-sym" style="color:var(--mid)">SOXX</span><div class="pb-track"><div class="pb-fill pb-comp" style="width:46%">+25.8%</div></div></div>
+      <div class="pb-row"><span class="pb-sym" style="color:var(--mid)">AMD</span><div class="pb-track"><div class="pb-fill pb-comp" style="width:40%">+22.1%</div></div></div>
+      <div class="pb-row"><span class="pb-sym r">INTC</span><div class="pb-track"><div class="pb-fill pb-neg" style="width:22%">12.4%</div></div></div>
+      <div style="margin-top:14px;padding:12px;background:#ebe8e1;border-radius:8px;font-size:12px;color:var(--mid);line-height:1.6">NVDA outperforming peers by <span class="g" style="font-weight:600">+24.4%</span>  strong institutional momentum.</div>
+      <div style="margin-top:10px;font-size:11px;color:var(--mid)">Beta: <span style="font-family:'DM Mono',monospace;color:var(--ink)">1.25×</span> vs S&P 500</div>
+    </div>
+  </div>
+
+  <!-- Row 3 -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5px;background:var(--border)">
+    <!-- Insider -->
+    <div class="w" style="border-right:none">
+      <div class="w-lbl">Insider Trades (90d)</div>
+      <div style="padding:10px 12px;background:#1a8a4a08;border:1px solid #1a8a4a20;border-radius:8px;font-size:12px;color:#1a8a4a;margin-bottom:14px"> Net Sentiment: Strongly Bullish</div>
+      <div class="ins-row"><span class="ins-type ins-buy">BUY</span><div class="ins-name"><div style="font-weight:600;font-size:13px">Kress Colette</div><div class="ins-pos">CFO · 2026-05-14</div></div><span style="font-family:'DM Mono',monospace;font-size:12px">450K · $202</span></div>
+      <div class="ins-row"><span class="ins-type ins-buy">BUY</span><div class="ins-name"><div style="font-weight:600;font-size:13px">Huang Jen-Hsun</div><div class="ins-pos">CEO · 2026-04-28</div></div><span style="font-family:'DM Mono',monospace;font-size:12px">1M · $198</span></div>
+      <div class="ins-row"><span class="ins-type ins-sell">SELL</span><div class="ins-name"><div style="font-weight:600;font-size:13px">Miller Jay</div><div class="ins-pos">Director · 2026-03-12</div></div><span style="font-family:'DM Mono',monospace;font-size:12px">210K · $211</span></div>
+    </div>
+    <!-- News/Sentiment -->
+    <div class="w" style="border-right:none">
+      <div class="w-lbl">News & Sentiment</div>
+      <div style="display:flex;gap:10px;font-size:12px;font-family:'DM Mono',monospace"><span class="g">72% Bull</span><span style="color:var(--mid)">18% Neutral</span><span class="r">10% Bear</span></div>
+      <div style="display:flex;height:4px;border-radius:2px;overflow:hidden"><div style="width:72%;background:#1a8a4a"></div><div style="width:18%;background:#888"></div><div style="width:10%;background:#c0392b"></div></div>
+      <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:4px">
+        <div style="padding:10px 0;border-bottom:1px solid var(--border)"><span class="pill-tag tg" style="font-size:9px;margin-bottom:5px;display:inline-block">Today</span><div style="font-size:13px;line-height:1.5;margin-top:4px">AI enterprise chip launch announced  Impact 9.4/10</div></div>
+        <div style="padding:10px 0"><span class="pill-tag tr" style="font-size:9px;margin-bottom:5px;display:inline-block">Yesterday</span><div style="font-size:13px;line-height:1.5;margin-top:4px">Institutional accumulation via block trades detected</div></div>
+      </div>
+    </div>
+    <!-- Dividend -->
+    <div class="w">
+      <div class="w-lbl">Dividend Calendar</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+        <div style="padding:12px;background:#ebe8e1;border-radius:8px"><div style="font-size:10px;color:var(--mid);margin-bottom:4px;text-transform:uppercase;letter-spacing:.1em">Yield</div><div style="font-family:var(--serif);font-size:1.8rem;font-weight:400;letter-spacing:-.04em">0.92%</div></div>
+        <div style="padding:12px;background:#ebe8e1;border-radius:8px"><div style="font-size:10px;color:var(--mid);margin-bottom:4px;text-transform:uppercase;letter-spacing:.1em">Payout Ratio</div><div style="font-family:var(--serif);font-size:1.8rem;font-weight:400;letter-spacing:-.04em;color:#1a8a4a">14.5%</div></div>
+      </div>
+      <div style="font-size:12px;color:var(--mid);margin-bottom:12px">12 consecutive years · 5Y CAGR +14.2%</div>
+      <div style="font-size:11px;color:var(--mid);margin-bottom:10px">Ex-Div: <span style="font-family:'DM Mono',monospace;color:var(--ink)">2026-07-01</span></div>
+      <div class="div-row"><span class="div-yr">2026</span><div class="div-bar" style="flex:1;opacity:.9"></div><span class="div-val" style="font-family:'DM Mono',monospace;font-size:12px">$1.88</span></div>
+      <div class="div-row"><span class="div-yr">2025</span><div class="div-bar" style="flex:.87;opacity:.65"></div><span class="div-val" style="font-family:'DM Mono',monospace;font-size:12px">$1.65</span></div>
+      <div class="div-row"><span class="div-yr">2024</span><div class="div-bar" style="flex:.75;opacity:.45"></div><span class="div-val" style="font-family:'DM Mono',monospace;font-size:12px">$1.42</span></div>
+    </div>
+  </div>
+  <footer style="margin-top:0"><div class="fl"><a>About</a><a>Privacy</a></div><div>vistaclara © 2026</div></footer>
+</div>
+
+<!--  COMPARE  -->
+<div class="page" id="pg-compare">
+  <div style="padding:80px 3rem 0;max-width:1400px;margin:0 auto">
+    <div class="sec-label">Peer-to-Peer Engine</div>
+    <div style="font-family:var(--serif);font-size:clamp(2.5rem,6vw,4.5rem);font-weight:400;letter-spacing:-.04em;margin-bottom:40px">Comparison</div>
+  </div>
+
+  <div class="cmp-slots">
+    <div>
+      <div class="slot-l">Slot 1</div>
+      <div class="slot-box"><input class="slot-inp" value="NVDA"></div>
+    </div>
+    <div class="cmp-vs">vs</div>
+    <div>
+      <div class="slot-l">Slot 2</div>
+      <div class="slot-box"><input class="slot-inp" value="AMD"></div>
+    </div>
+    <div class="cmp-vs">vs</div>
+    <div>
+      <div class="slot-l">Slot 3 (Optional)</div>
+      <div class="slot-box"><input class="slot-inp" placeholder="INTC" style="color:var(--mid)"></div>
+    </div>
+    <button class="btn-pill" style="align-self:flex-end">Launch </button>
+  </div>
+
+  <div class="cmp-table">
+    <table class="ct">
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th style="font-family:var(--serif);font-size:1.1rem;font-weight:400;letter-spacing:-.02em;text-transform:none;letter-spacing:0;color:#1a8a4a">NVDA <span style="font-size:11px;color:var(--mid)">Nvidia Corp.</span></th>
+          <th style="font-family:var(--serif);font-size:1.1rem;font-weight:400;letter-spacing:0;text-transform:none">AMD <span style="font-size:11px;color:var(--mid)">Advanced Micro</span></th>
+          <th style="font-family:var(--serif);font-size:1.1rem;font-weight:400;letter-spacing:0;text-transform:none;color:#c0392b">INTC <span style="font-size:11px;color:var(--mid)">Intel Corp.</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="4" class="ct-sec"> Scorecard Summary</td></tr>
+        <tr><td>Overall Score</td><td><span class="pill-tag tg">4.57 Strong Buy</span></td><td><span class="pill-tag ta">3.82 Buy</span></td><td><span class="pill-tag tr">2.10 Avoid</span></td></tr>
+        <tr><td colspan="4" class="ct-sec"> Intrinsic Value</td></tr>
+        <tr><td>Current Price</td><td style="font-family:'DM Mono',monospace;color:var(--ink)">$205.10</td><td style="font-family:'DM Mono',monospace">$160.40</td><td style="font-family:'DM Mono',monospace">$31.15</td></tr>
+        <tr><td>Fair Value (DCF)</td><td style="font-family:'DM Mono',monospace;color:var(--ink);font-weight:600">$245.00</td><td style="font-family:'DM Mono',monospace">$155.00</td><td style="font-family:'DM Mono',monospace">$22.00</td></tr>
+        <tr><td>Margin of Safety</td><td style="font-family:'DM Mono',monospace;color:#1a8a4a;font-weight:600">+19.4%</td><td style="font-family:'DM Mono',monospace;color:var(--mid)">3.3%</td><td style="font-family:'DM Mono',monospace;color:#c0392b">29.3%</td></tr>
+        <tr><td colspan="4" class="ct-sec"> Key Metrics</td></tr>
+        <tr><td>P/E Ratio</td><td style="font-family:'DM Mono',monospace;color:var(--ink)">16.2× <span class="pill-tag tg">Cheap</span></td><td style="font-family:'DM Mono',monospace">28.4× <span class="pill-tag tr">Exp.</span></td><td style="font-family:'DM Mono',monospace">19.5× <span class="pill-tag ta">Fair</span></td></tr>
+        <tr><td>Gross Margin</td><td style="font-family:'DM Mono',monospace;color:var(--ink)">74.1% <span class="pill-tag tp">Elite</span></td><td style="font-family:'DM Mono',monospace">48.2% <span class="pill-tag ta">Good</span></td><td style="font-family:'DM Mono',monospace">32.0% <span class="pill-tag tr">Weak</span></td></tr>
+        <tr><td>Rev. Growth YoY</td><td style="font-family:'DM Mono',monospace;color:#1a8a4a;font-weight:600">+85.2%</td><td style="font-family:'DM Mono',monospace;color:#1a8a4a">+12.2%</td><td style="font-family:'DM Mono',monospace;color:#c0392b">5.1%</td></tr>
+        <tr><td colspan="4" class="ct-sec"> Technical</td></tr>
+        <tr><td>vs SMA 200</td><td style="color:#1a8a4a;font-weight:600"> Above</td><td style="color:#1a8a4a"> Above</td><td style="color:#c0392b"> Below</td></tr>
+        <tr style="background:#f9f8f5">
+          <td></td>
+          <td><button class="btn-pill" style="font-size:11px;padding:7px 14px" onclick="show('analytics')">Full Analytics</button></td>
+          <td><button class="btn-outline" style="font-size:11px;padding:7px 14px">Full Analytics</button></td>
+          <td><button class="btn-outline" style="font-size:11px;padding:7px 14px">Full Analytics</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Duels -->
+  <div style="padding:0 3rem;max-width:1400px;margin:0 auto">
+    <div class="sec-label" style="margin-bottom:20px">Popular Duels</div>
+    <div class="duels" style="margin-bottom:60px">
+      <div class="duel"><div class="duel-icon"></div><div class="duel-title">The AI Chip War</div><div class="duel-tickers">NVDA vs AMD vs INTC</div><div class="duel-tag"> Active This Week</div></div>
+      <div class="duel"><div class="duel-icon"></div><div class="duel-title">EV Showdown</div><div class="duel-tickers">TSLA vs BYD vs RIVN</div><div class="duel-tag"> Margins vs Volume</div></div>
+      <div class="duel"><div class="duel-icon"></div><div class="duel-title">Cloud Infrastructure</div><div class="duel-tickers">MSFT vs AMZN vs GOOGL</div></div>
+      <div class="duel"><div class="duel-icon"></div><div class="duel-title">Consumer Giants</div><div class="duel-tickers">KO vs PEP</div><div class="duel-tag"> Dividend Duel</div></div>
+      <div class="duel"><div class="duel-icon"></div><div class="duel-title">Digital Payments</div><div class="duel-tickers">V vs MA vs PYPL</div></div>
+      <div class="duel"><div class="duel-icon"></div><div class="duel-title">Smartphone Rivals</div><div class="duel-tickers">AAPL vs MSFT</div></div>
+    </div>
+  </div>
+  <footer><div class="fl"><a>About</a><a>Privacy</a></div><div>vistaclara © 2026</div></footer>
+</div>
+
+<!--  PORTFOLIO  -->
+<div class="page" id="pg-portfolio">
+  <div style="padding:80px 3rem 0;max-width:1400px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:32px">
+    <div><div class="sec-label">Command Center</div><div style="font-family:var(--serif);font-size:clamp(2.5rem,6vw,4.5rem);font-weight:400;letter-spacing:-.04em">Portfolio</div></div>
+    <button class="btn-pill" style="align-self:flex-end;margin-bottom:6px">+ Add Position</button>
+  </div>
+  <div style="padding:0 3rem;max-width:1400px;margin:0 auto">
+    <!-- Stats -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.5px;background:var(--border);margin-bottom:1.5px">
+      <div class="ph"><div class="ph-l">Net Asset Value</div><div class="ph-v">$42,150</div><div class="ph-s g">+$1,240 (+3.0%) today</div></div>
+      <div class="ph"><div class="ph-l">Cash Buffer</div><div class="ph-v">$8,430</div><div class="ph-s" style="color:var(--mid)">20.0% of portfolio</div></div>
+      <div class="ph"><div class="ph-l">Weighted Score</div><div class="ph-v g">4.12</div><div class="ph-s" style="color:var(--mid)">/ 5.0 · Buy Signal</div></div>
+      <div class="ph"><div class="ph-l">Market Rule</div><div class="ph-v g">Bullish</div><div class="ph-s g">2/3 above SMA 200</div></div>
+    </div>
+    <!-- Grid -->
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:1.5px;background:var(--border);margin-bottom:1.5px">
+      <div style="background:var(--bg);padding:28px">
+        <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid);margin-bottom:16px">Holdings</div>
+        <table class="ht">
+          <thead><tr><th>Asset</th><th>Allocation</th><th>Return</th><th>Score</th><th>Trend</th></tr></thead>
+          <tbody>
+            <tr onclick="show('analytics')" style="cursor:pointer"><td><div style="font-weight:700;font-family:'DM Mono',monospace;font-size:14px">NVDA</div><div style="font-size:11px;color:var(--mid)">Nvidia</div></td><td style="font-family:'DM Mono',monospace;font-size:12px">$19,050 · 45.2%</td><td class="g" style="font-family:'DM Mono',monospace">+46.51%</td><td><span class="pill-tag tg">4.57</span></td><td class="g"> SMA</td></tr>
+            <tr><td><div style="font-weight:700;font-family:'DM Mono',monospace;font-size:14px">BTC</div><div style="font-size:11px;color:var(--mid)">Bitcoin</div></td><td style="font-family:'DM Mono',monospace;font-size:12px">$9,310 · 22.1%</td><td class="r" style="font-family:'DM Mono',monospace">0.80%</td><td><span class="pill-tag ta">3.40</span></td><td class="r"> SMA</td></tr>
+            <tr onclick="show('analytics')" style="cursor:pointer"><td><div style="font-weight:700;font-family:'DM Mono',monospace;font-size:14px">COST</div><div style="font-size:11px;color:var(--mid)">Costco</div></td><td style="font-family:'DM Mono',monospace;font-size:12px">$5,360 · 12.7%</td><td class="g" style="font-family:'DM Mono',monospace">+3.2%</td><td><span class="pill-tag tg">4.25</span></td><td class="g"> SMA</td></tr>
+            <tr><td><div style="font-weight:700;font-family:'DM Mono',monospace;font-size:14px">Cash</div><div style="font-size:11px;color:var(--mid)">USD</div></td><td style="font-family:'DM Mono',monospace;font-size:12px">$8,430 · 20.0%</td><td style="color:var(--mid)"></td><td></td><td style="color:var(--mid)"></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- Donut -->
+      <div style="background:var(--bg)" class="donut-wrap">
+        <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid)">Asset Allocation</div>
+        <svg viewBox="0 0 120 120" style="width:110px;height:110px;display:block;margin:0 auto">
+          <circle cx="60" cy="60" r="48" fill="none" stroke="#ebe8e1" stroke-width="18"/>
+          <circle cx="60" cy="60" r="48" fill="none" stroke="var(--ink)" stroke-width="18" stroke-dasharray="136 165" stroke-dashoffset="0" transform="rotate(-90 60 60)"/>
+          <circle cx="60" cy="60" r="48" fill="none" stroke="#888" stroke-width="18" stroke-dasharray="66 235" stroke-dashoffset="-136" transform="rotate(-90 60 60)"/>
+          <circle cx="60" cy="60" r="48" fill="none" stroke="#1a8a4a" stroke-width="18" stroke-dasharray="38 263" stroke-dashoffset="-202" transform="rotate(-90 60 60)"/>
+          <text x="60" y="57" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)" font-family="'DM Mono',monospace">45%</text>
+          <text x="60" y="71" text-anchor="middle" font-size="9" fill="var(--mid)" font-family="Inter,sans-serif">NVDA</text>
+        </svg>
+        <div class="alloc-r"><div class="alloc-dot" style="background:var(--ink)"></div><span style="flex:1;color:var(--mid);font-size:13px">Tech / NVDA</span><span style="font-family:'DM Mono',monospace;font-size:12px;font-weight:600">45.2%</span></div>
+        <div class="alloc-r"><div class="alloc-dot" style="background:#888"></div><span style="flex:1;color:var(--mid);font-size:13px">Crypto / BTC</span><span style="font-family:'DM Mono',monospace;font-size:12px">22.1%</span></div>
+        <div class="alloc-r"><div class="alloc-dot" style="background:#1a8a4a"></div><span style="flex:1;color:var(--mid);font-size:13px">Retail / COST</span><span style="font-family:'DM Mono',monospace;font-size:12px">12.7%</span></div>
+        <div class="alloc-r"><div class="alloc-dot" style="background:#ebe8e1;border:1px solid var(--border)"></div><span style="flex:1;color:var(--mid);font-size:13px">Cash</span><span style="font-family:'DM Mono',monospace;font-size:12px">20.0%</span></div>
+      </div>
+    </div>
+    <!-- Leverage + Risk -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.5px;background:var(--border);margin-bottom:60px">
+      <div style="background:var(--bg);padding:28px">
+        <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid);margin-bottom:16px">Leverage Desk <span style="color:#1a8a4a">1 active</span></div>
+        <div class="lev">
+          <div class="lev-h"><span class="lev-sym">NVDA <span style="color:var(--mid);font-weight:400">LONG ×5</span></span><span class="pill-tag tg" style="font-size:10px">Active</span></div>
+          <div class="lev-ret">+$900 <span style="font-size:14px;color:var(--mid);">(+8.9%)</span></div>
+          <div class="lev-grid">
+            <div class="lev-item">SL: <span>$195.00</span></div>
+            <div class="lev-item">TP1: <span>$210.00</span></div>
+            <div class="lev-item">TP2: <span>$215.00</span></div>
+            <div class="lev-item">TP3: <span>Trail</span></div>
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--bg);padding:28px">
+        <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid);margin-bottom:16px">Risk & Trend Matrix</div>
+        <div style="padding:10px 12px;background:#1a8a4a08;border:1px solid #1a8a4a20;border-radius:8px;font-size:13px;color:#1a8a4a;margin-bottom:14px;font-weight:500"> Market Rule: BULLISH</div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 0;border-bottom:1px solid var(--border);color:var(--mid)"><span>NVDA</span><span class="g"> above SMA</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 0;border-bottom:1px solid var(--border);color:var(--mid)"><span>AAPL</span><span class="g"> above SMA</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 0;color:var(--mid)"><span>BTC</span><span class="r"> below SMA</span></div>
+      </div>
+      <div style="background:var(--bg);padding:28px">
+        <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid);margin-bottom:16px">Trade History</div>
+        <div class="ins-row"><span class="ins-type ins-buy">LONG</span><div class="ins-name"><div style="font-weight:600;font-size:13px">TSLA</div><div class="ins-pos">Closed 2026-05-10</div></div><span style="font-family:'DM Mono',monospace;color:#1a8a4a;font-size:12px">+$420.00</span></div>
+        <div class="ins-row"><span class="ins-type ins-sell">SHORT</span><div class="ins-name"><div style="font-weight:600;font-size:13px">AMD</div><div class="ins-pos">Closed 2026-04-22</div></div><span style="font-family:'DM Mono',monospace;color:#c0392b;font-size:12px">$110.00</span></div>
+        <div class="ins-row"><span class="ins-type ins-buy">LONG</span><div class="ins-name"><div style="font-weight:600;font-size:13px">NVDA</div><div class="ins-pos">Open · +$900</div></div><span style="font-family:'DM Mono',monospace;color:#1a8a4a;font-size:12px">+$900.00</span></div>
+      </div>
+    </div>
+  </div>
+  <footer><div class="fl"><a>About</a><a>Privacy</a></div><div>vistaclara © 2026</div></footer>
+</div>
+
+<!--  PROFILE  -->
+<div class="page" id="pg-profile">
+  <div class="pro-max">
+    <div class="sec-label">Account</div>
+    <div style="font-family:var(--serif);font-size:clamp(2.5rem,6vw,4rem);font-weight:400;letter-spacing:-.04em;margin-bottom:40px">Profile &<br>Settings</div>
+
+    <div class="pro-sec">
+      <div class="pro-sh"> Appearance & Display</div>
+      <div class="pro-sb">
+        <div class="pro-row"><div><div class="pro-l">Interface Theme</div><div class="pro-d">Dark: deep purple · Light: lavender</div></div><div class="tog-pair"><button class="tog" onclick="this.classList.add('on');this.nextElementSibling.classList.remove('on')">Dark</button><button class="tog on" onclick="this.classList.add('on');this.previousElementSibling.classList.remove('on')">Light</button></div></div>
+        <div class="pro-row"><div class="pro-l">Language</div><select style="padding:7px 14px;border:1.5px solid var(--border);border-radius:8px;background:transparent;font-size:13px;color:var(--ink);outline:none"><option>English (US)</option><option>Deutsch</option><option>Français</option></select></div>
+        <div class="pro-row"><div class="pro-l">Currency</div><select style="padding:7px 14px;border:1.5px solid var(--border);border-radius:8px;background:transparent;font-size:13px;color:var(--ink);outline:none"><option>USD ($)</option><option>EUR ()</option><option>GBP (£)</option></select></div>
+      </div>
+    </div>
+
+    <div class="pro-sec">
+      <div class="pro-sh"> API Credentials</div>
+      <div class="pro-sb">
+        <div class="pro-l" style="margin-bottom:10px">Yahoo Finance Proxy</div>
+        <div class="api-box"><div class="api-dot"></div><div class="api-txt">https://fragrant-wave-6bd7.workers.dev</div><button class="btn-outline" style="font-size:11px;padding:5px 12px;flex-shrink:0">Edit</button></div>
+        <div style="font-size:12px;color:#1a8a4a;margin-top:8px;font-family:'DM Mono',monospace"> Connected · Status: Valid</div>
+        <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn-outline" style="font-size:12px;padding:8px 16px"> Export (JSON)</button>
+          <button class="btn-outline" style="font-size:12px;padding:8px 16px"> Import Backup</button>
+          <button style="padding:8px 16px;border:1.5px solid #c0392b30;border-radius:999px;font-size:12px;color:#c0392b;background:transparent"> Wipe Cache</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="pro-sec">
+      <div class="pro-sh"> Subscription & System</div>
+      <div class="pro-sb">
+        <div class="pro-row"><div><div class="pro-l">Current Plan</div><div class="pro-d">Free Personal Tier</div></div><span class="badge">FREE</span></div>
+        <div class="pro-row"><div><div class="pro-l">Architecture</div></div><span style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500">Build v2.6.1 · Client-side</span></div>
+      </div>
+    </div>
+  </div>
+  <footer style="max-width:700px;margin:0 auto;padding:24px 3rem"><div class="fl"><a>About</a><a>Methodology</a><a>Privacy</a></div><div>vistaclara © 2026</div></footer>
+</div>
+
 <script src="../../src/js/app.js"></script>
+<script>
+(function(){
+  window.showPage=function(page){
+    document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+    document.querySelectorAll('.nav-c a').forEach(a=>a.classList.remove('on'));
+    var pg=document.getElementById('pg-'+page);if(pg)pg.classList.add('on');
+    var nm={markets:'n-markets',analytics:'n-analytics',comparison:'n-comparison'};
+    var ni=nm[page];if(ni){var el=document.getElementById(ni);if(el)el.classList.add('on');}
+    window.scrollTo(0,0);
+    if(page==='analytics')setTimeout(drawChart,60);
+  };
+  window.G=window.showPage;
+  // tape uses id="ti"
+  var td=[{s:'S&P 500',c:'+0.4%'},{s:'NASDAQ',c:'+1.2%'},{s:'NVDA',c:'+46.51%'},{s:'AAPL',c:'+1.2%'},{s:'BTC',c:'−0.8%'},{s:'TSLA',c:'−3.4%'},{s:'MSFT',c:'+0.8%'},{s:'AMD',c:'+3.1%'}];
+  var ti=document.getElementById('ti');
+  if(ti)ti.innerHTML=[...td,...td].map(t=>'<div class="tc"><div class="tc-dot"></div>'+t.s+' &nbsp; '+t.c+'</div>').join('');
+  // cursor
+  var C=document.getElementById('C');
+  if(C){document.addEventListener('mousemove',e=>{C.style.left=e.clientX+'px';C.style.top=e.clientY+'px'});document.addEventListener('mouseover',e=>{C.classList.toggle('h',!!e.target.closest('button,a,[onclick],.dt,.bento>div,.lev,.ni,.al'));});document.addEventListener('mousedown',()=>C.style.transform='translate(-50%,-50%) scale(.5)');document.addEventListener('mouseup',()=>C.style.transform='translate(-50%,-50%)');}
+  // chart bridges id="cc"
+  window.drawChart=function(){var cv=document.getElementById('cc')||document.getElementById('price-chart-canvas');if(!cv)return;var ctx=cv.getContext('2d'),dpr=devicePixelRatio||1,W=cv.offsetWidth,H=140;cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+'px';cv.style.height=H+'px';ctx.scale(dpr,dpr);var pts=[],v=150;for(var i=0;i<80;i++){v+=(Math.sin(i*.28)*.3+(Math.random()-.41))*v*.022;pts.push(Math.max(40,v));}var mn=Math.min(...pts)*.97,mx=Math.max(...pts)*1.03,tx=i=>(i/(pts.length-1))*(W-12)+6,ty=v=>H-4-((v-mn)/(mx-mn))*(H-10),sma=pts.slice(0,50).reduce((a,b)=>a+b)/50;ctx.beginPath();ctx.strokeStyle='rgba(10,10,10,.12)';ctx.lineWidth=1;ctx.setLineDash([4,5]);ctx.moveTo(6,ty(sma));ctx.lineTo(W-6,ty(sma));ctx.stroke();ctx.setLineDash([]);var g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'rgba(42,122,74,.1)');g.addColorStop(1,'rgba(42,122,74,0)');ctx.beginPath();pts.forEach((v,i)=>i?ctx.lineTo(tx(i),ty(v)):ctx.moveTo(tx(i),ty(v)));ctx.lineTo(tx(pts.length-1),H);ctx.lineTo(6,H);ctx.closePath();ctx.fillStyle=g;ctx.fill();ctx.beginPath();ctx.strokeStyle='#2a7a4a';ctx.lineWidth=1.6;ctx.lineJoin='round';pts.forEach((v,i)=>i?ctx.lineTo(tx(i),ty(v)):ctx.moveTo(tx(i),ty(v)));ctx.stroke();ctx.beginPath();ctx.arc(tx(pts.length-1),ty(pts[pts.length-1]),3.5,0,Math.PI*2);ctx.fillStyle='#2a7a4a';ctx.fill();};
+  window.addEventListener('resize',()=>{if(document.getElementById('pg-analytics')?.classList.contains('on'))drawChart();});
+  setTimeout(()=>G('analytics'),50);
+})();
+</script>
 </body>
 </html>

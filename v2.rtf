@@ -1,0 +1,639 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2869
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 HelveticaNeue;\f1\fnil\fcharset0 .SFNS-Regular_wdth_opsz110000_GRAD_wght1AE0000;}
+{\colortbl;\red255\green255\blue255;\red95\green167\blue255;\red24\green24\blue23;\red229\green231\blue236;
+\red140\green233\blue81;\red248\green157\blue78;\red182\green181\blue168;}
+{\*\expandedcolortbl;;\cssrgb\c43922\c72157\c100000;\cssrgb\c12157\c12157\c11765;\cssrgb\c91765\c92549\c94118;
+\cssrgb\c60784\c91373\c38824;\cssrgb\c98431\c67843\c37647;\cssrgb\c76471\c76078\c71765;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs24 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 cat\cf4 \strokec4  > /home/claude/futara_v2.html << \cf5 \strokec5 'EOF'\
+\pard\pardeftab720\partightenfactor0
+\cf4 \strokec4 <!DOCTYPE html>\
+<html lang="en">\
+<head>\
+<meta charset="UTF-8">\
+<meta name="viewport" content="width=device-width,initial-scale=1">\
+<title>futara \'97 editorial</title>\
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">\
+<style>\
+*\{margin:0;padding:0;box-sizing:border-box;cursor:none!important\}\
+:root\{--bg:#f0ede8;--b2:#e8e4de;--bdr:rgba(13,13,13,.1);--ink:#0d0d0d;--mid:#6b6b6b;--soft:#bbb;--G:#1a6e3c;--R:#b83232;--A:#8a6a00;--pill:999px\}\
+body\{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:14px;overflow-x:hidden\}\
+/* CURSOR */\
+#C\{position:fixed;width:10px;height:10px;background:var(--ink);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s,border .2s,background .2s;mix-blend-mode:difference;border:0px solid var(--ink)\}\
+#C.h\{width:38px;height:38px;background:transparent;border-width:1.5px\}\
+#C.t\{width:2px;height:22px;border-radius:2px\}\
+/* NAV */\
+nav\{position:fixed;top:0;left:0;right:0;z-index:100;height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 3rem;background:var(--bg);border-bottom:1px solid var(--bdr)\}\
+.nl\{font-size:15px;font-weight:700;letter-spacing:-.04em;display:flex;align-items:center;gap:7px\}\
+.nl svg\{flex-shrink:0\}\
+.nc\{display:flex;gap:24px;font-size:13px;color:var(--mid)\}\
+.nc a\{transition:color .15s\}\
+.nc a:hover,.nc a.on\{color:var(--ink)\}\
+.nc a.on\{font-weight:500\}\
+.nr\{display:flex;align-items:center;gap:10px\}\
+.btn\{display:inline-flex;align-items:center;gap:6px;padding:8px 20px;background:var(--ink);color:#fff;border:none;border-radius:var(--pill);font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;transition:opacity .15s\}\
+.btn:hover\{opacity:.8\}\
+.btn2\{display:inline-flex;align-items:center;gap:6px;padding:8px 20px;background:transparent;color:var(--ink);border:1.5px solid var(--ink);border-radius:var(--pill);font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;transition:all .15s\}\
+.btn2:hover\{background:var(--ink);color:#fff\}\
+/* PAGES */\
+.pg\{display:none\}\
+.pg.on\{display:block;animation:fi .22s ease\}\
+@keyframes fi\{from\{opacity:0;transform:translateY(5px)\}to\{opacity:1;transform:none\}\}\
+/* BENTO GRID UTILS */\
+.bento\{display:grid;gap:1px;background:var(--bdr)\}\
+.bento>*\{background:var(--bg)\}\
+/* CARD */\
+.c\{border:1px solid var(--bdr);transition:background .15s\}\
+.c:hover\{background:var(--b2)\}\
+.ch\{padding:12px 20px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between\}\
+.cl\{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--mid)\}\
+.cb\{padding:16px 20px\}\
+/* MISC */\
+.g\{color:var(--G)\}.r\{color:var(--R)\}.a\{color:var(--A)\}\
+.tag\{display:inline-flex;padding:2px 9px;border-radius:var(--pill);font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase\}\
+.tg\{background:rgba(26,110,60,.1);color:var(--G)\}.tr\{background:rgba(184,50,50,.08);color:var(--R)\}.ta\{background:rgba(138,106,0,.1);color:var(--A)\}.tp\{background:rgba(13,13,13,.07);color:var(--ink)\}\
+.sep\{height:1px;background:var(--bdr);margin:0\}\
+.serif\{font-family:'DM Serif Display',serif\}\
+input[type=range]\{width:100%;height:2px;-webkit-appearance:none;background:var(--bdr);border-radius:1px;outline:none;accent-color:var(--ink)\}\
+input[type=range]::-webkit-slider-thumb\{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--ink)\}\
+/* MARQUEE */\
+.mq-wrap\{border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr);overflow:hidden;height:36px\}\
+.mq\{display:flex;height:100%;animation:mscroll 50s linear infinite;white-space:nowrap\}\
+@keyframes mscroll\{to\{transform:translateX(-50%)\}\}\
+.mi\{display:inline-flex;align-items:center;gap:10px;padding:0 28px;height:100%;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--mid);border-right:1px solid var(--bdr)\}\
+.mi-dot\{width:4px;height:4px;border-radius:50%;background:var(--mid)\}\
+/* RT = ratios table */\
+.rt\{width:100%;border-collapse:collapse;font-size:13px\}\
+.rt th\{text-align:left;padding:7px 10px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--mid);border-bottom:2px solid var(--ink)\}\
+.rt td\{padding:11px 10px;border-bottom:1px solid var(--bdr);color:var(--mid)\}\
+.rt tr:last-child td\{border-bottom:none\}\
+.rt td:first-child\{color:var(--ink);font-weight:500\}\
+.rt tr:hover td\{background:var(--b2)\}\
+/* BAR */\
+.br\{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bdr);font-size:13px\}\
+.br:last-child\{border-bottom:none\}\
+.bw\{flex:1;height:2px;background:var(--bdr);border-radius:1px;overflow:hidden\}\
+.bf\{height:100%;background:var(--ink);border-radius:1px;transition:width .8s\}\
+/* PEER BARS */\
+.pb\{display:flex;align-items:center;gap:12px;margin:8px 0;font-size:12px\}\
+.pt\{flex:1;height:22px;background:var(--b2);border-radius:3px;overflow:hidden\}\
+.pf\{height:100%;display:flex;align-items:center;padding-left:10px;font-size:11px;font-family:'DM Mono',monospace;font-weight:600;color:#fff;transition:width .8s\}\
+/* INSIDER */\
+.ir\{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--bdr);font-size:13px\}\
+.ir:last-child\{border-bottom:none\}\
+.it\{padding:2px 8px;border-radius:3px;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;flex-shrink:0\}\
+/* WATCHLIST */\
+.wi\{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--bdr)\}\
+.wi:last-child\{border-bottom:none\}\
+/* STRESS */\
+.st\{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px\}\
+.si\{padding:12px;border:1px solid var(--bdr);border-radius:8px\}\
+.sl\{font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--mid);margin-bottom:5px\}\
+/* ALLOC */\
+.al\{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:13px\}\
+.ad\{width:8px;height:8px;border-radius:50%;flex-shrink:0\}\
+/* PROFILE */\
+.ps\{border:1px solid var(--bdr);border-radius:12px;overflow:hidden;margin-bottom:14px\}\
+.psh\{padding:13px 22px;border-bottom:1px solid var(--bdr);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--mid)\}\
+.psb\{padding:20px 22px\}\
+.pr\{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--bdr)\}\
+.pr:last-child\{border-bottom:none\}\
+.tog\{display:flex;gap:4px\}\
+.tb\{padding:6px 14px;border-radius:var(--pill);border:1.5px solid var(--bdr);font-size:12px;font-weight:500;background:transparent;color:var(--mid);transition:all .15s;font-family:'DM Sans',sans-serif\}\
+.tb.on\{background:var(--ink);color:#fff;border-color:var(--ink)\}\
+.tb:hover:not(.on)\{border-color:var(--ink);color:var(--ink)\}\
+select\{background:var(--bg);border:1.5px solid var(--bdr);border-radius:8px;padding:7px 12px;font-size:13px;color:var(--ink);outline:none;font-family:'DM Sans',sans-serif\}\
+/* CMP */\
+.ct\{display:grid;grid-template-columns:200px 1fr 1fr 1fr;border-bottom:1px solid var(--bdr)\}\
+.cc\{padding:11px 16px;border-right:1px solid var(--bdr);font-size:12px\}\
+.cc:last-child\{border-right:none\}\
+.cs\{padding:7px 16px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.16em;background:var(--ink);color:#fff;grid-column:1/-1;border-bottom:1px solid var(--bdr)\}\
+/* DOCK */\
+.dk\{display:flex;border-bottom:1px solid var(--bdr);overflow-x:auto\}\
+.dk::-webkit-scrollbar\{height:0\}\
+.dt\{flex-shrink:0;padding:16px 22px;border-right:1px solid var(--bdr);transition:background .15s;min-width:120px\}\
+.dt:hover\{background:var(--b2)\}\
+.dt.on\{background:var(--ink);color:#fff\}\
+.dl\{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--mid);margin-bottom:5px\}\
+.dt.on .dl\{color:rgba(255,255,255,.5)\}\
+.dv\{font-family:'DM Serif Display',serif;font-size:1.4rem;line-height:1;letter-spacing:-.02em\}\
+.ds\{font-size:10px;font-family:'DM Mono',monospace;color:var(--mid);margin-top:3px\}\
+.dt.on .ds\{color:rgba(255,255,255,.5)\}\
+/* PORTFOLIO STAT */\
+.pst\{padding:20px;background:var(--bg);border-right:1px solid var(--bdr)\}\
+.pst:last-child\{border-right:none\}\
+.psl\{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.16em;color:var(--mid);margin-bottom:6px\}\
+.psv\{font-family:'DM Serif Display',serif;font-size:2rem;letter-spacing:-.03em;line-height:1\}\
+.pss\{font-size:11px;font-family:'DM Mono',monospace;margin-top:4px\}\
+/* NEWS */\
+.ni-row\{display:grid;grid-template-columns:110px 1fr 100px;gap:16px;align-items:start;padding:16px 20px;border-bottom:1px solid var(--bdr);transition:background .15s\}\
+.ni-row:hover\{background:var(--b2)\}\
+.ni-time\{font-size:11px;font-family:'DM Mono',monospace;color:var(--mid)\}\
+/* LEVERAGE */\
+.lev\{border:1.5px solid var(--ink);border-radius:10px;padding:16px;margin-bottom:10px\}\
+/* HEATMAP */\
+.hm\{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;padding:16px 20px\}\
+.hi\{padding:9px 8px;border-radius:7px;text-align:center\}\
+.hpos\{background:rgba(26,110,60,.08);color:var(--G)\}.hneg\{background:rgba(184,50,50,.07);color:var(--R)\}\
+footer\{border-top:1px solid var(--bdr);padding:22px 3rem;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--mid);margin-top:60px\}\
+footer a\{transition:color .15s\}\
+footer a:hover\{color:var(--ink)\}\
+.fl\{display:flex;gap:20px\}\
+</style>\
+</head>\
+<body>\
+<div id="C"></div>\
+\
+<nav>\
+  <div class="nl" onclick="G('home')">\
+    <svg width="16" height="16" viewBox="0 0 28 28" fill="none"><path d="M14 1L27 26H1Z" fill="#0d0d0d"/><circle cx="14" cy="20" r="3.5" fill="#c8ff00"/></svg>\
+    futara\
+  </div>\
+  <div class="nc">\
+    <a id="n-markets" onclick="G('markets')">Markets</a>\
+    <a id="n-analytics" class="on" onclick="G('analytics')">Analytics</a>\
+    <a id="n-comparison" onclick="G('comparison')">Comparison</a>\
+  </div>\
+  <div class="nr">\
+    <button class="btn2" style="gap:5px" onclick="G('portfolio')">\
+      <svg width="13" height="13" viewBox="0 0 20 20" fill="none"><rect x="2" y="6" width="16" height="12" rx="2.5" stroke="currentColor" stroke-width="1.6"/><path d="M7 6V5a3 3 0 016 0v1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>\
+      Portfolio\
+    </button>\
+    <button class="btn" onclick="G('profile')">Profile \uc0\u8594 </button>\
+  </div>\
+</nav>\
+\
+<!-- \uc0\u9552 \u9552 \u9552  HOME \u9552 \u9552 \u9552  -->\
+<div class="pg on" id="pg-home" style="padding-top:58px">\
+  <div style="padding:80px 3rem 60px;max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1fr 400px;gap:80px;align-items:center">\
+    <div>\
+      <div style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--mid);margin-bottom:20px;display:flex;align-items:center;gap:10px"><span style="display:block;width:22px;height:1px;background:var(--mid)"></span>Market Intelligence Platform</div>\
+      <h1 class="serif" style="font-size:clamp(3rem,8vw,6rem);line-height:.9;letter-spacing:-.03em;margin-bottom:24px">Deep <em>market</em><br>intelligence<br>for everyone.</h1>\
+      <p style="font-size:15px;color:var(--mid);line-height:1.75;max-width:440px;margin-bottom:32px;font-weight:300">Algorithmic scorecards, DCF valuation and live ratio analysis \'97 powered by real-time data and Damodaran-WACC benchmarks.</p>\
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px">\
+        <button class="btn" style="font-size:14px;padding:11px 26px" onclick="G('analytics')">Start Analysing \uc0\u8594 </button>\
+        <button class="btn2" style="font-size:14px;padding:11px 26px" onclick="G('markets')">Live Markets</button>\
+      </div>\
+      <div style="display:flex;gap:8px;flex-wrap:wrap">\
+        <span onclick="G('analytics')" style="padding:5px 14px;border:1px solid var(--bdr);border-radius:var(--pill);font-size:12px;font-family:'DM Mono',monospace;color:var(--mid);transition:all .15s" onmouseover="this.style.borderColor='var(--ink)';this.style.color='var(--ink)'" onmouseout="this.style.borderColor='';this.style.color=''">NVDA</span>\
+        <span onclick="G('analytics')" style="padding:5px 14px;border:1px solid var(--bdr);border-radius:var(--pill);font-size:12px;font-family:'DM Mono',monospace;color:var(--mid);transition:all .15s" onmouseover="this.style.borderColor='var(--ink)';this.style.color='var(--ink)'" onmouseout="this.style.borderColor='';this.style.color=''">AAPL</span>\
+        <span onclick="G('analytics')" style="padding:5px 14px;border:1px solid var(--bdr);border-radius:var(--pill);font-size:12px;font-family:'DM Mono',monospace;color:var(--mid);transition:all .15s" onmouseover="this.style.borderColor='var(--ink)';this.style.color='var(--ink)'" onmouseout="this.style.borderColor='';this.style.color=''">MSFT</span>\
+        <span onclick="G('analytics')" style="padding:5px 14px;border:1px solid var(--bdr);border-radius:var(--pill);font-size:12px;font-family:'DM Mono',monospace;color:var(--mid);transition:all .15s" onmouseover="this.style.borderColor='var(--ink)';this.style.color='var(--ink)'" onmouseout="this.style.borderColor='';this.style.color=''">AMD</span>\
+      </div>\
+    </div>\
+    <!-- hero right card -->\
+    <div style="border:1px solid var(--bdr);border-radius:16px;overflow:hidden">\
+      <div style="background:var(--ink);color:#fff;padding:22px">\
+        <div style="font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:16px">Market Pulse \'b7 Live</div>\
+        <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:13px"><span>NVDA</span><span>$205.10</span><span style="color:#4ade80">+46.51%</span></div>\
+        <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:13px"><span>AAPL</span><span>$182.10</span><span style="color:#4ade80">+1.20%</span></div>\
+        <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:13px"><span>BTC</span><span>$68,400</span><span style="color:#f87171">\uc0\u8722 0.80%</span></div>\
+        <div style="display:flex;justify-content:space-between;padding:9px 0;font-size:13px"><span>MSFT</span><span>$431.20</span><span style="color:#4ade80">+0.80%</span></div>\
+      </div>\
+      <div style="padding:16px 22px">\
+        <div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--mid);margin-bottom:8px">Aggregate Sentiment</div>\
+        <div style="display:flex;height:4px;border-radius:2px;overflow:hidden;margin-bottom:8px"><div style="width:72%;background:var(--G)"></div><div style="width:18%;background:var(--A)"></div><div style="width:10%;background:var(--R)"></div></div>\
+        <div style="display:flex;gap:12px;font-size:11px;font-family:'DM Mono',monospace"><span class="g">72% Bull</span><span class="a">18% Neutral</span><span class="r">10% Bear</span></div>\
+      </div>\
+    </div>\
+  </div>\
+  <!-- marquee -->\
+  <div class="mq-wrap"><div class="mq" id="mq"></div></div>\
+  <!-- feature grid -->\
+  <div style="padding:60px 3rem;max-width:1400px;margin:0 auto">\
+    <div style="font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--mid);margin-bottom:32px;display:flex;align-items:center;gap:10px"><span style="display:block;width:16px;height:1px;background:var(--mid)"></span>What we offer</div>\
+    <div class="bento" style="grid-template-columns:repeat(3,1fr)">\
+      <div style="padding:28px;background:var(--bg);border-right:1px solid var(--bdr);transition:background .15s" onmouseover="this.style.background='var(--b2)'" onmouseout="this.style.background=''">\
+        <div style="font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid);margin-bottom:16px">01</div>\
+        <div class="serif" style="font-size:1.8rem;line-height:1.05;letter-spacing:-.03em;margin-bottom:10px">Algorithmic<br>Scorecard</div>\
+        <div style="font-size:13px;color:var(--mid);line-height:1.65">10-ratio weighted scoring system. STRONG BUY to AVOID in seconds.</div>\
+      </div>\
+      <div style="padding:28px;background:var(--bg);border-right:1px solid var(--bdr);transition:background .15s" onmouseover="this.style.background='var(--b2)'" onmouseout="this.style.background=''">\
+        <div style="font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid);margin-bottom:16px">02</div>\
+        <div class="serif" style="font-size:1.8rem;line-height:1.05;letter-spacing:-.03em;margin-bottom:10px">DCF Stresstest<br>Engine</div>\
+        <div style="font-size:13px;color:var(--mid);line-height:1.65">Real-time intrinsic value sliders. Worst and best case scenarios.</div>\
+      </div>\
+      <div style="padding:28px;background:var(--bg);transition:background .15s" onmouseover="this.style.background='var(--b2)'" onmouseout="this.style.background=''">\
+        <div style="font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid);margin-bottom:16px">03</div>\
+        <div class="serif" style="font-size:1.8rem;line-height:1.05;letter-spacing:-.03em;margin-bottom:10px">Peer-to-Peer<br>Comparison</div>\
+        <div style="font-size:13px;color:var(--mid);line-height:1.65">Side-by-side matrix across scorecard, DCF, margins and technicals.</div>\
+      </div>\
+    </div>\
+  </div>\
+  <footer style="max-width:1400px"><div class="fl"><a>About</a><a>Methodology</a><a>Privacy</a></div><div>futara \'a9 2026</div></footer>\
+</div>\
+\
+<!-- \uc0\u9552 \u9552 \u9552  MARKETS \u9552 \u9552 \u9552  -->\
+<div class="pg" id="pg-markets" style="padding-top:58px">\
+  <div style="padding:40px 3rem 0;max-width:1400px;margin:0 auto">\
+    <div style="font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--mid);margin-bottom:8px">Global Markets</div>\
+    <div class="serif" style="font-size:clamp(2rem,5vw,3.5rem);letter-spacing:-.03em;margin-bottom:32px">Market Overview</div>\
+    <!-- top row tickers -->\
+    <div class="bento" style="grid-template-columns:repeat(4,1fr);margin-bottom:1px">\
+      <div style="padding:22px;border-right:1px solid var(--bdr);transition:background .15s" onmouseover="this.style.background='var(--b2)'" onmouseout="this.style.background=''">\
+        <div style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;margin-bottom:8px" class="g">NVDA</div>\
+        <div class="serif" style="font-size:2.2rem;letter-spacing:-.04em;line-height:1">$205.10</div>\
+        <div style="margin-top:8px"><span class="tag tg">+46.51%</span> <span style="font-size:11px;color:var(--mid)">\uc0\u9650  SMA</span></div>\
+      </div>\
+      <div style="padding:22px;border-right:1px solid var(--bdr);transition:background .15s" onmouseover="this.style.background='var(--b2)'" onmouseout="this.style.background=''">\
+        <div style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;margin-bottom:8px" class="g">AAPL</div>\
+        <div class="serif" style="font-size:2.2rem;letter-spacing:-.04em;line-height:1">$182.10</div>\
+        <div style="margin-top:8px"><span class="tag tg">+1.20%</span></div>\
+      </div>\
+      <div style="padding:22px;border-right:1px solid var(--bdr);transition:background .15s" onmouseover="this.style.background='var(--b2)'" onmouseout="this.style.background=''">\
+        <div style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;margin-bottom:8px" class="r">BTC</div>\
+        <div class="serif" style="font-size:2.2rem;letter-spacing:-.04em;line-height:1">$68,400</div>\
+        <div style="margin-top:8px"><span class="tag tr">\uc0\u8722 0.80%</span> <span style="font-size:11px;color:var(--mid)">\u9660  SMA</span></div>\
+      </div>\
+      <div style="padding:22px;transition:background .15s" onmouseover="this.style.background='var(--b2)'" onmouseout="this.style.background=''">\
+        <div style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;margin-bottom:8px" class="g">MSFT</div>\
+        <div class="serif" style="font-size:2.2rem;letter-spacing:-.04em;line-height:1">$431.20</div>\
+        <div style="margin-top:8px"><span class="tag tg">+0.80%</span></div>\
+      </div>\
+    </div>\
+    <!-- sectors + news -->\
+    <div class="bento" style="grid-template-columns:1fr 2fr;margin-bottom:40px">\
+      <div style="padding:24px;border-right:1px solid var(--bdr)">\
+        <div class="cl" style="margin-bottom:16px">\uc0\u9889  Sector Rotation</div>\
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px">\
+          <div class="br"><span style="width:100px;color:var(--mid)">Tech & AI</span><div class="bw"><div class="bf" style="width:78%;background:var(--G)"></div></div><span class="g" style="font-family:'DM Mono',monospace;font-size:11px;min-width:42px;text-align:right">+4.6%</span></div>\
+          <div class="br"><span style="width:100px;color:var(--mid)">Financials</span><div class="bw"><div class="bf" style="width:40%"></div></div><span style="font-family:'DM Mono',monospace;font-size:11px;min-width:42px;text-align:right;color:var(--mid)">+2.1%</span></div>\
+          <div class="br"><span style="width:100px;color:var(--mid)">Healthcare</span><div class="bw"><div class="bf" style="width:26%;background:#888"></div></div><span style="font-family:'DM Mono',monospace;font-size:11px;min-width:42px;text-align:right;color:var(--mid)">+1.4%</span></div>\
+          <div class="br"><span style="width:100px;color:var(--mid)">Energy</span><div class="bw"><div class="bf" style="width:18%;background:var(--R)"></div></div><span class="r" style="font-family:'DM Mono',monospace;font-size:11px;min-width:42px;text-align:right">\uc0\u8722 1.2%</span></div>\
+        </div>\
+        <div class="cl" style="margin-bottom:12px">\uc0\u55357 \u56522  Heatmap</div>\
+        <div class="hm" style="padding:0">\
+          <div class="hi hpos"><div style="font-size:10px;font-family:'DM Mono',monospace;font-weight:600">NVDA</div><div style="font-size:12px;font-family:'DM Mono',monospace;font-weight:700;margin-top:2px">+4.6%</div></div>\
+          <div class="hi hpos"><div style="font-size:10px;font-family:'DM Mono',monospace;font-weight:600">AAPL</div><div style="font-size:12px;font-family:'DM Mono',monospace;font-weight:700;margin-top:2px">+1.2%</div></div>\
+          <div class="hi hpos"><div style="font-size:10px;font-family:'DM Mono',monospace;font-weight:600">AMD</div><div style="font-size:12px;font-family:'DM Mono',monospace;font-weight:700;margin-top:2px">+3.1%</div></div>\
+          <div class="hi hneg"><div style="font-size:10px;font-family:'DM Mono',monospace;font-weight:600">TSLA</div><div style="font-size:12px;font-family:'DM Mono',monospace;font-weight:700;margin-top:2px">\uc0\u8722 3.4%</div></div>\
+          <div class="hi hneg"><div style="font-size:10px;font-family:'DM Mono',monospace;font-weight:600">META</div><div style="font-size:12px;font-family:'DM Mono',monospace;font-weight:700;margin-top:2px">\uc0\u8722 0.5%</div></div>\
+          <div class="hi hneg"><div style="font-size:10px;font-family:'DM Mono',monospace;font-weight:600">BTC</div><div style="font-size:12px;font-family:'DM Mono',monospace;font-weight:700;margin-top:2px">\uc0\u8722 0.8%</div></div>\
+        </div>\
+      </div>\
+      <div>\
+        <div style="padding:14px 20px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between">\
+          <span class="cl">Intel Feed</span>\
+          <span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--G);display:flex;align-items:center;gap:5px"><span style="width:6px;height:6px;border-radius:50%;background:var(--G);display:inline-block;animation:pls 1.5s ease-in-out infinite"></span>Live</span>\
+        </div>\
+        <style>@keyframes pls\{0%,100%\{opacity:1\}50%\{opacity:.3\}\}</style>\
+        <div class="ni-row"><div class="ni-time">10:15 AM</div><div><span class="tag tr" style="margin-bottom:5px;display:inline-block">Macro Alert</span><div style="font-size:13px;line-height:1.5;margin-top:4px">US Core CPI 0.3% MoM \'97 hot vs expected. Volatility spike across rate-sensitive assets.</div></div><div style="text-align:right"><span style="font-size:10px;padding:3px 9px;border:1px solid var(--bdr);border-radius:var(--pill);color:var(--mid)">High</span></div></div>\
+        <div class="ni-row"><div class="ni-time">09:45 AM</div><div><span class="tag tg" style="margin-bottom:5px;display:inline-block">NVDA Intel</span><div style="font-size:13px;line-height:1.5;margin-top:4px">Institutional block buying at $201.50. Uptrend confirmed vs SMA 200.</div><div style="margin-top:8px"><button class="btn2" style="font-size:11px;padding:5px 12px" onclick="G('analytics')">Open Analytics \uc0\u8594 </button></div></div><div></div></div>\
+        <div class="ni-row"><div class="ni-time">08:30 AM</div><div><span class="tag ta" style="margin-bottom:5px;display:inline-block">Corporate</span><div style="font-size:13px;line-height:1.5;margin-top:4px">ECB Press Conference \'97 Lagarde on Q3 2026 rate cut timelines.</div></div><div style="text-align:right"><span style="font-size:10px;padding:3px 9px;border:1px solid var(--bdr);border-radius:var(--pill);color:var(--mid)">Med</span></div></div>\
+        <div class="ni-row" style="border-bottom:none"><div class="ni-time">07:00 AM</div><div><span class="tag tp" style="margin-bottom:5px;display:inline-block">Dividend</span><div style="font-size:13px;line-height:1.5;margin-top:4px">MSFT declares $0.85/share quarterly dividend \'97 ex-date July 17.</div></div><div></div></div>\
+      </div>\
+    </div>\
+  </div>\
+  <footer style="max-width:1400px;margin:0 auto"><div class="fl"><a>About</a><a>Privacy</a></div><div>futara \'a9 2026</div></footer>\
+</div>\
+\
+<!-- \uc0\u9552 \u9552 \u9552  ANALYTICS \u9552 \u9552 \u9552  -->\
+<div class="pg" id="pg-analytics" style="padding-top:58px;display:block">\
+  <!-- hero strip -->\
+  <div style="border-bottom:1px solid var(--bdr);padding:32px 3rem 24px;max-width:1400px;margin:0 auto;display:flex;align-items:flex-start;justify-content:space-between">\
+    <div>\
+      <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--mid);margin-bottom:10px;font-family:'DM Mono',monospace">NVDA \'b7 NASDAQ \'b7 Semiconductor</div>\
+      <div class="serif" style="font-size:clamp(2.5rem,6vw,4.5rem);letter-spacing:-.04em;line-height:1">$205.10</div>\
+      <div class="g" style="font-size:14px;font-family:'DM Mono',monospace;margin-top:8px">+$4.62  (+2.30%)</div>\
+      <div style="font-size:11px;color:var(--mid);margin-top:4px;font-family:'DM Mono',monospace">Nvidia Corporation</div>\
+    </div>\
+    <div style="display:flex;gap:10px;margin-top:8px">\
+      <button class="btn" onclick="G('portfolio')">+ Portfolio</button>\
+      <button class="btn2">+ Watchlist</button>\
+      <button class="btn2" onclick="G('comparison')">Compare</button>\
+    </div>\
+  </div>\
+  <!-- dock -->\
+  <div class="dk" style="max-width:none;border-bottom:1px solid var(--bdr)">\
+    <div class="dt on"><div class="dl">Scorecard</div><div class="dv">4.57</div><div class="ds">STRONG BUY</div></div>\
+    <div class="dt"><div class="dl">Ratios</div><div class="dv">16.2\'d7</div><div class="ds">P/E \'b7 Cheap</div></div>\
+    <div class="dt"><div class="dl">Valuation</div><div class="dv">$245</div><div class="ds">MoS +19.4%</div></div>\
+    <div class="dt"><div class="dl">Chart</div><div class="dv">\uc0\u8593  Up</div><div class="ds">SMA 200 \u10003 </div></div>\
+    <div class="dt"><div class="dl">Market</div><div class="dv">1.25\'d7</div><div class="ds">Beta</div></div>\
+    <div class="dt"><div class="dl">Financials</div><div class="dv">$253B</div><div class="ds">Q1/25 Rev.</div></div>\
+  </div>\
+  <!-- widget grid -->\
+  <div class="bento" style="grid-template-columns:repeat(3,1fr)">\
+    <!-- scorecard -->\
+    <div style="padding:24px;border-right:1px solid var(--bdr)">\
+      <div class="cl" style="margin-bottom:16px">Scorecard</div>\
+      <div style="text-align:center;padding:20px 0">\
+        <div class="serif g" style="font-size:3.5rem;letter-spacing:-.05em;line-height:1">4.57<span style="font-size:1.2rem;color:var(--mid)">/5</span></div>\
+        <div style="display:inline-block;margin-top:10px;padding:4px 14px;border:1px solid var(--G);border-radius:var(--pill);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--G)">Strong Buy</div>\
+        <div style="font-size:10px;color:var(--mid);margin-top:10px;font-family:'DM Mono',monospace">WACC: 9.4% \'b7 Beta: 1.25 \'b7 Risk: Moderate</div>\
+      </div>\
+      <div class="br"><span style="flex:1;color:var(--mid)">Financial Ratios</span><span style="font-size:9px;color:var(--soft)">65%</span><div class="bw"><div class="bf" style="width:84%"></div></div><span style="font-family:'DM Mono',monospace;font-size:11px;min-width:36px;text-align:right">4.2/5</span></div>\
+      <div class="br"><span style="flex:1;color:var(--mid)">Management</span><span style="font-size:9px;color:var(--soft)">12%</span><div class="bw"><div class="bf" style="width:40%;background:#888"></div></div><span style="font-family:'DM Mono',monospace;font-size:11px;min-width:36px;text-align:right">2.0/5</span></div>\
+      <div class="br"><span style="flex:1;color:var(--mid)">Moat</span><span style="font-size:9px;color:var(--soft)">10%</span><div class="bw"><div class="bf" style="width:60%"></div></div><span style="font-family:'DM Mono',monospace;font-size:11px;min-width:36px;text-align:right">3.0/5</span></div>\
+      <div class="br"><span style="flex:1;color:var(--mid)">ESG & Risk</span><span style="font-size:9px;color:var(--soft)">8%</span><div class="bw"><div class="bf" style="width:80%"></div></div><span style="font-family:'DM Mono',monospace;font-size:11px;min-width:36px;text-align:right">4.0/5</span></div>\
+      <div class="br"><span style="flex:1;color:var(--mid)">DCF/Valuation</span><span style="font-size:9px;color:var(--soft)">5%</span><div class="bw"><div class="bf" style="width:40%;background:#888"></div></div><span style="font-family:'DM Mono',monospace;font-size:11px;min-width:36px;text-align:right">2.0/5</span></div>\
+    </div>\
+    <!-- chart -->\
+    <div style="padding:24px;border-right:1px solid var(--bdr)">\
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">\
+        <span class="cl">Price Chart</span>\
+        <div style="display:flex;gap:4px">\
+          <button class="tb on" style="font-size:9px;padding:3px 8px">1M</button>\
+          <button class="tb" style="font-size:9px;padding:3px 8px">6M</button>\
+          <button class="tb" style="font-size:9px;padding:3px 8px">1Y</button>\
+        </div>\
+      </div>\
+      <canvas id="cc" style="width:100%;display:block" height="140"></canvas>\
+      <div style="margin-top:12px;padding:10px 12px;border:1px solid rgba(26,110,60,.2);border-radius:8px;font-size:12px;color:var(--G);background:rgba(26,110,60,.06)">\uc0\u55357 \u56613  Strong Uptrend \'97 8.7% above 200-day MA</div>\
+    </div>\
+    <!-- ratios -->\
+    <div style="padding:24px">\
+      <div class="cl" style="margin-bottom:16px">Key Financial Ratios</div>\
+      <table class="rt"><thead><tr><th>Metric</th><th>Current</th><th>Sector</th><th></th></tr></thead><tbody>\
+        <tr><td>P/E Ratio</td><td style="font-family:'DM Mono',monospace">16.2\'d7</td><td style="font-family:'DM Mono',monospace;color:var(--mid)">21.1\'d7</td><td><span class="tag tg">Cheap</span></td></tr>\
+        <tr><td>Gross Margin</td><td style="font-family:'DM Mono',monospace">74.1%</td><td style="font-family:'DM Mono',monospace;color:var(--mid)">52.3%</td><td><span class="tag tp">Elite</span></td></tr>\
+        <tr><td>Oper. Margin</td><td style="font-family:'DM Mono',monospace">65.6%</td><td style="font-family:'DM Mono',monospace;color:var(--mid)">38.0%</td><td><span class="tag tp">Elite</span></td></tr>\
+        <tr><td>Net Margin</td><td style="font-family:'DM Mono',monospace">63.0%</td><td style="font-family:'DM Mono',monospace;color:var(--mid)">31.4%</td><td><span class="tag tp">Elite</span></td></tr>\
+        <tr><td>Rev. Growth</td><td style="font-family:'DM Mono',monospace" class="g">+85.2%</td><td style="font-family:'DM Mono',monospace;color:var(--mid)">\'97</td><td><span class="tag tp">Hyper</span></td></tr>\
+      </tbody></table>\
+    </div>\
+  </div>\
+  <!-- row 2 -->\
+  <div class="bento" style="grid-template-columns:2fr 1fr">\
+    <div style="padding:24px;border-right:1px solid var(--bdr)">\
+      <div class="cl" style="margin-bottom:16px">Intrinsic Value & Stresstest</div>\
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-bottom:18px">\
+        <div><div style="font-size:11px;color:var(--mid);margin-bottom:6px">Current Price</div><div class="serif" style="font-size:2.4rem;letter-spacing:-.04em">$205.10</div></div>\
+        <div><div style="font-size:11px;color:var(--mid);margin-bottom:6px">Fair Value (DCF)</div><div class="serif g" style="font-size:2.4rem;letter-spacing:-.04em">$245.00</div><div style="font-size:12px;font-family:'DM Mono',monospace;color:var(--G);margin-top:4px">MoS: +19.4% Underpriced</div></div>\
+      </div>\
+      <div style="margin:12px 0"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;color:var(--mid)">Revenue Growth (5Y)</span><span style="font-size:12px;font-family:'DM Mono',monospace">8.5%</span></div><input type="range" min="1" max="20" value="8.5" step=".5"></div>\
+      <div style="margin:12px 0"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;color:var(--mid)">Operating Margin</span><span style="font-size:12px;font-family:'DM Mono',monospace">65.6%</span></div><input type="range" min="20" max="80" value="65.6" step=".5"></div>\
+      <div style="margin:12px 0"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;color:var(--mid)">WACC</span><span style="font-size:12px;font-family:'DM Mono',monospace">9.4%</span></div><input type="range" min="5" max="18" value="9.4" step=".1"></div>\
+      <div class="st">\
+        <div class="si"><div class="sl">Worst Case</div><div class="serif r" style="font-size:1.4rem">$182</div><div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--R)">\uc0\u8722 11%</div></div>\
+        <div class="si"><div class="sl">Base Case</div><div class="serif g" style="font-size:1.4rem">$245</div><div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--G)">+19%</div></div>\
+        <div class="si"><div class="sl">Best Case</div><div class="serif g" style="font-size:1.4rem">$298</div><div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--G)">+45%</div></div>\
+      </div>\
+    </div>\
+    <div style="padding:24px">\
+      <div class="cl" style="margin-bottom:16px">Peer Performance (YTD)</div>\
+      <div class="pb"><span style="font-family:'DM Mono',monospace;font-weight:600;width:44px" class="g">NVDA</span><div class="pt"><div class="pf" style="width:80%;background:var(--ink)">+46.5%</div></div></div>\
+      <div class="pb"><span style="font-family:'DM Mono',monospace;font-weight:600;width:44px;color:var(--mid)">SOXX</span><div class="pt"><div class="pf" style="width:46%;background:#888">+25.8%</div></div></div>\
+      <div class="pb"><span style="font-family:'DM Mono',monospace;font-weight:600;width:44px;color:var(--mid)">AMD</span><div class="pt"><div class="pf" style="width:40%;background:#aaa">+22.1%</div></div></div>\
+      <div class="pb"><span style="font-family:'DM Mono',monospace;font-weight:600;width:44px" class="r">INTC</span><div class="pt"><div class="pf" style="width:22%;background:rgba(184,50,50,.2);color:var(--R)">\uc0\u8722 12.4%</div></div></div>\
+      <div style="margin-top:14px;padding:12px;background:var(--b2);border-radius:8px;font-size:12px;color:var(--mid);line-height:1.6">NVDA outperforming peers by <span class="g" style="font-weight:600">+24.4%</span> \'97 strong institutional momentum.</div>\
+    </div>\
+  </div>\
+  <!-- row 3 -->\
+  <div class="bento" style="grid-template-columns:repeat(3,1fr)">\
+    <div style="padding:24px;border-right:1px solid var(--bdr)">\
+      <div class="cl" style="margin-bottom:14px">Insider Trades (90d)</div>\
+      <div style="padding:10px 12px;border:1px solid rgba(26,110,60,.2);border-radius:8px;font-size:12px;color:var(--G);background:rgba(26,110,60,.06);margin-bottom:14px">\uc0\u55357 \u57314  Net Sentiment: Strongly Bullish</div>\
+      <div class="ir"><span class="it tg">BUY</span><div style="flex:1"><div style="font-weight:600;font-size:13px">Kress Colette</div><div style="font-size:10px;color:var(--mid)">CFO \'b7 2026-05-14</div></div><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--mid)">450K \'b7 $202</span></div>\
+      <div class="ir"><span class="it tg">BUY</span><div style="flex:1"><div style="font-weight:600;font-size:13px">Huang Jen-Hsun</div><div style="font-size:10px;color:var(--mid)">CEO \'b7 2026-04-28</div></div><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--mid)">1M \'b7 $198</span></div>\
+      <div class="ir"><span class="it tr">SELL</span><div style="flex:1"><div style="font-weight:600;font-size:13px">Miller Jay</div><div style="font-size:10px;color:var(--mid)">Director \'b7 2026-03-12</div></div><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--mid)">210K \'b7 $211</span></div>\
+    </div>\
+    <div style="padding:24px;border-right:1px solid var(--bdr)">\
+      <div class="cl" style="margin-bottom:14px">News & Sentiment</div>\
+      <div style="display:flex;gap:10px;font-size:12px;font-family:'DM Mono',monospace;margin-bottom:6px"><span class="g">72% Bull</span><span class="a">18% Neutral</span><span class="r">10% Bear</span></div>\
+      <div style="display:flex;height:3px;border-radius:2px;overflow:hidden;margin-bottom:16px"><div style="width:72%;background:var(--G)"></div><div style="width:18%;background:var(--A)"></div><div style="width:10%;background:var(--R)"></div></div>\
+      <div style="padding:10px 0;border-bottom:1px solid var(--bdr)"><span class="tag tg" style="margin-bottom:5px;display:inline-block">Today</span><div style="font-size:13px;line-height:1.5">AI chip launch \'97 Impact 9.4/10</div></div>\
+      <div style="padding:10px 0"><span class="tag tr" style="margin-bottom:5px;display:inline-block">Yesterday</span><div style="font-size:13px;line-height:1.5">Institutional accumulation via block trades</div></div>\
+    </div>\
+    <div style="padding:24px">\
+      <div class="cl" style="margin-bottom:14px">Dividend Calendar</div>\
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">\
+        <div style="padding:12px;background:var(--b2);border-radius:8px"><div style="font-size:9px;color:var(--mid);margin-bottom:4px;text-transform:uppercase;letter-spacing:.1em">Yield</div><div class="serif" style="font-size:1.6rem;letter-spacing:-.03em">0.92%</div></div>\
+        <div style="padding:12px;background:var(--b2);border-radius:8px"><div style="font-size:9px;color:var(--mid);margin-bottom:4px;text-transform:uppercase;letter-spacing:.1em">Payout</div><div class="serif g" style="font-size:1.6rem;letter-spacing:-.03em">14.5%</div></div>\
+      </div>\
+      <div style="font-size:12px;color:var(--mid);margin-bottom:10px">12 consecutive years \'b7 5Y CAGR +14.2%</div>\
+      <div style="display:flex;align-items:center;gap:8px;margin:4px 0;font-size:11px"><span style="font-family:'DM Mono',monospace;width:28px;color:var(--mid)">2026</span><div style="flex:1;height:6px;background:var(--ink);border-radius:1px;opacity:.9"></div><span style="font-family:'DM Mono',monospace">$1.88</span></div>\
+      <div style="display:flex;align-items:center;gap:8px;margin:4px 0;font-size:11px"><span style="font-family:'DM Mono',monospace;width:28px;color:var(--mid)">2025</span><div style="flex:.88;height:6px;background:var(--ink);border-radius:1px;opacity:.6"></div><span style="font-family:'DM Mono',monospace">$1.65</span></div>\
+      <div style="display:flex;align-items:center;gap:8px;margin:4px 0;font-size:11px"><span style="font-family:'DM Mono',monospace;width:28px;color:var(--mid)">2024</span><div style="flex:.76;height:6px;background:var(--ink);border-radius:1px;opacity:.4"></div><span style="font-family:'DM Mono',monospace">$1.42</span></div>\
+    </div>\
+  </div>\
+  <footer style="margin-top:0"><div class="fl"><a>About</a><a>Privacy</a></div><div>futara \'a9 2026</div></footer>\
+</div>\
+\
+<!-- \uc0\u9552 \u9552 \u9552  COMPARISON \u9552 \u9552 \u9552  -->\
+<div class="pg" id="pg-comparison" style="padding-top:58px">\
+  <div style="padding:40px 3rem;max-width:1400px;margin:0 auto">\
+    <div style="font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--mid);margin-bottom:8px">Peer-to-Peer Engine</div>\
+    <div class="serif" style="font-size:clamp(2rem,5vw,3.5rem);letter-spacing:-.03em;margin-bottom:32px">Comparison</div>\
+    <!-- slots -->\
+    <div style="display:grid;grid-template-columns:1fr 40px 1fr 40px 1fr 160px;gap:12px;align-items:end;margin-bottom:32px;padding:24px;border:1px solid var(--bdr);border-radius:14px">\
+      <div><div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--mid);margin-bottom:8px">Slot 1</div><div style="border-bottom:2px solid var(--ink);padding:6px 0"><input value="NVDA" style="background:transparent;border:none;outline:none;font-family:'DM Serif Display',serif;font-size:1.8rem;letter-spacing:-.03em;color:var(--ink);width:100%"></div></div>\
+      <div class="serif" style="font-size:1.4rem;color:var(--mid);text-align:center;padding-bottom:6px">vs</div>\
+      <div><div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--mid);margin-bottom:8px">Slot 2</div><div style="border-bottom:2px solid var(--ink);padding:6px 0"><input value="AMD" style="background:transparent;border:none;outline:none;font-family:'DM Serif Display',serif;font-size:1.8rem;letter-spacing:-.03em;color:var(--ink);width:100%"></div></div>\
+      <div class="serif" style="font-size:1.4rem;color:var(--mid);text-align:center;padding-bottom:6px">vs</div>\
+      <div><div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--mid);margin-bottom:8px">Slot 3 (Optional)</div><div style="border-bottom:2px solid var(--bdr);padding:6px 0"><input placeholder="INTC" style="background:transparent;border:none;outline:none;font-family:'DM Serif Display',serif;font-size:1.8rem;letter-spacing:-.03em;color:var(--mid);width:100%"></div></div>\
+      <button class="btn" style="font-size:14px;padding:11px 22px;align-self:flex-end">Launch \uc0\u8594 </button>\
+    </div>\
+    <!-- table -->\
+    <div style="border:1px solid var(--bdr);overflow:hidden;margin-bottom:40px">\
+      <div style="display:grid;grid-template-columns:200px 1fr 1fr 1fr;background:var(--b2);border-bottom:2px solid var(--ink)">\
+        <div style="padding:14px 16px;border-right:1px solid var(--bdr)"><span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--mid)">Metric</span></div>\
+        <div style="padding:14px 16px;border-right:1px solid var(--bdr)"><div class="serif g" style="font-size:1.1rem;letter-spacing:-.02em">NVDA</div><div style="font-size:10px;color:var(--mid);margin-top:1px">Nvidia Corporation</div></div>\
+        <div style="padding:14px 16px;border-right:1px solid var(--bdr)"><div class="serif" style="font-size:1.1rem;letter-spacing:-.02em">AMD</div><div style="font-size:10px;color:var(--mid);margin-top:1px">Advanced Micro Devices</div></div>\
+        <div style="padding:14px 16px"><div class="serif r" style="font-size:1.1rem;letter-spacing:-.02em">INTC</div><div style="font-size:10px;color:var(--mid);margin-top:1px">Intel Corporation</div></div>\
+      </div>\
+      <div class="ct"><div class="cs">\uc0\u11088  Scorecard Summary</div></div>\
+      <div class="ct"><div class="cc" style="color:var(--mid)">Overall Score</div><div class="cc" style="background:rgba(26,110,60,.04)"><span class="tag tg">4.57 Strong Buy</span></div><div class="cc"><span class="tag ta">3.82 Buy</span></div><div class="cc"><span class="tag tr">2.10 Avoid</span></div></div>\
+      <div class="ct"><div class="cs">\uc0\u55358 \u56814  Intrinsic Value (DCF)</div></div>\
+      <div class="ct"><div class="cc" style="color:var(--mid)">Current Price</div><div class="cc" style="font-family:'DM Mono',monospace;color:var(--ink)">$205.10</div><div class="cc" style="font-family:'DM Mono',monospace">$160.40</div><div class="cc" style="font-family:'DM Mono',monospace">$31.15</div></div>\
+      <div class="ct"><div class="cc" style="color:var(--mid)">Fair Value</div><div class="cc" style="background:rgba(26,110,60,.04);font-family:'DM Mono',monospace;font-weight:700;color:var(--ink)">$245.00</div><div class="cc" style="font-family:'DM Mono',monospace">$155.00</div><div class="cc" style="font-family:'DM Mono',monospace">$22.00</div></div>\
+      <div class="ct"><div class="cc" style="color:var(--mid)">Margin of Safety</div><div class="cc" style="background:rgba(26,110,60,.04);font-family:'DM Mono',monospace;color:var(--G);font-weight:700">+19.4%</div><div class="cc" style="font-family:'DM Mono',monospace;color:var(--A)">\uc0\u8722 3.3%</div><div class="cc" style="font-family:'DM Mono',monospace;color:var(--R)">\u8722 29.3%</div></div>\
+      <div class="ct"><div class="cs">\uc0\u55357 \u56522  Key Metrics</div></div>\
+      <div class="ct"><div class="cc" style="color:var(--mid)">P/E Ratio</div><div class="cc" style="background:rgba(26,110,60,.04);font-family:'DM Mono',monospace">16.2\'d7 <span class="tag tg">Cheap</span></div><div class="cc" style="font-family:'DM Mono',monospace">28.4\'d7 <span class="tag tr">Exp.</span></div><div class="cc" style="font-family:'DM Mono',monospace">19.5\'d7 <span class="tag ta">Fair</span></div></div>\
+      <div class="ct"><div class="cc" style="color:var(--mid)">Gross Margin</div><div class="cc" style="background:rgba(26,110,60,.04);font-family:'DM Mono',monospace">74.1% <span class="tag tp">Elite</span></div><div class="cc" style="font-family:'DM Mono',monospace">48.2%</div><div class="cc" style="font-family:'DM Mono',monospace">32.0%</div></div>\
+      <div class="ct"><div class="cc" style="color:var(--mid)">Rev. Growth</div><div class="cc" style="background:rgba(26,110,60,.04);font-family:'DM Mono',monospace;color:var(--G)">+85.2%</div><div class="cc" style="font-family:'DM Mono',monospace;color:var(--G)">+12.2%</div><div class="cc" style="font-family:'DM Mono',monospace;color:var(--R)">\uc0\u8722 5.1%</div></div>\
+      <div class="ct" style="background:var(--b2)"><div class="cc"></div><div class="cc"><button class="btn" style="font-size:11px;padding:6px 14px" onclick="G('analytics')">Full Analytics</button></div><div class="cc"><button class="btn2" style="font-size:11px;padding:6px 14px">Full Analytics</button></div><div class="cc"><button class="btn2" style="font-size:11px;padding:6px 14px">Full Analytics</button></div></div>\
+    </div>\
+    <!-- duels -->\
+    <div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--mid);margin-bottom:16px">Popular Duels</div>\
+    <div class="bento" style="grid-template-columns:repeat(3,1fr);margin-bottom:60px">\
+      <div style="padding:24px;border-right:1px solid var(--bdr);transition:background .15s" onmouseover="this.style.background='var(--b2)'" onmouseout="this.style.background=''"><div style="font-size:1.3rem;margin-bottom:10px">\uc0\u55357 \u56507 </div><div class="serif" style="font-size:1.4rem;letter-spacing:-.03em;margin-bottom:4px">The AI Chip War</div><div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--mid)">NVDA vs AMD vs INTC</div><div style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--R);margin-top:8px;font-weight:700">\u55357 \u56613  Active</div></div>\
+      <div style="padding:24px;border-right:1px solid var(--bdr);transition:background .15s" onmouseover="this.style.background='var(--b2)'" onmouseout="this.style.background=''"><div style="font-size:1.3rem;margin-bottom:10px">\uc0\u55357 \u56983 </div><div class="serif" style="font-size:1.4rem;letter-spacing:-.03em;margin-bottom:4px">EV Showdown</div><div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--mid)">TSLA vs BYD vs RIVN</div></div>\
+      <div style="padding:24px;transition:background .15s" onmouseover="this.style.background='var(--b2)'" onmouseout="this.style.background=''"><div style="font-size:1.3rem;margin-bottom:10px">\uc0\u9729 \u65039 </div><div class="serif" style="font-size:1.4rem;letter-spacing:-.03em;margin-bottom:4px">Cloud Infrastructure</div><div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--mid)">MSFT vs AMZN vs GOOGL</div></div>\
+    </div>\
+  </div>\
+  <footer style="max-width:1400px;margin:0 auto"><div class="fl"><a>About</a><a>Privacy</a></div><div>futara \'a9 2026</div></footer>\
+</div>\
+\
+<!-- \uc0\u9552 \u9552 \u9552  PORTFOLIO \u9552 \u9552 \u9552  -->\
+<div class="pg" id="pg-portfolio" style="padding-top:58px">\
+  <div style="padding:40px 3rem;max-width:1400px;margin:0 auto">\
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:24px">\
+      <div><div style="font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--mid);margin-bottom:6px">Command Center</div><div class="serif" style="font-size:clamp(2rem,5vw,3.5rem);letter-spacing:-.03em">Portfolio</div></div>\
+      <button class="btn" style="margin-bottom:6px">+ Add Position</button>\
+    </div>\
+    <!-- stats -->\
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--bdr);margin-bottom:1px">\
+      <div class="pst"><div class="psl">Net Asset Value</div><div class="psv">$42,150</div><div class="pss g">+$1,240 (+3.0%)</div></div>\
+      <div class="pst"><div class="psl">Cash Buffer</div><div class="psv">$8,430</div><div class="pss" style="color:var(--mid)">20.0%</div></div>\
+      <div class="pst"><div class="psl">Weighted Score</div><div class="psv g">4.12</div><div class="pss" style="color:var(--mid)">/ 5.0 \'b7 Buy</div></div>\
+      <div class="pst" style="border-right:none"><div class="psl">Market Rule</div><div class="psv g">Bullish</div><div class="pss g">2/3 above SMA</div></div>\
+    </div>\
+    <!-- holdings + right col -->\
+    <div class="bento" style="grid-template-columns:2fr 1fr;margin-bottom:1px">\
+      <div style="padding:24px;border-right:1px solid var(--bdr)">\
+        <div class="cl" style="margin-bottom:16px">Holdings</div>\
+        <table class="rt">\
+          <thead><tr><th>Asset</th><th>Allocation</th><th>Return</th><th>Score</th><th>Trend</th></tr></thead>\
+          <tbody>\
+            <tr onclick="G('analytics')" style="cursor:pointer"><td><div style="font-weight:700;font-family:'DM Mono',monospace">NVDA</div><div style="font-size:10px;color:var(--mid)">Nvidia</div></td><td style="font-family:'DM Mono',monospace;font-size:12px">$19,050 \'b7 45.2%</td><td class="g" style="font-family:'DM Mono',monospace">+46.51%</td><td><span class="tag tg">4.57</span></td><td class="g">\uc0\u8593  SMA</td></tr>\
+            <tr><td><div style="font-weight:700;font-family:'DM Mono',monospace">BTC</div><div style="font-size:10px;color:var(--mid)">Bitcoin</div></td><td style="font-family:'DM Mono',monospace;font-size:12px">$9,310 \'b7 22.1%</td><td class="r" style="font-family:'DM Mono',monospace">\uc0\u8722 0.80%</td><td><span class="tag ta">3.40</span></td><td class="r">\u8595  SMA</td></tr>\
+            <tr onclick="G('analytics')" style="cursor:pointer"><td><div style="font-weight:700;font-family:'DM Mono',monospace">COST</div><div style="font-size:10px;color:var(--mid)">Costco</div></td><td style="font-family:'DM Mono',monospace;font-size:12px">$5,360 \'b7 12.7%</td><td class="g" style="font-family:'DM Mono',monospace">+3.2%</td><td><span class="tag tg">4.25</span></td><td class="g">\uc0\u8593  SMA</td></tr>\
+            <tr><td><div style="font-weight:700;font-family:'DM Mono',monospace">Cash</div></td><td style="font-family:'DM Mono',monospace;font-size:12px">$8,430 \'b7 20.0%</td><td style="color:var(--mid)">\'97</td><td>\'97</td><td style="color:var(--mid)">\'97</td></tr>\
+          </tbody>\
+        </table>\
+      </div>\
+      <div style="padding:24px">\
+        <div class="cl" style="margin-bottom:14px">Asset Allocation</div>\
+        <svg viewBox="0 0 120 120" style="width:105px;height:105px;display:block;margin:0 auto 14px">\
+          <circle cx="60" cy="60" r="48" fill="none" stroke="#e8e4de" stroke-width="18"/>\
+          <circle cx="60" cy="60" r="48" fill="none" stroke="#0d0d0d" stroke-width="18" stroke-dasharray="136 165" stroke-dashoffset="0" transform="rotate(-90 60 60)"/>\
+          <circle cx="60" cy="60" r="48" fill="none" stroke="#888" stroke-width="18" stroke-dasharray="66 235" stroke-dashoffset="-136" transform="rotate(-90 60 60)"/>\
+          <circle cx="60" cy="60" r="48" fill="none" stroke="#1a6e3c" stroke-width="18" stroke-dasharray="38 263" stroke-dashoffset="-202" transform="rotate(-90 60 60)"/>\
+          <text x="60" y="57" text-anchor="middle" font-size="12" font-weight="600" fill="#0d0d0d" font-family="'DM Mono',monospace">45%</text>\
+          <text x="60" y="70" text-anchor="middle" font-size="9" fill="#6b6b6b" font-family="DM Sans,sans-serif">NVDA</text>\
+        </svg>\
+        <div class="al"><div class="ad" style="background:#0d0d0d"></div><span style="flex:1;color:var(--mid)">NVDA</span><span style="font-family:'DM Mono',monospace;font-size:12px">45.2%</span></div>\
+        <div class="al"><div class="ad" style="background:#888"></div><span style="flex:1;color:var(--mid)">BTC</span><span style="font-family:'DM Mono',monospace;font-size:12px">22.1%</span></div>\
+        <div class="al"><div class="ad" style="background:#1a6e3c"></div><span style="flex:1;color:var(--mid)">COST</span><span style="font-family:'DM Mono',monospace;font-size:12px">12.7%</span></div>\
+        <div class="al"><div class="ad" style="background:#e8e4de;border:1px solid var(--bdr)"></div><span style="flex:1;color:var(--mid)">Cash</span><span style="font-family:'DM Mono',monospace;font-size:12px">20.0%</span></div>\
+      </div>\
+    </div>\
+    <!-- leverage + risk + trades -->\
+    <div class="bento" style="grid-template-columns:repeat(3,1fr)">\
+      <div style="padding:24px;border-right:1px solid var(--bdr)">\
+        <div class="cl" style="margin-bottom:14px">Leverage Desk <span style="color:var(--G)">1 active</span></div>\
+        <div class="lev">\
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><span style="font-family:'DM Mono',monospace;font-weight:600">NVDA <span style="font-weight:400;color:var(--mid)">LONG \'d75</span></span><span class="tag tg">Active</span></div>\
+          <div class="serif g" style="font-size:1.8rem;letter-spacing:-.04em">+$900 <span style="font-size:1rem;color:var(--mid)">(+8.9%)</span></div>\
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;font-size:11px">\
+            <div style="color:var(--mid)">SL: <span style="font-family:'DM Mono',monospace;font-weight:600;color:var(--ink)">$195.00</span></div>\
+            <div style="color:var(--mid)">TP1: <span style="font-family:'DM Mono',monospace;font-weight:600;color:var(--ink)">$210.00</span></div>\
+          </div>\
+        </div>\
+      </div>\
+      <div style="padding:24px;border-right:1px solid var(--bdr)">\
+        <div class="cl" style="margin-bottom:14px">Risk & Trend Matrix</div>\
+        <div style="padding:10px 12px;border:1px solid rgba(26,110,60,.2);border-radius:8px;font-size:13px;color:var(--G);background:rgba(26,110,60,.06);margin-bottom:14px;font-weight:500">\uc0\u55357 \u57314  Market Rule: BULLISH</div>\
+        <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 0;border-bottom:1px solid var(--bdr);color:var(--mid)"><span>NVDA</span><span class="g">\uc0\u8593  above SMA</span></div>\
+        <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 0;border-bottom:1px solid var(--bdr);color:var(--mid)"><span>AAPL</span><span class="g">\uc0\u8593  above SMA</span></div>\
+        <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 0;color:var(--mid)"><span>BTC</span><span class="r">\uc0\u8595  below SMA</span></div>\
+      </div>\
+      <div style="padding:24px">\
+        <div class="cl" style="margin-bottom:14px">Trade History</div>\
+        <div class="ir"><span class="it tg">LONG</span><div style="flex:1"><div style="font-weight:600;font-size:13px">TSLA</div><div style="font-size:10px;color:var(--mid)">Closed 2026-05-10</div></div><span style="font-family:'DM Mono',monospace;font-size:12px" class="g">+$420.00</span></div>\
+        <div class="ir"><span class="it tr">SHORT</span><div style="flex:1"><div style="font-weight:600;font-size:13px">AMD</div><div style="font-size:10px;color:var(--mid)">Closed 2026-04-22</div></div><span style="font-family:'DM Mono',monospace;font-size:12px" class="r">\uc0\u8722 $110.00</span></div>\
+        <div class="ir"><span class="it tg">LONG</span><div style="flex:1"><div style="font-weight:600;font-size:13px">NVDA</div><div style="font-size:10px;color:var(--mid)">Open \'b7 Leverage</div></div><span style="font-family:'DM Mono',monospace;font-size:12px" class="g">+$900.00</span></div>\
+      </div>\
+    </div>\
+  </div>\
+  <footer style="max-width:1400px;margin:0 auto"><div class="fl"><a>About</a><a>Privacy</a></div><div>futara \'a9 2026</div></footer>\
+</div>\
+\
+<!-- \uc0\u9552 \u9552 \u9552  PROFILE \u9552 \u9552 \u9552  -->\
+<div class="pg" id="pg-profile" style="padding-top:58px">\
+  <div style="max-width:680px;margin:0 auto;padding:40px 3rem 60px">\
+    <div style="font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--mid);margin-bottom:8px">Account</div>\
+    <div class="serif" style="font-size:clamp(2rem,5vw,3.5rem);letter-spacing:-.03em;margin-bottom:36px">Profile &<br>Settings</div>\
+    <div class="ps">\
+      <div class="psh">\uc0\u55356 \u57111  Appearance & Display</div>\
+      <div class="psb">\
+        <div class="pr"><div><div style="font-size:14px;font-weight:500">Interface Theme</div><div style="font-size:11px;color:var(--mid);margin-top:2px">Dark: deep purple \'b7 Light: editorial beige</div></div><div class="tog"><button class="tb">Dark</button><button class="tb on">Light</button></div></div>\
+        <div class="pr"><div style="font-size:14px;font-weight:500">Language</div><select><option>English (US)</option><option>Deutsch</option><option>Fran\'e7ais</option></select></div>\
+        <div class="pr"><div style="font-size:14px;font-weight:500">Currency</div><select><option>USD ($)</option><option>EUR (\'80)</option><option>GBP (\'a3)</option></select></div>\
+      </div>\
+    </div>\
+    <div class="ps">\
+      <div class="psh">\uc0\u55357 \u56593  API Credentials</div>\
+      <div class="psb">\
+        <div style="font-size:14px;font-weight:500;margin-bottom:10px">Yahoo Finance Proxy</div>\
+        <div style="display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--b2);border-radius:10px;margin-bottom:8px">\
+          <div style="width:7px;height:7px;border-radius:50%;background:var(--G);flex-shrink:0"></div>\
+          <div style="flex:1;font-family:'DM Mono',monospace;font-size:12px;color:var(--mid)">https://fragrant-wave-6bd7.workers.dev</div>\
+          <button class="btn2" style="font-size:11px;padding:5px 12px">Edit</button>\
+        </div>\
+        <div style="font-size:12px;color:var(--G);font-family:'DM Mono',monospace;margin-bottom:14px">\uc0\u55357 \u57314  Connected \'b7 Valid</div>\
+        <div style="display:flex;gap:8px;flex-wrap:wrap">\
+          <button class="btn2" style="font-size:12px;padding:7px 14px">\uc0\u55357 \u56549  Export (JSON)</button>\
+          <button class="btn2" style="font-size:12px;padding:7px 14px">\uc0\u55357 \u56548  Import</button>\
+          <button style="padding:7px 14px;border:1.5px solid rgba(184,50,50,.3);border-radius:var(--pill);font-size:12px;color:var(--R);background:transparent;font-family:'DM Sans',sans-serif">\uc0\u55357 \u56785  Wipe Cache</button>\
+        </div>\
+      </div>\
+    </div>\
+    <div class="ps">\
+      <div class="psh">\uc0\u55357 \u56550  Subscription & System</div>\
+      <div class="psb">\
+        <div class="pr"><div><div style="font-size:14px;font-weight:500">Current Plan</div><div style="font-size:11px;color:var(--mid);margin-top:2px">Free Personal Tier</div></div><span style="padding:4px 12px;border:1.5px solid var(--bdr);border-radius:var(--pill);font-size:11px;font-weight:600;font-family:'DM Mono',monospace;color:var(--mid)">FREE</span></div>\
+        <div class="pr"><div style="font-size:14px;font-weight:500">Architecture</div><span style="font-family:'DM Mono',monospace;font-size:12px;font-weight:600">Build v2.6.1 \'b7 Client-side</span></div>\
+      </div>\
+    </div>\
+  </div>\
+  <footer style="max-width:680px;margin:0 auto"><div class="fl"><a>About</a><a>Privacy</a></div><div>futara \'a9 2026</div></footer>\
+</div>\
+\
+<script>\
+// CURSOR\
+const C=document.getElementById('C');\
+document.addEventListener('mousemove',e=>\{C.style.left=e.clientX+'px';C.style.top=e.clientY+'px'\});\
+document.addEventListener('mouseover',e=>\{\
+  const t=e.target;\
+  if(t.tagName==='INPUT'||t.tagName==='TEXTAREA')\{C.classList.add('t');C.classList.remove('h')\}\
+  else if(t.closest('button,a,[onclick],.dt,.nc a,.bento>div,.ir,.tb,.tog,.wi'))\{C.classList.add('h');C.classList.remove('t')\}\
+  else\{C.classList.remove('h');C.classList.remove('t')\}\
+\});\
+document.addEventListener('mousedown',()=>C.style.transform='translate(-50%,-50%) scale(.72)');\
+document.addEventListener('mouseup',()=>C.style.transform='translate(-50%,-50%)');\
+\
+// MARQUEE\
+const ticks=['NVDA +46.51%','AAPL +1.20%','MSFT +0.80%','AMD +3.10%','BTC \uc0\u8722 0.80%','TSLA \u8722 3.40%','S&P 500 +0.40%','NASDAQ +1.20%'];\
+const mqEl=document.getElementById('mq');\
+mqEl.innerHTML=[...ticks,...ticks].map(t=>`<div class="mi"><div class="mi-dot"></div>$\{t\}</div>`).join('');\
+\
+// NAV\
+const N=\{markets:'n-markets',analytics:'n-analytics',comparison:'n-comparison',portfolio:null,profile:null,home:null\};\
+const P=\{home:'pg-home',markets:'pg-markets',analytics:'pg-analytics',comparison:'pg-comparison',portfolio:'pg-portfolio',profile:'pg-profile'\};\
+function G(id)\{\
+  Object.values(P).forEach(p=>\{const el=document.getElementById(p);if(el)el.classList.remove('on')\});\
+  document.querySelectorAll('.nc a').forEach(a=>a.classList.remove('on'));\
+  document.getElementById(P[id]).classList.add('on');\
+  const ni=N[id];if(ni)document.getElementById(ni).classList.add('on');\
+  window.scrollTo(0,0);\
+  if(id==='analytics')setTimeout(drawChart,60);\
+\}\
+\
+// CHART\
+function drawChart()\{\
+  const cv=document.getElementById('cc');if(!cv)return;\
+  const ctx=cv.getContext('2d'),dpr=window.devicePixelRatio||1,W=cv.offsetWidth,H=140;\
+  cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+'px';cv.style.height=H+'px';ctx.scale(dpr,dpr);\
+  const pts=[];let v=150;\
+  for(let i=0;i<80;i++)\{v+=(Math.sin(i*.28)*.35+(Math.random()-.41))*v*.022;pts.push(Math.max(40,v));\}\
+  const mn=Math.min(...pts)*.97,mx=Math.max(...pts)*1.03;\
+  const tx=i=>(i/(pts.length-1))*(W-14)+7,ty=v=>H-5-((v-mn)/(mx-mn))*(H-12);\
+  const sma=pts.slice(0,50).reduce((a,b)=>a+b)/50;\
+  ctx.beginPath();ctx.strokeStyle='rgba(13,13,13,.15)';ctx.lineWidth=1;ctx.setLineDash([4,4]);\
+  ctx.moveTo(7,ty(sma));ctx.lineTo(W-7,ty(sma));ctx.stroke();ctx.setLineDash([]);\
+  const g=ctx.createLinearGradient(0,0,0,H);\
+  g.addColorStop(0,'rgba(26,110,60,.15)');g.addColorStop(1,'rgba(26,110,60,0)');\
+  ctx.beginPath();pts.forEach((v,i)=>i?ctx.lineTo(tx(i),ty(v)):ctx.moveTo(tx(i),ty(v)));\
+  ctx.lineTo(tx(pts.length-1),H);ctx.lineTo(7,H);ctx.closePath();ctx.fillStyle=g;ctx.fill();\
+  ctx.beginPath();ctx.strokeStyle='#1a6e3c';ctx.lineWidth=1.8;ctx.lineJoin='round';\
+  pts.forEach((v,i)=>i?ctx.lineTo(tx(i),ty(v)):ctx.moveTo(tx(i),ty(v)));ctx.stroke();\
+  ctx.beginPath();ctx.arc(tx(pts.length-1),ty(pts[pts.length-1]),4,0,Math.PI*2);ctx.fillStyle='#1a6e3c';ctx.fill();\
+\}\
+\
+G('analytics');\
+window.addEventListener('resize',()=>\{if(document.getElementById('pg-analytics').classList.contains('on'))drawChart()\});\
+</script>\
+</body>\
+</html>\
+\pard\pardeftab720\partightenfactor0
+\cf5 \strokec5 EOF\cf4 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf6 \strokec6 echo\cf4 \strokec4  \cf5 \strokec5 "V2 done: \cf6 \strokec6 $(\cf2 \strokec2 wc\cf6 \strokec6  -l \cf4 \strokec4 <\cf6 \strokec6  /home/claude/futara_v2.html)\cf5 \strokec5  lines"
+\f1\fs21 \cf7 \cb1 \strokec7 \
+}
