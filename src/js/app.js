@@ -391,11 +391,23 @@ function showTapeOnboarding() {
 function buildTape() {
   const inner = document.getElementById('tape-inner');
   if (!inner) return;
-  renderTape(inner);
-  connectFinnhubWS(inner);
+
+  const syms = getTapeSymbols();
+
+  // Nothing selected yet — show onboarding if not done
+  if (syms.length === 0) {
+    if (!isOnboardingDone()) {
+      setTimeout(showTapeOnboarding, 800);
+    }
+    inner.innerHTML = '';
+    return;
+  }
+
+  renderTape(inner, syms);
+  connectFinnhubWS(inner, syms);
 }
 
-function renderTape(inner) {
+function renderTape(inner, syms) {
   const fallback = {
     'NVDA':{price:'205.10',pct:'+2.30%',up:true},
     'AAPL':{price:'182.10',pct:'+0.66%',up:true},
@@ -407,16 +419,19 @@ function renderTape(inner) {
     'GOOGL':{price:'175.80',pct:'+0.74%',up:true},
     'JPM': {price:'201.50',pct:'+0.40%',up:true},
     'NFLX':{price:'680.20',pct:'+0.75%',up:true},
+    'BTC': {price:'68,400',pct:'-0.80%',up:false},
+    'ETH': {price:'3,820',pct:'+1.20%',up:true},
   };
-  const items = TAPE_SYMBOLS.map(sym => {
-    const q = tapeQuotes[sym] || fallback[sym] || {price:'—',pct:'0%',up:null};
+  const items = syms.map(sym => {
+    const q = tapeQuotes[sym] || fallback[sym] || {price:'—',pct:'—',up:null};
     return `<div class="ticker-item" id="tape-${sym}">
       <span class="ticker-symbol">${sym}</span>
       <span class="ticker-price">$${q.price}</span>
-      <span class="ticker-change ${q.up===true?'up':q.up===false?'dn':''}">${q.up===true?'▲':'▼'} ${q.pct}</span>
+      <span class="ticker-change ${q.up===true?'up':q.up===false?'dn':''}">${q.up===true?'▲':q.up===false?'▼':''} ${q.pct}</span>
     </div>`;
   });
   inner.innerHTML = [...items, ...items].join('');
+}
 }
 
 function connectFinnhubWS(inner) {
