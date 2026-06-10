@@ -248,12 +248,12 @@ function logTrade({ sym, price, qty, side, reason, currentFundamentals }) {
 
 // ===== NAVIGATION =====
 function showPage(page) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  document.querySelectorAll('.f-page').forEach(p => p.classList.remove('is-active'));
+  document.querySelectorAll('.f-nav-item').forEach(l => l.classList.remove('is-active'));
 
   const pageEl = document.getElementById('page-' + page);
   if (!pageEl) return;
-  pageEl.classList.add('active');
+  pageEl.classList.add('is-active');
   currentPage = page;
 
   const navId = {
@@ -261,7 +261,7 @@ function showPage(page) {
     'analytics-start': 'nav-analytics', 'analytics': 'nav-analytics',
     'comparison': 'nav-comparison', 'portfolio': null, 'profile': null
   }[page];
-  if (navId) document.getElementById(navId)?.classList.add('active');
+  if (navId) document.getElementById(navId)?.classList.add('is-active');
 
   const tape = document.getElementById('ticker-tape');
   if (tape) tape.style.display = 'block';
