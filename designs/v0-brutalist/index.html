@@ -55,10 +55,10 @@
     @media(max-width:992px){.col-8,.col-6,.col-4,.col-3{grid-column:span 12}}
 
     /* ── TAPE ── */
-    .tape-wrap{background:var(--lime);overflow:hidden;height:32px;display:flex;align-items:center}
+    .tape-wrap{background:#000;border-bottom:1px solid rgba(255,255,255,.08);overflow:hidden;height:32px;display:flex;align-items:center}
     .tape-inner{display:flex;animation:tscroll 30s linear infinite;white-space:nowrap}
     @keyframes tscroll{to{transform:translateX(-50%)}}
-    .tape-item{display:inline-flex;align-items:center;gap:10px;padding:0 20px;font-family:var(--font-mono);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#000;border-right:1px solid rgba(0,0,0,.12);height:32px}
+    .tape-item{display:inline-flex;align-items:center;gap:10px;padding:0 24px;font-family:var(--font-mono);font-size:.7rem;font-weight:700;letter-spacing:.06em;color:var(--ink);border-right:1px solid rgba(255,255,255,.06);height:32px}
 
     /* ── CARDS / TABLES ── */
     .stat-card{background:var(--surface-card);border:1px solid var(--border);border-radius:var(--rm);padding:1.5rem}
