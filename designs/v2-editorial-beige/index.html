@@ -687,7 +687,7 @@ footer a:hover{color:var(--ink)}
             if(!SYMS.includes(s))return;
             var prev=Q[s]?parseFloat(Q[s].p.replace(',','')):t.p;
             var pct=((t.p-prev)/prev*100);
-            Q[s]={p:t.p>1000?t.p.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,','):t.p.toFixed(2),c:(pct>=0?'+':'')+pct.toFixed(2)+'%',u:t.p>=prev};
+            Q[s]={p:t.p>1000?Math.round(t.p).toLocaleString():t.p.toFixed(2),c:(pct>=0?'+':'')+pct.toFixed(2)+'%',u:t.p>=prev};
           });
           render();
         }
