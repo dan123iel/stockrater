@@ -17,8 +17,8 @@ body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font
 .nb-ic{width:24px;height:24px;background:var(--P);border-radius:7px;display:flex;align-items:center;justify-content:center}
 .nd{width:1px;height:18px;background:var(--bdm);margin:0 5px}
 .ni{padding:5px 13px;font-size:13px;color:var(--mid);border-radius:var(--pill);transition:all .15s}
-.ni:hover{color:var(--ink);background:rgba(160,140,255,.1)}
-.ni.on{background:var(--P);color:#fff;font-weight:500}
+.nav-link:hover{color:var(--ink);background:rgba(160,140,255,.1)}
+.nav-link.active{background:var(--P);color:#fff;font-weight:500}
 .nic{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all .15s;color:var(--mid)}
 .nic:hover{background:rgba(160,140,255,.12);color:var(--ink)}
 .nic.lime{background:var(--L);color:#111}
@@ -31,7 +31,7 @@ body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font
 @keyframes spin{to{transform:rotate(360deg)}}
 /* PAGES */
 .pg{display:none;min-height:100vh}
-.pg.on{display:block;animation:fi .2s ease}
+.page.active{display:block;animation:fi .2s ease}
 @keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 /* TAPE */
 #tape{height:30px;overflow:hidden;border-bottom:1px solid var(--bdr);background:#0a0812;position:sticky;top:74px;z-index:50}
@@ -80,14 +80,14 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 .dk::-webkit-scrollbar{height:0}
 .dt{flex-shrink:0;padding:10px 14px;background:var(--b2);border:1px solid var(--bdr);border-radius:12px;min-width:110px;transition:all .15s}
 .dt:hover{border-color:var(--bdm)}
-.dt.on{border-color:var(--P);background:rgba(111,94,245,.12)}
+.dt.active{border-color:var(--P);background:rgba(111,94,245,.12)}
 .dl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--dim);margin-bottom:4px}
-.dt.on .dl{color:var(--P2)}
+.dt.active .dl{color:var(--P2)}
 .dv{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--ink);letter-spacing:-.03em}
 .ds{font-size:10px;color:var(--dim);font-family:'DM Mono',monospace;margin-top:2px}
 .sbr{display:flex;gap:4px}
 .sb{padding:4px 10px;border-radius:var(--pill);border:1px solid var(--bdr);font-size:9px;font-weight:700;background:transparent;color:var(--dim);transition:all .15s}
-.sb.on{background:var(--P);color:#fff;border-color:var(--P)}
+.sb.active{background:var(--P);color:#fff;border-color:var(--P)}
 .ct{display:grid;grid-template-columns:200px 1fr 1fr 1fr;border-bottom:1px solid var(--bdr)}
 .cc{padding:10px 16px;border-right:1px solid var(--bdr);font-size:12px}
 .cc:last-child{border-right:none}
@@ -103,7 +103,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 .pr:last-child{border-bottom:none}
 .tog{display:flex;gap:4px}
 .tb{padding:5px 12px;border-radius:var(--pill);border:1px solid var(--bdr);font-size:11px;font-weight:600;background:transparent;color:var(--dim);transition:all .15s;font-family:'DM Sans',sans-serif}
-.tb.on{background:var(--P);color:#fff;border-color:var(--P)}
+.tb.active{background:var(--P);color:#fff;border-color:var(--P)}
 .hm{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:14px 18px}
 .hmi{padding:9px 8px;border-radius:10px;text-align:center}
 .hpos{background:rgba(45,202,114,.1);color:var(--G)}.hneg{background:rgba(252,80,80,.08);color:var(--R)}
@@ -118,37 +118,37 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 <div id="hbg"><div class="dg"></div><div class="gb"></div><div class="orb1"></div><div class="star">✦</div></div>
 
 <nav id="nav">
-  <div class="nb" onclick="G('home')">
+  <div class="nb" onclick="showPage('home')">
     <div class="nb-ic"><svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M7 1L13 12H1Z" fill="white" opacity=".9"/><circle cx="7" cy="10" r="2" fill="white"/></svg></div>
     fut<span style="color:var(--P2)">a</span>ra
   </div>
-  <div class="ni on" id="n-home" onclick="G('home')">home</div>
-  <div class="ni" id="n-markets" onclick="G('markets')">markets</div>
-  <div class="ni" id="n-analytics" onclick="G('analytics')">analytics</div>
-  <div class="ni" id="n-comparison" onclick="G('comparison')">comparison</div>
+  <div class="nav-link on" id="nav-home" onclick="showPage('home')">home</div>
+  <div class="nav-link" id="nav-markets" onclick="showPage('markets')">markets</div>
+  <div class="nav-link" id="nav-analytics" onclick="showPage('analytics')">analytics</div>
+  <div class="nav-link" id="nav-comparison" onclick="showPage('comparison')">comparison</div>
   <div class="nd"></div>
-  <button class="nic lime" onclick="G('portfolio')" title="Portfolio"><svg width="14" height="14" viewBox="0 0 20 20" fill="none"><rect x="2" y="6" width="16" height="12" rx="2.5" stroke="currentColor" stroke-width="1.6"/><path d="M7 6V5a3 3 0 016 0v1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
-  <button class="nic" onclick="G('profile')"><svg width="14" height="14" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="3.2" stroke="currentColor" stroke-width="1.6"/><path d="M3 17c0-3.31 3.13-6 7-6s7 2.69 7 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+  <button class="nic lime" onclick="showPage('portfolio')" title="Portfolio"><svg width="14" height="14" viewBox="0 0 20 20" fill="none"><rect x="2" y="6" width="16" height="12" rx="2.5" stroke="currentColor" stroke-width="1.6"/><path d="M7 6V5a3 3 0 016 0v1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+  <button class="nic" onclick="showPage('profile')"><svg width="14" height="14" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="3.2" stroke="currentColor" stroke-width="1.6"/><path d="M3 17c0-3.31 3.13-6 7-6s7 2.69 7 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
 </nav>
 
-<div id="tape"><div class="ti" id="ti"></div></div>
+<div id="tape"><div class="tape-inner" id="tape-inner"></div></div>
 
 <!-- HOME -->
-<div class="pg on" id="pg-home" style="padding-top:74px;position:relative;z-index:1">
+<div class="page on" id="page-home" style="padding-top:74px;position:relative;z-index:1">
   <div style="padding:80px 3rem 60px;max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1fr 420px;gap:80px;align-items:center">
     <div>
       <div style="font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--P2);margin-bottom:18px;display:flex;align-items:center;gap:8px"><span style="display:block;width:18px;height:1px;background:var(--P2)"></span>Market Intelligence Platform</div>
       <div style="font-family:'Syne',sans-serif;font-size:clamp(3rem,8vw,6rem);font-weight:800;line-height:.94;letter-spacing:-.06em;margin-bottom:22px">Dive deeper<br>into <span style="color:var(--P2)">market</span><br><span style="color:var(--L)">intel.</span></div>
       <div style="font-size:15px;color:var(--mid);line-height:1.7;max-width:460px;margin-bottom:32px;font-weight:300">Algorithmic scorecards, DCF valuation and live ratio analysis — powered by Damodaran-WACC benchmarks and real-time data.</div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px">
-        <button class="btn" style="font-size:14px;padding:11px 24px" onclick="G('analytics')">Start Analysing →</button>
-        <button class="btn2" style="font-size:14px;padding:11px 24px" onclick="G('markets')">Live Markets</button>
+        <button class="btn" style="font-size:14px;padding:11px 24px" onclick="showPage('analytics')">Start Analysing →</button>
+        <button class="btn2" style="font-size:14px;padding:11px 24px" onclick="showPage('markets')">Live Markets</button>
       </div>
       <div style="display:flex;gap:7px;flex-wrap:wrap">
-        <span onclick="G('analytics')" style="padding:5px 13px;background:rgba(111,94,245,.1);border:1px solid var(--bdm);border-radius:var(--pill);font-size:12px;font-family:'DM Mono',monospace;color:var(--mid)">NVDA</span>
-        <span onclick="G('analytics')" style="padding:5px 13px;background:rgba(111,94,245,.1);border:1px solid var(--bdm);border-radius:var(--pill);font-size:12px;font-family:'DM Mono',monospace;color:var(--mid)">AAPL</span>
-        <span onclick="G('analytics')" style="padding:5px 13px;background:rgba(111,94,245,.1);border:1px solid var(--bdm);border-radius:var(--pill);font-size:12px;font-family:'DM Mono',monospace;color:var(--mid)">MSFT</span>
-        <span onclick="G('analytics')" style="padding:5px 13px;background:rgba(111,94,245,.1);border:1px solid var(--bdm);border-radius:var(--pill);font-size:12px;font-family:'DM Mono',monospace;color:var(--mid)">AMD</span>
+        <span onclick="showPage('analytics')" style="padding:5px 13px;background:rgba(111,94,245,.1);border:1px solid var(--bdm);border-radius:var(--pill);font-size:12px;font-family:'DM Mono',monospace;color:var(--mid)">NVDA</span>
+        <span onclick="showPage('analytics')" style="padding:5px 13px;background:rgba(111,94,245,.1);border:1px solid var(--bdm);border-radius:var(--pill);font-size:12px;font-family:'DM Mono',monospace;color:var(--mid)">AAPL</span>
+        <span onclick="showPage('analytics')" style="padding:5px 13px;background:rgba(111,94,245,.1);border:1px solid var(--bdm);border-radius:var(--pill);font-size:12px;font-family:'DM Mono',monospace;color:var(--mid)">MSFT</span>
+        <span onclick="showPage('analytics')" style="padding:5px 13px;background:rgba(111,94,245,.1);border:1px solid var(--bdm);border-radius:var(--pill);font-size:12px;font-family:'DM Mono',monospace;color:var(--mid)">AMD</span>
       </div>
     </div>
     <div class="c">
@@ -167,9 +167,9 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
     </div>
   </div>
   <div style="padding:0 3rem 80px;max-width:1400px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
-    <div class="c" onclick="G('analytics')"><div class="ch"><span class="cl">01 — Scorecard</span></div><div class="cb"><div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:-.04em;margin-bottom:8px">Algorithmic<br>Rating</div><div style="font-size:13px;color:var(--mid);line-height:1.65">10-ratio weighted scoring. STRONG BUY to AVOID in seconds.</div></div></div>
-    <div class="c" onclick="G('analytics')"><div class="ch"><span class="cl">02 — DCF Engine</span></div><div class="cb"><div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:-.04em;margin-bottom:8px">Stresstest<br>Valuation</div><div style="font-size:13px;color:var(--mid);line-height:1.65">Real-time intrinsic value sliders. Worst / best case scenarios.</div></div></div>
-    <div class="c" onclick="G('comparison')"><div class="ch"><span class="cl">03 — Comparison</span></div><div class="cb"><div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:-.04em;margin-bottom:8px">Peer-to-Peer<br>Matrix</div><div style="font-size:13px;color:var(--mid);line-height:1.65">Side-by-side across scorecard, DCF, margins and technicals.</div></div></div>
+    <div class="c" onclick="showPage('analytics')"><div class="ch"><span class="cl">01 — Scorecard</span></div><div class="cb"><div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:-.04em;margin-bottom:8px">Algorithmic<br>Rating</div><div style="font-size:13px;color:var(--mid);line-height:1.65">10-ratio weighted scoring. STRONG BUY to AVOID in seconds.</div></div></div>
+    <div class="c" onclick="showPage('analytics')"><div class="ch"><span class="cl">02 — DCF Engine</span></div><div class="cb"><div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:-.04em;margin-bottom:8px">Stresstest<br>Valuation</div><div style="font-size:13px;color:var(--mid);line-height:1.65">Real-time intrinsic value sliders. Worst / best case scenarios.</div></div></div>
+    <div class="c" onclick="showPage('comparison')"><div class="ch"><span class="cl">03 — Comparison</span></div><div class="cb"><div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:-.04em;margin-bottom:8px">Peer-to-Peer<br>Matrix</div><div style="font-size:13px;color:var(--mid);line-height:1.65">Side-by-side across scorecard, DCF, margins and technicals.</div></div></div>
   </div>
   <footer style="border-top:1px solid var(--bdr);padding:20px 3rem;display:flex;justify-content:space-between;font-size:11px;color:var(--dim);max-width:1400px;margin:0 auto">
     <div style="display:flex;gap:18px"><span>About</span><span>Methodology</span><span>API</span></div><div>futara · 2026</div>
@@ -177,7 +177,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 </div>
 
 <!-- MARKETS -->
-<div class="pg" id="pg-markets" style="padding-top:104px">
+<div class="page" id="page-markets" style="padding-top:104px">
   <div style="padding:0 3rem 60px;max-width:1400px;margin:0 auto">
     <div style="margin-bottom:20px"><div style="font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--P2);margin-bottom:8px">Live Markets</div><div style="font-family:'Syne',sans-serif;font-size:clamp(2.5rem,5vw,4rem);font-weight:800;line-height:.95;letter-spacing:-.06em">market<br><span style="color:var(--L)">pulse.</span></div></div>
     <div style="display:grid;grid-template-columns:290px 1fr;gap:20px">
@@ -210,7 +210,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
         </div>
         <div class="c"><div style="padding:0 18px">
           <div style="padding:13px 0;border-bottom:1px solid var(--bdr)"><div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--dim);margin-bottom:4px">10:15 AM</div><span class="tag tr" style="margin-bottom:5px;display:inline-block">Macro Alert</span><div style="font-size:13px;line-height:1.5;margin-top:4px">US Core CPI 0.3% MoM — hot vs expected. Rate-sensitive volatility spike incoming.</div></div>
-          <div style="padding:13px 0;border-bottom:1px solid var(--bdr)"><div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--dim);margin-bottom:4px">09:45 AM</div><span class="tag tg" style="margin-bottom:5px;display:inline-block">NVDA Intel</span><div style="font-size:13px;line-height:1.5;margin-top:4px">Institutional block buying at $201.50. Uptrend confirmed vs SMA 200.</div><div style="margin-top:8px"><button class="btn2" style="font-size:10px;padding:4px 10px" onclick="G('analytics')">Open Analytics →</button></div></div>
+          <div style="padding:13px 0;border-bottom:1px solid var(--bdr)"><div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--dim);margin-bottom:4px">09:45 AM</div><span class="tag tg" style="margin-bottom:5px;display:inline-block">NVDA Intel</span><div style="font-size:13px;line-height:1.5;margin-top:4px">Institutional block buying at $201.50. Uptrend confirmed vs SMA 200.</div><div style="margin-top:8px"><button class="btn2" style="font-size:10px;padding:4px 10px" onclick="showPage('analytics')">Open Analytics →</button></div></div>
           <div style="padding:13px 0;border-bottom:1px solid var(--bdr)"><div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--dim);margin-bottom:4px">08:30 AM</div><span class="tag ta" style="margin-bottom:5px;display:inline-block">Corporate</span><div style="font-size:13px;line-height:1.5;margin-top:4px">ECB Press Conference — Lagarde on Q3 2026 rate cut timelines.</div></div>
           <div style="padding:13px 0"><div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--dim);margin-bottom:4px">07:00 AM</div><span class="tag tp" style="margin-bottom:5px;display:inline-block">Dividend</span><div style="font-size:13px;line-height:1.5;margin-top:4px">MSFT declares $0.85/share quarterly dividend — ex-date July 17.</div></div>
         </div></div>
@@ -220,7 +220,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 </div>
 
 <!-- ANALYTICS -->
-<div class="pg" id="pg-analytics" style="padding-top:74px">
+<div class="page" id="page-analytics" style="padding-top:74px">
   <div style="padding:26px 3rem 16px;border-bottom:1px solid var(--bdr);display:flex;align-items:flex-start;justify-content:space-between;max-width:1400px;margin:0 auto">
     <div>
       <div style="font-size:10px;color:var(--dim);font-family:'DM Mono',monospace;margin-bottom:4px">NVDA · NASDAQ · Semiconductor</div>
@@ -228,7 +228,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
       <div class="g" style="font-size:14px;font-family:'DM Mono',monospace;margin-top:5px">+$4.62 (+2.30%) today</div>
     </div>
     <div style="display:flex;gap:8px;margin-top:6px">
-      <button class="btn">+ Portfolio</button><button class="btn2">+ Watchlist</button><button class="btn2" onclick="G('comparison')">Compare</button>
+      <button class="btn">+ Portfolio</button><button class="btn2">+ Watchlist</button><button class="btn2" onclick="showPage('comparison')">Compare</button>
     </div>
   </div>
   <div style="padding:16px 3rem 60px;max-width:1400px;margin:0 auto">
@@ -253,7 +253,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
         <div class="br"><span style="flex:1;color:var(--mid)">DCF/Valuation</span><span style="font-size:9px;color:var(--dim)">5%</span><div class="bw"><div class="bf" style="width:40%;background:var(--A)"></div></div><span style="font-family:'DM Mono',monospace;font-size:11px;min-width:36px;text-align:right">2.0/5</span></div>
       </div></div>
       <div class="c"><div class="ch"><span class="cl">Price Chart</span><div class="sbr"><button class="sb on">1M</button><button class="sb">6M</button><button class="sb">1Y</button></div></div><div class="cb">
-        <canvas id="cc" style="width:100%;display:block" height="140"></canvas>
+        <canvas id="price-chart-canvas" style="width:100%;display:block" height="140"></canvas>
         <div style="margin-top:10px;padding:8px 10px;background:rgba(45,202,114,.08);border-radius:10px;font-size:12px;color:var(--G)">🔥 Strong Uptrend — 8.7% above 200-day MA</div>
       </div></div>
       <div class="c"><div class="ch"><span class="cl">Key Financial Ratios</span></div>
@@ -317,7 +317,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 </div>
 
 <!-- COMPARISON -->
-<div class="pg" id="pg-comparison" style="padding-top:74px">
+<div class="page" id="page-comparison" style="padding-top:74px">
   <div style="padding:24px 3rem;max-width:1400px;margin:0 auto">
     <div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;letter-spacing:-.05em;margin-bottom:6px">Peer-to-Peer Comparison</div>
     <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto;gap:12px;align-items:end;background:var(--b2);border:1px solid var(--bdr);border-radius:16px;padding:20px;margin-bottom:20px;margin-top:20px">
@@ -336,14 +336,14 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
         <div style="padding:14px 16px"><div style="font-size:15px;font-weight:800;font-family:'DM Mono',monospace;color:var(--R)">INTC</div><div style="font-size:10px;color:var(--dim);margin-top:2px">Intel Corporation</div></div>
       </div>
       <div class="ct"><div class="cs">⭐ Scorecard</div></div>
-      <div class="ct"><div class="cc" style="color:var(--mid)">Score</div><div class="cc" style="background:rgba(45,202,114,.04)"><span class="tag tg">4.57 Strong Buy</span></div><div class="cc"><span class="tag ta">3.82 Buy</span></div><div class="cc"><span class="tag tr">2.10 Avoid</span></div></div>
+      <div class="ct"><div class="price-chart-canvas" style="color:var(--mid)">Score</div><div class="price-chart-canvas" style="background:rgba(45,202,114,.04)"><span class="tag tg">4.57 Strong Buy</span></div><div class="price-chart-canvas"><span class="tag ta">3.82 Buy</span></div><div class="price-chart-canvas"><span class="tag tr">2.10 Avoid</span></div></div>
       <div class="ct"><div class="cs">🧮 Valuation</div></div>
-      <div class="ct"><div class="cc" style="color:var(--mid)">Fair Value</div><div class="cc" style="background:rgba(45,202,114,.04);font-family:'DM Mono',monospace;font-weight:700">$245.00</div><div class="cc" style="font-family:'DM Mono',monospace">$155.00</div><div class="cc" style="font-family:'DM Mono',monospace">$22.00</div></div>
-      <div class="ct"><div class="cc" style="color:var(--mid)">Margin of Safety</div><div class="cc" style="background:rgba(45,202,114,.04);font-family:'DM Mono',monospace;color:var(--G);font-weight:700">+19.4%</div><div class="cc" style="font-family:'DM Mono',monospace;color:var(--A)">−3.3%</div><div class="cc" style="font-family:'DM Mono',monospace;color:var(--R)">−29.3%</div></div>
+      <div class="ct"><div class="price-chart-canvas" style="color:var(--mid)">Fair Value</div><div class="price-chart-canvas" style="background:rgba(45,202,114,.04);font-family:'DM Mono',monospace;font-weight:700">$245.00</div><div class="price-chart-canvas" style="font-family:'DM Mono',monospace">$155.00</div><div class="price-chart-canvas" style="font-family:'DM Mono',monospace">$22.00</div></div>
+      <div class="ct"><div class="price-chart-canvas" style="color:var(--mid)">Margin of Safety</div><div class="price-chart-canvas" style="background:rgba(45,202,114,.04);font-family:'DM Mono',monospace;color:var(--G);font-weight:700">+19.4%</div><div class="price-chart-canvas" style="font-family:'DM Mono',monospace;color:var(--A)">−3.3%</div><div class="price-chart-canvas" style="font-family:'DM Mono',monospace;color:var(--R)">−29.3%</div></div>
       <div class="ct"><div class="cs">📊 Key Metrics</div></div>
-      <div class="ct"><div class="cc" style="color:var(--mid)">P/E Ratio</div><div class="cc" style="background:rgba(45,202,114,.04);font-family:'DM Mono',monospace">16.2× <span class="tag tg">Cheap</span></div><div class="cc" style="font-family:'DM Mono',monospace">28.4× <span class="tag tr">Exp.</span></div><div class="cc" style="font-family:'DM Mono',monospace">19.5× <span class="tag ta">Fair</span></div></div>
-      <div class="ct"><div class="cc" style="color:var(--mid)">Rev. Growth</div><div class="cc" style="background:rgba(45,202,114,.04);font-family:'DM Mono',monospace;color:var(--G)">+85.2%</div><div class="cc" style="font-family:'DM Mono',monospace;color:var(--G)">+12.2%</div><div class="cc" style="font-family:'DM Mono',monospace;color:var(--R)">−5.1%</div></div>
-      <div class="ct" style="background:var(--b3)"><div class="cc"></div><div class="cc"><button class="btn" style="font-size:10px;padding:5px 12px" onclick="G('analytics')">Full Analytics</button></div><div class="cc"><button class="btn2" style="font-size:10px;padding:5px 12px">Full Analytics</button></div><div class="cc"><button class="btn2" style="font-size:10px;padding:5px 12px">Full Analytics</button></div></div>
+      <div class="ct"><div class="price-chart-canvas" style="color:var(--mid)">P/E Ratio</div><div class="price-chart-canvas" style="background:rgba(45,202,114,.04);font-family:'DM Mono',monospace">16.2× <span class="tag tg">Cheap</span></div><div class="price-chart-canvas" style="font-family:'DM Mono',monospace">28.4× <span class="tag tr">Exp.</span></div><div class="price-chart-canvas" style="font-family:'DM Mono',monospace">19.5× <span class="tag ta">Fair</span></div></div>
+      <div class="ct"><div class="price-chart-canvas" style="color:var(--mid)">Rev. Growth</div><div class="price-chart-canvas" style="background:rgba(45,202,114,.04);font-family:'DM Mono',monospace;color:var(--G)">+85.2%</div><div class="price-chart-canvas" style="font-family:'DM Mono',monospace;color:var(--G)">+12.2%</div><div class="price-chart-canvas" style="font-family:'DM Mono',monospace;color:var(--R)">−5.1%</div></div>
+      <div class="ct" style="background:var(--b3)"><div class="price-chart-canvas"></div><div class="price-chart-canvas"><button class="btn" style="font-size:10px;padding:5px 12px" onclick="showPage('analytics')">Full Analytics</button></div><div class="price-chart-canvas"><button class="btn2" style="font-size:10px;padding:5px 12px">Full Analytics</button></div><div class="price-chart-canvas"><button class="btn2" style="font-size:10px;padding:5px 12px">Full Analytics</button></div></div>
     </div>
     <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--dim);margin-bottom:12px">Popular Duels</div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
@@ -355,7 +355,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 </div>
 
 <!-- PORTFOLIO -->
-<div class="pg" id="pg-portfolio" style="padding-top:74px">
+<div class="page" id="page-portfolio" style="padding-top:74px">
   <div style="padding:24px 3rem 60px;max-width:1400px;margin:0 auto">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
       <div><div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;letter-spacing:-.05em">Portfolio</div><div style="font-size:12px;color:var(--dim);margin-top:3px">Command Center</div></div>
@@ -371,9 +371,9 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
       <div>
         <div class="c" style="margin-bottom:14px"><div class="ch"><span class="cl">Holdings</span></div>
           <table class="rt"><thead><tr><th>Asset</th><th>Allocation</th><th>Return</th><th>Score</th><th>Trend</th></tr></thead><tbody>
-            <tr onclick="G('analytics')"><td><div style="font-weight:800;font-family:'DM Mono',monospace">NVDA</div><div style="font-size:10px;color:var(--dim)">Nvidia</div></td><td style="font-family:'DM Mono',monospace;font-size:12px">$19,050 · 45.2%</td><td class="g" style="font-family:'DM Mono',monospace">+46.51%</td><td><span class="tag tg">4.57</span></td><td class="g">↑ SMA</td></tr>
+            <tr onclick="showPage('analytics')"><td><div style="font-weight:800;font-family:'DM Mono',monospace">NVDA</div><div style="font-size:10px;color:var(--dim)">Nvidia</div></td><td style="font-family:'DM Mono',monospace;font-size:12px">$19,050 · 45.2%</td><td class="g" style="font-family:'DM Mono',monospace">+46.51%</td><td><span class="tag tg">4.57</span></td><td class="g">↑ SMA</td></tr>
             <tr><td><div style="font-weight:800;font-family:'DM Mono',monospace">BTC</div></td><td style="font-family:'DM Mono',monospace;font-size:12px">$9,310 · 22.1%</td><td class="r" style="font-family:'DM Mono',monospace">−0.80%</td><td><span class="tag ta">3.40</span></td><td class="r">↓ SMA</td></tr>
-            <tr onclick="G('analytics')"><td><div style="font-weight:800;font-family:'DM Mono',monospace">COST</div></td><td style="font-family:'DM Mono',monospace;font-size:12px">$5,360 · 12.7%</td><td class="g" style="font-family:'DM Mono',monospace">+3.2%</td><td><span class="tag tg">4.25</span></td><td class="g">↑ SMA</td></tr>
+            <tr onclick="showPage('analytics')"><td><div style="font-weight:800;font-family:'DM Mono',monospace">COST</div></td><td style="font-family:'DM Mono',monospace;font-size:12px">$5,360 · 12.7%</td><td class="g" style="font-family:'DM Mono',monospace">+3.2%</td><td><span class="tag tg">4.25</span></td><td class="g">↑ SMA</td></tr>
             <tr><td><div style="font-weight:800;font-family:'DM Mono',monospace">Cash</div></td><td style="font-family:'DM Mono',monospace;font-size:12px">$8,430 · 20.0%</td><td style="color:var(--dim)">—</td><td>—</td><td style="color:var(--dim)">—</td></tr>
           </tbody></table>
         </div>
@@ -414,7 +414,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
 </div>
 
 <!-- PROFILE -->
-<div class="pg" id="pg-profile" style="padding-top:74px">
+<div class="page" id="page-profile" style="padding-top:74px">
   <div style="max-width:700px;margin:0 auto;padding:28px 3rem 60px">
     <div style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;letter-spacing:-.05em;margin-bottom:24px">Profile & Settings</div>
     <div class="ps"><div class="psh">Appearance</div><div class="psb">
@@ -438,50 +438,6 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;heigh
   </div>
 </div>
 
-<script>
-const C=document.getElementById('cur');
-document.addEventListener('mousemove',e=>{C.style.left=e.clientX+'px';C.style.top=e.clientY+'px'});
-document.addEventListener('mouseover',e=>{C.classList.toggle('h',!!e.target.closest('button,a,[onclick],.ni,.c,.dt,.hmi,.wi'))});
-document.addEventListener('mousedown',()=>C.style.transform='translate(-50%,-50%) scale(.75)');
-document.addEventListener('mouseup',()=>C.style.transform='translate(-50%,-50%)');
-
-const td=[{s:'S&P 500',p:'5,420',c:'+0.4%',u:1},{s:'NASDAQ',p:'18,650',c:'+1.2%',u:1},{s:'NVDA',p:'$205.10',c:'+46.51%',u:1},{s:'AAPL',p:'$182.10',c:'+1.2%',u:1},{s:'BTC/USD',p:'$68,400',c:'−0.8%',u:0},{s:'TSLA',p:'$175.20',c:'−3.4%',u:0},{s:'MSFT',p:'$431.20',c:'+0.8%',u:1},{s:'AMD',p:'$160.40',c:'+3.1%',u:1}];
-document.getElementById('ti').innerHTML=[...td,...td].map(t=>`<div class="tc"><span style="font-weight:500;color:rgba(240,237,245,.8)">${t.s}</span><span>${t.p}</span><span style="color:${t.u?'var(--G)':'var(--R)'}">${t.c}</span></div>`).join('');
-
-const PAGES=['home','markets','analytics','comparison','portfolio','profile'];
-const NAV_IDS={home:'n-home',markets:'n-markets',analytics:'n-analytics',comparison:'n-comparison'};
-function G(id){
-  PAGES.forEach(p=>{document.getElementById('pg-'+p)?.classList.remove('on')});
-  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
-  document.getElementById('pg-'+id)?.classList.add('on');
-  if(NAV_IDS[id])document.getElementById(NAV_IDS[id])?.classList.add('on');
-  document.getElementById('hbg').style.display=id==='home'?'block':'none';
-  window.scrollTo(0,0);
-  if(id==='analytics')setTimeout(drawChart,50);
-}
-
-function drawChart(){
-  const cv=document.getElementById('cc');if(!cv)return;
-  const ctx=cv.getContext('2d'),dpr=window.devicePixelRatio||1,W=cv.offsetWidth,H=140;
-  cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+'px';cv.style.height=H+'px';ctx.scale(dpr,dpr);
-  const pts=[];let v=160;
-  for(let i=0;i<80;i++){v+=(Math.sin(i*.3)*.3+(Math.random()-.41))*v*.022;pts.push(Math.max(40,v));}
-  const mn=Math.min(...pts)*.97,mx=Math.max(...pts)*1.03;
-  const tx=i=>(i/(pts.length-1))*(W-16)+8,ty=v=>H-6-((v-mn)/(mx-mn))*(H-14);
-  const sma=pts.slice(0,50).reduce((a,b)=>a+b)/50;
-  ctx.beginPath();ctx.strokeStyle='rgba(111,94,245,.3)';ctx.lineWidth=1;ctx.setLineDash([4,3]);
-  ctx.moveTo(8,ty(sma));ctx.lineTo(W-8,ty(sma));ctx.stroke();ctx.setLineDash([]);
-  const g=ctx.createLinearGradient(0,0,0,H);
-  g.addColorStop(0,'rgba(45,202,114,.2)');g.addColorStop(1,'rgba(45,202,114,0)');
-  ctx.beginPath();pts.forEach((v,i)=>i?ctx.lineTo(tx(i),ty(v)):ctx.moveTo(tx(i),ty(v)));
-  ctx.lineTo(tx(pts.length-1),H);ctx.lineTo(8,H);ctx.closePath();ctx.fillStyle=g;ctx.fill();
-  ctx.beginPath();ctx.strokeStyle='#2dca72';ctx.lineWidth=2;ctx.lineJoin='round';
-  pts.forEach((v,i)=>i?ctx.lineTo(tx(i),ty(v)):ctx.moveTo(tx(i),ty(v)));ctx.stroke();
-  ctx.beginPath();ctx.arc(tx(pts.length-1),ty(pts[pts.length-1]),4,0,Math.PI*2);ctx.fillStyle='#2dca72';ctx.fill();
-}
-
-G('home');
-window.addEventListener('resize',()=>{if(document.getElementById('pg-analytics').classList.contains('on'))drawChart()});
-</script>
+<script src="/src/js/app.js"></script>
 </body>
 </html>

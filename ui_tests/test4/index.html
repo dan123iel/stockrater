@@ -14,15 +14,15 @@ body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;font-s
 nav{position:fixed;top:0;left:0;right:0;z-index:100;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:rgba(250,250,248,.95);backdrop-filter:blur(12px)}
 .logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;letter-spacing:.04em}
 .logo span{font-style:italic}
-.nav-c{display:flex;gap:32px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mid)}
-.nav-c a{transition:color .2s}
-.nav-c a:hover,.nav-c a.on{color:var(--ink)}
+.nav-links{display:flex;gap:32px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mid)}
+.nav-links a{transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--ink)}
 .nav-r{display:flex;gap:16px;align-items:center}
 .nb{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);transition:color .2s}
 .nb:hover{color:var(--ink)}
 .nb.solid{color:var(--ink);border-bottom:1px solid var(--ink);padding-bottom:1px}
 .pg{display:none;padding-top:56px}
-.pg.on{display:block;animation:fi .3s ease}
+.page.active{display:block;animation:fi .3s ease}
 @keyframes fi{from{opacity:0}to{opacity:1}}
 .serif{font-family:'Cormorant Garamond',serif}
 .mono{font-family:'DM Mono',monospace}
@@ -58,12 +58,12 @@ section{padding:80px 48px}
 .dock::-webkit-scrollbar{height:0}
 .dt{flex-shrink:0;padding:20px 32px;border-right:1px solid var(--bdr);transition:background .15s;min-width:130px}
 .dt:hover{background:#f4f3f0}
-.dt.on{background:var(--ink);color:var(--bg)}
+.dt.active{background:var(--ink);color:var(--bg)}
 .dl{font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--mid);margin-bottom:6px}
-.dt.on .dl{color:rgba(255,255,255,.4)}
+.dt.active .dl{color:rgba(255,255,255,.4)}
 .dv{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;line-height:1}
 .ds{font-size:9px;font-family:'DM Mono',monospace;color:var(--mid);margin-top:3px}
-.dt.on .ds{color:rgba(255,255,255,.4)}
+.dt.active .ds{color:rgba(255,255,255,.4)}
 .score-ring{text-align:center;padding:32px 0}
 .score-n{font-family:'Cormorant Garamond',serif;font-size:5rem;font-weight:300;letter-spacing:-.04em;color:#2a7a4a;line-height:1}
 .score-v{font-size:9px;letter-spacing:.2em;text-transform:uppercase;border:1px solid #2a7a4a;padding:4px 14px;display:inline-block;margin-top:8px;color:#2a7a4a}
@@ -93,13 +93,13 @@ canvas{display:block;width:100%}
 .pr:last-child{border-bottom:none}
 .tog{display:flex;gap:1px}
 .tb{padding:7px 16px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--bdr);background:transparent;color:var(--mid);transition:all .15s;font-family:'Inter',sans-serif}
-.tb.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tb.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 select{background:transparent;border:1px solid var(--bdr);padding:7px 12px;font-size:12px;color:var(--ink);outline:none;font-family:'Inter',sans-serif}
 input[type=range]{width:100%;height:1px;-webkit-appearance:none;background:var(--bdr);outline:none}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--ink)}
 .insight{padding:12px 14px;border-left:2px solid var(--ink);background:#f4f3f0;font-size:12px;color:var(--mid);line-height:1.6;margin-top:12px}
 .ni{display:grid;grid-template-columns:100px 1fr 80px;gap:16px;padding:16px 0;border-bottom:1px solid var(--bdr);align-items:start}
-.ni:hover .ni-t{color:var(--ink)}
+.nav-link:hover .ni-t{color:var(--ink)}
 .ni-time{font-size:10px;font-family:'DM Mono',monospace;color:var(--mid)}
 .ni-t{font-size:13px;line-height:1.6;color:var(--mid);transition:color .15s}
 .lev{border:1px solid var(--bdr);padding:20px;margin-bottom:10px;transition:background .15s}
@@ -116,20 +116,20 @@ footer{border-top:1px solid var(--bdr);padding:28px 48px;display:flex;align-item
 <body>
 <div id="C"></div>
 <nav>
-  <div class="logo" onclick="G('home')">fut<span>a</span>ra</div>
-  <div class="nav-c">
-    <a id="n-markets" onclick="G('markets')">Markets</a>
-    <a id="n-analytics" onclick="G('analytics')">Analytics</a>
-    <a id="n-comparison" onclick="G('comparison')">Comparison</a>
+  <div class="logo" onclick="showPage('home')">fut<span>a</span>ra</div>
+  <div class="nav-links">
+    <a id="nav-markets" onclick="showPage('markets')">Markets</a>
+    <a id="nav-analytics" onclick="showPage('analytics')">Analytics</a>
+    <a id="nav-comparison" onclick="showPage('comparison')">Comparison</a>
   </div>
-  <div class="nav-r">
-    <a class="nb" onclick="G('portfolio')">Portfolio</a>
-    <a class="nb solid" onclick="G('profile')">Profile</a>
+  <div class="nav-actions">
+    <a class="nb" onclick="showPage('portfolio')">Portfolio</a>
+    <a class="nb solid" onclick="showPage('profile')">Profile</a>
   </div>
 </nav>
 
 <!-- HOME -->
-<div class="pg on" id="pg-home">
+<div class="page on" id="page-home">
   <div class="hero">
     <div class="hl">
       <div>
@@ -137,15 +137,15 @@ footer{border-top:1px solid var(--bdr);padding:28px 48px;display:flex;align-item
         <h1 class="h-title">Deep<br><em>market</em><br>intel.</h1>
         <p class="h-sub">Algorithmic scorecards, DCF valuation and live ratio analysis — powered by real-time data and Damodaran-WACC benchmarks.</p>
         <div class="h-btns">
-          <button class="btn-fill" onclick="G('analytics')">Start Analysing</button>
-          <button class="btn-line" onclick="G('markets')">Live Markets</button>
+          <button class="btn-fill" onclick="showPage('analytics')">Start Analysing</button>
+          <button class="btn-line" onclick="showPage('markets')">Live Markets</button>
         </div>
       </div>
       <div style="display:flex;gap:32px;flex-wrap:wrap">
-        <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mid);border-bottom:1px solid var(--bdr);padding-bottom:4px" onclick="G('analytics')">NVDA</span>
-        <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mid);border-bottom:1px solid var(--bdr);padding-bottom:4px" onclick="G('analytics')">AAPL</span>
-        <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mid);border-bottom:1px solid var(--bdr);padding-bottom:4px" onclick="G('analytics')">MSFT</span>
-        <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mid);border-bottom:1px solid var(--bdr);padding-bottom:4px" onclick="G('analytics')">AMD</span>
+        <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mid);border-bottom:1px solid var(--bdr);padding-bottom:4px" onclick="showPage('analytics')">NVDA</span>
+        <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mid);border-bottom:1px solid var(--bdr);padding-bottom:4px" onclick="showPage('analytics')">AAPL</span>
+        <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mid);border-bottom:1px solid var(--bdr);padding-bottom:4px" onclick="showPage('analytics')">MSFT</span>
+        <span style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mid);border-bottom:1px solid var(--bdr);padding-bottom:4px" onclick="showPage('analytics')">AMD</span>
       </div>
     </div>
     <div style="background:#0a0a0a;color:#fafaf8;display:flex;flex-direction:column;padding:80px 48px">
@@ -163,14 +163,14 @@ footer{border-top:1px solid var(--bdr);padding:28px 48px;display:flex;align-item
       </div>
     </div>
   </div>
-  <div class="tape"><div class="tape-i" id="ti"></div></div>
+  <div class="tape"><div class="tape-i" id="tape-inner"></div></div>
   <section>
     <div class="max">
       <div class="sec-no">What we offer</div>
       <div class="bento" style="grid-template-columns:repeat(3,1fr);margin-top:40px">
-        <div style="padding:40px;border-right:1px solid var(--bdr)" onclick="G('analytics')" onmouseover="this.style.background='#f4f3f0'" onmouseout="this.style.background=''"><div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--mid);margin-bottom:24px">01</div><div class="serif" style="font-size:2rem;font-weight:300;line-height:1.05;letter-spacing:-.02em;margin-bottom:14px">Algorithmic<br>Scorecard</div><div style="font-size:12px;color:var(--mid);line-height:1.75">10-ratio weighted scoring. STRONG BUY to AVOID in seconds.</div></div>
-        <div style="padding:40px;border-right:1px solid var(--bdr)" onclick="G('analytics')" onmouseover="this.style.background='#f4f3f0'" onmouseout="this.style.background=''"><div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--mid);margin-bottom:24px">02</div><div class="serif" style="font-size:2rem;font-weight:300;line-height:1.05;letter-spacing:-.02em;margin-bottom:14px">DCF Stresstest<br>Engine</div><div style="font-size:12px;color:var(--mid);line-height:1.75">Intrinsic value sliders. Worst and best-case scenarios instantly.</div></div>
-        <div style="padding:40px" onclick="G('comparison')" onmouseover="this.style.background='#f4f3f0'" onmouseout="this.style.background=''"><div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--mid);margin-bottom:24px">03</div><div class="serif" style="font-size:2rem;font-weight:300;line-height:1.05;letter-spacing:-.02em;margin-bottom:14px">Peer-to-Peer<br>Comparison</div><div style="font-size:12px;color:var(--mid);line-height:1.75">Side-by-side matrix: scorecard, DCF, margins, technicals.</div></div>
+        <div style="padding:40px;border-right:1px solid var(--bdr)" onclick="showPage('analytics')" onmouseover="this.style.background='#f4f3f0'" onmouseout="this.style.background=''"><div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--mid);margin-bottom:24px">01</div><div class="serif" style="font-size:2rem;font-weight:300;line-height:1.05;letter-spacing:-.02em;margin-bottom:14px">Algorithmic<br>Scorecard</div><div style="font-size:12px;color:var(--mid);line-height:1.75">10-ratio weighted scoring. STRONG BUY to AVOID in seconds.</div></div>
+        <div style="padding:40px;border-right:1px solid var(--bdr)" onclick="showPage('analytics')" onmouseover="this.style.background='#f4f3f0'" onmouseout="this.style.background=''"><div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--mid);margin-bottom:24px">02</div><div class="serif" style="font-size:2rem;font-weight:300;line-height:1.05;letter-spacing:-.02em;margin-bottom:14px">DCF Stresstest<br>Engine</div><div style="font-size:12px;color:var(--mid);line-height:1.75">Intrinsic value sliders. Worst and best-case scenarios instantly.</div></div>
+        <div style="padding:40px" onclick="showPage('comparison')" onmouseover="this.style.background='#f4f3f0'" onmouseout="this.style.background=''"><div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--mid);margin-bottom:24px">03</div><div class="serif" style="font-size:2rem;font-weight:300;line-height:1.05;letter-spacing:-.02em;margin-bottom:14px">Peer-to-Peer<br>Comparison</div><div style="font-size:12px;color:var(--mid);line-height:1.75">Side-by-side matrix: scorecard, DCF, margins, technicals.</div></div>
       </div>
     </div>
   </section>
@@ -178,7 +178,7 @@ footer{border-top:1px solid var(--bdr);padding:28px 48px;display:flex;align-item
 </div>
 
 <!-- MARKETS -->
-<div class="pg" id="pg-markets">
+<div class="page" id="page-markets">
   <section style="padding:64px 48px 0">
     <div class="max">
       <div class="sec-no">Global Markets</div>
@@ -208,10 +208,10 @@ footer{border-top:1px solid var(--bdr);padding:28px 48px;display:flex;align-item
         </div>
         <div>
           <div style="padding:14px 32px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between"><span class="sec-no" style="margin-bottom:0">Intel Feed</span><span class="mono g" style="font-size:9px">Live</span></div>
-          <div class="ni" style="padding:16px 32px"><div class="ni-time">10:15 AM</div><div><span class="tag tr" style="margin-bottom:5px;display:inline-block">Macro Alert</span><div class="ni-t" style="margin-top:5px">US Core CPI 0.3% MoM — hot vs expected. Rate-sensitive volatility spike.</div></div><div style="text-align:right"><span class="tag">High</span></div></div>
-          <div class="ni" style="padding:16px 32px"><div class="ni-time">09:45 AM</div><div><span class="tag tg" style="margin-bottom:5px;display:inline-block">NVDA Intel</span><div class="ni-t" style="margin-top:5px">Institutional block buying at $201.50. Uptrend confirmed vs SMA 200.</div><div style="margin-top:10px"><button class="btn-line" onclick="G('analytics')" style="font-size:10px">Open Analytics</button></div></div><div></div></div>
-          <div class="ni" style="padding:16px 32px"><div class="ni-time">08:30 AM</div><div><span class="tag ta" style="margin-bottom:5px;display:inline-block">Corporate</span><div class="ni-t" style="margin-top:5px">ECB Press Conference — Lagarde on Q3 2026 rate cut timelines.</div></div><div><span class="tag">Med</span></div></div>
-          <div class="ni" style="padding:16px 32px;border-bottom:none"><div class="ni-time">07:00 AM</div><div><span class="tag tp" style="margin-bottom:5px;display:inline-block">Dividend</span><div class="ni-t" style="margin-top:5px">MSFT declares $0.85/share quarterly dividend — ex-date July 17.</div></div><div></div></div>
+          <div class="nav-link" style="padding:16px 32px"><div class="ni-time">10:15 AM</div><div><span class="tag tr" style="margin-bottom:5px;display:inline-block">Macro Alert</span><div class="ni-t" style="margin-top:5px">US Core CPI 0.3% MoM — hot vs expected. Rate-sensitive volatility spike.</div></div><div style="text-align:right"><span class="tag">High</span></div></div>
+          <div class="nav-link" style="padding:16px 32px"><div class="ni-time">09:45 AM</div><div><span class="tag tg" style="margin-bottom:5px;display:inline-block">NVDA Intel</span><div class="ni-t" style="margin-top:5px">Institutional block buying at $201.50. Uptrend confirmed vs SMA 200.</div><div style="margin-top:10px"><button class="btn-line" onclick="showPage('analytics')" style="font-size:10px">Open Analytics</button></div></div><div></div></div>
+          <div class="nav-link" style="padding:16px 32px"><div class="ni-time">08:30 AM</div><div><span class="tag ta" style="margin-bottom:5px;display:inline-block">Corporate</span><div class="ni-t" style="margin-top:5px">ECB Press Conference — Lagarde on Q3 2026 rate cut timelines.</div></div><div><span class="tag">Med</span></div></div>
+          <div class="nav-link" style="padding:16px 32px;border-bottom:none"><div class="ni-time">07:00 AM</div><div><span class="tag tp" style="margin-bottom:5px;display:inline-block">Dividend</span><div class="ni-t" style="margin-top:5px">MSFT declares $0.85/share quarterly dividend — ex-date July 17.</div></div><div></div></div>
         </div>
       </div>
     </div>
@@ -220,7 +220,7 @@ footer{border-top:1px solid var(--bdr);padding:28px 48px;display:flex;align-item
 </div>
 
 <!-- ANALYTICS -->
-<div class="pg" id="pg-analytics">
+<div class="page" id="page-analytics">
   <div style="border-bottom:1px solid var(--bdr);padding:40px 48px 28px;display:flex;align-items:flex-end;justify-content:space-between">
     <div>
       <div class="mono" style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--mid);margin-bottom:14px">NVDA · NASDAQ · Semiconductor</div>
@@ -228,9 +228,9 @@ footer{border-top:1px solid var(--bdr);padding:28px 48px;display:flex;align-item
       <div class="g mono" style="font-size:12px;margin-top:8px">+$4.62 (+2.30%)</div>
     </div>
     <div style="display:flex;gap:16px">
-      <button class="btn-fill" onclick="G('portfolio')">+ Portfolio</button>
+      <button class="btn-fill" onclick="showPage('portfolio')">+ Portfolio</button>
       <button class="btn-line" style="font-size:11px">+ Watchlist</button>
-      <button class="btn-line" style="font-size:11px" onclick="G('comparison')">Compare</button>
+      <button class="btn-line" style="font-size:11px" onclick="showPage('comparison')">Compare</button>
     </div>
   </div>
   <div class="dock">
@@ -258,7 +258,7 @@ footer{border-top:1px solid var(--bdr);padding:28px 48px;display:flex;align-item
           <span style="border-bottom:1px solid var(--ink);color:var(--ink)">1M</span><span>6M</span><span>1Y</span>
         </div>
       </div>
-      <canvas id="cc" height="140"></canvas>
+      <canvas id="price-chart-canvas" height="140"></canvas>
       <div class="insight">Strong Uptrend — Price 8.7% above 200-day moving average</div>
     </div>
     <div style="padding:32px">
@@ -311,8 +311,8 @@ footer{border-top:1px solid var(--bdr);padding:28px 48px;display:flex;align-item
       <div class="sec-no" style="margin-bottom:14px">News &amp; Sentiment</div>
       <div style="display:flex;gap:12px;font-size:11px;font-family:'DM Mono',monospace;margin-bottom:10px"><span class="g">72% Bull</span><span style="color:var(--mid)">18% Neutral</span><span class="r">10% Bear</span></div>
       <div style="display:flex;height:1px;background:var(--bdr);margin-bottom:16px"><div style="flex:.72;background:#2a7a4a"></div><div style="flex:.18;background:#888"></div><div style="flex:.1;background:#c03030"></div></div>
-      <div class="ni" style="padding:10px 0"><div class="ni-time">Today</div><div class="ni-t">AI chip launch — Impact 9.4/10</div><div></div></div>
-      <div class="ni" style="padding:10px 0;border-bottom:none"><div class="ni-time">Yesterday</div><div class="ni-t">Institutional accumulation via block trades</div><div></div></div>
+      <div class="nav-link" style="padding:10px 0"><div class="ni-time">Today</div><div class="ni-t">AI chip launch — Impact 9.4/10</div><div></div></div>
+      <div class="nav-link" style="padding:10px 0;border-bottom:none"><div class="ni-time">Yesterday</div><div class="ni-t">Institutional accumulation via block trades</div><div></div></div>
     </div>
     <div style="padding:32px">
       <div class="sec-no" style="margin-bottom:14px">Dividend Calendar</div>
@@ -330,7 +330,7 @@ footer{border-top:1px solid var(--bdr);padding:28px 48px;display:flex;align-item
 </div>
 
 <!-- COMPARISON -->
-<div class="pg" id="pg-comparison">
+<div class="page" id="page-comparison">
   <section style="padding:64px 48px 0">
     <div class="max">
       <div class="sec-no">Peer-to-Peer Engine</div>
@@ -351,15 +351,15 @@ footer{border-top:1px solid var(--bdr);padding:28px 48px;display:flex;align-item
           <div style="padding:14px 16px"><div class="serif r" style="font-size:1.2rem;font-weight:300">INTC</div><div style="font-size:10px;color:var(--mid)">Intel Corporation</div></div>
         </div>
         <div class="ct"><div class="cs">Scorecard Summary</div></div>
-        <div class="ct"><div class="cc" style="color:var(--mid)">Overall Score</div><div class="cc" style="background:rgba(42,122,74,.04)"><span class="tag tg">4.57 Strong Buy</span></div><div class="cc"><span class="tag ta">3.82 Buy</span></div><div class="cc"><span class="tag tr">2.10 Avoid</span></div></div>
+        <div class="ct"><div class="price-chart-canvas" style="color:var(--mid)">Overall Score</div><div class="price-chart-canvas" style="background:rgba(42,122,74,.04)"><span class="tag tg">4.57 Strong Buy</span></div><div class="price-chart-canvas"><span class="tag ta">3.82 Buy</span></div><div class="price-chart-canvas"><span class="tag tr">2.10 Avoid</span></div></div>
         <div class="ct"><div class="cs">Intrinsic Value</div></div>
-        <div class="ct"><div class="cc" style="color:var(--mid)">Fair Value</div><div class="cc" style="background:rgba(42,122,74,.04)"><span class="mono">$245.00</span></div><div class="cc"><span class="mono">$155.00</span></div><div class="cc"><span class="mono">$22.00</span></div></div>
-        <div class="ct"><div class="cc" style="color:var(--mid)">Margin of Safety</div><div class="cc" style="background:rgba(42,122,74,.04)"><span class="mono g">+19.4%</span></div><div class="cc"><span class="mono a">-3.3%</span></div><div class="cc"><span class="mono r">-29.3%</span></div></div>
+        <div class="ct"><div class="price-chart-canvas" style="color:var(--mid)">Fair Value</div><div class="price-chart-canvas" style="background:rgba(42,122,74,.04)"><span class="mono">$245.00</span></div><div class="price-chart-canvas"><span class="mono">$155.00</span></div><div class="price-chart-canvas"><span class="mono">$22.00</span></div></div>
+        <div class="ct"><div class="price-chart-canvas" style="color:var(--mid)">Margin of Safety</div><div class="price-chart-canvas" style="background:rgba(42,122,74,.04)"><span class="mono g">+19.4%</span></div><div class="price-chart-canvas"><span class="mono a">-3.3%</span></div><div class="price-chart-canvas"><span class="mono r">-29.3%</span></div></div>
         <div class="ct"><div class="cs">Key Metrics</div></div>
-        <div class="ct"><div class="cc" style="color:var(--mid)">P/E Ratio</div><div class="cc" style="background:rgba(42,122,74,.04)"><span class="mono">16.2x </span><span class="tag tg">Cheap</span></div><div class="cc"><span class="mono">28.4x </span><span class="tag tr">Exp.</span></div><div class="cc"><span class="mono">19.5x </span><span class="tag ta">Fair</span></div></div>
-        <div class="ct"><div class="cc" style="color:var(--mid)">Gross Margin</div><div class="cc" style="background:rgba(42,122,74,.04)"><span class="mono">74.1% </span><span class="tag tp">Elite</span></div><div class="cc"><span class="mono">48.2%</span></div><div class="cc"><span class="mono">32.0%</span></div></div>
-        <div class="ct"><div class="cc" style="color:var(--mid)">Rev. Growth</div><div class="cc" style="background:rgba(42,122,74,.04)"><span class="mono g">+85.2%</span></div><div class="cc"><span class="mono g">+12.2%</span></div><div class="cc"><span class="mono r">-5.1%</span></div></div>
-        <div class="ct" style="background:#f4f3f0"><div class="cc"></div><div class="cc"><button class="btn-fill" style="font-size:10px;padding:7px 14px" onclick="G('analytics')">Full Analytics</button></div><div class="cc"><button class="btn-line" style="font-size:10px">Full Analytics</button></div><div class="cc"><button class="btn-line" style="font-size:10px">Full Analytics</button></div></div>
+        <div class="ct"><div class="price-chart-canvas" style="color:var(--mid)">P/E Ratio</div><div class="price-chart-canvas" style="background:rgba(42,122,74,.04)"><span class="mono">16.2x </span><span class="tag tg">Cheap</span></div><div class="price-chart-canvas"><span class="mono">28.4x </span><span class="tag tr">Exp.</span></div><div class="price-chart-canvas"><span class="mono">19.5x </span><span class="tag ta">Fair</span></div></div>
+        <div class="ct"><div class="price-chart-canvas" style="color:var(--mid)">Gross Margin</div><div class="price-chart-canvas" style="background:rgba(42,122,74,.04)"><span class="mono">74.1% </span><span class="tag tp">Elite</span></div><div class="price-chart-canvas"><span class="mono">48.2%</span></div><div class="price-chart-canvas"><span class="mono">32.0%</span></div></div>
+        <div class="ct"><div class="price-chart-canvas" style="color:var(--mid)">Rev. Growth</div><div class="price-chart-canvas" style="background:rgba(42,122,74,.04)"><span class="mono g">+85.2%</span></div><div class="price-chart-canvas"><span class="mono g">+12.2%</span></div><div class="price-chart-canvas"><span class="mono r">-5.1%</span></div></div>
+        <div class="ct" style="background:#f4f3f0"><div class="price-chart-canvas"></div><div class="price-chart-canvas"><button class="btn-fill" style="font-size:10px;padding:7px 14px" onclick="showPage('analytics')">Full Analytics</button></div><div class="price-chart-canvas"><button class="btn-line" style="font-size:10px">Full Analytics</button></div><div class="price-chart-canvas"><button class="btn-line" style="font-size:10px">Full Analytics</button></div></div>
       </div>
       <div class="sec-no" style="margin-bottom:20px">Popular Duels</div>
       <div class="bento" style="grid-template-columns:repeat(3,1fr);margin-bottom:60px">
@@ -373,7 +373,7 @@ footer{border-top:1px solid var(--bdr);padding:28px 48px;display:flex;align-item
 </div>
 
 <!-- PORTFOLIO -->
-<div class="pg" id="pg-portfolio">
+<div class="page" id="page-portfolio">
   <section style="padding:64px 48px 0">
     <div class="max">
       <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:40px">
@@ -390,9 +390,9 @@ footer{border-top:1px solid var(--bdr);padding:28px 48px;display:flex;align-item
         <div style="padding:28px;border-right:1px solid var(--bdr)">
           <div class="sec-no" style="margin-bottom:14px">Holdings</div>
           <table class="t"><thead><tr><th>Asset</th><th>Allocation</th><th>Return</th><th>Score</th><th>Trend</th></tr></thead><tbody>
-            <tr onclick="G('analytics')"><td><div>NVDA</div><div class="mono" style="font-size:10px;color:var(--mid)">Nvidia</div></td><td class="mono" style="font-size:11px">$19,050 45.2%</td><td class="mono g">+46.51%</td><td><span class="tag tg">4.57</span></td><td class="g">Up SMA</td></tr>
+            <tr onclick="showPage('analytics')"><td><div>NVDA</div><div class="mono" style="font-size:10px;color:var(--mid)">Nvidia</div></td><td class="mono" style="font-size:11px">$19,050 45.2%</td><td class="mono g">+46.51%</td><td><span class="tag tg">4.57</span></td><td class="g">Up SMA</td></tr>
             <tr><td><div>BTC</div><div class="mono" style="font-size:10px;color:var(--mid)">Bitcoin</div></td><td class="mono" style="font-size:11px">$9,310 22.1%</td><td class="mono r">-0.80%</td><td><span class="tag ta">3.40</span></td><td class="r">Dn SMA</td></tr>
-            <tr onclick="G('analytics')"><td><div>COST</div><div class="mono" style="font-size:10px;color:var(--mid)">Costco</div></td><td class="mono" style="font-size:11px">$5,360 12.7%</td><td class="mono g">+3.2%</td><td><span class="tag tg">4.25</span></td><td class="g">Up SMA</td></tr>
+            <tr onclick="showPage('analytics')"><td><div>COST</div><div class="mono" style="font-size:10px;color:var(--mid)">Costco</div></td><td class="mono" style="font-size:11px">$5,360 12.7%</td><td class="mono g">+3.2%</td><td><span class="tag tg">4.25</span></td><td class="g">Up SMA</td></tr>
             <tr><td><div>Cash</div></td><td class="mono" style="font-size:11px">$8,430 20.0%</td><td style="color:var(--mid)">—</td><td>—</td><td style="color:var(--mid)">—</td></tr>
           </tbody></table>
         </div>
@@ -445,7 +445,7 @@ footer{border-top:1px solid var(--bdr);padding:28px 48px;display:flex;align-item
 </div>
 
 <!-- PROFILE -->
-<div class="pg" id="pg-profile">
+<div class="page" id="page-profile">
   <section style="padding:64px 48px 60px">
     <div style="max-width:680px;margin:0 auto">
       <div class="sec-no">Account</div>
@@ -478,45 +478,6 @@ footer{border-top:1px solid var(--bdr);padding:28px 48px;display:flex;align-item
   <footer><div class="fl"><a>About</a><a>Privacy</a></div><div>futara 2026</div></footer>
 </div>
 
-<script>
-const C=document.getElementById('C');
-document.addEventListener('mousemove',e=>{C.style.left=e.clientX+'px';C.style.top=e.clientY+'px'});
-document.addEventListener('mouseover',e=>{C.classList.toggle('h',!!e.target.closest('button,a,[onclick],.dt,.bento>div,.lev,.ni,.al'))});
-document.addEventListener('mousedown',()=>C.style.transform='translate(-50%,-50%) scale(.5)');
-document.addEventListener('mouseup',()=>C.style.transform='translate(-50%,-50%)');
-const td=[{s:'S&P 500',c:'+0.4%'},{s:'NASDAQ',c:'+1.2%'},{s:'NVDA',c:'+46.51%'},{s:'AAPL',c:'+1.2%'},{s:'BTC',c:'-0.8%'},{s:'TSLA',c:'-3.4%'},{s:'MSFT',c:'+0.8%'},{s:'AMD',c:'+3.1%'}];
-const ti=document.getElementById('ti');
-if(ti){ti.innerHTML=[...td,...td].map(t=>`<div class="tc"><div class="tc-dot"></div>${t.s} &nbsp; ${t.c}</div>`).join('')}
-const N={home:null,markets:'n-markets',analytics:'n-analytics',comparison:'n-comparison',portfolio:null,profile:null};
-const P={home:'pg-home',markets:'pg-markets',analytics:'pg-analytics',comparison:'pg-comparison',portfolio:'pg-portfolio',profile:'pg-profile'};
-function G(id){
-  Object.values(P).forEach(p=>{const el=document.getElementById(p);if(el)el.classList.remove('on')});
-  document.querySelectorAll('.nav-c a').forEach(a=>a.classList.remove('on'));
-  document.getElementById(P[id]).classList.add('on');
-  const ni=N[id];if(ni)document.getElementById(ni).classList.add('on');
-  window.scrollTo(0,0);
-  if(id==='analytics')setTimeout(drawChart,60);
-}
-function drawChart(){
-  const cv=document.getElementById('cc');if(!cv)return;
-  const ctx=cv.getContext('2d'),dpr=window.devicePixelRatio||1,W=cv.offsetWidth,H=140;
-  cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+'px';cv.style.height=H+'px';ctx.scale(dpr,dpr);
-  const pts=[];let v=150;
-  for(let i=0;i<80;i++){v+=(Math.sin(i*.28)*.3+(Math.random()-.41))*v*.022;pts.push(Math.max(40,v));}
-  const mn=Math.min(...pts)*.97,mx=Math.max(...pts)*1.03;
-  const tx=i=>(i/(pts.length-1))*(W-12)+6,ty=v=>H-4-((v-mn)/(mx-mn))*(H-10);
-  const sma=pts.slice(0,50).reduce((a,b)=>a+b)/50;
-  ctx.beginPath();ctx.strokeStyle='rgba(10,10,10,.12)';ctx.lineWidth=1;ctx.setLineDash([4,5]);
-  ctx.moveTo(6,ty(sma));ctx.lineTo(W-6,ty(sma));ctx.stroke();ctx.setLineDash([]);
-  const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'rgba(42,122,74,.1)');g.addColorStop(1,'rgba(42,122,74,0)');
-  ctx.beginPath();pts.forEach((v,i)=>i?ctx.lineTo(tx(i),ty(v)):ctx.moveTo(tx(i),ty(v)));
-  ctx.lineTo(tx(pts.length-1),H);ctx.lineTo(6,H);ctx.closePath();ctx.fillStyle=g;ctx.fill();
-  ctx.beginPath();ctx.strokeStyle='#2a7a4a';ctx.lineWidth=1.6;ctx.lineJoin='round';
-  pts.forEach((v,i)=>i?ctx.lineTo(tx(i),ty(v)):ctx.moveTo(tx(i),ty(v)));ctx.stroke();
-  ctx.beginPath();ctx.arc(tx(pts.length-1),ty(pts[pts.length-1]),3.5,0,Math.PI*2);ctx.fillStyle='#2a7a4a';ctx.fill();
-}
-G('home');
-window.addEventListener('resize',()=>{if(document.getElementById('pg-analytics').classList.contains('on'))drawChart()});
-</script>
+<script src="/src/js/app.js"></script>
 </body>
 </html>
