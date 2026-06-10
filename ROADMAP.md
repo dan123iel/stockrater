@@ -295,9 +295,26 @@ Set up the structure in Phase 2 so translation in Phase 4 is a 1-day job.
 
 ---
 
-1. Answer open questions above
-2. Implement Strategy Profile onboarding in `app.js`
-3. Implement strategy-relative score calculation
-4. Add scorecard weight editor to Profile page
-5. Add score explanation ("Why this score?") to Analytics
-6. Ensure all strings are in English
+## Next Actions — Sprint Plan
+
+**Sprint 1 — Strategy Core** *(implement in `app.js`)*
+- [ ] Strategy Profile onboarding — 3 questions, saved to localStorage
+- [ ] Strategy-relative score calculation — weights shift per profile
+- [ ] Scorecard weight editor in Profile — sliders + manual override
+- [ ] Score explanation Layer 1 — financial rules, no AI, always works
+
+**Sprint 2 — Intelligence**
+- [ ] Groq API — company summary + strategy-aligned explanation (Layer 2)
+- [ ] Stock recommendations based on strategy profile
+- [ ] Voting rights + ownership structure widget in Analytics
+- [ ] Widget drag & reorder — complete existing partial implementation
+
+**Sprint 3 — Data & Language**
+- [ ] All UI strings in English (audit + fix)
+- [ ] Trade Journal — manual entry
+- [ ] Trade Republic CSV import
+- [ ] Macro summary section
+
+**Sprint 4 — Design & i18n Prep**
+- [ ] Final design direction decided
+- [ ] i18n string structure set up in `app.js` (prep for DE/ES later)
