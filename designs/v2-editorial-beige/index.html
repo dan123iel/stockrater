@@ -185,7 +185,7 @@ footer a:hover{color:var(--ink)}
     <div id="v2-search-wrap" style="position:relative;display:flex;align-items:center">
       <input id="v2-search-input" type="text" placeholder="ticker or ISIN..."
         style="width:0;opacity:0;padding:0;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);outline:none;transition:all .25s ease;border-radius:999px"
-        onkeydown="if(event.key==='Enter'){var v=this.value.trim().toUpperCase();if(v&&typeof openTicker==='function')openTicker(v);else if(v){G('analytics');}}"
+        onkeydown="if(event.key==='Enter'){v2DoSearch(this.value);}"
       >
       <button id="v2-search-btn" onclick="v2ToggleSearch()"
         style="width:34px;height:34px;border-radius:50%;background:#0d0d0d;border:none;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s">
