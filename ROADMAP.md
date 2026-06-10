@@ -1,0 +1,257 @@
+# futara — Product Roadmap & Discovery
+
+**Version:** 0.1 (Discovery Phase)
+**Last updated:** 2026-06-10
+**Status:** Pre-MVP
+
+---
+
+## The One-Liner
+
+> "futara tells you whether a stock fits *your* investment strategy — algorithmically, transparently, without conflict of interest."
+
+---
+
+## Unique Positioning Statement (UPS)
+
+| Competitor | Problem |
+|---|---|
+| Bloomberg / Morningstar | Data for professionals, expensive, no personal strategy match |
+| YouTube / Influencers | Opinion-based, not reproducible, no personal reference |
+| Bank advisors | Conflict of interest — they sell products |
+| Robo-advisors (Scalable, etc.) | Black box, no explainability, no education |
+| **futara** | **Strategy-relative scoring, explainable, personal, open** |
+
+The core insight: a P/E of 30x is good for a growth investor and bad for a value investor. No tool currently adjusts the score to the user's profile. That is the gap.
+
+---
+
+## Target Users (Persona Interview — open questions)
+
+### Primary: The Self-Directed Retail Investor
+- Invests 1–4x per year, own research
+- Uses YouTube, Reddit, maybe Bloomberg for free
+- Frustrated that no tool combines their personal strategy with objective data
+- Wants to know: "Should I buy this?" not just "here is the data"
+
+### Secondary: The Active Trader
+- Trades more frequently, wants quick signals
+- Needs portfolio performance vs. own past decisions
+- Wants to know: "Was that trade actually good in hindsight?"
+
+### Future: The Advised Investor
+- Currently uses a bank advisor
+- Wants a second opinion, fee-free
+- Trusts numbers more than salespeople
+
+---
+
+## The 3 Core Questions futara Must Answer
+
+1. **"Should I buy this stock — given how I invest?"**
+   → Strategy-relative score, not absolute
+
+2. **"Was my past trade actually a good decision?"**
+   → Trade journal + retrospective scoring
+
+3. **"What is happening in the market right now that is relevant to me?"**
+   → Macro summary + AI-filtered news by portfolio/watchlist
+
+---
+
+## Discovery — What We Know vs. What We Need to Validate
+
+| Assumption | Status | How to validate |
+|---|---|---|
+| Users want strategy-relative scoring | Hypothesis | Build it, measure engagement |
+| Scorecard is differentiating | Likely true — nothing like it exists | User interviews |
+| People will log their own trades | Uncertain | Observe if portfolio section is used |
+| AI summaries add value | Likely yes | A/B test with/without |
+| Broker API is needed for retention | Phase 4 — not MVP | Survey active users |
+
+---
+
+## Product Phases
+
+### ✅ Phase 0 — Foundation (done)
+- [x] Single-page app, no build step
+- [x] Design/logic fully separated (`index.html` = CSS, `app.js` = logic)
+- [x] Ticker search + basic scorecard
+- [x] DCF model with stress test
+- [x] Peer comparison matrix
+- [x] Live ticker tape (Finnhub WebSocket)
+- [x] News feed (Finnhub REST, cards with thumbnail + modal)
+- [x] Portfolio (manual, localStorage)
+- [x] Dark/light theme
+- [x] Design variants (test2 / test3 / test4)
+
+---
+
+### 🔵 Phase 1 — MVP (next 4–6 weeks)
+**Goal:** First version that delivers real, personal value.
+**Success metric:** User opens it before making an investment decision.
+
+**Features:**
+- [ ] **Strategy Profile** — onboarding screen, 3 questions:
+  - Investment horizon (short / medium / long)
+  - Risk tolerance (conservative / moderate / aggressive)
+  - Focus (value / growth / dividend / momentum)
+- [ ] **Strategy-relative scoring** — same stock, different score per profile
+  - Value investor: rewards low P/E, penalises high growth multiples
+  - Growth investor: rewards revenue growth, tolerates high multiples
+  - Dividend: rewards yield, payout ratio, streak
+- [ ] **Scorecard weight editor** — manually adjust the 5 factor weights
+  - Sliders: Financial Ratios / Management / Moat / ESG / Valuation
+  - Reset to profile defaults
+- [ ] **Score explanation** — "Why 4.2?"
+  - Per factor: what is pulling the score up/down and why
+  - Plain-English sentence per factor
+- [ ] **Ensure full English** — all UI strings in English
+
+---
+
+### 🟡 Phase 2 — Intelligence (weeks 6–12)
+**Goal:** AI makes the app feel like a smart analyst, not just a calculator.
+**Success metric:** User shares a futara analysis with someone else.
+
+**Features:**
+- [ ] **AI integration** (Groq API — free tier, Llama 3 / Gemma 2)
+  - Company summary: what the company actually does, in plain English
+  - Macro summary: what is happening in markets relevant to this stock
+  - Side facts: moat, competitive position, risks — 3 bullet points
+  - Buy/sell recommendation explanation aligned with user's strategy
+- [ ] **Stock recommendations** — "Based on your profile, consider:"
+  - Filter universe by strategy criteria
+  - Show top 5 matching stocks with mini-scorecard
+- [ ] **Voting rights & ownership structure** (via API or static data)
+  - Float, insider %, institutional %, free float
+  - Voting share classes (e.g. Alphabet Class A/B/C)
+- [ ] **Widget layout customisation** — drag to reorder, hide/show tiles
+  - Saved per user in localStorage
+
+---
+
+### 🟠 Phase 3 — Trade Journal (weeks 12–20)
+**Goal:** futara becomes the place where you track and learn from your decisions.
+**Success metric:** User logs at least 3 trades.
+
+**Features:**
+- [ ] **Manual trade entry** — date, ticker, price, quantity, reason
+- [ ] **Trade retrospective** — "You bought NVDA at $180. Score at the time: 3.9. Score today: 4.6."
+- [ ] **Performance analysis** — P&L, vs. index, vs. own strategy
+- [ ] **CSV import** — broker export (Trade Republic, Scalable, generic)
+- [ ] **Macro summary page** — standalone section
+  - Interest rates, inflation, VIX, sector rotation
+  - AI-generated weekly summary
+
+---
+
+### 🔴 Phase 4 — Platform (months 5–12)
+**Goal:** futara becomes a product, not just a personal tool.
+**Success metric:** 100 active users, NPS > 40.
+
+**Features:**
+- [ ] **Auth** (Supabase Auth or Clerk) — email/Google login
+- [ ] **Database** (Supabase PostgreSQL) — user data, trades, profiles
+- [ ] **Broker API** — Trade Republic (unofficial WS), Scalable Capital (API beta)
+- [ ] **Alerts** — price drops below SMA200, score changes, news triggers
+- [ ] **Watchlist notifications**
+- [ ] **Subscription model** — free tier + pro features
+
+---
+
+## Data Model (current — localStorage)
+
+```
+strategy_profile: {
+  horizon: 'long',        // short / medium / long
+  risk: 'moderate',       // conservative / moderate / aggressive
+  focus: 'growth',        // value / growth / dividend / momentum
+  scoreWeights: {
+    ratios: 65,
+    management: 12,
+    moat: 10,
+    esg: 8,
+    valuation: 5
+  }
+}
+
+portfolio: [
+  { sym, name, shares, avgPrice, addedAt }
+]
+
+trades: [
+  { sym, date, price, qty, side, reason, scoreAtTime }
+]
+
+watchlist: [sym, ...]
+
+cache: { [sym]: { data, ts } }
+```
+
+**Phase 4 — database entities:**
+`user` → `strategy_profile` → `portfolio` → `position` → `trade`
+`watchlist` → `alert` → `notification`
+
+---
+
+## Tech Stack
+
+| Layer | Current | Phase 4 |
+|---|---|---|
+| Frontend | HTML + CSS + vanilla JS | Stay (or migrate to Next.js if needed) |
+| Logic | `src/js/app.js` | Same + modular files |
+| Backend | Cloudflare Worker (proxy only) | + Supabase Edge Functions |
+| Database | localStorage | Supabase PostgreSQL |
+| Auth | none | Supabase Auth / Clerk |
+| AI | none | Groq API (Llama 3.1 / Gemma 2) |
+| Live data | Finnhub WebSocket + REST | Same |
+| Fundamentals | Yahoo via Worker + FMP | Same + possibly Alpha Vantage |
+| Hosting | GitHub Pages | Same (or Vercel for Next.js) |
+
+---
+
+## Scorecard Rules (Phase 1 target)
+
+```
+Default weights (total = 100):
+  Financial Ratios    65  ← P/E, margins, growth, EV/EBITDA
+  Management          12  ← insider activity, compensation
+  Moat / Competitive  10  ← market position, pricing power
+  ESG & Risk           8  ← beta, volatility, governance
+  DCF / Valuation      5  ← margin of safety
+
+Profile adjustments (applied automatically):
+  value:    ratios +10, valuation +10, management -5, esg -5
+  growth:   ratios +5, moat +10, valuation -10, management -5
+  dividend: ratios +5, esg +10, valuation +5, management -5, moat -5
+  momentum: ratios -10, moat +15, esg -5, management 0
+
+Score bands:
+  ≥ 4.5  → Strong Buy
+  ≥ 3.5  → Buy
+  ≥ 2.5  → Hold
+  ≥ 1.5  → Reduce
+  < 1.5  → Avoid
+```
+
+---
+
+## Open Questions (need answers before building)
+
+1. **AI:** Groq (fast, free tier, Llama/Gemma) vs. OpenAI (better quality, paid) — which first?
+2. **Score explanation:** generated by AI or rule-based templates? AI is richer but costs API calls.
+3. **Broker CSV:** which broker format first? Trade Republic, Scalable, or generic?
+4. **Design:** which test variant becomes the permanent design? test2 (dark) / test3 (beige) / test4 (minimal)?
+5. **Language:** confirm all UI must be English — including scorecard labels, onboarding, tooltips?
+
+---
+
+## Next Immediate Actions (Phase 1 start)
+
+1. Answer open questions above
+2. Implement Strategy Profile onboarding in `app.js`
+3. Implement strategy-relative score calculation
+4. Add scorecard weight editor to Profile page
+5. Add score explanation ("Why this score?") to Analytics
+6. Ensure all strings are in English
