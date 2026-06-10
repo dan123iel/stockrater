@@ -754,6 +754,47 @@ document.addEventListener('click', function(e) {
   if (_v2SearchOpen && !e.target.closest('#v2-search-wrap')) v2ToggleSearch();
 });
 
+// Search
+function v2DoSearch(val) {
+  var sym = (val || '').trim().toUpperCase();
+  if (!sym) return;
+  v2ToggleSearch();
+  G('analytics');
+
+  // Update hero with symbol
+  var heroSym = document.getElementById('v2-hero-sym');
+  if (heroSym) heroSym.textContent = sym + ' · Loading…';
+
+  // Fetch via Worker (Yahoo Finance proxy)
+  var worker = (localStorage.getItem('sr_workerurl') || 'https://fragrant-wave-6bd7.d-lenz-contact.workers.dev').replace(/\/+$/, '');
+  fetch(worker + '/yahoo/quote?symbol=' + sym)
+    .then(function(r){ return r.json(); })
+    .then(function(d) {
+      var q = d.quoteResponse && d.quoteResponse.result && d.quoteResponse.result[0];
+      if (!q) return;
+      var price = q.regularMarketPrice ? q.regularMarketPrice.toFixed(2) : '—';
+      var chg   = q.regularMarketChange ? (q.regularMarketChange >= 0 ? '+' : '') + q.regularMarketChange.toFixed(2) : '';
+      var pct   = q.regularMarketChangePercent ? (q.regularMarketChangePercent >= 0 ? '+' : '') + q.regularMarketChangePercent.toFixed(2) + '%' : '';
+      var name  = q.longName || q.shortName || sym;
+      var sector = q.sector || q.quoteType || '';
+
+      if (heroSym) heroSym.textContent = sym + ' · ' + (sector ? sector + ' · ' : '') + name;
+      var heroPrice = document.getElementById('v2-hero-price');
+      if (heroPrice) heroPrice.textContent = '$' + price;
+      var heroChg = document.getElementById('v2-hero-chg');
+      if (heroChg) {
+        heroChg.textContent = chg + ' (' + pct + ')';
+        heroChg.className = q.regularMarketChange >= 0 ? 'g' : 'r';
+        heroChg.style.fontFamily = "'DM Mono', monospace";
+        heroChg.style.fontSize = '14px';
+        heroChg.style.marginTop = '8px';
+      }
+    })
+    .catch(function(){
+      if (heroSym) heroSym.textContent = sym + ' · data unavailable';
+    });
+}
+
 function v2EditTicker() {
   localStorage.removeItem('tape_onboarding_done');
   if (typeof showTapeOnboarding === 'function') showTapeOnboarding();
