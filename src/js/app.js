@@ -432,7 +432,6 @@ function renderTape(inner, syms) {
   });
   inner.innerHTML = [...items, ...items].join('');
 }
-}
 
 function connectFinnhubWS(inner, syms) {
   if (finnhubWS) { try { finnhubWS.close(); } catch(e){} }
