@@ -32,6 +32,220 @@ let currentPage = 'home';
 let currentTicker = 'NVDA';
 let apiKeyRevealed = false;
 
+// ===== STRATEGY PROFILE =====
+// Stored in localStorage as 'strategy_profile'
+// Score is always live-calculated — profile only shifts the weights
+// scoreAtTime is stored once when a trade is logged
+
+const STRATEGY_DEFAULTS = {
+  horizon:      'long',      // 'short' | 'medium' | 'long'
+  risk:         'moderate',  // 'conservative' | 'moderate' | 'aggressive'
+  focus:        'growth',    // 'value' | 'growth' | 'dividend' | 'momentum'
+  scoreWeights: {
+    ratios:     65,
+    management: 12,
+    moat:       10,
+    esg:        8,
+    valuation:  5
+  }
+};
+
+// Weight adjustments per focus — applied on top of defaults
+const FOCUS_WEIGHT_ADJUSTMENTS = {
+  value:    { ratios: +10, valuation: +10, management: -5,  esg: -5,  moat:  0  },
+  growth:   { ratios: +5,  valuation: -10, management: -5,  esg:  0,  moat: +10 },
+  dividend: { ratios: +5,  valuation: +5,  management: -5,  esg: +10, moat: -5  },
+  momentum: { ratios: -10, valuation: 0,   management:  0,  esg: -5,  moat: +15 }
+};
+
+function getStrategyProfile() {
+  try {
+    const saved = localStorage.getItem('strategy_profile');
+    return saved ? JSON.parse(saved) : { ...STRATEGY_DEFAULTS };
+  } catch(e) { return { ...STRATEGY_DEFAULTS }; }
+}
+
+function saveStrategyProfile(profile) {
+  localStorage.setItem('strategy_profile', JSON.stringify(profile));
+}
+
+// Returns effective weights after applying focus adjustments
+function getEffectiveWeights(profile) {
+  const base = { ...STRATEGY_DEFAULTS.scoreWeights, ...(profile.scoreWeights || {}) };
+  const adj = FOCUS_WEIGHT_ADJUSTMENTS[profile.focus] || {};
+  const w = {};
+  let total = 0;
+  for (const k in base) {
+    w[k] = Math.max(0, (base[k] || 0) + (adj[k] || 0));
+    total += w[k];
+  }
+  // Normalise to 100
+  if (total !== 100) {
+    for (const k in w) w[k] = Math.round(w[k] / total * 100);
+  }
+  return w;
+}
+
+// ===== LIVE SCORE ENGINE =====
+// Score is ALWAYS recalculated fresh from live data + current profile.
+// The only thing stored is scoreAtTime when logging a trade.
+
+function calculateScore(fundamentals, profile) {
+  // fundamentals: { pe, grossMargin, opMargin, netMargin, revGrowth,
+  //                 evEbitda, beta, insiderSentiment, mosPercent }
+  // Returns: { total: 0-5, breakdown: { ratios, management, moat, esg, valuation } }
+
+  const weights = getEffectiveWeights(profile || getStrategyProfile());
+
+  // --- Financial Ratios sub-score (0–5) ---
+  let ratioScore = 3.0; // baseline
+  const { pe, grossMargin, opMargin, netMargin, revGrowth } = fundamentals;
+  if (pe !== null && pe !== undefined) {
+    if (pe < 15)       ratioScore += 0.6;
+    else if (pe < 20)  ratioScore += 0.3;
+    else if (pe > 35)  ratioScore -= 0.5;
+    else if (pe > 50)  ratioScore -= 1.0;
+  }
+  if (grossMargin > 70) ratioScore += 0.5;
+  else if (grossMargin > 50) ratioScore += 0.2;
+  else if (grossMargin < 25) ratioScore -= 0.4;
+  if (revGrowth > 50)  ratioScore += 0.6;
+  else if (revGrowth > 20) ratioScore += 0.3;
+  else if (revGrowth < 0)  ratioScore -= 0.5;
+  ratioScore = Math.min(5, Math.max(0, ratioScore));
+
+  // --- Management sub-score (0–5) ---
+  let mgmtScore = fundamentals.insiderSentiment ?? 3.0;
+  mgmtScore = Math.min(5, Math.max(0, mgmtScore));
+
+  // --- Moat sub-score (0–5) ---
+  let moatScore = 3.0;
+  if (opMargin > 25) moatScore += 0.6;
+  else if (opMargin > 15) moatScore += 0.2;
+  else if (opMargin < 5) moatScore -= 0.5;
+  moatScore = Math.min(5, Math.max(0, moatScore));
+
+  // --- ESG & Risk sub-score (0–5) ---
+  let esgScore = 3.0;
+  const beta = fundamentals.beta;
+  if (beta !== null && beta !== undefined) {
+    if (beta < 0.8)    esgScore += 0.4;
+    else if (beta < 1.2) esgScore += 0.1;
+    else if (beta > 1.8) esgScore -= 0.5;
+    else if (beta > 2.5) esgScore -= 1.0;
+  }
+  esgScore = Math.min(5, Math.max(0, esgScore));
+
+  // --- Valuation / DCF sub-score (0–5) ---
+  let valScore = 3.0;
+  const mos = fundamentals.mosPercent;
+  if (mos !== null && mos !== undefined) {
+    if (mos > 30)       valScore = 5.0;
+    else if (mos > 15)  valScore = 4.2;
+    else if (mos > 0)   valScore = 3.5;
+    else if (mos > -15) valScore = 2.5;
+    else                valScore = 1.5;
+  }
+
+  // --- Weighted total ---
+  const W = weights;
+  const total = (
+    ratioScore  * (W.ratios     / 100) +
+    mgmtScore   * (W.management / 100) +
+    moatScore   * (W.moat       / 100) +
+    esgScore    * (W.esg        / 100) +
+    valScore    * (W.valuation  / 100)
+  );
+
+  return {
+    total: Math.round(total * 100) / 100,
+    breakdown: {
+      ratios:     { score: ratioScore, weight: W.ratios },
+      management: { score: mgmtScore, weight: W.management },
+      moat:       { score: moatScore, weight: W.moat },
+      esg:        { score: esgScore,  weight: W.esg },
+      valuation:  { score: valScore,  weight: W.valuation }
+    }
+  };
+}
+
+function scoreVerdict(score) {
+  if (score >= 4.5) return 'Strong Buy';
+  if (score >= 3.5) return 'Buy';
+  if (score >= 2.5) return 'Hold';
+  if (score >= 1.5) return 'Reduce';
+  return 'Avoid';
+}
+
+// Score explanation — Layer 1 (rule-based, no AI needed)
+function explainScore(fundamentals, breakdown, profile) {
+  const lines = [];
+  const { pe, grossMargin, revGrowth, beta, mosPercent } = fundamentals;
+  const focus = profile?.focus || 'growth';
+
+  if (pe < 15)        lines.push(`P/E ${pe}x is well below market average — undervalued on earnings.`);
+  else if (pe > 35)   lines.push(`P/E ${pe}x is elevated — growth expectations are already priced in.`);
+
+  if (grossMargin > 70) lines.push(`Gross margin ${grossMargin}% is elite — strong pricing power.`);
+  else if (grossMargin < 30) lines.push(`Gross margin ${grossMargin}% is below average — margin pressure risk.`);
+
+  if (revGrowth > 30) lines.push(`Revenue growth ${revGrowth}% YoY is exceptional.`);
+  else if (revGrowth < 0) lines.push(`Revenue is declining ${revGrowth}% YoY — negative signal.`);
+
+  if (beta > 1.8)     lines.push(`Beta ${beta}x — high volatility, not suited for conservative profiles.`);
+  else if (beta < 0.8) lines.push(`Beta ${beta}x — low volatility, stable for conservative profiles.`);
+
+  if (mosPercent > 15)  lines.push(`DCF shows ${mosPercent}% margin of safety — stock appears underpriced.`);
+  else if (mosPercent < -10) lines.push(`DCF shows stock is ${Math.abs(mosPercent)}% above fair value.`);
+
+  // Strategy fit note
+  const fitMap = {
+    value:    pe < 20   ? 'Fits your value strategy well.' : 'Valuation is stretched for a value investor.',
+    growth:   revGrowth > 15 ? 'Strong growth aligns with your strategy.' : 'Growth is below your target threshold.',
+    dividend: 'Check dividend yield and payout consistency in the dividend panel.',
+    momentum: 'Check SMA 200 and trend signals in the chart panel.'
+  };
+  if (fitMap[focus]) lines.push(fitMap[focus]);
+
+  return lines.join(' ');
+}
+
+// ===== LOCALSTORAGE HELPERS =====
+function loadPortfolio() {
+  try { return JSON.parse(localStorage.getItem('sr_portfolio') || '[]'); } catch(e) { return []; }
+}
+function savePortfolio(data) { localStorage.setItem('sr_portfolio', JSON.stringify(data)); }
+
+function loadTrades() {
+  try { return JSON.parse(localStorage.getItem('sr_trades') || '[]'); } catch(e) { return []; }
+}
+function saveTrades(data) { localStorage.setItem('sr_trades', JSON.stringify(data)); }
+
+function loadWatchlist() {
+  try { return JSON.parse(localStorage.getItem('sr_watchlist') || '[]'); } catch(e) { return []; }
+}
+function saveWatchlist(data) { localStorage.setItem('sr_watchlist', JSON.stringify(data)); }
+
+// Add trade — stores scoreAtTime so user can compare later
+function logTrade({ sym, price, qty, side, reason, currentFundamentals }) {
+  const trades = loadTrades();
+  const profile = getStrategyProfile();
+  const scored = currentFundamentals ? calculateScore(currentFundamentals, profile) : null;
+  trades.unshift({
+    id:            Date.now(),
+    sym:           sym.toUpperCase(),
+    date:          new Date().toISOString(),
+    price:         parseFloat(price),
+    qty:           parseFloat(qty),
+    side:          side,           // 'buy' | 'sell'
+    reason:        reason || '',
+    scoreAtTime:   scored ? scored.total : null,
+    verdictAtTime: scored ? scoreVerdict(scored.total) : null,
+    profileSnapshot: { focus: profile.focus, risk: profile.risk }
+  });
+  saveTrades(trades);
+}
+
 // ===== NAVIGATION =====
 function showPage(page) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
