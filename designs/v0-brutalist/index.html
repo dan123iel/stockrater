@@ -179,7 +179,14 @@
     </div>
   </div>
 
-  <header>
+  <!-- TICKER STRIP (under nav, always visible) -->
+  <div style="position:fixed;top:0;left:0;width:100%;z-index:999;padding-top:58px;pointer-events:none">
+    <div style="background:#111;border-bottom:1px solid rgba(255,255,255,.06);overflow:hidden;height:34px;display:flex;align-items:center">
+      <div id="ticker-strip" style="display:flex;animation:tscroll 35s linear infinite;white-space:nowrap"></div>
+    </div>
+  </div>
+
+  <header style="top:92px">
     <div class="logo" onclick="navigateTo('home')"><div class="logo-dot"></div>futara<span>.</span></div>
     <nav>
       <div class="nav-link active-nav" id="btn-nav-home" onclick="navigateTo('home')">home</div>
