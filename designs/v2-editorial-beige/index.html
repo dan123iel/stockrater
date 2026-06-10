@@ -8,6 +8,13 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;cursor:none!important}
 :root{--bg:#f0ede8;--b2:#e8e4de;--bdr:rgba(13,13,13,.1);--ink:#0d0d0d;--mid:#6b6b6b;--soft:#bbb;--G:#1a6e3c;--R:#b83232;--A:#8a6a00;--pill:999px}
+
+[data-theme="dark"]{--bg:#131210;--b2:#1a1916;--bdr:rgba(240,237,232,.08);--ink:#f0ede8;--mid:#888;--soft:#555;--G:#3dba6e;--R:#e05555;--A:#c49a3a}
+[data-theme="dark"] #C{background:#f0ede8!important}
+[data-theme="dark"] #C.h{background:rgba(240,237,232,0.5)!important}
+[data-theme="dark"] nav,[data-theme="dark"] #v2-ticker-wrap{background:var(--bg)}
+[data-theme="dark"] .c:hover{background:var(--b2)}
+[data-theme="dark"] .bento>*{background:var(--bg)}
 body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:14px;overflow-x:hidden}
 /* CURSOR */
 #C{position:fixed;width:10px;height:10px;background:#000!important;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s}
@@ -575,7 +582,7 @@ footer a:hover{color:var(--ink)}
     <div class="ps">
       <div class="psh"> Appearance & Display</div>
       <div class="psb">
-        <div class="pr"><div><div style="font-size:14px;font-weight:500">Interface Theme</div><div style="font-size:11px;color:var(--mid);margin-top:2px">Dark: deep purple · Light: editorial beige</div></div><div class="tog"><button class="tb">Dark</button><button class="tb on">Light</button></div></div>
+        <div class="pr"><div><div style="font-size:14px;font-weight:500">Interface Theme</div><div style="font-size:11px;color:var(--mid);margin-top:2px">Dark: deep purple · Light: editorial beige</div></div><div class="tog"><button class="tb" id="v2-dark-btn" onclick="v2SetTheme('dark')">Dark</button><button class="tb on" id="v2-light-btn" onclick="v2SetTheme('light')">Light</button></div></div>
         <div class="pr"><div style="font-size:14px;font-weight:500">Language</div><select><option>English (US)</option><option>Deutsch</option><option>Français</option></select></div>
         <div class="pr"><div style="font-size:14px;font-weight:500">Currency</div><select><option>USD ($)</option><option>EUR ()</option><option>GBP (£)</option></select></div>
       </div>
@@ -686,6 +693,21 @@ footer a:hover{color:var(--ink)}
     ws.onerror=function(){};
   }catch(err){}
 })();
+</script>
+<script>
+function v2SetTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  localStorage.setItem('v2_theme', t);
+  var db = document.getElementById('v2-dark-btn');
+  var lb = document.getElementById('v2-light-btn');
+  if (db) { db.classList.toggle('on', t==='dark'); }
+  if (lb) { lb.classList.toggle('on', t==='light'); }
+  // Update cursor color
+  var C = document.getElementById('C');
+  if (C) C.style.background = t==='dark' ? '#f0ede8' : '#000';
+}
+// Restore saved theme
+(function(){ var t=localStorage.getItem('v2_theme'); if(t) v2SetTheme(t); })();
 </script>
 </body>
 </html>

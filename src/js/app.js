@@ -272,11 +272,121 @@ function showPage(page) {
   window.scrollTo(0, 0);
 }
 
-// ===== FINNHUB =====
+// ===== TAPE SYMBOL LOGIC =====
+// Priority: portfolio symbols → watchlist → onboarding picks → empty (no fallback)
 const FINNHUB_KEY = 'd8k2199r01qjgd6qgrugd8k2199r01qjgd6qgrv0';
-const TAPE_SYMBOLS = ['NVDA','AAPL','MSFT','TSLA','AMD','META','AMZN','GOOGL','JPM','NFLX'];
 let tapeQuotes = {};
 let finnhubWS = null;
+
+function getTapeSymbols() {
+  // 1. Portfolio symbols
+  const portfolio = loadPortfolio();
+  const portfolioSyms = portfolio.map(p => p.sym).filter(Boolean);
+
+  // 2. Watchlist
+  const watchlist = loadWatchlist();
+
+  // 3. Onboarding picks
+  let onboarding = [];
+  try { onboarding = JSON.parse(localStorage.getItem('tape_symbols') || '[]'); } catch(e) {}
+
+  // Merge: portfolio first, then watchlist, then onboarding — deduplicated, max 12
+  const merged = [...new Set([...portfolioSyms, ...watchlist, ...onboarding])].slice(0, 12);
+  return merged;
+}
+
+// Onboarding categories — shown when tape is empty
+const ONBOARDING_CATEGORIES = {
+  'Tech & AI':    ['NVDA','AAPL','MSFT','GOOGL','META','AMD','TSLA','AMZN'],
+  'Finance':      ['JPM','GS','BAC','V','MA','BRK.B','MS','AXP'],
+  'Consumer':     ['COST','WMT','MCD','SBUX','NKE','AMZN','TGT','HD'],
+  'Healthcare':   ['JNJ','UNH','PFE','ABBV','MRK','LLY','BMY','GILD'],
+  'Energy':       ['XOM','CVX','COP','SLB','EOG','PXD','OXY','MPC'],
+  'Crypto':       ['BTC','ETH','SOL','BNB','XRP','DOGE','ADA','AVAX'],
+  'Index & ETF':  ['SPY','QQQ','DIA','VTI','IWM','GLD','TLT','VNQ'],
+};
+
+function saveOnboardingSymbols(syms) {
+  localStorage.setItem('tape_symbols', JSON.stringify(syms));
+  localStorage.setItem('tape_onboarding_done', '1');
+}
+
+function isOnboardingDone() {
+  return !!localStorage.getItem('tape_onboarding_done');
+}
+
+function showTapeOnboarding() {
+  // Check if modal already exists
+  if (document.getElementById('tape-onboarding-modal')) return;
+
+  const selected = new Set();
+
+  const modal = document.createElement('div');
+  modal.id = 'tape-onboarding-modal';
+  modal.style.cssText = 'position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px';
+
+  modal.innerHTML = `
+    <div style="background:var(--bg,#fff);color:var(--ink,#000);max-width:600px;width:100%;border-radius:16px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.3)">
+      <div style="padding:24px 28px;border-bottom:1px solid var(--bdr,rgba(0,0,0,.1))">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;opacity:.5;margin-bottom:6px">Personalise your ticker</div>
+        <div style="font-size:1.4rem;font-weight:700;letter-spacing:-.03em">Which markets do you follow?</div>
+        <div style="font-size:13px;opacity:.5;margin-top:4px">Select up to 12 symbols to show in your live ticker.</div>
+      </div>
+      <div style="padding:20px 28px;max-height:60vh;overflow-y:auto" id="tob-categories">
+        ${Object.entries(ONBOARDING_CATEGORIES).map(([cat, syms]) => `
+          <div style="margin-bottom:18px">
+            <div style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;opacity:.4;margin-bottom:8px">${cat}</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px">
+              ${syms.map(s => `
+                <button onclick="tobToggle(this,'${s}')" data-sym="${s}"
+                  style="padding:5px 13px;border-radius:999px;border:1.5px solid var(--bdr,rgba(0,0,0,.15));font-size:12px;font-weight:600;background:transparent;color:var(--ink,#000);cursor:pointer;transition:all .15s;font-family:inherit">
+                  ${s}
+                </button>`).join('')}
+            </div>
+          </div>`).join('')}
+      </div>
+      <div style="padding:16px 28px;border-top:1px solid var(--bdr,rgba(0,0,0,.1));display:flex;align-items:center;justify-content:space-between">
+        <div style="font-size:12px;opacity:.4" id="tob-count">0 / 12 selected</div>
+        <div style="display:flex;gap:10px">
+          <button onclick="tobSkip()" style="padding:8px 18px;border-radius:999px;border:1.5px solid var(--bdr,rgba(0,0,0,.15));font-size:13px;font-weight:600;background:transparent;color:var(--ink,#000);cursor:pointer;font-family:inherit">Skip</button>
+          <button onclick="tobConfirm()" id="tob-confirm" style="padding:8px 20px;border-radius:999px;border:none;font-size:13px;font-weight:600;background:var(--ink,#000);color:var(--bg,#fff);cursor:pointer;font-family:inherit;opacity:.4" disabled>Confirm →</button>
+        </div>
+      </div>
+    </div>`;
+
+  document.body.appendChild(modal);
+
+  window.tobToggle = function(btn, sym) {
+    if (selected.has(sym)) {
+      selected.delete(sym);
+      btn.style.background = 'transparent';
+      btn.style.borderColor = 'var(--bdr,rgba(0,0,0,.15))';
+      btn.style.color = 'var(--ink,#000)';
+    } else {
+      if (selected.size >= 12) return;
+      selected.add(sym);
+      btn.style.background = 'var(--ink,#000)';
+      btn.style.borderColor = 'var(--ink,#000)';
+      btn.style.color = 'var(--bg,#fff)';
+    }
+    const count = document.getElementById('tob-count');
+    const confirm = document.getElementById('tob-confirm');
+    if (count) count.textContent = `${selected.size} / 12 selected`;
+    if (confirm) { confirm.disabled = selected.size === 0; confirm.style.opacity = selected.size > 0 ? '1' : '.4'; }
+  };
+
+  window.tobConfirm = function() {
+    const syms = [...selected];
+    saveOnboardingSymbols(syms);
+    modal.remove();
+    buildTape();
+  };
+
+  window.tobSkip = function() {
+    localStorage.setItem('tape_onboarding_done', '1');
+    modal.remove();
+  };
+}
 
 function buildTape() {
   const inner = document.getElementById('tape-inner');
