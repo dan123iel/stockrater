@@ -238,6 +238,16 @@ footer a:hover{color:var(--ink)}
 .div-yr{font-family:'DM Mono',monospace;color:var(--mid);width:32px}
 .div-bar{flex:1;height:6px;background:var(--ink);border-radius:2px}
 .div-valfont-family:'DM Mono',monospace
+
+#news-modal.is-open { display:flex !important; }
+.news-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px; margin-top:16px; }
+.news-card { border:1px solid var(--bdr,rgba(0,0,0,.1)); border-radius:12px; overflow:hidden; cursor:pointer; transition:transform .15s; }
+.news-card:hover { transform:translateY(-2px); }
+.news-card-img { width:100%; height:140px; object-fit:cover; display:block; background:rgba(0,0,0,.05); }
+.news-card-body { padding:12px; }
+.news-card-source { font-size:10px; opacity:.5; text-transform:uppercase; letter-spacing:.1em; margin-bottom:4px; }
+.news-card-title { font-size:13px; font-weight:600; line-height:1.4; margin-bottom:6px; }
+.news-card-time { font-size:11px; opacity:.4; }
 </style>
 </head>
 <body>
@@ -403,7 +413,17 @@ footer a:hover{color:var(--ink)}
           <div class="sec-label" style="margin-bottom:0">Intel Feed</div>
           <span style="font-size:11px;font-family:'DM Mono',monospace;color:#1a8a4a;display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#1a8a4a;animation:pulse 1.5s ease-in-out infinite"></span>Live</span>
         </div>
-        <style>@keyframes pulse{0%,100%{opacity:1}50%opacity:.3</style>
+        <style>@keyframes pulse{0%,100%{opacity:1}50%opacity:.3
+#news-modal.is-open { display:flex !important; }
+.news-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px; margin-top:16px; }
+.news-card { border:1px solid var(--bdr,rgba(0,0,0,.1)); border-radius:12px; overflow:hidden; cursor:pointer; transition:transform .15s; }
+.news-card:hover { transform:translateY(-2px); }
+.news-card-img { width:100%; height:140px; object-fit:cover; display:block; background:rgba(0,0,0,.05); }
+.news-card-body { padding:12px; }
+.news-card-source { font-size:10px; opacity:.5; text-transform:uppercase; letter-spacing:.1em; margin-bottom:4px; }
+.news-card-title { font-size:13px; font-weight:600; line-height:1.4; margin-bottom:6px; }
+.news-card-time { font-size:11px; opacity:.4; }
+</style>
         <div class="news-item" style="padding:18px 28px"><div class="ni-time">10:15 AM</div><div><span class="pill-tag tr" style="margin-bottom:6px;display:inline-block">Macro Alert</span><div class="ni-title">US Core CPI 0.3% MoM  hot vs expected. Volatility spike across rate-sensitive assets.</div></div><div class="ni-tag"><span class="badge">High Impact</span></div></div>
         <div class="news-item" style="padding:18px 28px"><div class="ni-time">09:45 AM</div><div><span class="pill-tag tg" style="margin-bottom:6px;display:inline-block">NVDA Intel</span><div class="ni-title">Institutional block buying at $201.50 support. Uptrend continuation vs SMA 200 confirmed.</div><div style="margin-top:8px"><button class="btn-outline" style="font-size:11px;padding:5px 12px" onclick="show('analytics')">Open Analytics </button></div></div><div class="ni-tag"></div></div>
         <div class="news-item" style="padding:18px 28px"><div class="ni-time">08:30 AM</div><div><span class="pill-tag ta" style="margin-bottom:6px;display:inline-block">Corporate</span><div class="ni-title">ECB Press Conference  Lagarde on rate cut timelines Q3 2026.</div></div><div class="ni-tag"><span class="badge">Med Impact</span></div></div>
