@@ -1,69 +1,129 @@
-# StockRater — Company Rating & Trading Tool
+# futara
 
-A self-hosted, shareable web app for fundamental company analysis and leverage trading position sizing. Built on the Financial Modeling Prep API.
+**A personal investment intelligence tool** — algorithmic stock scoring, DCF valuation, and strategy-aligned analysis in one place.
 
-## Features
-
-- **Company Rating** — Enter any ticker, auto-loads live balance sheet, income statement, cash flow, and key ratios from FMP. Scores 10 financial ratios against benchmarks. Manual qualitative scoring (Management, Moat, ESG). Weighted scorecard (70% / 10% / 10% / 10%) with verdict: Strong buy / Buy / Hold / Avoid.
-- **Leverage Trading** — Load live price, SMA200, and ATR from FMP automatically. Position sizing, SL/TP calculation (TP1 +50%, TP2 +100%, TP3 trailing). Trend validation vs. SMA 200 + Market Filter.
-- **Portfolio & Watchlist** — Save rated companies and trades. Data persists in localStorage.
-- **Mobile-friendly** — Responsive sidebar, works on phone and desktop.
+**Live:** https://dan123iel.github.io/stockrater/
+**Repo:** https://github.com/dan123iel/stockrater
 
 ---
 
-## Setup in 3 steps
+## What is this?
 
-### 1. Get a free FMP API key
-Go to [https://financialmodelingprep.com/register](https://financialmodelingprep.com/register) and create a free account. No credit card required. The free tier includes 250 requests/day — enough for normal personal use.
+futara answers one question: **"Should I buy this stock — given how I invest?"**
 
-### 2. Deploy to GitHub Pages
-
-1. Create a new GitHub repository (e.g. `stockrater`)
-2. Upload `index.html` to the repository root
-3. Go to **Settings → Pages → Source → Deploy from branch → main → / (root)**
-4. After ~1 minute your app is live at `https://yourusername.github.io/stockrater/`
-5. Share that link with friends — they set their own API key in the Settings tab
-
-### 3. Enter your API key in the app
-Open the app → **Settings tab** → paste your FMP key → Save. The key is stored only in your browser's localStorage — never sent to any server other than FMP directly.
+It scores any stock against your personal investment strategy (value, growth, dividend, or momentum), explains *why* a stock scores the way it does, and tracks your own trades over time. No Bloomberg subscription required, no YouTube opinion, no bank advisor conflict of interest.
 
 ---
 
-## Architecture
+## How it works
 
 ```
-index.html          ← entire app, single file, no build step
-  ├── CSS           ← dark theme, responsive, mobile sidebar
-  ├── FMP API calls ← quote, balance-sheet, income-statement,
-  │                   cash-flow, key-metrics, historical prices
-  ├── Scoring logic ← ratio benchmarks (Damodaran-based)
-  │                   WACC table by industry
-  └── localStorage  ← portfolio, trades, watchlist, 1h cache
+You open futara in a browser
+       ↓
+Enter a ticker (e.g. NVDA, AAPL, MSFT)
+       ↓
+futara fetches live data from Finnhub + Yahoo Finance
+       ↓
+Calculates a score (1–5) adjusted to YOUR investment profile
+       ↓
+Shows: score, explanation, chart, ratios, DCF, insider trades, news
 ```
 
-## WACC / Beta source
-Industry-level WACC and Beta values are sourced from Aswath Damodaran's annual dataset (NYU Stern). Built into the app — no additional API needed.
+Everything runs in the browser. No server, no database, no login required.
+Data is cached locally for 1 hour.
 
-## Ratio benchmarks
+---
 
-| Ratio | Score 5 | Score 3.5 | Score 2 |
-|---|---|---|---|
-| Current ratio | ≥1.5 | ≥1.0 | ≥0.8 |
-| Quick ratio | ≥1.0 | ≥0.9 | ≥0.7 |
-| Cash ratio | ≥0.3 | ≥0.2 | ≥0.1 |
-| Equity / assets | ≥40% | ≥25% | ≥15% |
-| Debt / equity | ≤1.0x | ≤1.4x | ≤1.6x |
-| Debt ratio | ≤30% | ≤40% | ≤50% |
-| Gross margin | ≥35% | ≥20% | ≥10% |
-| Net margin | ≥12% | ≥6% | ≥2% |
-| FCF margin | ≥12% | ≥6% | ≥2% |
-| EV / EBITDA | ≤12x | ≤22x | ≤35x |
+## File Structure
 
-## Scorecard weights
+```
+futara/
+│
+├── index.html                    ← Active design (CSS only — swap to change the look)
+│
+├── src/
+│   └── js/
+│       ├── templates.js          ← All page HTML (structure of every screen)
+│       └── app.js                ← All logic (data fetching, scoring, navigation)
+│
+├── designs/                      ← Alternative visual designs (same logic, different CSS)
+│   ├── v0-brutalist/             ← Space Grotesk, high contrast
+│   ├── v1-dark-purple/           ← Dark mode, purple accent (Syne font)
+│   ├── v2-editorial-beige/       ← Light mode, serif typography (DM Serif Display)
+│   └── v3-minimalist-air/        ← Ultra-minimal, Cormorant Garamond
+│
+├── worker.js                     ← Cloudflare Worker (backend proxy for Yahoo Finance)
+│
+├── public/robots.txt
+│
+├── PROJECT.md                    ← Technical architecture and rules
+├── ROADMAP.md                    ← Product vision, phases, and backlog
+└── README.md                     ← This file
+```
 
-| Category | Weight |
-|---|---|
-| A) Financial ratios | 70% |
-| B) Management quality | 10% |
-| C) Competitive moat | 10% |
-| D) ESG & Risk | 10% |
+---
+
+## The Three-File Architecture
+
+futara separates three concerns completely:
+
+| File | Responsibility | Change when... |
+|---|---|---|
+| `index.html` | Visual design (CSS only) | You want a different look |
+| `src/js/templates.js` | Page structure (HTML) | You add/remove a screen or widget |
+| `src/js/app.js` | Logic (data, scoring, API) | You add/change a feature |
+
+**Switching designs is one step:** replace `index.html` with any file from `designs/`.
+The logic and structure stay exactly the same.
+
+---
+
+## Design Variants
+
+| Folder | Style | Font |
+|---|---|---|
+| `designs/v0-brutalist/` | High contrast, editorial | Space Grotesk |
+| `designs/v1-dark-purple/` | Dark mode, purple accent | Syne |
+| `designs/v2-editorial-beige/` | Warm light mode, serif | DM Serif Display |
+| `designs/v3-minimalist-air/` | Ultra-minimal, airy | Cormorant Garamond |
+
+Browse live: https://dan123iel.github.io/stockrater/designs/v1-dark-purple/
+
+---
+
+## Data Sources
+
+| Source | What it provides | Cost |
+|---|---|---|
+| Finnhub | Live prices (WebSocket), news | Free tier |
+| Yahoo Finance (via Worker) | Fundamentals, historical charts | Free (proxied) |
+| FMP (optional) | Enhanced fundamentals | Free tier |
+
+---
+
+## Tech Stack
+
+- **Frontend:** Vanilla HTML + CSS + JavaScript — no framework, no build step
+- **Backend:** Cloudflare Worker (lightweight proxy)
+- **Storage:** Browser localStorage (no database at this stage)
+- **Hosting:** GitHub Pages (auto-deploys on push)
+
+---
+
+## Roadmap
+
+See [ROADMAP.md](./ROADMAP.md) for the full product vision.
+
+**Current:** Scoring, DCF, comparison, portfolio, news
+**Next:** Strategy profile, score explanations, trade journal, AI (Groq/Llama)
+**Later:** Broker CSV import, auth, multi-user (Supabase)
+
+---
+
+## Local Development
+
+```bash
+# No build step needed
+python3 -m http.server 8080
+# open http://localhost:8080
+```
