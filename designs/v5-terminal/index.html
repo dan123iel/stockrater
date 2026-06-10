@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>futara // ARCHITEKTUR-TERMINAL</title>
+    <style>
+        :root {
+            --bg-color: #0a0a0a;
+            --surface-color: #121212;
+            --border-color: #262626;
+            --text-main: #ffffff;
+            --text-muted: #8c8c8c;
+            --accent-color: #00ff66;
+            --accent-danger: #ff3333;
+            --font-mono: 'Courier New', Courier, monospace;
+            --font-sans: 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            letter-spacing: -0.02em;
+            overflow-x: hidden;
+        }
+
+        .marquee-container {
+            width: 100%;
+            background: var(--accent-color);
+            color: #000;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            font-size: 0.75rem;
+            padding: 4px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            border-bottom: 2px solid #000;
+        }
+
+        .marquee-text {
+            display: inline-block;
+            animation: marquee 25s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% { transform: translate3d(100%, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+
+        .app-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: calc(100vh - 24px);
+        }
+
+        sidebar {
+            background-color: var(--surface-color);
+            border-right: 1px solid var(--border-color);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .brand-zone h1 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            line-height: 0.9;
+            letter-spacing: -0.05em;
+            margin-bottom: 2rem;
+        }
+
+        .brand-zone span { color: var(--accent-color); }
+
+        .input-group { margin-bottom: 1.5rem; }
+
+        .input-group label {
+            display: block;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .brutal-input {
+            width: 100%;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            padding: 0.75rem;
+            color: #fff;
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .brutal-input:focus { outline: none; border-color: var(--accent-color); }
+
+        .brutal-btn {
+            width: 100%;
+            background: transparent;
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+            padding: 0.75rem;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .brutal-btn:hover { background: var(--accent-color); color: #000; }
+
+        main {
+            padding: 2rem;
+            display: grid;
+            grid-template-rows: auto 1fr;
+            gap: 2rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .brutal-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .brutal-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0;
+            width: 4px; height: 100%;
+            background: var(--border-color);
+        }
+
+        .brutal-card.active::before { background: var(--accent-color); }
+
+        .card-title {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .big-score {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .brutal-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+        }
+
+        .brutal-table th, .brutal-table td {
+            padding: 0.6rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .brutal-table th { color: var(--text-muted); font-weight: normal; }
+
+        @media (max-width: 900px) {
+            .app-container { grid-template-columns: 1fr; }
+            sidebar { border-right: none; border-bottom: 1px solid var(--border-color); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="marquee-container">
+        <div class="marquee-text" id="tape-v5">
+            ++ SYSTEM: ONLINE // FREE-TIER CACHE LOGIC: ENFORCED // DISCIPLINE IS TRADING ALGORITHM // DAMODARAN WACC METRICS LOADED ++
+        </div>
+    </div>
+
+    <div class="app-container">
+        <sidebar>
+            <div class="brand-zone">
+                <h1>FUT<br>ARA<span>//</span></h1>
+
+                <div class="input-group">
+                    <label for="apiKey">FMP API KEY</label>
+                    <input type="password" id="apiKey" class="brutal-input" placeholder="Paste Key Here">
+                </div>
+
+                <div class="input-group">
+                    <label for="tickerInput">TICKER SYMBOL</label>
+                    <input type="text" id="tickerInput" class="brutal-input" value="AAPL" style="text-transform:uppercase">
+                </div>
+
+                <button class="brutal-btn" id="analyzeBtn">EXECUTE_ANALYSIS</button>
+            </div>
+
+            <div style="font-family:var(--font-mono);font-size:0.7rem;color:var(--text-muted)">
+                v2.0.26 // CLIENT-SIDE ONLY
+            </div>
+        </sidebar>
+
+        <main>
+            <div id="outputHeader">
+                <h2 style="font-size:2.5rem;font-weight:900;letter-spacing:-0.04em" id="companyName">INITIALIZING...</h2>
+                <p style="font-family:var(--font-mono);color:var(--accent-color)" id="companySector">SELECT TICKER TO GENERATE RUNTIME DATA</p>
+            </div>
+
+            <div class="dashboard-grid">
+
+                <div class="brutal-card active" id="scoreCard">
+                    <div class="card-title"><span>[MOD_01] QUANT_VERDICT</span><span id="verdictLabel">WAITING</span></div>
+                    <div class="big-score" id="totalScore">00.0%</div>
+                    <p style="font-family:var(--font-mono);font-size:0.8rem;color:var(--text-muted)">
+                        Weighted Core: 65% Ratios | 12% Mgmt | 10% Moat | 8% ESG | 5% DCF
+                    </p>
+                </div>
+
+                <div class="brutal-card" id="leverageCard">
+                    <div class="card-title"><span>[MOD_02] LEVERAGE_FILTER_RISK</span><span id="trendStatus">CHECKING</span></div>
+                    <table class="brutal-table">
+                        <tr><td>Live Price</td><td id="livePrice">-</td></tr>
+                        <tr><td>SMA 200</td><td id="sma200">-</td></tr>
+                        <tr><td>ATR (Volatility)</td><td id="atr">-</td></tr>
+                        <tr style="color:var(--accent-color)"><td>TP1 (+50%)</td><td id="tp1">-</td></tr>
+                        <tr style="color:var(--accent-color)"><td>TP2 (+100%)</td><td id="tp2">-</td></tr>
+                    </table>
+                </div>
+
+                <div class="brutal-card" style="grid-column:1/-1">
+                    <div class="card-title"><span>[MOD_03] HARDCODED_RATIO_EVALUATOR</span><span>PASSED/FAILED</span></div>
+                    <table class="brutal-table" id="ratioTable">
+                        <thead>
+                            <tr>
+                                <th>METRIC</th>
+                                <th>ACTUAL VALUE</th>
+                                <th>TARGET BENCHMARK</th>
+                                <th>SCORE (1-5)</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="../../src/js/app.js"></script>
+    <script>
+    (function() {
+        // Compatibility shim — v5 has no pages/nav routing, just the terminal dashboard
+        // G() and showPage() are noops here (single-page terminal layout)
+        window.showPage = function() {};
+        window.G = window.showPage;
+
+        // Live tape update via app.js Finnhub data if available, else keep static text
+        // (tape-v5 id used so app.js tape builder won't conflict)
+
+        // --- ORIGINAL V5 LOGIC (preserved exactly) ---
+        const DAMODARAN_DATA = {
+            "Technology": { wacc: 0.082, beta: 1.20 },
+            "Financial Services": { wacc: 0.075, beta: 1.05 },
+            "Healthcare": { wacc: 0.068, beta: 0.95 },
+            "Consumer Defensive": { wacc: 0.062, beta: 0.80 },
+            "Consumer Cyclical": { wacc: 0.078, beta: 1.10 },
+            "Industrials": { wacc: 0.072, beta: 1.00 },
+            "Default": { wacc: 0.075, beta: 1.00 }
+        };
+
+        const RATIO_RULES = {
+            currentRatio: [ {min:1.5,s:5},{min:1.0,s:3.5},{min:0.8,s:2} ],
+            quickRatio:   [ {min:1.0,s:5},{min:0.9,s:3.5},{min:0.7,s:2} ],
+            cashRatio:    [ {min:0.3,s:5},{min:0.2,s:3.5},{min:0.1,s:2} ],
+            equityAssets: [ {min:0.40,s:5},{min:0.25,s:3.5},{min:0.15,s:2} ],
+            debtEquity:   [ {max:1.0,s:5},{max:1.4,s:3.5},{max:1.6,s:2} ],
+            debtRatio:    [ {max:0.30,s:5},{max:0.40,s:3.5},{max:0.50,s:2} ],
+            grossMargin:  [ {min:0.35,s:5},{min:0.20,s:3.5},{min:0.10,s:2} ],
+            netMargin:    [ {min:0.12,s:5},{min:0.06,s:3.5},{min:0.02,s:2} ],
+            fcfMargin:    [ {min:0.12,s:5},{min:0.06,s:3.5},{min:0.02,s:2} ],
+            evEbitda:     [ {max:12,s:5},{max:22,s:3.5},{max:35,s:2} ]
+        };
+
+        document.getElementById('apiKey').value = localStorage.getItem('fmp_apikey') || '';
+
+        document.getElementById('analyzeBtn').addEventListener('click', () => {
+            const ticker = document.getElementById('tickerInput').value.toUpperCase().trim();
+            const apiKey = document.getElementById('apiKey').value.trim();
+            if (!ticker || !apiKey) { alert("CRITICAL ERROR: Ticker and API Key required."); return; }
+            localStorage.setItem('fmp_apikey', apiKey);
+            fetchStockData(ticker, apiKey);
+        });
+
+        async function fetchStockData(ticker, apiKey) {
+            const cacheKey = `stock_data_${ticker}`;
+            const cached = localStorage.getItem(cacheKey);
+            const cachedTime = localStorage.getItem(`${cacheKey}_time`);
+            if (cached && cachedTime && (Date.now() - cachedTime < 3600000)) {
+                renderData(JSON.parse(cached)); return;
+            }
+            try {
+                const pRes = await fetch(`https://financialmodelingprep.com/api/v3/profile/${ticker}?apikey=${apiKey}`);
+                if (pRes.status === 429) throw new Error("HTTP_429: API Rate Limit Exceeded.");
+                const profile = await pRes.json();
+                const metrics = await (await fetch(`https://financialmodelingprep.com/api/v3/key-metrics/${ticker}?limit=1&apikey=${apiKey}`)).json();
+                const ratios  = await (await fetch(`https://financialmodelingprep.com/api/v3/ratios/${ticker}?limit=1&apikey=${apiKey}`)).json();
+                const technicals = await fetchTechnicalData(ticker, apiKey);
+                if (!profile.length || !metrics.length) { alert("DATA ERROR: Target Symbol non-responsive or invalid."); return; }
+                const compiledData = { profile: profile[0], metrics: metrics[0], ratios: ratios[0], technicals };
+                localStorage.setItem(cacheKey, JSON.stringify(compiledData));
+                localStorage.setItem(`${cacheKey}_time`, Date.now());
+                renderData(compiledData);
+            } catch(err) { alert(err.message || "FATAL RUNTIME EXCEPTION"); }
+        }
+
+        async function fetchTechnicalData(ticker, apiKey) {
+            try {
+                const quote = await (await fetch(`https://financialmodelingprep.com/api/v3/quote/${ticker}?apikey=${apiKey}`)).json();
+                const sma   = await (await fetch(`https://financialmodelingprep.com/api/v3/technical_indicator/daily/${ticker}?period=200&type=sma&apikey=${apiKey}`)).json();
+                return { price: quote[0]?.price||0, sma200: sma[0]?.sma||0, atr: quote[0]?.changesPercentage||0 };
+            } catch { return { price:0, sma200:0, atr:0 }; }
+        }
+
+        function evaluateMetric(value, ruleSet, isInverse=false) {
+            if (value === undefined || value === null) return 1;
+            for (let step of ruleSet) {
+                if (!isInverse && value >= step.min) return step.s;
+                if (isInverse  && value <= step.max) return step.s;
+            }
+            return 1;
+        }
+
+        function renderData(data) {
+            document.getElementById('companyName').innerText = data.profile.companyName.toUpperCase();
+            document.getElementById('companySector').innerText = `SECTOR: ${data.profile.sector.toUpperCase()} // BETA: ${data.profile.beta}`;
+            const r = data.ratios, m = data.metrics;
+            const evaluated = [
+                { name:"Current Ratio",  val:r.currentRatio,              score:evaluateMetric(r.currentRatio, RATIO_RULES.currentRatio),          target:"≥ 1.5" },
+                { name:"Quick Ratio",    val:r.quickRatio,                 score:evaluateMetric(r.quickRatio,   RATIO_RULES.quickRatio),             target:"≥ 1.0" },
+                { name:"Cash Ratio",     val:r.cashRatio,                  score:evaluateMetric(r.cashRatio,    RATIO_RULES.cashRatio),              target:"≥ 0.3" },
+                { name:"Debt / Equity",  val:r.debtEquityRatio,            score:evaluateMetric(r.debtEquityRatio, RATIO_RULES.debtEquity, true),    target:"≤ 1.0x" },
+                { name:"Gross Margin",   val:r.grossProfitMargin,          score:evaluateMetric(r.grossProfitMargin, RATIO_RULES.grossMargin),       target:"≥ 35%" },
+                { name:"Net Margin",     val:r.netProfitMargin,            score:evaluateMetric(r.netProfitMargin,   RATIO_RULES.netMargin),         target:"≥ 12%" },
+                { name:"EV / EBITDA",    val:m.enterpriseValueOverEBITDA,  score:evaluateMetric(m.enterpriseValueOverEBITDA, RATIO_RULES.evEbitda, true), target:"≤ 12x" }
+            ];
+            const tbody = document.querySelector('#ratioTable tbody');
+            tbody.innerHTML = '';
+            let total = 0;
+            evaluated.forEach(item => {
+                total += item.score;
+                tbody.innerHTML += `<tr>
+                    <td>${item.name.toUpperCase()}</td>
+                    <td>${item.val != null ? item.val.toFixed(2) : 'N/A'}</td>
+                    <td>${item.target}</td>
+                    <td style="color:${item.score>=3.5?'var(--accent-color)':'var(--accent-danger)'}">${item.score}/5</td>
+                </tr>`;
+            });
+            const avg = (total / evaluated.length) / 5;
+            const final = (avg * 65) + 25;
+            document.getElementById('totalScore').innerText = `${final.toFixed(1)}%`;
+            let verdict = final>=75 ? "STRONG BUY" : final>=60 ? "BUY" : final>=45 ? "HOLD" : "AVOID";
+            const vl = document.getElementById('verdictLabel');
+            vl.innerText = verdict;
+            vl.style.color = verdict.includes("BUY") ? "var(--accent-color)" : "var(--accent-danger)";
+            const tech = data.technicals;
+            document.getElementById('livePrice').innerText = `${tech.price.toFixed(2)} USD`;
+            document.getElementById('sma200').innerText   = `${tech.sma200.toFixed(2)} USD`;
+            document.getElementById('atr').innerText      = `${tech.atr.toFixed(2)}%`;
+            const tl = document.getElementById('trendStatus');
+            if (tech.price > tech.sma200 && tech.sma200 > 0) {
+                tl.innerText = "LONG_VALIDATED"; tl.style.color = "var(--accent-color)";
+                document.getElementById('leverageCard').classList.add('active');
+                document.getElementById('tp1').innerText = `${(tech.price*1.5).toFixed(2)} USD`;
+                document.getElementById('tp2').innerText = `${(tech.price*2.0).toFixed(2)} USD`;
+            } else {
+                tl.innerText = "LONG_BLOCKED_BELOW_SMA200"; tl.style.color = "var(--accent-danger)";
+                document.getElementById('leverageCard').classList.remove('active');
+                document.getElementById('tp1').innerText = "BLOCKED";
+                document.getElementById('tp2').innerText = "BLOCKED";
+            }
+        }
+    })();
+    </script>
+</body>
+</html>
