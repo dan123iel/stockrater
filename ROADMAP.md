@@ -249,7 +249,51 @@ Score bands:
 
 ---
 
-## Next Immediate Actions (Phase 1 start)
+## Score Explanation — Hybrid Architecture
+
+```
+Layer 1 — Financial Rules (always runs, no API needed):
+  "P/E 16.2x is 24% below sector average (21.1x) → positive signal"
+  "Gross margin 74.1% is in top 5% of sector → elite"
+  "Revenue growth +85% YoY → hyper growth, above benchmark"
+  "DCF fair value $245 vs price $205 → 19% margin of safety"
+
+Layer 2 — AI Synthesis (Groq, runs on demand):
+  Takes all rule outputs as context
+  Generates 2–3 sentence plain-English summary
+  Aligns explanation with user's strategy profile
+  Example: "For a growth investor, NVDA scores exceptionally well.
+  The revenue growth of 85% and elite margins outweigh the
+  slightly elevated EV/EBITDA. Main risk: valuation sensitivity
+  to rate changes."
+
+Fallback: if Groq API unavailable → show Layer 1 only
+Cost: Groq free tier = 14,400 requests/day on Llama 3.1 8B → sufficient
+```
+
+---
+
+## i18n Structure (Phase 2 prep)
+
+All UI strings will be moved to a `strings` object in `app.js`:
+
+```js
+const STRINGS = {
+  en: {
+    'nav.markets': 'Markets',
+    'nav.analytics': 'Analytics',
+    'score.strongBuy': 'Strong Buy',
+    // ...
+  },
+  de: { /* Phase 4 */ },
+  es: { /* Phase 4 */ }
+}
+```
+
+No external library needed. Simple `t('key')` function.
+Set up the structure in Phase 2 so translation in Phase 4 is a 1-day job.
+
+---
 
 1. Answer open questions above
 2. Implement Strategy Profile onboarding in `app.js`
