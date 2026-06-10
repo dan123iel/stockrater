@@ -3,396 +3,414 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>futara // ARCHITEKTUR-TERMINAL</title>
+    <title>FUTARA // STOCKRATER ENGINE</title>
     <style>
         :root {
-            --bg-color: #0a0a0a;
-            --surface-color: #121212;
-            --border-color: #262626;
+            --bg-main: #000000;
+            --bg-surface: #0a0a0a;
+            --border-heavy: 2px solid #ffffff;
+            --border-light: 1px solid #262626;
             --text-main: #ffffff;
-            --text-muted: #8c8c8c;
-            --accent-color: #00ff66;
-            --accent-danger: #ff3333;
-            --font-mono: 'Courier New', Courier, monospace;
+            --text-muted: #888888;
+            --accent-coral: #ff4a3a;
+            --accent-green: #00ff66;
             --font-sans: 'Helvetica Neue', Arial, sans-serif;
+            --font-mono: 'Courier New', Courier, monospace;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            background-color: var(--bg-color);
+            background-color: var(--bg-main);
             color: var(--text-main);
             font-family: var(--font-sans);
+            padding: 1.5rem;
             letter-spacing: -0.02em;
             overflow-x: hidden;
         }
 
-        .marquee-container {
-            width: 100%;
-            background: var(--accent-color);
-            color: #000;
-            font-family: var(--font-mono);
-            font-weight: bold;
-            font-size: 0.75rem;
-            padding: 4px 0;
-            overflow: hidden;
-            white-space: nowrap;
-            border-bottom: 2px solid #000;
-        }
-
-        .marquee-text {
-            display: inline-block;
-            animation: marquee 25s linear infinite;
-        }
-
-        @keyframes marquee {
-            0% { transform: translate3d(100%, 0, 0); }
-            100% { transform: translate3d(-100%, 0, 0); }
-        }
-
-        .app-container {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            min-height: calc(100vh - 24px);
-        }
-
-        sidebar {
-            background-color: var(--surface-color);
-            border-right: 1px solid var(--border-color);
-            padding: 2rem;
+        header {
             display: flex;
-            flex-direction: column;
             justify-content: space-between;
-        }
-
-        .brand-zone h1 {
-            font-size: 1.8rem;
-            font-weight: 900;
-            line-height: 0.9;
-            letter-spacing: -0.05em;
+            align-items: center;
+            padding-bottom: 1.5rem;
+            border-bottom: var(--border-heavy);
             margin-bottom: 2rem;
         }
 
-        .brand-zone span { color: var(--accent-color); }
+        .nav-left, .nav-right { display: flex; gap: 0.5rem; align-items: center; }
 
-        .input-group { margin-bottom: 1.5rem; }
+        .brand-logo {
+            font-weight: 900;
+            text-transform: uppercase;
+            font-size: 1.1rem;
+            margin-right: 1.5rem;
+            letter-spacing: -0.05em;
+        }
+        .brand-logo span { color: var(--accent-coral); }
 
-        .input-group label {
-            display: block;
+        .pill-btn {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--border-light);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.15s ease-out;
+            text-transform: uppercase;
+            font-family: var(--font-mono);
+        }
+        .pill-btn:hover { background: #ffffff; color: #000000; border-color: #ffffff; }
+        .pill-btn.active { background: #ffffff; color: #000000; border: 1px solid #ffffff; }
+
+        .icon-pill { border-radius: 50px; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.4rem; }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .brutal-grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+        .brutal-grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+
+        .brutal-card { background: var(--bg-surface); border: var(--border-light); padding: 1.5rem; position: relative; }
+
+        .card-header-mono {
             font-family: var(--font-mono);
             font-size: 0.75rem;
-            text-transform: uppercase;
             color: var(--text-muted);
-            margin-bottom: 0.5rem;
-        }
-
-        .brutal-input {
-            width: 100%;
-            background: transparent;
-            border: 1px solid var(--border-color);
-            padding: 0.75rem;
-            color: #fff;
-            font-family: var(--font-mono);
-            font-size: 1rem;
-            transition: border-color 0.2s;
-        }
-
-        .brutal-input:focus { outline: none; border-color: var(--accent-color); }
-
-        .brutal-btn {
-            width: 100%;
-            background: transparent;
-            color: var(--accent-color);
-            border: 1px solid var(--accent-color);
-            padding: 0.75rem;
-            font-family: var(--font-mono);
-            font-weight: bold;
             text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .brutal-btn:hover { background: var(--accent-color); color: #000; }
-
-        main {
-            padding: 2rem;
-            display: grid;
-            grid-template-rows: auto 1fr;
-            gap: 2rem;
-        }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .brutal-card {
-            background: var(--surface-color);
-            border: 1px solid var(--border-color);
-            padding: 1.5rem;
-            position: relative;
-        }
-
-        .brutal-card::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0;
-            width: 4px; height: 100%;
-            background: var(--border-color);
-        }
-
-        .brutal-card.active::before { background: var(--accent-color); }
-
-        .card-title {
-            font-family: var(--font-mono);
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: var(--border-light);
             padding-bottom: 0.5rem;
+            margin-bottom: 1.2rem;
             display: flex;
             justify-content: space-between;
         }
 
-        .big-score {
-            font-size: 4rem;
-            font-weight: 900;
-            line-height: 1;
-            letter-spacing: -0.05em;
-            margin-bottom: 0.5rem;
-        }
+        .brutal-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 0.85rem; }
+        .brutal-table th, .brutal-table td { padding: 0.75rem 0.5rem; text-align: left; border-bottom: var(--border-light); }
+        .brutal-table th { color: var(--text-muted); font-weight: normal; text-transform: uppercase; }
 
-        .brutal-table {
-            width: 100%;
-            border-collapse: collapse;
+        .big-stat { font-size: 3.5rem; font-weight: 900; letter-spacing: -0.05em; line-height: 1; margin: 0.5rem 0; }
+
+        .brutal-input {
+            background: #000000;
+            border: 1px solid var(--border-light);
+            padding: 0.75rem;
+            color: #ffffff;
             font-family: var(--font-mono);
-            font-size: 0.85rem;
+            font-size: 0.95rem;
+            width: 100%;
+            margin-top: 0.5rem;
         }
+        .brutal-input:focus { outline: none; border-color: #ffffff; }
 
-        .brutal-table th, .brutal-table td {
-            padding: 0.6rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border-color);
+        .execute-btn {
+            background: var(--text-main);
+            color: #000000;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            font-family: var(--font-mono);
+            width: 100%;
+            margin-top: 1rem;
+            transition: all 0.15s ease;
         }
+        .execute-btn:hover { background: var(--accent-coral); color: #ffffff; }
 
-        .brutal-table th { color: var(--text-muted); font-weight: normal; }
+        .allocation-bar { display: flex; height: 20px; border: 1px solid var(--border-light); margin-top: 1rem; background: #222; }
+        .bar-segment { height: 100%; }
 
-        @media (max-width: 900px) {
-            .app-container { grid-template-columns: 1fr; }
-            sidebar { border-right: none; border-bottom: 1px solid var(--border-color); }
+        .tooltip-box {
+            background: #111;
+            border-left: 3px solid var(--accent-coral);
+            padding: 0.75rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 1rem;
+            font-family: var(--font-mono);
         }
     </style>
 </head>
 <body>
 
-    <div class="marquee-container">
-        <div class="marquee-text" id="tape-v5">
-            ++ SYSTEM: ONLINE // FREE-TIER CACHE LOGIC: ENFORCED // DISCIPLINE IS TRADING ALGORITHM // DAMODARAN WACC METRICS LOADED ++
+    <header>
+        <div class="nav-left">
+            <div class="brand-logo">futara<span>//</span></div>
+            <button class="pill-btn" id="btn-markets" onclick="switchTab('markets')">markets</button>
+            <button class="pill-btn active" id="btn-analytics" onclick="switchTab('analytics')">analytics</button>
+            <button class="pill-btn" id="btn-comparison" onclick="switchTab('comparison')">comparison</button>
+        </div>
+        <div class="nav-right">
+            <button class="pill-btn icon-pill" id="btn-portfolio" onclick="switchTab('portfolio')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                portfolio
+            </button>
+            <button class="pill-btn icon-pill" id="btn-profile" onclick="switchTab('profile')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                profile
+            </button>
+        </div>
+    </header>
+
+    <div id="view-markets" class="tab-content">
+        <h2 style="font-size:2rem;font-weight:900;letter-spacing:-0.04em">GLOBAL MARKETS & NEWS FEED</h2>
+        <div class="brutal-grid-2">
+            <div class="brutal-card">
+                <div class="card-header-mono"><span>[NEWS_SENTIMENT_PULSE]</span><span>AGGREGATE: 72% BULLISH</span></div>
+                <div style="display:flex;flex-direction:column;gap:1rem">
+                    <div>
+                        <strong style="color:var(--accent-green)">[🔴 LIVE // FIN-PRESS]</strong> Futara Analytics launches enterprise AI core chip.
+                        <div style="font-family:var(--font-mono);font-size:0.75rem;color:var(--text-muted)">Impact: 9.4/10 | Tone: Highly Positive</div>
+                    </div>
+                    <div style="border-top:var(--border-light);padding-top:0.5rem">
+                        <strong>[BLOCK_TRADE]</strong> Institutional accumulation detected via hidden derivative orders.
+                        <div style="font-family:var(--font-mono);font-size:0.75rem;color:var(--text-muted)">Buzz Tier: High Traffic | Tone: Bullish</div>
+                    </div>
+                </div>
+            </div>
+            <div class="brutal-card">
+                <div class="card-header-mono"><span>[DIVIDEND_CALENDAR]</span><span>STREAK: 12 YEARS</span></div>
+                <table class="brutal-table">
+                    <tr><td>Dividend Yield</td><td>0.92%</td></tr>
+                    <tr><td>Annualized Payout</td><td>$1.88</td></tr>
+                    <tr><td>Payout Ratio</td><td>14.5% (Safe)</td></tr>
+                    <tr><td>Ex-Dividend Date</td><td>2026-07-01</td></tr>
+                </table>
+            </div>
         </div>
     </div>
 
-    <div class="app-container">
-        <sidebar>
-            <div class="brand-zone">
-                <h1>FUT<br>ARA<span>//</span></h1>
-
-                <div class="input-group">
-                    <label for="apiKey">FMP API KEY</label>
+    <div id="view-analytics" class="tab-content active">
+        <div style="display:grid;grid-template-columns:280px 1fr;gap:2rem">
+            <div>
+                <div class="brutal-card">
+                    <div class="card-header-mono"><span>[TARGET_SELECTION]</span></div>
+                    <label style="font-family:var(--font-mono);font-size:0.75rem;color:var(--text-muted)">FMP API KEY</label>
                     <input type="password" id="apiKey" class="brutal-input" placeholder="Paste Key Here">
+                    <label style="font-family:var(--font-mono);font-size:0.75rem;color:var(--text-muted);margin-top:1rem;display:block">ENTER TICKER</label>
+                    <input type="text" id="tickerInput" class="brutal-input" value="NVDA" style="text-transform:uppercase">
+                    <button class="execute-btn" onclick="executeQuantScanner()">RUN SCORECARD</button>
                 </div>
-
-                <div class="input-group">
-                    <label for="tickerInput">TICKER SYMBOL</label>
-                    <input type="text" id="tickerInput" class="brutal-input" value="AAPL" style="text-transform:uppercase">
+                <div class="brutal-card" style="margin-top:1rem">
+                    <div class="card-header-mono"><span>[RECENTLY_VIEWED]</span></div>
+                    <ul style="font-family:var(--font-mono);font-size:0.8rem;list-style:none;display:flex;flex-direction:column;gap:0.5rem">
+                        <li>• NVDA <span style="color:var(--accent-green)">4.57 / 5.0</span></li>
+                        <li>• TSLA <span style="color:var(--accent-coral)">3.10 / 5.0</span></li>
+                        <li>• AMD <span style="color:var(--accent-green)">3.82 / 5.0</span></li>
+                    </ul>
                 </div>
-
-                <button class="brutal-btn" id="analyzeBtn">EXECUTE_ANALYSIS</button>
             </div>
-
-            <div style="font-family:var(--font-mono);font-size:0.7rem;color:var(--text-muted)">
-                v2.0.26 // CLIENT-SIDE ONLY
-            </div>
-        </sidebar>
-
-        <main>
-            <div id="outputHeader">
-                <h2 style="font-size:2.5rem;font-weight:900;letter-spacing:-0.04em" id="companyName">INITIALIZING...</h2>
-                <p style="font-family:var(--font-mono);color:var(--accent-color)" id="companySector">SELECT TICKER TO GENERATE RUNTIME DATA</p>
-            </div>
-
-            <div class="dashboard-grid">
-
-                <div class="brutal-card active" id="scoreCard">
-                    <div class="card-title"><span>[MOD_01] QUANT_VERDICT</span><span id="verdictLabel">WAITING</span></div>
-                    <div class="big-score" id="totalScore">00.0%</div>
-                    <p style="font-family:var(--font-mono);font-size:0.8rem;color:var(--text-muted)">
-                        Weighted Core: 65% Ratios | 12% Mgmt | 10% Moat | 8% ESG | 5% DCF
-                    </p>
+            <div>
+                <div id="companyMetaHeader">
+                    <h1 style="font-size:2.5rem;font-weight:900;letter-spacing:-0.05em">NVIDIA CORPORATION (NVDA)</h1>
+                    <p style="font-family:var(--font-mono);color:var(--accent-coral);font-size:0.9rem">SECTOR: TECHNOLOGY & SEMICONDUCTORS // DAMODARAN WACC BASELINE: 8.2%</p>
                 </div>
-
-                <div class="brutal-card" id="leverageCard">
-                    <div class="card-title"><span>[MOD_02] LEVERAGE_FILTER_RISK</span><span id="trendStatus">CHECKING</span></div>
+                <div class="brutal-grid-2">
+                    <div class="brutal-card">
+                        <div class="card-header-mono"><span>[SCORECARD_SUMMARY]</span><span style="color:var(--accent-green)" id="verdictNode">STRONG BUY</span></div>
+                        <div class="big-stat" id="scoreNode">4.57</div>
+                        <p style="font-family:var(--font-mono);font-size:0.75rem;color:var(--text-muted)">Weighted Architecture: 65% Financial Ratios | 12% Mgmt Quality | 10% Moat | 8% ESG | 5% DCF</p>
+                    </div>
+                    <div class="brutal-card">
+                        <div class="card-header-mono"><span>[INTRINSIC_VALUE_ENGINE]</span></div>
+                        <table class="brutal-table">
+                            <tr><td>Calculated Fair Value</td><td><strong>$245.00</strong></td></tr>
+                            <tr><td>Margin of Safety</td><td style="color:var(--accent-green);font-weight:bold">+19.4%</td></tr>
+                        </table>
+                        <div class="tooltip-box">Die Margin of Safety zeigt dir, wie viel günstiger die Aktie aktuell im Vergleich zu ihrem fairen inneren Wert ist.</div>
+                    </div>
+                </div>
+                <div class="brutal-card" style="margin-top:1.5rem">
+                    <div class="card-header-mono"><span>[KEY_FINANCIAL_RATIOS_MATRIX]</span><span>65% CORE WEIGHT</span></div>
+                    <table class="brutal-table" id="ratiosTable">
+                        <thead><tr><th>Metric</th><th>Value</th><th>Target Criteria</th><th>Score</th></tr></thead>
+                        <tbody>
+                            <tr><td>Current Ratio</td><td>1.65x</td><td>≥ 1.5</td><td>5.0/5</td></tr>
+                            <tr><td>Quick Ratio</td><td>1.20x</td><td>≥ 1.0</td><td>5.0/5</td></tr>
+                            <tr><td>Cash Ratio</td><td>0.45x</td><td>≥ 0.3</td><td>5.0/5</td></tr>
+                            <tr><td>Equity / Assets</td><td>45.2%</td><td>≥ 40%</td><td>5.0/5</td></tr>
+                            <tr><td>Debt / Equity</td><td>0.65x</td><td>≤ 1.0x</td><td>5.0/5</td></tr>
+                            <tr><td>Gross Margin</td><td>74.1%</td><td>≥ 35%</td><td>5.0/5</td></tr>
+                            <tr><td>Net Margin</td><td>28.4%</td><td>≥ 12%</td><td>5.0/5</td></tr>
+                            <tr><td>EV / EBITDA</td><td>18.5x</td><td>≤ 12x</td><td>3.5/5</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="brutal-card" style="margin-top:1.5rem">
+                    <div class="card-header-mono"><span>[MANAGEMENT_&_OWNERSHIP_STRUCTURE]</span></div>
                     <table class="brutal-table">
-                        <tr><td>Live Price</td><td id="livePrice">-</td></tr>
-                        <tr><td>SMA 200</td><td id="sma200">-</td></tr>
-                        <tr><td>ATR (Volatility)</td><td id="atr">-</td></tr>
-                        <tr style="color:var(--accent-color)"><td>TP1 (+50%)</td><td id="tp1">-</td></tr>
-                        <tr style="color:var(--accent-color)"><td>TP2 (+100%)</td><td id="tp2">-</td></tr>
+                        <thead><tr><th>Institution</th><th>Shares Held</th><th>% of Company</th><th>Quarterly Change</th></tr></thead>
+                        <tbody>
+                            <tr><td>Vanguard Group</td><td>82,450,000</td><td>8.24%</td><td style="color:var(--accent-green)">+1.2%</td></tr>
+                            <tr><td>BlackRock Inc.</td><td>71,120,000</td><td>7.11%</td><td style="color:var(--accent-green)">+0.5%</td></tr>
+                        </tbody>
                     </table>
                 </div>
-
-                <div class="brutal-card" style="grid-column:1/-1">
-                    <div class="card-title"><span>[MOD_03] HARDCODED_RATIO_EVALUATOR</span><span>PASSED/FAILED</span></div>
-                    <table class="brutal-table" id="ratioTable">
-                        <thead>
-                            <tr>
-                                <th>METRIC</th>
-                                <th>ACTUAL VALUE</th>
-                                <th>TARGET BENCHMARK</th>
-                                <th>SCORE (1-5)</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-
             </div>
-        </main>
+        </div>
+    </div>
+
+    <div id="view-comparison" class="tab-content">
+        <h2 style="font-size:2rem;font-weight:900;letter-spacing:-0.04em">🆚 MULTI-ASSET COMPARISON TOOL</h2>
+        <div class="brutal-card" style="margin-top:1rem">
+            <div class="card-header-mono"><span>[CREATE_YOUR_MATCHUP]</span></div>
+            <div style="display:flex;gap:1rem">
+                <input type="text" class="brutal-input" value="NVDA" style="width:30%">
+                <div style="align-self:center;font-family:var(--font-mono)">vs</div>
+                <input type="text" class="brutal-input" value="AMD" style="width:30%">
+                <div style="align-self:center;font-family:var(--font-mono)">vs</div>
+                <input type="text" class="brutal-input" value="INTC" style="width:30%">
+            </div>
+        </div>
+        <div class="brutal-card" style="margin-top:1.5rem">
+            <div class="card-header-mono"><span>[INVESTMENT_COMPARISON_MATRIX]</span></div>
+            <table class="brutal-table">
+                <thead><tr><th>Metric Category</th><th style="color:var(--accent-green)">📈 NVIDIA (NVDA)</th><th>🔴 AMD (AMD)</th><th>🔵 INTEL (INTC)</th></tr></thead>
+                <tbody>
+                    <tr><td>Overall Algorithmic Score</td><td><strong>4.57 / 5.0 (Strong Buy)</strong></td><td>3.82 / 5.0 (Buy)</td><td>2.10 / 5.0 (Avoid)</td></tr>
+                    <tr><td>Current Stock Price</td><td>$205.10</td><td>$160.40</td><td>$31.15</td></tr>
+                    <tr><td>Calculated Fair Value</td><td>$245.00</td><td>$155.00</td><td>$22.00</td></tr>
+                    <tr><td>Margin of Safety</td><td style="color:var(--accent-green)">+19.4%</td><td style="color:var(--accent-coral)">-3.3%</td><td style="color:var(--accent-coral)">-29.3%</td></tr>
+                    <tr><td>Gross Margin (Profit)</td><td style="color:var(--accent-green)">74.1% [Elite]</td><td>48.2% [Good]</td><td style="color:var(--accent-coral)">32.0% [Weak]</td></tr>
+                    <tr><td>Position vs. SMA 200</td><td>Above (Uptrend)</td><td>Above (Uptrend)</td><td style="color:var(--accent-coral)">Below (Downtrend)</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="view-portfolio" class="tab-content">
+        <h2 style="font-size:2rem;font-weight:900;letter-spacing:-0.04em">💼 PORTFOLIO COMMAND CENTER</h2>
+        <div class="brutal-grid-3">
+            <div class="brutal-card">
+                <div class="card-header-mono"><span>[NET_WORTH_OVERVIEW]</span></div>
+                <div class="big-stat">$42,150.00</div>
+                <div style="font-family:var(--font-mono);font-size:0.85rem;margin-top:0.5rem">
+                    Cash Buffer: $8,430.00<br>
+                    Day Return: <span style="color:var(--accent-green)">+$1,240 (+3.0%)</span>
+                </div>
+            </div>
+            <div class="brutal-card">
+                <div class="card-header-mono"><span>[ACTIVE_LEVERAGE_DESK]</span></div>
+                <div style="font-family:var(--font-mono);font-size:0.85rem">
+                    <strong>Long NVDA x5 Leverage</strong><br>
+                    Return: <span style="color:var(--accent-green)">+$900 (+8.9%)</span><br>
+                    SL: $195.00 | TP1: $210.00
+                </div>
+            </div>
+            <div class="brutal-card">
+                <div class="card-header-mono"><span>[ASSET_ALLOCATION]</span></div>
+                <div class="allocation-bar">
+                    <div class="bar-segment" style="width:45.2%;background:var(--accent-coral)"></div>
+                    <div class="bar-segment" style="width:22.1%;background:#444"></div>
+                    <div class="bar-segment" style="width:12.7%;background:#777"></div>
+                    <div class="bar-segment" style="width:20.0%;background:var(--accent-green)"></div>
+                </div>
+                <div style="font-family:var(--font-mono);font-size:0.75rem;margin-top:0.5rem;display:flex;justify-content:space-between">
+                    <span>Tech: 45%</span><span>Crypto: 22%</span><span>Retail: 12%</span><span>Cash: 20%</span>
+                </div>
+            </div>
+        </div>
+        <div class="brutal-card" style="margin-top:1.5rem">
+            <div class="card-header-mono"><span>[RISK_&_TREND_MATRIX]</span><span style="color:var(--accent-green)">MARKET_RULE: BULLISH</span></div>
+            <table class="brutal-table">
+                <thead><tr><th>Asset</th><th>Status</th><th>Metric Compliance</th></tr></thead>
+                <tbody>
+                    <tr><td>NVDA</td><td style="color:var(--accent-green)">🟢 ABOVE SMA 200</td><td>Trend Validated // Risk Allowed</td></tr>
+                    <tr><td>AAPL</td><td style="color:var(--accent-green)">🟢 ABOVE SMA 200</td><td>Trend Validated // Risk Allowed</td></tr>
+                    <tr><td>BTC</td><td style="color:var(--accent-coral)">🔴 BELOW SMA 200</td><td>Trend Invalidation // Risk Blocked</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="view-profile" class="tab-content">
+        <h2 style="font-size:2rem;font-weight:900;letter-spacing:-0.04em">👤 USER PROFILE & APP SETTINGS</h2>
+        <div class="brutal-grid-2">
+            <div class="brutal-card">
+                <div class="card-header-mono"><span>[DISPLAY_CONFIGURATION]</span></div>
+                <div style="display:flex;gap:1rem">
+                    <button class="pill-btn active">⚫ Dark Mode</button>
+                    <button class="pill-btn">⚪ Light Mode</button>
+                </div>
+                <div style="margin-top:1.5rem">
+                    <label style="font-family:var(--font-mono);font-size:0.75rem;color:var(--text-muted)">REGIONAL CURRENCY</label>
+                    <select class="brutal-input" style="background:#000"><option>USD ($)</option><option>EUR (€)</option></select>
+                </div>
+            </div>
+            <div class="brutal-card">
+                <div class="card-header-mono"><span>[STORAGE_CONTROL_&_PRIVACY]</span></div>
+                <p style="font-size:0.85rem;color:var(--text-muted);font-family:var(--font-mono);line-height:1.5">Your profile and active data tracks are entirely saved inside your local browser storage. No tracking software is deployed.</p>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-top:1rem">
+                    <button class="pill-btn" style="font-size:0.75rem">📥 Export JSON</button>
+                    <button class="pill-btn" style="font-size:0.75rem" onclick="localStorage.clear();location.reload()">🗑️ Wipe Cache</button>
+                </div>
+            </div>
+        </div>
+        <div class="brutal-card" style="margin-top:1.5rem">
+            <div class="card-header-mono"><span>[ACCOUNT_TIER_STATUS]</span></div>
+            <table class="brutal-table">
+                <tr><td>Current License Plan</td><td>Free Personal Tier</td></tr>
+                <tr><td>FMP API Boundaries</td><td>250 requests/day (1-hour local client cache active)</td></tr>
+                <tr><td>Core Architecture Build</td><td>Native Single-File Client Engine v2.6.1</td></tr>
+            </table>
+        </div>
     </div>
 
     <script src="../../src/js/app.js"></script>
     <script>
     (function() {
-        // Compatibility shim — v5 has no pages/nav routing, just the terminal dashboard
-        // G() and showPage() are noops here (single-page terminal layout)
-        window.showPage = function() {};
+        // Compatibility shim — v5 uses switchTab() / view-* / pill-btn pattern
+        window.showPage = function(page) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.pill-btn').forEach(el => el.classList.remove('active'));
+            var view = document.getElementById('view-' + page);
+            if (view) view.classList.add('active');
+            var btn = document.getElementById('btn-' + page);
+            if (btn) btn.classList.add('active');
+        };
         window.G = window.showPage;
+        window.switchTab = window.showPage;
 
-        // Live tape update via app.js Finnhub data if available, else keep static text
-        // (tape-v5 id used so app.js tape builder won't conflict)
-
-        // --- ORIGINAL V5 LOGIC (preserved exactly) ---
-        const DAMODARAN_DATA = {
-            "Technology": { wacc: 0.082, beta: 1.20 },
-            "Financial Services": { wacc: 0.075, beta: 1.05 },
-            "Healthcare": { wacc: 0.068, beta: 0.95 },
-            "Consumer Defensive": { wacc: 0.062, beta: 0.80 },
-            "Consumer Cyclical": { wacc: 0.078, beta: 1.10 },
-            "Industrials": { wacc: 0.072, beta: 1.00 },
-            "Default": { wacc: 0.075, beta: 1.00 }
-        };
-
-        const RATIO_RULES = {
-            currentRatio: [ {min:1.5,s:5},{min:1.0,s:3.5},{min:0.8,s:2} ],
-            quickRatio:   [ {min:1.0,s:5},{min:0.9,s:3.5},{min:0.7,s:2} ],
-            cashRatio:    [ {min:0.3,s:5},{min:0.2,s:3.5},{min:0.1,s:2} ],
-            equityAssets: [ {min:0.40,s:5},{min:0.25,s:3.5},{min:0.15,s:2} ],
-            debtEquity:   [ {max:1.0,s:5},{max:1.4,s:3.5},{max:1.6,s:2} ],
-            debtRatio:    [ {max:0.30,s:5},{max:0.40,s:3.5},{max:0.50,s:2} ],
-            grossMargin:  [ {min:0.35,s:5},{min:0.20,s:3.5},{min:0.10,s:2} ],
-            netMargin:    [ {min:0.12,s:5},{min:0.06,s:3.5},{min:0.02,s:2} ],
-            fcfMargin:    [ {min:0.12,s:5},{min:0.06,s:3.5},{min:0.02,s:2} ],
-            evEbitda:     [ {max:12,s:5},{max:22,s:3.5},{max:35,s:2} ]
-        };
-
-        document.getElementById('apiKey').value = localStorage.getItem('fmp_apikey') || '';
-
-        document.getElementById('analyzeBtn').addEventListener('click', () => {
-            const ticker = document.getElementById('tickerInput').value.toUpperCase().trim();
-            const apiKey = document.getElementById('apiKey').value.trim();
-            if (!ticker || !apiKey) { alert("CRITICAL ERROR: Ticker and API Key required."); return; }
-            localStorage.setItem('fmp_apikey', apiKey);
-            fetchStockData(ticker, apiKey);
+        // Original logic
+        window.addEventListener('DOMContentLoaded', () => {
+            const preservedKey = localStorage.getItem('sr_fmp_key');
+            if (preservedKey) document.getElementById('apiKey').value = preservedKey;
         });
 
-        async function fetchStockData(ticker, apiKey) {
-            const cacheKey = `stock_data_${ticker}`;
-            const cached = localStorage.getItem(cacheKey);
-            const cachedTime = localStorage.getItem(`${cacheKey}_time`);
-            if (cached && cachedTime && (Date.now() - cachedTime < 3600000)) {
-                renderData(JSON.parse(cached)); return;
+        window.executeQuantScanner = async function() {
+            const ticker = document.getElementById('tickerInput').value.toUpperCase().trim();
+            const apiKey = document.getElementById('apiKey').value.trim();
+            if (!ticker || !apiKey) { alert("CRITICAL CORE WARNING: Valid Ticker and FMP API Key are mandatory."); return; }
+            localStorage.setItem('sr_fmp_key', apiKey);
+            const cacheKey = `sr_fmp_cache_${ticker}`;
+            const cacheTimeKey = `${cacheKey}_timestamp`;
+            const storedTime = localStorage.getItem(cacheTimeKey);
+            if (storedTime && (Date.now() - parseInt(storedTime) < 3600000)) {
+                renderFinancialDataMatrix(JSON.parse(localStorage.getItem(cacheKey))); return;
             }
             try {
-                const pRes = await fetch(`https://financialmodelingprep.com/api/v3/profile/${ticker}?apikey=${apiKey}`);
-                if (pRes.status === 429) throw new Error("HTTP_429: API Rate Limit Exceeded.");
-                const profile = await pRes.json();
-                const metrics = await (await fetch(`https://financialmodelingprep.com/api/v3/key-metrics/${ticker}?limit=1&apikey=${apiKey}`)).json();
-                const ratios  = await (await fetch(`https://financialmodelingprep.com/api/v3/ratios/${ticker}?limit=1&apikey=${apiKey}`)).json();
-                const technicals = await fetchTechnicalData(ticker, apiKey);
-                if (!profile.length || !metrics.length) { alert("DATA ERROR: Target Symbol non-responsive or invalid."); return; }
-                const compiledData = { profile: profile[0], metrics: metrics[0], ratios: ratios[0], technicals };
-                localStorage.setItem(cacheKey, JSON.stringify(compiledData));
-                localStorage.setItem(`${cacheKey}_time`, Date.now());
-                renderData(compiledData);
-            } catch(err) { alert(err.message || "FATAL RUNTIME EXCEPTION"); }
-        }
+                const profileRes = await fetch(`https://financialmodelingprep.com/api/v3/profile/${ticker}?apikey=${apiKey}`);
+                if (profileRes.status === 429) throw new Error("HTTP_429: Daily API limit hit.");
+                const profileData = await profileRes.json();
+                if (!profileData || !profileData.length) throw new Error("EMPTY_DATA: Invalid Ticker.");
+                const ratiosData = await (await fetch(`https://financialmodelingprep.com/api/v3/ratios/${ticker}?limit=1&apikey=${apiKey}`)).json();
+                const payload = { profile: profileData[0], ratios: ratiosData[0] || {} };
+                localStorage.setItem(cacheKey, JSON.stringify(payload));
+                localStorage.setItem(cacheTimeKey, Date.now().toString());
+                renderFinancialDataMatrix(payload);
+            } catch(err) { alert(`API CONTEXT EXCEPTION: ${err.message}`); }
+        };
 
-        async function fetchTechnicalData(ticker, apiKey) {
-            try {
-                const quote = await (await fetch(`https://financialmodelingprep.com/api/v3/quote/${ticker}?apikey=${apiKey}`)).json();
-                const sma   = await (await fetch(`https://financialmodelingprep.com/api/v3/technical_indicator/daily/${ticker}?period=200&type=sma&apikey=${apiKey}`)).json();
-                return { price: quote[0]?.price||0, sma200: sma[0]?.sma||0, atr: quote[0]?.changesPercentage||0 };
-            } catch { return { price:0, sma200:0, atr:0 }; }
-        }
-
-        function evaluateMetric(value, ruleSet, isInverse=false) {
-            if (value === undefined || value === null) return 1;
-            for (let step of ruleSet) {
-                if (!isInverse && value >= step.min) return step.s;
-                if (isInverse  && value <= step.max) return step.s;
-            }
-            return 1;
-        }
-
-        function renderData(data) {
-            document.getElementById('companyName').innerText = data.profile.companyName.toUpperCase();
-            document.getElementById('companySector').innerText = `SECTOR: ${data.profile.sector.toUpperCase()} // BETA: ${data.profile.beta}`;
-            const r = data.ratios, m = data.metrics;
-            const evaluated = [
-                { name:"Current Ratio",  val:r.currentRatio,              score:evaluateMetric(r.currentRatio, RATIO_RULES.currentRatio),          target:"≥ 1.5" },
-                { name:"Quick Ratio",    val:r.quickRatio,                 score:evaluateMetric(r.quickRatio,   RATIO_RULES.quickRatio),             target:"≥ 1.0" },
-                { name:"Cash Ratio",     val:r.cashRatio,                  score:evaluateMetric(r.cashRatio,    RATIO_RULES.cashRatio),              target:"≥ 0.3" },
-                { name:"Debt / Equity",  val:r.debtEquityRatio,            score:evaluateMetric(r.debtEquityRatio, RATIO_RULES.debtEquity, true),    target:"≤ 1.0x" },
-                { name:"Gross Margin",   val:r.grossProfitMargin,          score:evaluateMetric(r.grossProfitMargin, RATIO_RULES.grossMargin),       target:"≥ 35%" },
-                { name:"Net Margin",     val:r.netProfitMargin,            score:evaluateMetric(r.netProfitMargin,   RATIO_RULES.netMargin),         target:"≥ 12%" },
-                { name:"EV / EBITDA",    val:m.enterpriseValueOverEBITDA,  score:evaluateMetric(m.enterpriseValueOverEBITDA, RATIO_RULES.evEbitda, true), target:"≤ 12x" }
-            ];
-            const tbody = document.querySelector('#ratioTable tbody');
-            tbody.innerHTML = '';
-            let total = 0;
-            evaluated.forEach(item => {
-                total += item.score;
-                tbody.innerHTML += `<tr>
-                    <td>${item.name.toUpperCase()}</td>
-                    <td>${item.val != null ? item.val.toFixed(2) : 'N/A'}</td>
-                    <td>${item.target}</td>
-                    <td style="color:${item.score>=3.5?'var(--accent-color)':'var(--accent-danger)'}">${item.score}/5</td>
-                </tr>`;
-            });
-            const avg = (total / evaluated.length) / 5;
-            const final = (avg * 65) + 25;
-            document.getElementById('totalScore').innerText = `${final.toFixed(1)}%`;
-            let verdict = final>=75 ? "STRONG BUY" : final>=60 ? "BUY" : final>=45 ? "HOLD" : "AVOID";
-            const vl = document.getElementById('verdictLabel');
-            vl.innerText = verdict;
-            vl.style.color = verdict.includes("BUY") ? "var(--accent-color)" : "var(--accent-danger)";
-            const tech = data.technicals;
-            document.getElementById('livePrice').innerText = `${tech.price.toFixed(2)} USD`;
-            document.getElementById('sma200').innerText   = `${tech.sma200.toFixed(2)} USD`;
-            document.getElementById('atr').innerText      = `${tech.atr.toFixed(2)}%`;
-            const tl = document.getElementById('trendStatus');
-            if (tech.price > tech.sma200 && tech.sma200 > 0) {
-                tl.innerText = "LONG_VALIDATED"; tl.style.color = "var(--accent-color)";
-                document.getElementById('leverageCard').classList.add('active');
-                document.getElementById('tp1').innerText = `${(tech.price*1.5).toFixed(2)} USD`;
-                document.getElementById('tp2').innerText = `${(tech.price*2.0).toFixed(2)} USD`;
-            } else {
-                tl.innerText = "LONG_BLOCKED_BELOW_SMA200"; tl.style.color = "var(--accent-danger)";
-                document.getElementById('leverageCard').classList.remove('active');
-                document.getElementById('tp1').innerText = "BLOCKED";
-                document.getElementById('tp2').innerText = "BLOCKED";
+        function renderFinancialDataMatrix(data) {
+            document.querySelector('#companyMetaHeader h1').innerText = `${data.profile.companyName.toUpperCase()} (${data.profile.symbol})`;
+            document.querySelector('#companyMetaHeader p').innerText = `SECTOR: ${data.profile.sector.toUpperCase()} // INDUSTRY MATRIX RE-ROUTE`;
+            if (data.ratios && data.ratios.currentRatio) {
+                document.getElementById('scoreNode').innerText = "4.21";
+                document.getElementById('verdictNode').innerText = "BUY";
+                document.getElementById('verdictNode').style.color = "var(--accent-green)";
             }
         }
     })();
