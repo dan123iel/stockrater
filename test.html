@@ -591,6 +591,9 @@ function buildLine() {
   var w = Math.max(80, Math.floor(document.body.clientWidth / 8.5));
   return '='.repeat(w);
 }
+// Helper: dynamic separator line
+function EQ() { return buildLine(); }
+function HR() { return '-'.repeat(buildLine().length); }
 
 function renderFooter() {
   var line = buildLine();
