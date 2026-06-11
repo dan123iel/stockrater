@@ -29,10 +29,10 @@
             font-family: var(--font);
             font-size: 14px;
             line-height: 1.4;
-            padding: 0 20px 20px;
+            padding: 0 0 20px;
         }
         pre { font-family: var(--font); white-space: pre; color: var(--text); }
-        .w { width: 100%; }
+        .w { width: 100%; display: block; }
         .view { display: none; }
         .view.on { display: block; }
         .g { color: var(--green); }
@@ -252,7 +252,7 @@ var NAV_LABELS = {
 function buildNav(page) {
   var bar = '='.repeat(98);
   var links = NAV_LABELS[page] || NAV_LABELS.home;
-  return bar + '\n [Logo] futara  |  ' + links + '\n' + bar;
+  return bar + '\n :) futara  |  ' + links + '\n' + bar;
 }
 
 function G(page) {
@@ -540,7 +540,6 @@ document.getElementById('nav-bar').addEventListener('click', function(e) {
 });
 
 // Init
-G('home');
 
 // Make nav words clickable by rebuilding with inline onclick
 function rebuildNav(page) {
@@ -558,8 +557,8 @@ function rebuildNav(page) {
     ? '<span class="lnk" onclick="G(\'profile\')">(👤 My Profile)</span>'
     : '<span class="lnk" onclick="G(\'profile\')">[👤 My Profile]</span>';
   var logoNav = page === 'home'
-    ? ' <span class="lnk" onclick="G(\'home\')">[Logo] futara</span>  |  '
-    : ' <span class="lnk" onclick="G(\'home\')">[Logo] futara</span>  |  ';
+    ? ' <span class="lnk" onclick="G(\'home\')">:) futara</span>  |  '
+    : ' <span class="lnk" onclick="G(\'home\')">:) futara</span>  |  ';
   var qSearch = '[Q] <input class="ii" placeholder="Search..." style="width:80px" onkeydown="if(event.key===\'Enter\')launchAnalytics(this.value)">';
   var line = logoNav + parts.join('   ') + '  |  ' + qSearch + '   ' + profilePart;
   return bar + '\n' + line + '\n' + bar;
@@ -582,9 +581,35 @@ G = function(page) {
   else if (page === 'comparison') renderComparison();
   else if (page === 'portfolio') renderPortfolio();
   else if (page === 'profile') renderProfile();
+  if (typeof renderFooter === "function") renderFooter();
 };
 
-G('home');
+// Init at end after all functions defined
+window.addEventListener('load', function(){ G('home'); renderFooter(); });
+
+function buildLine() {
+  var w = Math.max(80, Math.floor(document.body.clientWidth / 8.5));
+  return '='.repeat(w);
+}
+
+function renderFooter() {
+  var line = buildLine();
+  var mid = ' [ Footer: About | Methodology | API Documentation | Terms of Service | Privacy Policy 2026 ]';
+  var el = document.getElementById('footer-bar');
+  if (el) el.textContent = line + '\n' + mid + '\n' + line;
+}
+
+function renderNav() {
+  var nav = document.getElementById('nav-bar');
+  if (nav) nav.innerHTML = rebuildNav(current);
+}
+
+window.addEventListener('resize', function() { renderNav(); renderFooter(); });
 </script>
+
+<div id="page-footer" style="margin-top:20px">
+<pre id="footer-bar" class="w m"></pre>
+</div>
+
 </body>
 </html>
