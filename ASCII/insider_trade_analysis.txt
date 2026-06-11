@@ -1,0 +1,17 @@
++------------------------------------------------------------------------------------+
+| 👥 INSIDER TRADES ANALYSIS                                         [ ↙️ Collapse ] |
++------------------------------------------------------------------------------------+
+| Filter by Role: ( All Insiders ) [ C-Suite Only ] [ 10% Owners Only ]             |
+|                                                                                    |
+| Recent Transaction Volume (Last 3 Months):                                        |
+| Total Shares Bought:  ████████████ 1,450,000 shares ($297M)                        |
+| Total Shares Sold:    ██ 210,000 shares ($43M)                                     |
+| Net Sentiment:        🟢 Strongly Bullish Net Insider Buying                       |
+|                                                                                    |
+| Detailed Log:                                                                      |
+| Date       | Insider Name      | Position      | Type   | Shares   | Price/Share   |
+| -----------|-------------------|---------------|--------|----------|-------------- |
+| 2026-05-14 | Kress Colette     | CFO           | BUY    |  450,000 | $202.10       |
+| 2026-04-28 | Huang Jen-Hsun    | CEO           | BUY    |1,000,000 | $198.50       |
+| 2026-03-12 | Miller Jay        | Director      | SELL   |  210,000 | $211.00       |
++------------------------------------------------------------------------------------+

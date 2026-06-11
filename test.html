@@ -3,480 +3,588 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>futara // StockRater Ultimate</title>
+    <title>futara // Analytics Engine</title>
     <style>
         :root {
-            --bg-color: #0d0e11;
-            --container-bg: #15181f;
-            --border-color: #262b36;
-            --text-main: #e2e8f0;
-            --text-muted: #64748b;
-            --accent-green: #10b981;
-            --accent-red: #ef4444;
-            --accent-yellow: #f59e0b;
-            --accent-blue: #3b82f6;
-            --font-stack: "Courier New", Courier, monospace;
+            --bg: #0d0e11;
+            --surface: #15181f;
+            --border: #262b36;
+            --text: #e2e8f0;
+            --muted: #64748b;
+            --green: #10b981;
+            --red: #ef4444;
+            --yellow: #f59e0b;
+            --blue: #3b82f6;
+            --font: "Courier New", Courier, monospace;
         }
-
         [data-theme="light"] {
-            --bg-color: #f8fafc;
-            --container-bg: #ffffff;
-            --border-color: #cbd5e1;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --accent-green: #059669;
-            --accent-red: #dc2626;
-            --accent-yellow: #d97706;
-            --accent-blue: #2563eb;
+            --bg: #f8fafc; --surface: #fff; --border: #cbd5e1;
+            --text: #0f172a; --muted: #64748b;
+            --green: #059669; --red: #dc2626; --yellow: #d97706; --blue: #2563eb;
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: var(--font-stack);
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font);
             font-size: 14px;
             line-height: 1.4;
-            padding: 20px;
+            padding: 0 20px 20px;
         }
-
-        .wrapper { max-width: 1200px; margin: 0 auto; }
-        pre { font-family: var(--font-stack); white-space: pre; overflow-x: auto; color: var(--text-main); }
-
-        .nav-header { border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 20px; }
-        .nav-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
-        .nav-tabs { display: flex; gap: 10px; }
-        .tab-trigger { background: none; border: none; color: var(--text-muted); font-family: var(--font-stack); font-size: 14px; cursor: pointer; padding: 2px 8px; }
-        .tab-trigger:hover { color: var(--text-main); }
-        .tab-trigger.active { color: var(--bg-color); background-color: var(--text-main); font-weight: bold; }
-
-        .view-pane { display: none; }
-        .view-pane.active { display: block; }
-
-        .action-link { color: var(--accent-blue); text-decoration: none; cursor: pointer; }
-        .action-link:hover { text-decoration: underline; }
-        .btn-input { background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-main); padding: 2px 8px; font-family: var(--font-stack); }
-        .clickable-block { cursor: pointer; }
-
-        .widget-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 15px; }
-        .ascii-card { border: 1px solid var(--border-color); background: var(--container-bg); padding: 15px; margin-bottom: 15px; position: relative; }
-
-        .tooltip-container { position: relative; display: inline-block; cursor: help; color: var(--accent-blue); }
-        .tooltip-box { display: none; position: absolute; left: 0; top: 20px; background: var(--container-bg); border: 1px solid var(--border-color); padding: 10px; width: 450px; z-index: 100; font-family: var(--font-stack); white-space: pre-wrap; }
-        .tooltip-container:hover .tooltip-box { display: block; }
-
-        .g { color: var(--accent-green); }
-        .r { color: var(--accent-red); }
-        .y { color: var(--accent-yellow); }
-        .m { color: var(--text-muted); }
-
-        @media (max-width: 900px) {
-            .widget-grid-3 { grid-template-columns: 1fr; }
+        pre { font-family: var(--font); white-space: pre; color: var(--text); }
+        .w { width: 100%; }
+        .view { display: none; }
+        .view.on { display: block; }
+        .g { color: var(--green); }
+        .r { color: var(--red); }
+        .y { color: var(--yellow); }
+        .b { color: var(--blue); }
+        .m { color: var(--muted); }
+        a, .lnk { color: var(--blue); cursor: pointer; text-decoration: none; }
+        a:hover, .lnk:hover { text-decoration: underline; }
+        input.ii {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 1px 6px;
+            font-family: var(--font);
+            font-size: 14px;
         }
+        .tip { position: relative; display: inline; cursor: help; color: var(--blue); }
+        .tip .tipbox {
+            display: none; position: absolute; left: 0; top: 20px;
+            background: var(--surface); border: 1px solid var(--border);
+            padding: 10px; width: 440px; z-index: 100; white-space: pre-wrap;
+        }
+        .tip:hover .tipbox { display: block; }
     </style>
 </head>
 <body>
 
-<div class="wrapper">
+<!-- NAV -->
+<pre id="nav-bar" class="w"></pre>
 
-    <header class="nav-header">
-        <pre class="m">==================================================================================================</pre>
-        <div class="nav-row">
-            <pre><span class="bold"> [Logo] futara</span>  |</pre>
-            <div class="nav-tabs">
-                <button class="tab-trigger active" onclick="route('home', this)">home</button>
-                <button class="tab-trigger" onclick="route('markets', this)">markets</button>
-                <button class="tab-trigger" onclick="route('analytics', this)">analytics</button>
-                <button class="tab-trigger" onclick="route('comparison', this)">comparison</button>
-                <button class="tab-trigger" onclick="route('portfolio', this)">portfolio</button>
-            </div>
-            <div>
-                <pre>|  [Q] <input type="text" class="btn-input" placeholder="Search..." style="width:80px;" onkeydown="if(event.key==='Enter')launchAnalytics('NVDA')">      <a class="action-link" onclick="route('profile', document.getElementById('prof-t'))" id="prof-t">[👤 My Profile]</a></pre>
-            </div>
-        </div>
-        <pre class="m">==================================================================================================</pre>
-    </header>
+<!-- VIEWS -->
+<div id="view-home" class="view on">
+<pre id="home-content" class="w"></pre>
+</div>
 
-    <main id="pane-home" class="view-pane active">
-        <pre> 🌎 GLOBAL MARKETS HOME LAUNCHPAD
---------------------------------------------------------------------------------------------------
+<div id="view-markets" class="view">
+<pre id="markets-content" class="w"></pre>
+</div>
 
-                    WELCOME TO THE FUTARA ANALYTICS ENGINE.
-         Select a workspace tab above or type a ticker directly into the quick search.
+<div id="view-analytics" class="view">
+  <div id="an-start">
+<pre id="an-start-content" class="w"></pre>
+  </div>
+  <div id="an-detail" style="display:none">
+<pre id="an-detail-header" class="w"></pre>
+<pre id="an-scorecard" class="w"></pre>
+<pre class="w">--------------------------------------------------------------------------------------------------
+ CONTEXT DOCK (Click any thumbnail below to instantly switch the focus view):
 
-  🔥 Trending Targets Today: <a class="action-link" onclick="launchAnalytics('NVDA')">NVDA</a>, <a class="action-link" onclick="launchAnalytics('AAPL')">AAPL</a>, AMD, TSLA, BTC
-
---------------------------------------------------------------------------------------------------</pre>
-    </main>
-
-    <main id="pane-markets" class="view-pane">
-        <pre> 🌎 GLOBAL MARKETS OVERVIEW                                                    [⚙️ Filter Sectors]
---------------------------------------------------------------------------------------------------
-[ Live Pulse Active ] - Click Analytics tabs to evaluate cross-link parameters.
-
-• S&P 500  | 5,420.10 | <span class="g">▲ +0.42%</span>   • Fed Signals Higher Interest Rates for Q3 2026.
-• NASDAQ   | 18,650.40| <span class="g">▲ +1.25%</span>   • Institutional block buying orders detected on Tech.
-• BTC/USD  | $68,400  | <span class="r">▼ -0.80%</span>   • Crude Oil consolidates near critical resistance levels.
-
-👉 Select <a class="action-link" onclick="route('analytics')">[analytics]</a> to evaluate a distinct corporate profile structure.</pre>
-    </main>
-
-    <main id="pane-analytics" class="view-pane">
-
-        <div id="analytics-initial-state">
-            <pre> 📈 DEEP FUNDAMENTAL ANALYTICS ENGINE
---------------------------------------------------------------------------------------------------
-
-  ----------------------------------------------------------------------------------------------
-  🔍 TARGET SELECTION WORKSPACE
-
-                    WHICH COMPANY DO YOU WANT TO ANALYZE TODAY?
-         Enter a stock ticker to instantly deploy our 10-ratio algorithmic scorecard.
-
-                 [ Search by Ticker or Company Name... <input type="text" class="btn-input" id="search-main" placeholder="e.g. NVDA" style="width:160px;" onkeydown="if(event.key==='Enter')launchAnalytics(this.value)"> | 🔍 ]
-                   e.g., Apple (AAPL), Nvidia (NVDA), Microsoft (MSFT)
-
-  ----------------------------------------------------------------------------------------------
-
-  ----------------------------------------------------------------------------------------------
-  🕒 RECENTLY ANALYZED (Saved in your browser's localStorage)
-
-  <span class="clickable-block" onclick="launchAnalytics('NVDA')">[ NVDA ] Nvidia Corp.</span>         [ TSLA ] Tesla Inc.           [ AMD ] Advanced Micro Devices
-  ⭐ Score: 4.57 / 5.0          ⭐ Score: 3.10 / 5.0          ⭐ Score: 3.82 / 5.0
-  Last view: 2 hours ago        Last view: 1 day ago          Last view: 3 days ago
-  ----------------------------------------------------------------------------------------------
-
-  ----------------------------------------------------------------------------------------------
-  🚀 QUICK-START TEMPLATES & SECTOR RADARS
-
-  Want inspiration? Select an industry vertical to load our custom Damodaran-WACC benchmarks:
-
-  <a class="action-link" onclick="launchAnalytics('NVDA')">[💻 Technology & Semiconductors]</a>   [🏦 Banking & Financials]      [🔋 Automotive & EV]
-  Avg. Sector P/E: 21.1x             Avg. Sector P/E: 11.4x         Avg. Sector P/E: 15.8x
-  Top Target: MSFT (4.85)            Top Target: JPM (4.12)         Top Target: BYD (3.95)
-
-  [🛢️ Energy & Infrastructure]      [💊 Healthcare & Pharma]       [🛒 Consumer Retail]
-  Avg. Sector P/E: 9.8x              Avg. Sector P/E: 18.2x         Avg. Sector P/E: 24.5x
-  Top Target: XOM (3.70)             Top Target: LLY (4.30)         Top Target: COST (4.25)
-  ----------------------------------------------------------------------------------------------</pre>
-        </div>
-
-        <div id="analytics-active-dashboard" style="display:none;">
-            <div style="margin-bottom:15px;">
-                <pre><span class="bold" id="dyn-title">📈 DEEP ANALYSIS INTERACTIVE DESK</span>  |  <a class="action-link" onclick="backToAnalyticsStart()">[← Clear Ticker Search]</a></pre>
-            </div>
-
-            <div class="ascii-card">
-                <pre>+------------------------------------------------------------------------------------+
-| 📊 KEY FINANCIAL RATIOS TABLE                                                     |
+  <span class="lnk" onclick="showDock('scorecard')">(SCORECARD)</span>    <span class="lnk" onclick="showDock('ratios')">[📊 Ratios]</span>     <span class="lnk" onclick="showDock('dcf')">[🧮 Valuation]</span>  <span class="lnk" onclick="showDock('chart')">[📈 Chart]</span>      <span class="lnk" onclick="showDock('news')">[📰 News]</span>       <span class="lnk" onclick="showDock('mgmt')">[👔 Mgmt]</span>
+ +-------------+  +-------------+  +-------------+  +-------------+  +-------------+  +-------------+
+ | SCORECARD   |  | FIN. RATIOS |  | INTRINSIC V.|  | PRICE CHART |  | NEWS/SENT.  |  | MANAGEMENT  |
+ | ⭐ 4.57/5.0 |  | P/E: 16.2x  |  | Fair: $245  |  |   /\  /¯\   |  | Bull: 72%   |  | Insider:Buy |
+ | [STRONG BUY]|  | Div: 0.9%   |  | MoS: +19.4% |  |  /  \/   \  |  | Bear: 10%   |  | Inst: 68.4% |
+ +-------------+  +-------------+  +-------------+  +-------------+  +-------------+  +-------------+
+==================================================================================================</pre>
+    <div id="dock-scorecard" class="dock-pane">
+<pre class="w">+------------------------------------------------------------------------------------+
+| 🔍 SCORECARD DETAILS                                               [ ↙️ Collapse ] |
 +------------------------------------------------------------------------------------+
+| Everything below — the ratios, DCF, management, moat, ESG — feeds into this score. |
+| Financial Ratios (65%) drive the result most.                                      |
 |                                                                                    |
-|                      ⚠️ CONNECTION ERROR (API LIMIT)                               |
+|   ( 4.57 )    [ STRONG BUY ]  WACC: 9.4%  |  Beta: 1.25  |  Risk: Moderate         |
+|    / 5.0                                                                           |
 |                                                                                    |
-|         Failed to load data for this tile.                                         |
-|         Possible reasons:                                                          |
-|         • Your daily FMP limit (250/250 requests) has been reached.                |
-|         • The ticker symbol is invalid or does not exist.                          |
-|                                                                                    |
-|                      [ 🔄 Reload Tile ]                                            |
+|   1. Financial Ratios (65%)  [========================------]  4.2 / 5.0           |
+|   2. Management Quality (12%)[============------------------]  2.0 / 5.0           |
+|   3. Moat / Competitive (10%)[==================------------]  3.0 / 5.0           |
+|   4. ESG &amp; Risk (8%)         [============================--]  4.0 / 5.0           |
+|   5. Valuation / DCF (5%)    [============------------------]  2.0 / 5.0           |
 |                                                                                    |
 +------------------------------------------------------------------------------------+</pre>
-            </div>
-
-            <div class="ascii-card">
-                <pre>+------------------------------------------------------------------------------------+
-| 🧮 INTRINSIC VALUE & STRESSTEST ENGINE                                             |
+    </div>
+    <div id="dock-ratios" class="dock-pane" style="display:none">
+<pre class="w">+------------------------------------------------------------------------------------+
+| 📊 KEY FINANCIAL RATIOS TABLE                                                      |
 +------------------------------------------------------------------------------------+
-| Calculated Fair Value: $245.00  |  Margin of Safety <div class="tooltip-container">[?]<div class="tooltip-box">+--------------------------------------------------+
-| INFO-TOOLTIP:                                    |
-| Die Margin of Safety zeigt dir, wie viel günstiger|
-| die Aktie aktuell im Vergleich zu ihrem fairen   |
-| inneren Wert ist. Je höher, desto sicherer.      |
-+--------------------------------------------------+</div></div>: <span class="g font-weight:bold;">+19.4%</span>                    |
-|                                                     |                              |
+|                                                                                    |
+| Metric                    | Value      | Sector Avg | Signal                       |
+| --------------------------|------------|------------|----------------------------- |
+| P/E Ratio                 | 16.2x      | 21.1x      | <span class="g">🟢 Cheap vs. Sector</span>           |
+| Gross Margin              | 74.1%      | 52.3%      | <span class="g">🟢 Elite Profitability</span>        |
+| Operating Margin          | 65.6%      | 38.0%      | <span class="g">🟢 Best-in-Class</span>              |
+| Net Profit Margin         | 63.0%      | 31.4%      | <span class="g">🟢 Elite</span>                      |
+| Revenue Growth (YoY)      | +85.2%     | —          | <span class="g">🚀 Hyper Growth</span>               |
+| EV / EBITDA               | 18.5x      | 12.0x      | <span class="y">🟡 Slightly Elevated</span>          |
+| Return on Equity (ROE)    | 112.3%     | 28.4%      | <span class="g">🟢 Exceptional</span>                |
+| Debt / Equity Ratio       | 0.41x      | 0.85x      | <span class="g">🟢 Conservative Balance Sheet</span> |
+|                                                                                    |
 +------------------------------------------------------------------------------------+</pre>
-            </div>
-
-            <div class="ascii-card">
-                <pre>+------------------------------------------------------------------------------------+
-| 👔 MANAGEMENT & OWNERSHIP STRUCTURE                                [ ↙️ Collapse ] |
+    </div>
+    <div id="dock-dcf" class="dock-pane" style="display:none">
+<pre class="w">+------------------------------------------------------------------------------------+
+| 🧮 INTRINSIC VALUE &amp; STRESSTEST ENGINE                             [ ↙️ Collapse ] |
 +------------------------------------------------------------------------------------+
-| View Split: ( Major Shareholders ) [ Board of Directors ] [ Executive Compensation] |
+| Current Price: $205.10  |  Calculated Fair Value: $245.00  |  Margin of Safety: <span class="g">+19.4%</span>|
 |                                                                                    |
-| Capital Allocation Shares Split:                                                   |
-| [ Institutional: 68.4% ] [ Insiders/Founders: 14.2% ] [ Retail Public: 17.4% ]      |
+| [!] Move the sliders below to stress test the business model valuation in real-time:|
 |                                                                                    |
-| Top 4 Institutional Stakeholders:                                                  |
+| Revenue Growth Rate (Next 5Y):  8.5%  [-------o-------] (Default: 8.5%)             |
+| Operating Margin Tier:         65.6%  [------------o--] (Default: 65.6%)            |
+| Discount Rate (WACC):           9.4%  [----o----------] (Default: 9.4%)             |
+|                                                                                    |
+| STRESSTEST RESULT:                                                                 |
+| &gt; Under Worst-Case Scenario (Growth drops to 4%): Fair Value becomes $182.00 (-11%)|
+| &gt; Under Best-Case Scenario (Growth jumps to 12%): Fair Value becomes $298.00 (+45%)|
++------------------------------------------------------------------------------------+</pre>
+    </div>
+    <div id="dock-chart" class="dock-pane" style="display:none">
+<pre class="w">+------------------------------------------------------------------------------------+
+| 📈 PRICE CHART (12 Month)                                          [ ↙️ Collapse ] |
++------------------------------------------------------------------------------------+
+|                                                                                    |
+|  $210 |                                                               /¯¯\    /¯   |
+|  $200 |                                              /\/\      /¯\/\/    \  /     |
+|  $190 |                           /\/\      /¯\/\/\/                              |
+|  $180 |             /¯\/\/\/\/\/\/                                                |
+|  $170 | /¯\/\/\/\/\/                                                              |
+|       +---+---+---+---+---+---+---+---+---+---+---+---+                          |
+|       Jun Aug Oct Dec Feb Apr Jun Aug Oct Dec Feb Apr                             |
+|                                                                                    |
+|  [--- SMA 200: $188.40 ---]  Current: $205.10  &gt; SMA200  <span class="g">🟢 Uptrend Confirmed</span>      |
+|                                                                                    |
++------------------------------------------------------------------------------------+</pre>
+    </div>
+    <div id="dock-news" class="dock-pane" style="display:none">
+<pre class="w">+------------------------------------------------------------------------------------+
+| 📰 NEWS &amp; SOCIAL SENTIMENT PULSE                                   [ ↙️ Collapse ] |
++------------------------------------------------------------------------------------+
+| Aggregate Sentiment: [ <span class="g">Bullish: 72%</span> ] [ Neutral: 18% ] [ <span class="r">Bearish: 10%</span> ]               |
+|                                                                                    |
+| 1. Press Release (Today): "Futara Analytics launches enterprise AI core chip"     |
+|    &gt; AI Impact Rating: 9.4/10 | Sentiment: <span class="g">🟢 Highly Positive</span>                   |
+|                                                                                    |
+| 2. Market Intel (Yesterday): Institutional accumulation via block trades at $201. |
+|    &gt; Social Buzz: High | Sentiment: <span class="g">🟢 Bullish</span>                                  |
+|                                                                                    |
+| 3. Regulatory (3 Days Ago): Form 8-K filed regarding infrastructure lease.        |
+|    &gt; Relevance: Core Business | Sentiment: <span class="m">⚪ Neutral</span>                           |
++------------------------------------------------------------------------------------+</pre>
+    </div>
+    <div id="dock-mgmt" class="dock-pane" style="display:none">
+<pre class="w">+------------------------------------------------------------------------------------+
+| 👔 MANAGEMENT &amp; OWNERSHIP STRUCTURE                                [ ↙️ Collapse ] |
++------------------------------------------------------------------------------------+
+| Capital Allocation: [ Institutional: 68.4% ] [ Insiders: 14.2% ] [ Retail: 17.4% ]|
+|                                                                                    |
 | Institution             | Shares Held    | % of Company | Change (Last Quarter)    |
 | ------------------------|----------------|--------------|------------------------- |
 | Vanguard Group          | 82,450,000     | 8.24%        | <span class="g">🟢 Increased +1.2%</span>        |
 | BlackRock Inc.          | 71,120,000     | 7.11%        | <span class="g">🟢 Increased +0.5%</span>        |
 | State Street Corp       | 42,900,000     | 4.29%        | <span class="r">🔴 Decreased -0.3%</span>        |
 | Fidelity Management     | 38,100,000     | 3.81%        | <span class="m">⚪ Unchanged</span>              |
+|                                                                                    |
+| Insider Trades (Last 90 Days):                                                     |
+| • Kress Colette (CFO)    — BUY  450,000 shares @ $202.00  <span class="g">🟢 Bullish Signal</span>       |
+| • Huang Jen-Hsun (CEO)   — BUY  1,000,000 shares @ $198.00 <span class="g">🟢 Bullish Signal</span>      |
+| • Miller Jay (Director)  — SELL 210,000 shares @ $211.00  <span class="r">🔴 Insider Selling</span>      |
 +------------------------------------------------------------------------------------+</pre>
-            </div>
+    </div>
+  </div>
+</div>
 
-            <div class="ascii-card">
-                <pre>+------------------------------------------------------------------------------------+
-| 💰 DIVIDEND CALENDAR & GROWTH PATTERNS                             [ ↙️ Collapse ] |
-+------------------------------------------------------------------------------------+
-| Dividend Yield: 0.92%  |  Annualized Payout: $1.88  |  Payout Ratio: 14.5% (Safe)  |
-| Dividend Growth Streak: 12 Consecutive Years  |  5-Year CAGR: +14.2%               |
-|                                                                                    |
-| Critical Upcoming Dates:                                                           |
-| &gt; Next Declaration Date: 2026-06-15   &gt; Ex-Dividend Date:     2026-07-01           |
-| &gt; Record Date:           2026-07-02   &gt; Payment Date:         2026-07-15           |
-|                                                                                    |
-| Payout History Timeline:                                                           |
-| 2026 (Est.) | ████████████████████ $1.88                                           |
-| 2025        | █████████████████ $1.65                                              |
-| 2024        | ███████████████ $1.42                                                |
-+------------------------------------------------------------------------------------+</pre>
-            </div>
-
-            <div class="ascii-card">
-                <pre>+------------------------------------------------------------------------------------+
-| 📰 NEWS & SOCIAL SENTIMENT PULSE                                   [ ↙️ Collapse ] |
-+------------------------------------------------------------------------------------+
-| Sources: [x] Financial Press  [x] Regulatory Filings  [x] X/Twitter  [x] Reddit    |
-|                                                                                    |
-| Aggregate Sentiment Score:                                                         |
-| [ Bullish: 72% ] [ Neutral: 18% ] [ Bearish: 10% ] -&gt; <span class="g bold">🚀 High Buzz / Positive Tone</span>  |
-|                                                                                    |
-| Top Impact Stories & Discussions:                                                   |
-| 1. Press Release (Today): "Futara Analytics launches enterprise AI core chip"     |
-|    &gt; AI Impact Rating: Impact 9.4/10 | Sentiment: <span class="g">🟢 Highly Positive</span>               |
-|                                                                                    |
-| 2. Market Rumor (Yesterday): Institutional accumulation detected via block trades. |
-|    &gt; Social Buzz Tier: High Traffic | Sentiment: <span class="g">🟢 Bullish</span>                        |
-|                                                                                    |
-| 3. Regulatory Filing (3 Days Ago): Form 8-K filed regarding infrastructure lease.  |
-|    &gt; Relevance Match: Core Business | Sentiment: <span class="m">⚪ Neutral</span>                       |
-+------------------------------------------------------------------------------------+</pre>
-            </div>
-        </div>
-    </main>
-
-    <main id="pane-comparison" class="view-pane">
-
-        <pre> 🆚 PEER-TO-PEER COMPARISON ENGINE
---------------------------------------------------------------------------------------------------
-
-  ----------------------------------------------------------------------------------------------
-  🥊 CREATE YOUR MATCHUP (Select 2 to 3 Tickers)
-
-                    BUILD YOUR SIDE-BY-SIDE INVESTMENT MATRIX.
-        Compare algorithmic scorecards, intrinsic values, and metrics instantly.
-
-     +-----------------------+     +-----------------------+     +-----------------------+
-     | SLOT 1 (Primary)      |     | SLOT 2                |     | SLOT 3 (Optional)     |
-     | [ <input type="text" class="btn-input" value="NVDA" style="width:60px; font-weight:bold;">           | 🔍 ] | vs  | [ <input type="text" class="btn-input" value="AMD" style="width:60px; font-weight:bold;">            | 🔍 ] | vs  | [ <input type="text" class="btn-input" placeholder="Ticker" style="width:60px;">  | 🔍 ] |
-     | Nvidia Corporation    |     | Advanced Micro Devices|     | Add third asset...    |
-     +-----------------------+     +-----------------------+     +-----------------------+
-
-                               [ <a class="action-link" onclick="document.getElementById('comp-matrix').style.display='block'">🚀 Launch Comparison Matrix</a> ]
-
-  ----------------------------------------------------------------------------------------------
-
-  ----------------------------------------------------------------------------------------------
-  🔥 POPULAR MARKET DUELS & BATTLES
-
-  <a class="action-link" onclick="document.getElementById('comp-matrix').style.display='block'">[💻 The AI Chip War ]</a>               [🚗 The EV Showdown ]          [🥤 Consumer Giants ]
-  NVDA vs. AMD vs. INTC              TSLA vs. BYD vs. RIVN          COCA-COLA vs. PEPSICO
-  🔥 Active Battles This Week        ⚡ Margins vs. Volume Matchup  👑 Dividend Aristocrat Duel
-
-  [☁️ Cloud Infrastructure ]         [💳 Digital Payments ]         [📱 Smartphone Rivals ]
-  MSFT vs. AMZN vs. GOOGL            V vs. MA vs. PYPL              AAPL vs. SAMSUNG (SSNLF)
-  ----------------------------------------------------------------------------------------------
-
-  ----------------------------------------------------------------------------------------------
-  🕒 RECENT MATCHUPS (Pulled from browser localStorage cache)
-
-  • NVDA vs. AMD ────────────────────────────────────── Analyzed 4 hours ago ─ <a class="action-link" onclick="document.getElementById('comp-matrix').style.display='block'">[👁️ Reopen]</a>
-  • MSFT vs. GOOGL ──────────────────────────────────── Analyzed 2 days ago  ─ [👁️ Reopen]
-  +--------------------------------------------------------------------------------------------+</pre>
-
-        <div class="ascii-card" id="comp-matrix" style="display:none; margin-top:20px;">
-            <pre> 🆚 MULTI-ASSET COMPARISON TOOL MATRIX ACTIVE
+<div id="view-comparison" class="view">
+<pre id="comp-content" class="w"></pre>
+<div id="comp-matrix" style="display:none">
+<pre class="w"> 🆚 MULTI-ASSET COMPARISON TOOL MATRIX
 
  METRIC CATEGORY             | 📈 NVIDIA (NVDA)         | 🔴 AMD (AMD)             | 🔵 INTEL (INTC)
-=============================+==========================+==========================+==============
+=============================+==========================+==========================+================
  [⭐ SCORECARD SUMMARY]      |                          |                          |
  • Overall Algorithmic Score | <span class="g">🔥 4.57 / 5.0 (Strong Buy)</span>| <span class="m">⚪ 3.82 / 5.0 (Buy)</span>       | <span class="y">⚠️ 2.10 / 5.0 (Avoid)</span>
  • Financial Ratios (65%)    | [==================] 4.2 | [==============----] 3.5 | [======--------] 1.8
  • Management Quality (12%)  | [========----------] 2.0 | [============------] 3.0 | [========----------] 2.0
------------------------------+--------------------------+--------------------------+--------------
+-----------------------------+--------------------------+--------------------------+----------------
  [🧮 INTRINSIC VALUE (DCF)]  |                          |                          |
  • Current Stock Price       | $205.10                  | $160.40                  | $31.15
  • Calculated Fair Value     | $245.00                  | $155.00                  | $22.00
  • Margin of Safety (MoS)    | <span class="g">🟢 +19.4% (Underpriced)</span>  | <span class="y">🟡 -3.3% (Fair Value)</span>    | <span class="r">🔴 -29.3% (Overpriced)</span>
------------------------------+--------------------------+--------------------------+--------------
+-----------------------------+--------------------------+--------------------------+----------------
  [📊 KEY METRICS MATCHUP]    |                          |                          |
  • P/E Ratio (Valuation)     | 16.2x <span class="g">🟢 [Cheap]</span>         | 28.4x <span class="r">🔴 [Expensive]</span>     | 19.5x <span class="y">🟡 [Fair]</span>
  • Gross Margin (Profit)     | 74.1% <span class="g">🔥 [Elite]</span>         | 48.2% <span class="y">🟡 [Good]</span>          | 32.0% <span class="r">🔴 [Weak]</span>
  • Revenue Growth (YoY)      | +85.2% <span class="g">🚀 [Hyper]</span>        | +12.2% <span class="y">🟡 [Steady]</span>       | -5.1% <span class="r">🔴 [Declining]</span>
------------------------------+--------------------------+--------------------------+--------------
- ACTION HUB                  | <a class="action-link" onclick="route('portfolio')">[➕ Add Portfolio]</a>       | [➕ Add Portfolio]       | [➕ Add Portfolio]
-                             | <a class="action-link" onclick="launchAnalytics('NVDA')">[🔍 Open Analytics]</a>      | [🔍 Open Analytics]      | [🔍 Open Analytics]</pre>
-        </div>
-    </main>
-
-    <main id="pane-portfolio" class="view-pane">
-        <pre> 💼 PORTFOLIO COMMAND CENTER                                            [⚙️ Rearrange Widgets]
---------------------------------------------------------------------------------------------------</pre>
-
-        <div class="widget-grid-3">
-            <div class="ascii-card">
-                <pre><span class="bold">[⋮⋮ NET WORTH OVERVIEW]</span>
-----------------------------
-| Net Asset Value: $42,150.00|
-| Cash Buffer:     $ 8,430.00|
-|                            |
-| Day Return: <span class="g">🟢 +$1,240 (+3%)</span>|
-|                      <span class="m">[ X ]</span> |
-+----------------------------+</pre>
-            </div>
-            <div class="ascii-card">
-                <pre><span class="bold">[⋮⋮ ACTIVE LEVERAGE DESK]</span>
-----------------------------
-| ⚡ 1 ACTIVE LEVERAGE TRADE |
-| Long NVDA x5 Leverage      |
-| Return: <span class="g">🟢 +$900 (+8.9%)</span>   |
-| SL: $195.00 | TP1: $210.00 |
-|                      <span class="m">[ X ]</span> |
-+----------------------------+</pre>
-            </div>
-            <div class="ascii-card">
-                <pre><span class="bold">[⋮⋮ ASSET ALLOCATION PIE]</span>
-----------------------------
-| Tech & AI:    <span class="g">█████████ 45.2%</span>|
-|Crypto (BTC): <span class="g">███████   22.1%</span>|
-|Retail (COST):██ 12.7%       |
-|Cash Buffer:  ████  20.0%    |
-|                      <span class="m">[ X ]</span> |
-+----------------------------+</pre>
-            </div>
-        </div>
-
-        <div class="widget-grid-3">
-            <div class="ascii-card">
-                <pre><span class="bold">[⋮⋮ HOLDINGS RATINGS LOG]</span>
-----------------------------
-| 🏆 WEIGHTED SCORE: 4.12/5.0|
-|                            |
-| 1. NVDA   ⭐ 4.57/5.0 (Buy) |
-| 2. COST   ⭐ 4.25/5.0 (Buy) |
-| 3. TSLA   ⭐ 3.10/5.0 (Hold)|
-|                      <span class="m">[ X ]</span> |
-+----------------------------+</pre>
-            </div>
-            <div class="ascii-card">
-                <pre><span class="bold">[⋮⋮ RISK & TREND MATRIX]</span>
-----------------------------
-| 🟢 Market Rule: BULLISH    |
-| • NVDA: <span class="g">🟢 Price > SMA 200</span> |
-| • AAPL: <span class="g">🟢 Price > SMA 200</span> |
-| • BTC:  <span class="r">🔴 Price < SMA 200</span> |
-| (1 Position Invalidation!) |
-|                      <span class="m">[ X ]</span> |
-+----------------------------+</pre>
-            </div>
-            <div class="ascii-card">
-                <pre><span class="bold">[⋮⋮ TRADING HISTORY LOG]</span>
-----------------------------
-| Recent Closed Trades:      |
-|                            |
-| • TSLA  Long  <span class="g">🟢 +$420.00</span>  |
-| • AMD   Short <span class="r">🔴 -$110.00</span>  |
-|                      <span class="m">[ X ]</span> |
-+----------------------------+</pre>
-            </div>
-        </div>
-
-        <pre>--------------------------------------------------------------------------------------------------
- [+] Add Widget (Dividend Income Tracker, Performance Benchmark Comparison, Tax Estimator...)
---------------------------------------------------------------------------------------------------</pre>
-    </main>
-
-    <main id="pane-profile" class="view-pane">
-        <pre> 👤 USER PROFILE & APP SETTINGS
---------------------------------------------------------------------------------------------------
-
- [ MODULE 1: APPEARANCE & DISPLAY CONFIGURATION ]
- +----------------------------------------------------------------------------------------------+
- | 🌗 INTERFACE THEME CONTROLLER                                                                |
- |                                                                                              |
- |  <a class="action-link" onclick="setTheme('dark')">[ ⚫ Activate Dark Mode ]</a>                <a class="action-link" onclick="setTheme('light')">[ ⚪ Activate Light Mode ]</a>               |
- |  Saves battery, reduces eye strain       Optimized for bright daylight environments          |
- |                                                                                              |
- | -------------------------------------------------------------------------------------------- |
- | 🌐 REGIONAL FORMATTING & LANGUAGE                                                            |
- |  • Application Language:  [ English (US) ▾ ]                                                 |
- |  • Currency Unit:         [ USD ($)      ▾ ]                                                 |
- +----------------------------------------------------------------------------------------------+
-
- [ MODULE 2: DATA INTEGRATION & SECURITY ]
- +----------------------------------------------------------------------------------------------+
- | 🔑 API CREDENTIALS                                                                           |
- |  Financial Modeling Prep (FMP) Key:   [ •••••••••••••••••••••••••••••• ]  [ 👁️ Show Key ]   |
- |                                       <span class="g">🟢 Connected (Status: Valid Key | 210/250 requests left)</span>|
- |                                                                                              |
- | -------------------------------------------------------------------------------------------- |
- | 💾 BROWSER STORAGE CONTROL (localStorage)                                                    |
- |  Your profile, custom layouts, watchlist, and active trades are saved entirely in your      |
- |  browser cache for maximum privacy. No external server tracking is active.                   |
- |                                                                                              |
- |  [ 📥 Export Profile Data (JSON) ]   [ 📤 Import Backup File ]   [ 🗑️ Wipe Local Storage Cache ]|
- +----------------------------------------------------------------------------------------------+
-
- [ MODULE 3: SUBSCRIPTION & SYSTEM METRICS ]
- +----------------------------------------------------------------------------------------------+
- | 📦 ACCOUNT TIER STATUS                                                                       |
- |  • Current Plan:    Free Personal Tier                                                       |
- |  • Limitations:     250 FMP requests/day (1-hour client cache active)                        |
- |  • Core Architecture: Running native single-file client-side engine (Build v2.6.1)           |
- +----------------------------------------------------------------------------------------------+</pre>
-    </main>
-
-    <footer>
-        <pre class="m">==================================================================================================
- [ Footer: About | Methodology | API Documentation | Terms of Service | Privacy Policy 2026 ]
+ • Position vs. SMA 200      | <span class="g">🟢 Above (Uptrend)</span>      | <span class="g">🟢 Above (Uptrend)</span>    | <span class="r">🔴 Below (Downtrend)</span>
+-----------------------------+--------------------------+--------------------------+----------------
+ ACTION HUB                  | <span class="lnk" onclick="G('portfolio')">[➕ Add Portfolio]</span>       | [➕ Add Portfolio]       | [➕ Add Portfolio]
+                             | <span class="lnk" onclick="launchAnalytics('NVDA')">[🔍 Open Analytics]</span>      | [🔍 Open Analytics]      | [🔍 Open Analytics]
 ==================================================================================================</pre>
-    </footer>
+</div>
+</div>
 
+<div id="view-portfolio" class="view">
+<pre id="port-content" class="w"></pre>
+</div>
+
+<div id="view-profile" class="view">
+<pre id="prof-content" class="w"></pre>
 </div>
 
 <script>
-    function route(targetId, element) {
-        document.querySelectorAll('.view-pane').forEach(s => s.classList.remove('active'));
-        document.getElementById('pane-' + targetId).classList.add('active');
-        document.querySelectorAll('.tab-trigger').forEach(b => b.classList.remove('active'));
-        if (element && element.classList && element.classList.contains('tab-trigger')) {
-            element.classList.add('active');
-        }
-    }
+var PAGES = ['home','markets','analytics','comparison','portfolio','profile'];
+var current = 'home';
 
-    function launchAnalytics(ticker) {
-        route('analytics');
-        document.getElementById('analytics-initial-state').style.display = 'none';
-        document.getElementById('analytics-active-dashboard').style.display = 'block';
-        document.getElementById('dyn-title').innerText = '📈 SYSTEM COMPONENT RUNNING: ' + ticker.toUpperCase();
-    }
+// NAV LABELS per page
+var NAV_LABELS = {
+  home:       ' markets   analytics   comparison   portfolio  |  [Q]       [👤 My Profile]',
+  markets:    '(markets)  analytics   comparison   portfolio  |  [Q]       [👤 My Profile]',
+  analytics:  ' markets  (analytics)  comparison   portfolio  |  [Q]       [👤 My Profile]',
+  comparison: ' markets   analytics  (comparison)  portfolio  |  [Q]       [👤 My Profile]',
+  portfolio:  ' markets   analytics   comparison  (portfolio) |  [Q]       [👤 My Profile]',
+  profile:    ' markets   analytics   comparison   portfolio  |  [Q]      (👤 My Profile) ',
+};
 
-    function backToAnalyticsStart() {
-        document.getElementById('analytics-active-dashboard').style.display = 'none';
-        document.getElementById('analytics-initial-state').style.display = 'block';
-        document.getElementById('search-main').value = '';
-    }
+function buildNav(page) {
+  var bar = '='.repeat(98);
+  var links = NAV_LABELS[page] || NAV_LABELS.home;
+  return bar + '\n [Logo] futara  |  ' + links + '\n' + bar;
+}
 
-    function setTheme(mode) {
-        if (mode === 'light') {
-            document.documentElement.setAttribute('data-theme', 'light');
-        } else {
-            document.documentElement.removeAttribute('data-theme');
-        }
+function G(page) {
+  current = page;
+  // Update nav
+  document.getElementById('nav-bar').innerHTML = buildNav(page);
+
+  // Switch views
+  PAGES.forEach(function(p) {
+    var el = document.getElementById('view-' + p);
+    if (el) el.classList.remove('on');
+  });
+  var target = document.getElementById('view-' + page);
+  if (target) target.classList.add('on');
+
+  // Render page content
+  if (page === 'home') renderHome();
+  else if (page === 'markets') renderMarkets();
+  else if (page === 'analytics') { renderAnalyticsStart(); }
+  else if (page === 'comparison') renderComparison();
+  else if (page === 'portfolio') renderPortfolio();
+  else if (page === 'profile') renderProfile();
+}
+
+function renderHome() {
+  document.getElementById('home-content').innerHTML =
+' 🌎 GLOBAL MARKETS HOME LAUNCHPAD\n' +
+'--------------------------------------------------------------------------------------------------\n' +
+'\n' +
+'                       DIVE DEEPER INTO MARKET INTELLIGENCE.\n' +
+'                 Analyze Ratios, Intrinsic Value, and Risk in Real-Time.\n' +
+'\n' +
+'                 [ Search for a stock, crypto or asset... <input class="ii" id="hero-search" placeholder="e.g. NVDA" style="width:200px" onkeydown="if(event.key===\'Enter\')launchAnalytics(this.value)"> | 🔍 ]\n' +
+'                   e.g., Apple (AAPL), Nvidia (NVDA), Bitcoin (BTC)\n' +
+'--------------------------------------------------------------------------------------------------\n' +
+'\n' +
+'  🔥 LIVE GLOBAL MARKET TICKER\n' +
+'  S&amp;P 500: 5,420.10 <span class="g">▲ +0.4%</span>  |  NASDAQ: 18,650.40 <span class="g">▲ +1.2%</span>  |  BTC/USD: $68,400 <span class="r">▼ -0.8%</span>  |  EUR/USD: 1.09 <span class="m">⚪ 0%</span>\n' +
+'--------------------------------------------------------------------------------------------------\n' +
+'\n' +
+'  📊 MAIN DASHBOARD ROW 1: MARKET ACTIVITY\n' +
+'\n' +
+'  [ TOP GAINERS ]                     [ MOST ACTIVE UNIVERSE ]            [ FUTARA TOP SCORED ]\n' +
+'  +--------------------------------+  +--------------------------------+  +--------------------------------+\n' +
+'  | 1. <span class="lnk g" onclick="launchAnalytics(\'NVDA\')">NVDA   $205.10   ▲ +46.51%</span>  |  | 1. TSLA   $175.20   (12.4M Vol)|  | 1. MSFT   Score: 4.85 / 5.0    |\n' +
+'  | 2. <span class="lnk g" onclick="launchAnalytics(\'AMD\')">AMD    $160.40   ▲ +12.20%</span>  |  | 2. AAPL   $182.10   (9.8M Vol) |  | 2. GOOGL  Score: 4.62 / 5.0    |\n' +
+'  | 3. <span class="lnk g" onclick="launchAnalytics(\'INTC\')">INTC   $ 31.15   ▲ + 5.10%</span>  |  | 3. NVDA   $205.10   (8.2M Vol) |  | 3. NVDA   Score: 4.57 / 5.0    |\n' +
+'  |                    [View All]  |  |                    [View All]  |  |                    [View All]  |\n' +
+'  +--------------------------------+  +--------------------------------+  +--------------------------------+\n' +
+'\n' +
+'--------------------------------------------------------------------------------------------------\n' +
+'  🔥 Trending Targets Today: <span class="lnk" onclick="launchAnalytics(\'NVDA\')">NVDA</span>, <span class="lnk" onclick="launchAnalytics(\'AAPL\')">AAPL</span>, <span class="lnk" onclick="launchAnalytics(\'AMD\')">AMD</span>, <span class="lnk" onclick="launchAnalytics(\'TSLA\')">TSLA</span>, <span class="lnk" onclick="launchAnalytics(\'BTC\')">BTC</span>\n' +
+'==================================================================================================';
+}
+
+function renderMarkets() {
+  document.getElementById('markets-content').innerHTML =
+' 🌎 GLOBAL MARKETS OVERVIEW                                             [⚙️ Edit Watchlist Ticker]\n' +
+'--------------------------------------------------------------------------------------------------\n' +
+'\n' +
+' [ LEFT CONTROL PANEL: MY WATCHLIST &amp; TRENDS ]   [ RIGHT TIMELINE: COMBINED LIVE DATA STREAM ]\n' +
+'\n' +
+'  ⭐ My Watchlist (localStorage Stream)            🔥 Real-Time Market Pulse &amp; News\n' +
+'  +--------------------------------------------+  +--------------------------------------------+\n' +
+'  | NVDA  | $205.10 | <span class="g">▲ +46.51%</span> | <span class="g">🟢 Above SMA</span> |  | 10:15 AM | 🔴 MACRO ALERT                  |\n' +
+'  | AAPL  | $182.10 | <span class="g">▲ + 1.20%</span> | <span class="g">🟢 Above SMA</span> |  | US Core CPI Inflation MoM comes in hot at  |\n' +
+'  | BTC   | $68,400 | <span class="r">▼ - 0.80%</span> | <span class="r">🔴 Below SMA</span> |  | 0.3% vs 0.2% expected. Volatility expected.|\n' +
+'  +--------------------------------------------+  |                             [Impact: High] |\n' +
+'                                                   |                                            |\n' +
+'  ⚡ Sector Rotation (Where is the money moving?) | 09:45 AM | 🟢 TICKER INTEL (NVDA)          |\n' +
+'  +--------------------------------------------+  | Institutional block buying orders detected |\n' +
+'  | 1. Tech &amp; AI      █████████████████ <span class="g">+4.6%</span>  |  | at $201.50 support. Trend looks validated. |\n' +
+'  | 2. Financials     ████████ <span class="g">+2.1%</span>           |  |                  <span class="lnk" onclick="launchAnalytics(\'NVDA\')">[👉 Click to Open Card]</span>   |\n' +
+'  | 3. Energy         ░ <span class="r">▼ -1.2%</span>                |  |                                            |\n' +
+'  +--------------------------------------------+  | 08:30 AM | 📅 CORPORATE CATALYST           |\n' +
+'                                                   | ECB Press Conference begins. Lagarde       |\n' +
+'  📊 Global Heatmap Snapshot                      | speaks on rate cut timelines for Q3 2026.  |\n' +
+'  +--------------------------------------------+  |                             [Impact: Med]  |\n' +
+'  | <span class="g">[ NVDA +4.6% ] [ AAPL +1.2% ] [ AMD +3.1% ]</span>|  |                                            |\n' +
+'  | <span class="g">[ MSFT +0.8% ]</span> <span class="r">[ TSLA -3.4% ] [ META -0.5%]</span>|  | 07:00 AM | 💰 DIVIDEND ANNOUNCEMENT        |\n' +
+'  |                        [Expand Full Screen]|  | MSFT declares quarterly dividend of $0.85. |\n' +
+'  +--------------------------------------------+  +--------------------------------------------+\n' +
+'\n' +
+'==================================================================================================';
+}
+
+function renderAnalyticsStart() {
+  document.getElementById('an-detail').style.display = 'none';
+  document.getElementById('an-start').style.display = 'block';
+  document.getElementById('an-start-content').innerHTML =
+' 📈 DEEP FUNDAMENTAL ANALYTICS ENGINE\n' +
+'--------------------------------------------------------------------------------------------------\n' +
+'\n' +
+'  ----------------------------------------------------------------------------------------------\n' +
+'  🔍 TARGET SELECTION WORKSPACE\n' +
+'\n' +
+'                    WHICH COMPANY DO YOU WANT TO ANALYZE TODAY?\n' +
+'         Enter a stock ticker to instantly deploy our 10-ratio algorithmic scorecard.\n' +
+'\n' +
+'                 [ Search by Ticker or Company Name... <input class="ii" id="an-search" placeholder="e.g. NVDA" style="width:180px" onkeydown="if(event.key===\'Enter\')launchAnalytics(this.value)"> | 🔍 ]\n' +
+'                   e.g., Apple (AAPL), Nvidia (NVDA), Microsoft (MSFT)\n' +
+'\n' +
+'  ----------------------------------------------------------------------------------------------\n' +
+'\n' +
+'  ----------------------------------------------------------------------------------------------\n' +
+'  🕒 RECENTLY ANALYZED (Saved in your browser\'s localStorage)\n' +
+'\n' +
+'  <span class="lnk" onclick="launchAnalytics(\'NVDA\')">[ NVDA ] Nvidia Corp.</span>         <span class="lnk" onclick="launchAnalytics(\'TSLA\')">[ TSLA ] Tesla Inc.</span>           <span class="lnk" onclick="launchAnalytics(\'AMD\')">[ AMD ] Advanced Micro Devices</span>\n' +
+'  ⭐ Score: 4.57 / 5.0          ⭐ Score: 3.10 / 5.0          ⭐ Score: 3.82 / 5.0\n' +
+'  Last view: 2 hours ago        Last view: 1 day ago          Last view: 3 days ago\n' +
+'  ----------------------------------------------------------------------------------------------\n' +
+'\n' +
+'  ----------------------------------------------------------------------------------------------\n' +
+'  🚀 QUICK-START TEMPLATES &amp; SECTOR RADARS\n' +
+'\n' +
+'  <span class="lnk" onclick="launchAnalytics(\'NVDA\')">[💻 Technology &amp; Semiconductors]</span>   <span class="lnk" onclick="launchAnalytics(\'JPM\')">[🏦 Banking &amp; Financials]</span>      <span class="lnk" onclick="launchAnalytics(\'TSLA\')">[🔋 Automotive &amp; EV]</span>\n' +
+'  Avg. Sector P/E: 21.1x             Avg. Sector P/E: 11.4x         Avg. Sector P/E: 15.8x\n' +
+'  Top Target: MSFT (4.85)            Top Target: JPM (4.12)         Top Target: BYD (3.95)\n' +
+'\n' +
+'  <span class="lnk" onclick="launchAnalytics(\'XOM\')">[🛢️ Energy &amp; Infrastructure]</span>      <span class="lnk" onclick="launchAnalytics(\'LLY\')">[💊 Healthcare &amp; Pharma]</span>       <span class="lnk" onclick="launchAnalytics(\'COST\')">[🛒 Consumer Retail]</span>\n' +
+'  Avg. Sector P/E: 9.8x              Avg. Sector P/E: 18.2x         Avg. Sector P/E: 24.5x\n' +
+'  Top Target: XOM (3.70)             Top Target: LLY (4.30)         Top Target: COST (4.25)\n' +
+'  ----------------------------------------------------------------------------------------------';
+}
+
+function launchAnalytics(ticker) {
+  ticker = (ticker || '').trim().toUpperCase();
+  if (!ticker) return;
+  current = 'analytics';
+  PAGES.forEach(function(p){ var el=document.getElementById('view-'+p); if(el) el.classList.remove('on'); });
+  document.getElementById('view-analytics').classList.add('on');
+  document.getElementById('nav-bar').innerHTML = buildNav('analytics');
+  document.getElementById('an-start').style.display = 'none';
+  document.getElementById('an-detail').style.display = 'block';
+  document.getElementById('an-detail-header').innerHTML =
+'==================================================================================================\n' +
+' 📈 ' + ticker + ' CORP   $ 205.10  <span class="g">▲ +46.51%</span>   |  <span class="lnk" onclick="renderAnalyticsStart();document.getElementById(\'an-start\').style.display=\'block\';document.getElementById(\'an-detail\').style.display=\'none\'">[← Clear / New Search]</span>\n' +
+'==================================================================================================\n';
+  document.getElementById('an-scorecard').innerHTML =
+'+------------------------------------------------------------------------------------+\n' +
+'| 🔍 SCORECARD DETAILS — ' + ticker + '                                                      |\n' +
+'+------------------------------------------------------------------------------------+\n' +
+'| Everything below — the ratios, DCF, management, moat, ESG — feeds into this score. |\n' +
+'| Financial Ratios (65%) drive the result most.                                      |\n' +
+'|                                                                                    |\n' +
+'|   ( 4.57 )    [ STRONG BUY ]  WACC: 9.4%  |  Beta: 1.25  |  Risk: Moderate         |\n' +
+'|    / 5.0                                                                           |\n' +
+'|                                                                                    |\n' +
+'|   1. Financial Ratios (65%)  [========================------]  4.2 / 5.0           |\n' +
+'|   2. Management Quality (12%)[============------------------]  2.0 / 5.0           |\n' +
+'|   3. Moat / Competitive (10%)[==================------------]  3.0 / 5.0           |\n' +
+'|   4. ESG &amp; Risk (8%)         [============================--]  4.0 / 5.0           |\n' +
+'|   5. Valuation / DCF (5%)    [============------------------]  2.0 / 5.0           |\n' +
+'|                                                                                    |\n' +
+'+------------------------------------------------------------------------------------+\n';
+  showDock('scorecard');
+}
+
+function showDock(id) {
+  document.querySelectorAll('.dock-pane').forEach(function(el){ el.style.display='none'; });
+  var el = document.getElementById('dock-' + id);
+  if (el) el.style.display = 'block';
+}
+
+function renderComparison() {
+  document.getElementById('comp-matrix').style.display = 'none';
+  document.getElementById('comp-content').innerHTML =
+' 🆚 PEER-TO-PEER COMPARISON ENGINE\n' +
+'--------------------------------------------------------------------------------------------------\n' +
+'\n' +
+'  🥊 CREATE YOUR MATCHUP (Select 2 to 3 Tickers)\n' +
+'\n' +
+'     +-----------------------+     +-----------------------+     +-----------------------+\n' +
+'     | SLOT 1 (Primary)      |     | SLOT 2                |     | SLOT 3 (Optional)     |\n' +
+'     | [ <input class="ii" value="NVDA" style="width:60px">           | 🔍 ] | vs  | [ <input class="ii" value="AMD" style="width:60px">            | 🔍 ] | vs  | [ <input class="ii" placeholder="Ticker" style="width:60px">  | 🔍 ] |\n' +
+'     | Nvidia Corporation    |     | Advanced Micro Devices|     | Add third asset...    |\n' +
+'     +-----------------------+     +-----------------------+     +-----------------------+\n' +
+'\n' +
+'                               [ <span class="lnk" onclick="document.getElementById(\'comp-matrix\').style.display=\'block\'">🚀 Launch Comparison Matrix</span> ]\n' +
+'\n' +
+'--------------------------------------------------------------------------------------------------\n' +
+'\n' +
+'  🔥 POPULAR MARKET DUELS &amp; BATTLES\n' +
+'\n' +
+'  <span class="lnk" onclick="document.getElementById(\'comp-matrix\').style.display=\'block\'">[💻 The AI Chip War ]</span>               [🚗 The EV Showdown ]          [🥤 Consumer Giants ]\n' +
+'  NVDA vs. AMD vs. INTC              TSLA vs. BYD vs. RIVN          COCA-COLA vs. PEPSICO\n' +
+'  🔥 Active Battles This Week        ⚡ Margins vs. Volume Matchup  👑 Dividend Aristocrat Duel\n' +
+'\n' +
+'  [☁️ Cloud Infrastructure ]         [💳 Digital Payments ]         [📱 Smartphone Rivals ]\n' +
+'  MSFT vs. AMZN vs. GOOGL            V vs. MA vs. PYPL              AAPL vs. SAMSUNG\n' +
+'--------------------------------------------------------------------------------------------------\n' +
+'\n' +
+'  🕒 RECENT MATCHUPS\n' +
+'  • NVDA vs. AMD ─────────────────────── 4 hours ago ─ <span class="lnk" onclick="document.getElementById(\'comp-matrix\').style.display=\'block\'">[👁️ Reopen]</span>\n' +
+'  • MSFT vs. GOOGL ──────────────────── 2 days ago  ─ [👁️ Reopen]\n' +
+'==================================================================================================';
+}
+
+function renderPortfolio() {
+  document.getElementById('port-content').innerHTML =
+' 💼 PORTFOLIO COMMAND CENTER                                            [⚙️ Rearrange Widgets]\n' +
+'--------------------------------------------------------------------------------------------------\n' +
+'\n' +
+' [⋮⋮ NET WORTH OVERVIEW]          [⋮⋮ ACTIVE LEVERAGE DESK]        [⋮⋮ ASSET ALLOCATION PIE]\n' +
+' +----------------------------+  +----------------------------+  +----------------------------+\n' +
+' | Net Asset Value: $42,150.00|  | ⚡ 1 ACTIVE LEVERAGE TRADE |  | Tech &amp; AI:    █████████ 45.2%|\n' +
+' | Cash Buffer:     $ 8,430.00|  | Long NVDA x5 Leverage      |  |Crypto (BTC): ███████   22.1%|\n' +
+' |                            |  | Return: <span class="g">🟢 +$900 (+8.9%)</span>   |  |Retail (COST):██ 12.7%       |\n' +
+' | Day Return: <span class="g">🟢 +$1,240 (+3%)</span>|  | SL: $195.00 | TP1: $210.00 |  |Cash Buffer:  ████  20.0%    |\n' +
+' |                      [ X ] |  |                      [ X ] |  |                      [ X ] |\n' +
+' +----------------------------+  +----------------------------+  +----------------------------+\n' +
+'\n' +
+' [⋮⋮ HOLDINGS RATINGS LOG]       [⋮⋮ RISK &amp; TREND MATRIX]        [⋮⋮ TRADING HISTORY LOG]\n' +
+' +----------------------------+  +----------------------------+  +----------------------------+\n' +
+' | 🏆 WEIGHTED SCORE: 4.12/5.0|  | 🟢 Market Rule: BULLISH    |  | Recent Closed Trades:      |\n' +
+' |                            |  | • NVDA: <span class="g">🟢 Price > SMA 200</span> |  |                            |\n' +
+' | 1. NVDA   ⭐ 4.57/5.0 (Buy) |  | • AAPL: <span class="g">🟢 Price > SMA 200</span> |  | • TSLA  Long  <span class="g">🟢 +$420.00</span>  |\n' +
+' | 2. COST   ⭐ 4.25/5.0 (Buy) |  | • BTC:  <span class="r">🔴 Price &lt; SMA 200</span> |  | • AMD   Short <span class="r">🔴 -$110.00</span>  |\n' +
+' | 3. TSLA   ⭐ 3.10/5.0 (Hold)|  | (1 Position Invalidation!) |  |                            |\n' +
+' |                      [ X ] |  |                      [ X ] |  |                      [ X ] |\n' +
+' +----------------------------+  +----------------------------+  +----------------------------+\n' +
+'\n' +
+'--------------------------------------------------------------------------------------------------\n' +
+' [+] Add Widget (Dividend Income Tracker, Performance Benchmark Comparison, Tax Estimator...)\n' +
+'==================================================================================================';
+}
+
+function renderProfile() {
+  document.getElementById('prof-content').innerHTML =
+' 👤 USER PROFILE &amp; APP SETTINGS\n' +
+'--------------------------------------------------------------------------------------------------\n' +
+'\n' +
+' [ MODULE 1: APPEARANCE &amp; DISPLAY CONFIGURATION ]\n' +
+' +----------------------------------------------------------------------------------------------+\n' +
+' | 🌗 INTERFACE THEME                                                                           |\n' +
+' |                                                                                              |\n' +
+' |  <span class="lnk" onclick="setTheme(\'dark\')">( ⚫ Dark Mode - Active )</span>              <span class="lnk" onclick="setTheme(\'light\')">[ ⚪ Light Mode - Standard ]</span>                  |\n' +
+' |  Saves battery, reduces eye strain       Optimized for bright daylight environments          |\n' +
+' |                                                                                              |\n' +
+' | 🌐 REGIONAL FORMATTING                                                                       |\n' +
+' |  • Language:  [ English (US) ▾ ]   • Currency: [ USD ($) ▾ ]                                |\n' +
+' +----------------------------------------------------------------------------------------------+\n' +
+'\n' +
+' [ MODULE 2: DATA INTEGRATION &amp; SECURITY ]\n' +
+' +----------------------------------------------------------------------------------------------+\n' +
+' | 🔑 API CREDENTIALS                                                                           |\n' +
+' |  Financial Modeling Prep (FMP) Key:   [ •••••••••••••••••••••••••••••• ]  [ 👁️ Show Key ]   |\n' +
+' |                                       <span class="g">🟢 Connected (Status: Valid Key | 210/250 requests left)</span>|\n' +
+' |                                                                                              |\n' +
+' | 💾 BROWSER STORAGE CONTROL (localStorage)                                                    |\n' +
+' |  Your profile and trades are saved in your browser. No external server tracking.             |\n' +
+' |                                                                                              |\n' +
+' |  [ 📥 Export Profile Data (JSON) ]   [ 📤 Import Backup File ]   [ 🗑️ Wipe Cache ]          |\n' +
+' +----------------------------------------------------------------------------------------------+\n' +
+'\n' +
+' [ MODULE 3: SUBSCRIPTION &amp; SYSTEM METRICS ]\n' +
+' +----------------------------------------------------------------------------------------------+\n' +
+' | 📦 ACCOUNT TIER STATUS                                                                       |\n' +
+' |  • Current Plan:    Free Personal Tier                                                       |\n' +
+' |  • Limitations:     250 FMP requests/day (1-hour client cache active)                        |\n' +
+' |  • Core Architecture: Running native single-file client-side engine (Build v2.6.1)           |\n' +
+' +----------------------------------------------------------------------------------------------+\n' +
+'==================================================================================================';
+}
+
+function setTheme(mode) {
+  if (mode === 'light') document.documentElement.setAttribute('data-theme','light');
+  else document.documentElement.removeAttribute('data-theme');
+}
+
+// Make nav links clickable after render
+function attachNavClicks() {
+  var nav = document.getElementById('nav-bar');
+  nav.innerHTML = nav.innerHTML
+    .replace('(markets)', '<span class="lnk" onclick="G(\'markets\')">(markets)</span>')
+    .replace('analytics)', '<span class="lnk" onclick="G(\'analytics\')">analytics)</span>')
+    .replace(/\b(markets)\b(?!.*\()/, '<span class="lnk" onclick="G(\'markets\')">$1</span>')
+    ;
+}
+
+// Wire up nav as clickable text
+document.getElementById('nav-bar').addEventListener('click', function(e) {
+  var t = e.target;
+  if (t.tagName === 'SPAN' && t.onclick) return;
+});
+
+// Init
+G('home');
+
+// Make nav words clickable by rebuilding with inline onclick
+function rebuildNav(page) {
+  var pages = ['markets','analytics','comparison','portfolio'];
+  var bar = '='.repeat(98);
+  var parts = [];
+  pages.forEach(function(p) {
+    if (p === page) {
+      parts.push('(' + p + ')');
+    } else {
+      parts.push('<span class="lnk" onclick="G(\'' + p + '\')">' + p + '</span>');
     }
+  });
+  var profilePart = page === 'profile'
+    ? '<span class="lnk" onclick="G(\'profile\')">(👤 My Profile)</span>'
+    : '<span class="lnk" onclick="G(\'profile\')">[👤 My Profile]</span>';
+  var logoNav = page === 'home'
+    ? ' <span class="lnk" onclick="G(\'home\')">[Logo] futara</span>  |  '
+    : ' <span class="lnk" onclick="G(\'home\')">[Logo] futara</span>  |  ';
+  var qSearch = '[Q] <input class="ii" placeholder="Search..." style="width:80px" onkeydown="if(event.key===\'Enter\')launchAnalytics(this.value)">';
+  var line = logoNav + parts.join('   ') + '  |  ' + qSearch + '   ' + profilePart;
+  return bar + '\n' + line + '\n' + bar;
+}
+
+// Override G to use better nav
+var _oldG = G;
+G = function(page) {
+  current = page;
+  PAGES.forEach(function(p) {
+    var el = document.getElementById('view-' + p);
+    if (el) el.classList.remove('on');
+  });
+  var target = document.getElementById('view-' + page);
+  if (target) target.classList.add('on');
+  document.getElementById('nav-bar').innerHTML = rebuildNav(page);
+  if (page === 'home') renderHome();
+  else if (page === 'markets') renderMarkets();
+  else if (page === 'analytics') renderAnalyticsStart();
+  else if (page === 'comparison') renderComparison();
+  else if (page === 'portfolio') renderPortfolio();
+  else if (page === 'profile') renderProfile();
+};
+
+G('home');
 </script>
-
 </body>
 </html>

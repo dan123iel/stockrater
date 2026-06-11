@@ -1,0 +1,45 @@
+==================================================================================================
+ [Logo] futara  |  (markets)   analytics   comparison   portfolio  |  [Q]       [👤 My Profile]
+==================================================================================================
+
+  ----------------------------------------------------------------------------------------------
+  🚀 HERO SECTION (Above the fold)
+  
+                       DIVE DEEPER INTO MARKET INTELLIGENCE.
+                 Analyze Ratios, Intrinsic Value, and Risk in Real-Time.
+  
+                 [ Search for a stock, crypto or asset...                  | 🔍 ]
+                   e.g., Apple (AAPL), Nvidia (NVDA), Bitcoin (BTC)
+  ----------------------------------------------------------------------------------------------
+
+  ----------------------------------------------------------------------------------------------
+  🔥 LIVE GLOBAL MARKET TICKER
+  S&P 500: 5,420.10 ▲ +0.4%  |  NASDAQ: 18,650.40 ▲ +1.2%  |  BTC/USD: $68,400 ▼ -0.8%  |  EUR/USD: 1.09 ⚪ 0%
+  ----------------------------------------------------------------------------------------------
+
+  ----------------------------------------------------------------------------------------------
+  📊 MAIN DASHBOARD ROW 1: MARKET ACTIVITY
+  
+  [ TOP GAINERS ]                     [ MOST ACTIVE UNIVERSE ]            [ FUTARA TOP SCORED ]
+  +--------------------------------+  +--------------------------------+  +--------------------------------+
+  | 1. NVDA   $205.10   ▲ +46.51%  |  | 1. TSLA   $175.20   (12.4M Vol)|  | 1. MSFT   Score: 4.85 / 5.0    |
+  | 2. AMD    $160.40   ▲ +12.20%  |  | 2. AAPL   $182.10   (9.8M Vol) |  | 2. GOOGL  Score: 4.62 / 5.0    |
+  | 3. INTC   $ 31.15   ▲ + 5.10%  |  | 3. NVDA   $205.10   (8.2M Vol) |  | 3. NVDA   Score: 4.57 / 5.0    |
+  |                    [View All]  |  |                    [View All]  |  |                    [View All]  |
+  +--------------------------------+  +--------------------------------+  +--------------------------------+
+
+  ----------------------------------------------------------------------------------------------
+  💡 MAIN DASHBOARD ROW 2: PLATFORM CAPABILITIES (Feature Teasers)
+  
+  [ 🧮 VALUE & STRESSTEST ]          [ 📰 MACRO & SENTIMENT HUB ]        [ 💼 MY PORTFOLIO SNAPSHOT ]
+  +--------------------------------+  +--------------------------------+  +--------------------------------+
+  | Simulating DCF models has      |  | Aggregate Market Sentiment:    |  | Total Value:   $42,150.00      |
+  | never been easier. Adjust      |  | 🔥 BULLISH (74% Positive Buzz) |  | Day Change:    +$1,240.00 (+3%)|
+  | growth assumptions and test    |  |                                |  |                                |
+  | interest rate shocks instantly.|  | Top Sector: Semiconductors     |  | Best Asset:    NVDA (+46.51%)  |
+  |          [Launch Engine]       |  |          [Read Intel]          |  |          [Open Portfolio]      |
+  +--------------------------------+  +--------------------------------+  +--------------------------------+
+
+==================================================================================================
+ [ Footer: About | Methodology | API Documentation | Terms of Service | Privacy Policy 2026 ]
+==================================================================================================
