@@ -120,13 +120,13 @@ async function handleSummary(ticker, request) {
 
     flat.financialData = fd;
 
-    return corsResponse(flat);
+    return corsResponse(flat, 200, request);
   } catch (e) {
-    return corsResponse({ error: e.message }, 500);
+    return corsResponse({ error: e.message }, 500, request);
   }
 }
 
-async function handleSearch(query) {
+async function handleSearch(query, request) {
   try {
     const res = await fetch(
       `https://query1.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(query)}&quotesCount=6&newsCount=0&listsCount=0`,
