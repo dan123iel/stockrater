@@ -295,6 +295,41 @@ Set up the structure in Phase 2 so translation in Phase 4 is a 1-day job.
 
 ---
 
+## Gaps & Additional Findings (2026-06-12)
+
+Ergänzungen aus Code-Review von `app.js`, `worker.js` und Designanalyse — geht über den ursprünglichen Roadmap-Scope hinaus.
+
+### 🔴 Kritisch — blockiert alles andere
+
+| # | Problem | Datei | Status |
+|---|---------|-------|--------|
+| 1 | `index.html` fehlt komplett — aktives Design existiert nicht | — | ❌ offen |
+| 2 | Worker CORS hardcoded auf `dan123iel.github.io` — lokales Testen unmöglich | `worker.js` L4 | ✅ gefixt |
+| 3 | `app.js` verwendet andere ID-Konventionen als das neue Design (`f-page`, `is-active`, `page-`) — Bridge muss korrekt gemappt sein | `app.js` L252–264 | ❌ prüfen wenn index.html da ist |
+
+### 🟡 Inhaltlich fehlend (nicht im Roadmap erwähnt)
+
+| # | Problem | Wo | Aufwand |
+|---|---------|-----|---------|
+| 4 | **Error States / Loading States fehlen im Design** — leere Tiles bei schlechter Verbindung, kein Spinner, kein "Ticker not found" | `app.js` loadTickerData | S |
+| 5 | **Mobile nicht wirklich benutzbar** — Dock-Tabs, Tile Grid, Comparison Matrix bei 375px unbrauchbar. Kein Swipe, kein Touch-Layout. CSS responsive ist drin, UX nicht. | CSS / HTML | M |
+| 6 | **1h Cache (sr_cache) nicht durchgängig genutzt** — `fmpCache` in `app.js` ist in-memory (verloren bei Reload). `sr_cache` in localStorage wird deklariert aber nicht konsequent befüllt. Bei 250 FMP Requests/Tag kritisch. | `app.js` L686 | S |
+| 7 | **Suche nur mit exaktem Ticker** — Yahoo Search im Worker als `disabled` markiert, aber `navFilterSearch()` ruft sie trotzdem auf. Wer "Apple" tippt bekommt Fehler statt Ergebnis. | `worker.js` L29, `app.js` L608 | S |
+| 8 | **Keine URL-Synchronisation** — URL ändert sich nicht beim Öffnen eines Tickers. Kein direkter Link teilbar (`/analytics/NVDA`). Für Wachstum über Social wichtig. | `app.js` showPage | M |
+
+### 🟢 Nice-to-have (realistisch umsetzbar)
+
+| # | Feature | Aufwand |
+|---|---------|---------|
+| 9 | **Keyboard Navigation** — `/` öffnet Suche, `Esc` schließt Modal. Bereits teilweise in `app.js` (Cmd+K). Vervollständigen. | XS |
+| 10 | **PWA / Offline** — Service Worker + Manifest. App zum Homescreen, letzte Daten offline verfügbar. | M |
+| 11 | **Print / Export als PDF** — Ticker-Analyse exportieren. Echter Share-Moment, viraler Hebel. | S |
+
+### Aufwands-Legende
+`XS` < 1h · `S` < 1 Tag · `M` 1–3 Tage · `L` > 3 Tage
+
+---
+
 ## Next Actions — Sprint Plan
 
 **Sprint 1 — Strategy Core** *(implement in `app.js`)*
