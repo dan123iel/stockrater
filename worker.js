@@ -139,7 +139,7 @@ async function handleSearch(query, request) {
       exchange: q.exchange,
       type: q.quoteType,
     })).filter(q => q.type === 'EQUITY' || q.type === 'ETF');
-    return corsResponse({ quotes });
+    return corsResponse({ quotes }, 200, request);
   } catch (e) {
     return corsResponse({ error: e.message, quotes: [] }, 500, request);
   }
