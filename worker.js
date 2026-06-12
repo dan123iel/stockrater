@@ -43,7 +43,7 @@ export default {
   },
 };
 
-async function handleSummary(ticker) {
+async function handleSummary(ticker, request) {
   try {
     const crumb = await getCrumb();
 
