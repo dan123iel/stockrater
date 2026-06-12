@@ -1,7 +1,15 @@
 // Cloudflare Worker — Yahoo Finance Proxy for StockRater
 // Deploy at: https://dash.cloudflare.com → Workers & Pages → Create Worker
 
-const ALLOWED_ORIGIN = 'https://dan123iel.github.io';
+const ALLOWED_ORIGINS = [
+  'https://dan123iel.github.io',
+  'http://localhost',
+  'http://localhost:3000',
+  'http://localhost:5173',
+  'http://127.0.0.1',
+  'http://127.0.0.1:5500',
+  'null', // file:// protocol (local HTML open in browser)
+];
 
 export default {
   async fetch(request) {
