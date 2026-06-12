@@ -23,23 +23,23 @@ export default {
     // /yahoo/summary/:ticker — full quoteSummary with all financial modules
     const summaryMatch = path.match(/^\/yahoo\/summary\/([A-Z0-9.\-^]+)$/i);
     if (summaryMatch) {
-      return handleSummary(summaryMatch[1].toUpperCase());
+      return handleSummary(summaryMatch[1].toUpperCase(), request);
     }
 
     // /yahoo/chart/:ticker?range=1y
     const chartMatch = path.match(/^\/yahoo\/chart\/([A-Z0-9.\-^]+)$/i);
     if (chartMatch) {
       const range = url.searchParams.get('range') || '1y';
-      return handleChart(chartMatch[1].toUpperCase(), range);
+      return handleChart(chartMatch[1].toUpperCase(), range, request);
     }
 
     // /yahoo/search?q=query — search by name, ISIN, WKN
     if (path === '/yahoo/search') {
       const q = url.searchParams.get('q') || '';
-      return handleSearch(q);
+      return handleSearch(q, request);
     }
 
-    return corsResponse({ error: 'Unknown endpoint' }, 404);
+    return corsResponse({ error: 'Unknown endpoint' }, 404, request);
   },
 };
 
