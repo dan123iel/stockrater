@@ -141,11 +141,11 @@ async function handleSearch(query, request) {
     })).filter(q => q.type === 'EQUITY' || q.type === 'ETF');
     return corsResponse({ quotes });
   } catch (e) {
-    return corsResponse({ error: e.message, quotes: [] }, 500);
+    return corsResponse({ error: e.message, quotes: [] }, 500, request);
   }
 }
 
-async function handleChart(ticker, range) {
+async function handleChart(ticker, range, request) {
   try {
     const res = await fetch(
       `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=${range}`,
