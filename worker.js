@@ -14,7 +14,7 @@ const ALLOWED_ORIGINS = [
 export default {
   async fetch(request) {
     if (request.method === 'OPTIONS') {
-      return corsResponse(null, 204);
+      return corsResponse(null, 204, request);
     }
 
     const url = new URL(request.url);
