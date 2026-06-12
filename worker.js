@@ -199,12 +199,14 @@ function flatten(obj) {
   return out;
 }
 
-function corsResponse(body, status = 200) {
+function corsResponse(body, status = 200, request) {
+  const origin = request ? (request.headers.get('Origin') || '') : '';
+  const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
   return new Response(body !== null ? JSON.stringify(body) : null, {
     status,
     headers: {
       'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
+      'Access-Control-Allow-Origin': allowedOrigin,
       'Access-Control-Allow-Methods': 'GET, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
       'Cache-Control': 'no-store',
