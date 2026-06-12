@@ -1,7 +1,7 @@
 # futara — Product Roadmap & Discovery
 
-**Version:** 0.1 (Discovery Phase)
-**Last updated:** 2026-06-10
+**Version:** 0.2 (Discovery Phase)
+**Last updated:** 2026-06-12
 **Status:** Pre-MVP
 
 ---
