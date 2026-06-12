@@ -153,7 +153,7 @@ async function handleChart(ticker, range, request) {
     );
     const json = await res.json();
     const result = json?.chart?.result?.[0];
-    if (!result) return corsResponse({ error: `Ticker ${ticker} not found` }, 404);
+    if (!result) return corsResponse({ error: `Ticker ${ticker} not found` }, 404, request);
 
     const meta = result.meta || {};
     const timestamps = result.timestamp || [];
@@ -162,9 +162,9 @@ async function handleChart(ticker, range, request) {
     const highs  = (quote.high  || []).map(v => v ?? null);
     const lows   = (quote.low   || []).map(v => v ?? null);
 
-    return corsResponse({ meta, timestamps, closes, highs, lows });
+    return corsResponse({ meta, timestamps, closes, highs, lows }, 200, request);
   } catch (e) {
-    return corsResponse({ error: e.message }, 500);
+    return corsResponse({ error: e.message }, 500, request);
   }
 }
 
