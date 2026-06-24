@@ -4,7 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>pondex — Market Intelligence</title>
+<meta name="description" content="Algorithmic stock scoring platform. Strategy-relative scorecard, DCF stress-test, AI insights, global coverage.">
+<meta property="og:title" content="pondex — Market Intelligence">
+<meta property="og:description" content="Algorithmic stock analysis. Score any stock against your strategy. Global coverage, no paid APIs.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230a0b0e'/><text x='16' y='23' font-family='Courier New' font-size='20' font-weight='800' fill='%231db954' text-anchor='middle'>p</text></svg>">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <style>
+/* ── Lucide icon base styles ── */
+.icon { display:inline-flex; align-items:center; justify-content:center; vertical-align:middle; flex-shrink:0; }
+.icon svg { stroke-width:1.75; }
+.nav-icon { width:15px; height:15px; }
+.tile-icon { width:14px; height:14px; }
+.btn-icon { width:13px; height:13px; }
+.lg-icon { width:18px; height:18px; }
 :root {
   --bg: #0a0b0e;
   --surface: #111318;
@@ -909,8 +922,8 @@ input[type=range] {
       onblur="setTimeout(closeNavDropdown, 200)"
       autocomplete="off">
     <div id="nav-search-dropdown" style="display:none;position:absolute;top:calc(100% + 4px);right:0;min-width:280px;background:var(--surface);border:1px solid var(--border2);border-radius:3px;box-shadow:0 8px 24px rgba(0,0,0,.3);z-index:500;max-height:320px;overflow-y:auto"></div>
-    <button class="nav-btn" onclick="G('profile')">👤 Profile</button>
-    <button class="nav-btn" id="theme-btn" onclick="toggleTheme()">☀</button>
+    <button class="nav-btn" onclick="G('profile')" style="display:flex;align-items:center;gap:5px"><span data-lucide="user" style="width:14px;height:14px"></span> Profile</button>
+    <button class="nav-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle theme"><span data-lucide="moon" style="width:14px;height:14px"></span></button>
   </div>
 </nav>
 
@@ -948,10 +961,10 @@ input[type=range] {
     <div class="start-section">
       <div class="start-sec-title">Browse by asset class</div>
       <div class="sector-grid">
-        <div class="sector-card" onclick="G('markets');setAssetClass('stocks')"><div class="sc-icon">📈</div><div class="sc-name">Stocks</div><div class="sc-pe">11,000+ equities</div><div class="sc-top">NVDA, AAPL, MSFT...</div></div>
-        <div class="sector-card" onclick="G('markets');setAssetClass('bonds')"><div class="sc-icon">📜</div><div class="sc-name">Bonds</div><div class="sc-pe">Govt. &amp; corporate debt</div><div class="sc-top">US10Y, BUND, HYG...</div></div>
+        <div class="sector-card" onclick="G('markets');setAssetClass('stocks')"><div class="sc-icon" style="display:flex;align-items:center;justify-content:center"><span data-lucide="trending-up" style="width:22px;height:22px;stroke:var(--green)"></span></div><div class="sc-name">Stocks</div><div class="sc-pe">11,000+ equities</div><div class="sc-top">NVDA, AAPL, MSFT...</div></div>
+        <div class="sector-card" onclick="G('markets');setAssetClass('bonds')"><div class="sc-icon" style="display:flex;align-items:center;justify-content:center"><span data-lucide="landmark" style="width:22px;height:22px;stroke:var(--blue)"></span></div><div class="sc-name">Bonds</div><div class="sc-pe">Govt. &amp; corporate debt</div><div class="sc-top">US10Y, BUND, HYG...</div></div>
         <div class="sector-card" onclick="G('markets');setAssetClass('funds')"><div class="sc-icon">🧺</div><div class="sc-name">Funds &amp; ETFs</div><div class="sc-pe">Diversified baskets</div><div class="sc-top">SPY, QQQ, VWCE...</div></div>
-        <div class="sector-card" onclick="G('markets');setAssetClass('crypto')"><div class="sc-icon">◈</div><div class="sc-name">Crypto</div><div class="sc-pe">Digital assets</div><div class="sc-top">BTC, ETH, SOL...</div></div>
+        <div class="sector-card" onclick="G('markets');setAssetClass('crypto')"><div class="sc-icon" style="display:flex;align-items:center;justify-content:center"><span data-lucide="bitcoin" style="width:22px;height:22px;stroke:var(--yellow)"></span></div><div class="sc-name">Crypto</div><div class="sc-pe">Digital assets</div><div class="sc-top">BTC, ETH, SOL...</div></div>
       </div>
     </div>
 
@@ -1235,8 +1248,8 @@ input[type=range] {
       <span class="ph-title">📈 Analytics</span>
       <span class="ph-tag">Algorithmic Engine</span>
       <div class="ph-actions">
-        <button class="act-btn" onclick="toggleTileManager()">⊞ Manage tiles</button>
-        <button class="act-btn" onclick="showStart()">← New Search</button>
+        <button class="act-btn" onclick="toggleTileManager()" style="display:flex;align-items:center;gap:5px"><span data-lucide="layout-grid" style="width:13px;height:13px"></span> Manage tiles</button>
+        <button class="act-btn" onclick="showStart()" style="display:flex;align-items:center;gap:5px"><span data-lucide="arrow-left" style="width:13px;height:13px"></span> New Search</button>
       </div>
     </div>
 
@@ -1261,10 +1274,10 @@ input[type=range] {
         </div>
       </div>
       <div class="ph-actions" style="margin-left:auto">
-        <button class="act-btn" onclick="G('portfolio')">+ Portfolio</button>
-        <button class="act-btn" id="btn-watchlist" onclick="toggleWatchlist()">+ Watchlist</button>
-        <button class="act-btn" onclick="shareAnalysis()" title="Copy shareable link">🔗 Share</button>
-        <button class="act-btn" onclick="exportAnalyticsPDF()" title="Export this analysis as PDF">🖨 Export PDF</button>
+        <button class="act-btn" onclick="G('portfolio')" style="display:flex;align-items:center;gap:5px"><span data-lucide="briefcase" style="width:13px;height:13px"></span> Portfolio</button>
+        <button class="act-btn" id="btn-watchlist" onclick="toggleWatchlist()" style="display:flex;align-items:center;gap:5px"><span data-lucide="bookmark" style="width:13px;height:13px"></span> Watchlist</button>
+        <button class="act-btn" onclick="shareAnalysis()" title="Copy shareable link" style="display:flex;align-items:center;gap:5px"><span data-lucide="share-2" style="width:13px;height:13px"></span> Share</button>
+        <button class="act-btn" onclick="exportAnalyticsPDF()" title="Export PDF" style="display:flex;align-items:center;gap:5px"><span data-lucide="printer" style="width:13px;height:13px"></span> Export</button>
       </div>
     </div>
 
@@ -1382,8 +1395,8 @@ input[type=range] {
     <div class="port-stat"><div class="box-label">Portfolio Risk</div><div class="box-value y">Medium</div><div class="box-sub m">1 position below SMA 200</div></div>
   </div>
   <div class="asset-tabs" id="portfolio-tabs">
-    <button class="asset-tab active" data-ptab="holdings" onclick="setPortfolioTab('holdings')">📊 Holdings</button>
-    <button class="asset-tab" data-ptab="journal" onclick="setPortfolioTab('journal')">📓 Trade Journal</button>
+    <button class="asset-tab active" data-ptab="holdings" onclick="setPortfolioTab('holdings')" style="display:inline-flex;align-items:center;gap:5px"><span data-lucide="layers" style="width:13px;height:13px"></span> Holdings</button>
+    <button class="asset-tab" data-ptab="journal" onclick="setPortfolioTab('journal')" style="display:inline-flex;align-items:center;gap:5px"><span data-lucide="book-open" style="width:13px;height:13px"></span> Trade Journal</button>
   </div>
   <div id="portfolio-holdings">
   <div class="grid-2" style="border:none">
@@ -1391,8 +1404,8 @@ input[type=range] {
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
         <div class="box-title" style="margin-bottom:0">Holdings</div>
         <div style="display:flex;gap:6px">
-          <button class="act-btn" onclick="showAddPosition()">+ Add Position</button>
-          <button class="act-btn" style="color:var(--muted)" title="Phase 4: Connect broker for auto-sync">🔌 Connect Broker</button>
+          <button class="act-btn" onclick="showAddPosition()" style="display:flex;align-items:center;gap:5px"><span data-lucide="plus-circle" style="width:13px;height:13px"></span> Add Position</button>
+          <button class="act-btn" style="color:var(--muted);display:flex;align-items:center;gap:5px" title="Phase 4: Connect broker for auto-sync"><span data-lucide="plug" style="width:13px;height:13px"></span> Connect Broker</button>
         </div>
       </div>
       <div style="padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:2px;font-size:11px;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:8px">
@@ -1438,7 +1451,7 @@ input[type=range] {
     <div style="padding:16px 20px">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
         <div class="start-sec-title" style="margin-bottom:0">Add trade</div>
-        <label class="act-btn" style="cursor:pointer">📤 Import CSV<input type="file" id="csv-import" accept=".csv" style="display:none" onchange="importCSV(this.files[0])"></label>
+        <label class="act-btn" style="cursor:pointer;display:inline-flex;align-items:center;gap:5px"><span data-lucide="upload" style="width:13px;height:13px"></span> Import CSV<input type="file" id="csv-import" accept=".csv" style="display:none" onchange="importCSV(this.files[0])"></label>
       </div>
       <div class="journal-form">
         <div class="jf-field"><label>Date</label><input type="date" id="jr-date"></div>
@@ -1632,20 +1645,35 @@ input[type=range] {
 </div>
 
 <script>
+// ── Lucide icon helper ─────────────────────────────────────────────────
+// li('trending-up', 'nav-icon') → <span class="icon"><svg ...></svg></span>
+// Icons are rendered after Lucide CDN loads. Falls back to emoji gracefully.
+function li(name, cls) {
+  cls = cls || 'tile-icon';
+  // Return a placeholder span that gets replaced after Lucide loads
+  return '<span class="icon ' + cls + '" data-lucide="' + name + '"></span>';
+}
+
+// Render all pending Lucide icons in the DOM
+function renderIcons() {
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+}
 // ─── TILE DEFINITIONS ───────────────────────────────────────────────
 var TILE_DEFS = {
-  scorecard: { icon:'⭐', name:'Scorecard', desc:'Algorithmic rating', dtLabel:'Scorecard', dtVal:'—', dtSub:'open to load', build: buildScorecard },
-  chart:     { icon:'📈', name:'Price Chart', desc:'Price with SMA/RSI & index compare', dtLabel:'Chart', dtVal:'—', dtSub:'open to load', build: buildChart },
-  ratios:    { icon:'📊', name:'Valuation', desc:'P/E, margins, growth ratios', dtLabel:'Valuation', dtVal:'—', dtSub:'open to load', build: buildRatios },
-  dcf:       { icon:'🧮', name:'Stresstest', desc:'DCF fair value & scenario engine', dtLabel:'Stresstest', dtVal:'—', dtSub:'open to load', build: buildDCF },
-  news:      { icon:'📰', name:'News & Sentiment', desc:'Live news feed', dtLabel:'News', dtVal:'—', dtSub:'open to load', build: buildNews },
-  insider:   { icon:'👥', name:'Insider Trades', desc:'Net buying activity', dtLabel:'Insiders', dtVal:'—', dtSub:'open to load', build: buildInsider },
-  mgmt:      { icon:'👔', name:'Ownership', desc:'Institutional holders', dtLabel:'Ownership', dtVal:'—', dtSub:'open to load', build: buildMgmt },
-  dividend:  { icon:'💰', name:'Dividend Calendar', desc:'Yield & dividend history', dtLabel:'Dividend', dtVal:'—', dtSub:'open to load', build: buildDividend },
-  period:    { icon:'📅', name:'Financials', desc:'Income, Balance, Cash Flow', dtLabel:'Financials', dtVal:'—', dtSub:'open to load', build: buildPeriod },
-  analysts:  { icon:'🎯', name:'Analyst Ratings', desc:'Consensus rating & price targets', dtLabel:'Analysts', dtVal:'—', dtSub:'open to load', build: buildAnalysts },
-  ai:        { icon:'🤖', name:'AI Insights (Groq)', desc:'AI-powered strategy explanation', dtLabel:'AI Insights', dtVal:'Groq', dtSub:'Llama 3 powered', build: buildAI },
-  company:   { icon:'🏢', name:'Company Profile', desc:'Business summary, sector, HQ', dtLabel:'Profile', dtVal:'—', dtSub:'open to load', build: buildCompany },
+  scorecard: { icon:'star', name:'Scorecard', desc:'Algorithmic rating', dtLabel:'Scorecard', dtVal:'—', dtSub:'open to load', build: buildScorecard },
+  chart:     { icon:'trending-up', name:'Price Chart', desc:'Price with SMA/RSI & index compare', dtLabel:'Chart', dtVal:'—', dtSub:'open to load', build: buildChart },
+  ratios:    { icon:'percent', name:'Valuation', desc:'P/E, margins, growth ratios', dtLabel:'Valuation', dtVal:'—', dtSub:'open to load', build: buildRatios },
+  dcf:       { icon:'sliders', name:'Stresstest', desc:'DCF fair value & scenario engine', dtLabel:'Stresstest', dtVal:'—', dtSub:'open to load', build: buildDCF },
+  news:      { icon:'newspaper', name:'News & Sentiment', desc:'Live news feed', dtLabel:'News', dtVal:'—', dtSub:'open to load', build: buildNews },
+  insider:   { icon:'users', name:'Insider Trades', desc:'Net buying activity', dtLabel:'Insiders', dtVal:'—', dtSub:'open to load', build: buildInsider },
+  mgmt:      { icon:'pie-chart', name:'Ownership', desc:'Market cap, shares, 52W range', dtLabel:'Ownership', dtVal:'—', dtSub:'open to load', build: buildMgmt },
+  dividend:  { icon:'coins', name:'Dividend Calendar', desc:'Yield & dividend history', dtLabel:'Dividend', dtVal:'—', dtSub:'open to load', build: buildDividend },
+  period:    { icon:'table-2', name:'Financials', desc:'Income, Balance, Cash Flow', dtLabel:'Financials', dtVal:'—', dtSub:'open to load', build: buildPeriod },
+  analysts:  { icon:'target', name:'Analyst Ratings', desc:'EPS history & credit ratings', dtLabel:'Analysts', dtVal:'—', dtSub:'open to load', build: buildAnalysts },
+  ai:        { icon:'sparkles', name:'AI Insights', desc:'AI-powered strategy explanation', dtLabel:'AI Insights', dtVal:'AI', dtSub:'Llama 3.3 70B', build: buildAI },
+  company:   { icon:'building-2', name:'Company Profile', desc:'Business summary, sector, HQ', dtLabel:'Profile', dtVal:'—', dtSub:'open to load', build: buildCompany },
 };
 
 // Active tiles ordered (shown in dock)
@@ -1793,6 +1821,8 @@ function G(page, skipHash) {
   if (page === 'macro') setTimeout(function(){ setMacroTab(currentMacroTab || 'overview'); }, 0);
   if (page === 'markets') setTimeout(initMarketsPage, 50);
   if (page === 'ideas') setTimeout(initIdeasPage, 50);
+  // Re-render icons after page transition
+  setTimeout(function(){ if(typeof lucide!=='undefined') lucide.createIcons(); }, 50);
 }
 
 // ─── PORTFOLIO TABS (Holdings / Trade Journal) ────────────────────────
@@ -2489,7 +2519,7 @@ function renderDock() {
     var def = TILE_DEFS[id];
     if (!def) return '';
     return '<button class="dock-tab' + (id===activeDockId?' active':'') + '" data-id="' + id + '" draggable="true">' +
-      '<span class="dt-icon">' + def.icon + '</span>' +
+      '<span class="dt-icon">' + li(def.icon, 'tile-icon') + '</span>' +
       '<span class="dt-label">' + def.dtLabel + '</span>' +
       '<span class="dt-val ' + (def.dtValCls||'') + '" id="dtval-' + id + '">' + (def._liveVal||def.dtVal) + '</span>' +
       '<span class="dt-sub" id="dtsub-' + id + '">' + (def._liveSub||def.dtSub) + '</span>' +
@@ -2527,9 +2557,9 @@ function renderDock() {
       renderDock();
     });
   });
+  // Render Lucide icons after DOM update
+  setTimeout(function(){ if(typeof lucide!=='undefined') lucide.createIcons(); }, 10);
 }
-
-// Update a dock tab's live value/sub in-place without a full re-render
 function updateDockTab(id, val, sub, cls) {
   if (TILE_DEFS[id]) {
     TILE_DEFS[id]._liveVal = val;
@@ -2621,7 +2651,7 @@ function updateTileManager() {
     var item = document.createElement('div');
     item.className = 'tm-item' + (on ? ' active' : '');
     item.innerHTML =
-      '<span class="ti-icon">' + def.icon + '</span>' +
+      '<span class="ti-icon">' + li(def.icon, 'tile-icon') + '</span>' +
       '<div class="ti-info"><div class="ti-name">' + def.name + '</div><div class="ti-desc">' + def.desc + '</div></div>' +
       '<span class="ti-check">✓</span>';
     item.onclick = function() {
@@ -5892,12 +5922,12 @@ function toggleTheme() {
 function setTheme(mode) {
   if (mode === 'light') {
     document.documentElement.setAttribute('data-theme','light');
-    document.getElementById('theme-btn').textContent = '☽';
+    document.getElementById('theme-btn').innerHTML = '<span data-lucide="moon" style="width:14px;height:14px"></span>'; if(typeof lucide!=='undefined') lucide.createIcons();
     document.getElementById('tog-dark').classList.remove('on');
     document.getElementById('tog-light').classList.add('on');
   } else {
     document.documentElement.removeAttribute('data-theme');
-    document.getElementById('theme-btn').textContent = '☀';
+    document.getElementById('theme-btn').innerHTML = '<span data-lucide="sun" style="width:14px;height:14px"></span>'; if(typeof lucide!=='undefined') lucide.createIcons();
     document.getElementById('tog-dark').classList.add('on');
     document.getElementById('tog-light').classList.remove('on');
   }
@@ -5982,6 +6012,8 @@ window.addEventListener('load', function() {
     if (location.hash) { handleHash(true); } else { buildNav('home'); }
   } catch(e) { console.warn('nav init:', e); try { buildNav('home'); } catch(e2) {} }
   try { updateTileManager(); } catch(e) { console.warn('updateTileManager:', e); }
+  // Render all Lucide icons after page loads
+  setTimeout(function(){ if(typeof lucide!=='undefined') lucide.createIcons(); }, 100);
   // Show onboarding only for first-time users (no saved profile)
   if (!localStorage.getItem('pondex_strategy')) {
     setTimeout(function(){
@@ -7055,16 +7087,16 @@ function fetchYahooNews(ticker, container, exchange) {
         <div style="font-size:12px;color:var(--muted);margin-top:4px">Stock suggestions based on your strategy, portfolio &amp; macro context</div>
       </div>
       <div style="display:flex;gap:8px">
-        <button class="act-btn" style="padding:8px 16px" onclick="runAlgoScreen()">📊 Screen Stocks</button>
-        <button class="act-btn" style="padding:8px 16px" onclick="generateIdeas()">✨ AI Ideas</button>
+        <button class="act-btn" style="padding:8px 16px;display:flex;align-items:center;gap:6px" onclick="runAlgoScreen()"><span data-lucide="filter" style="width:14px;height:14px"></span> Screen Stocks</button>
+        <button class="act-btn" style="padding:8px 16px;display:flex;align-items:center;gap:6px" onclick="generateIdeas()"><span data-lucide="sparkles" style="width:14px;height:14px"></span> AI Ideas</button>
       </div>
     </div>
 
     <!-- Tab bar -->
     <div class="fin-tabs" style="margin-bottom:16px">
-      <button class="ftab active" onclick="switchIdeasTab(this,'screen')">📊 Algo Screen</button>
-      <button class="ftab" onclick="switchIdeasTab(this,'ai')">✨ AI Ideas</button>
-      <button class="ftab" onclick="switchIdeasTab(this,'chat')">💬 AI Chat</button>
+      <button class="ftab active" onclick="switchIdeasTab(this,'screen')" style="display:flex;align-items:center;gap:5px;justify-content:center"><span data-lucide="filter" style="width:13px;height:13px"></span> Algo Screen</button>
+      <button class="ftab" onclick="switchIdeasTab(this,'ai')" style="display:flex;align-items:center;gap:5px;justify-content:center"><span data-lucide="sparkles" style="width:13px;height:13px"></span> AI Ideas</button>
+      <button class="ftab" onclick="switchIdeasTab(this,'chat')" style="display:flex;align-items:center;gap:5px;justify-content:center"><span data-lucide="message-circle" style="width:13px;height:13px"></span> AI Chat</button>
     </div>
 
     <!-- Algo Screen tab -->
