@@ -1479,3 +1479,154 @@ Es ist die Kombination:
 > **These → Kauf → Monitoring → Lernen → bessere nächste Entscheidung**
 
 Diesen Kreislauf bildet aktuell praktisch kein großes Retail-Investing-Tool konsequent ab. Das ist die Kategorie die pondex besitzen kann.
+
+---
+
+## Externe Produktkritik & Roadmap-Empfehlungen
+
+> Unabhängige Außenperspektive auf Stärken, Lücken und Prioritäten.
+
+---
+
+### Was stark ist
+
+Die Produktidee ist klar: ein Browser-basierter Investment-Assistent mit Scoring, Fair-Value, News, Insider-Daten und AI-Chat. Die Positionierung ist gut: nicht für Daytrader, sondern für selbstbestimmte Privatanleger mit Strategie.
+
+---
+
+### Was verbessert werden kann
+
+**Weniger Marketing, mehr Präzision.** Manche Aussagen sind zu groß formuliert und noch nicht messbar genug — zum Beispiel "hundert weitere Parameter" oder "alles auf deine persönliche Strategie zugeschnitten". Das sollte durch konkrete, zählbare Aussagen ersetzt werden.
+
+**Score-Logik transparent machen.** Die grün/gelb/rot-Bewertung gegen "akademische Standards" wirkt teils zu absolut. Nutzer müssen verstehen wie die Bewertung entsteht — welche Schwellenwerte, welche Quellen, warum genau diese Zahl.
+
+**Score-Sprache überdenken.** "Strong Buy / Avoid" klingt nach Anlageberatung. Besser: Passung zum Profil kommunizieren, nicht Urteil über die Aktie. (→ Excellent Fit / Poor Fit, bereits an anderer Stelle dokumentiert)
+
+---
+
+### Sinnvolle Features aus externer Sicht
+
+- **Portfolio-Import** und automatische Analyse des Gesamtportfolios statt nur einzelner Aktien
+- **Watchlist Alerts** bei Fair-Value-Abweichungen, Insider-Käufen oder Quartalszahlen
+- **Vergleichsmodus** für mehrere Aktien derselben Branche
+- **Transparente Score-Erklärung** pro Komponente — nachvollziehbar, nicht nur als Zahl
+- **Szenario-Analyse** — "was passiert bei langsamerem Umsatzwachstum oder höherer Marge"
+
+---
+
+### Produktlücken die noch fehlen
+
+- **Datenquellen-Transparenz** — woher kommen die Daten, wie aktuell sind sie
+- **Aktualisierungsfrequenz** — wann wurden Fundamentaldaten zuletzt abgerufen
+- **Risikohinweise** — klare Disclaimer dass pondex keine Anlageberatung ist
+- **AI-Entscheidungsbegründung** — wie kommt die AI zu ihrer Einschätzung, was fließt ein
+- **Vorschlagsbegründung** — wenn pondex eine Aktie vorschlägt braucht es eine Erklärung warum genau diese Aktie zum Profil passt und welche Alternativen es gibt
+
+---
+
+### Die größte Chance
+
+Der stärkste Unterschied zu klassischen Finanzseiten wäre ein **"Warum diese Aktie?"**-Layer: nicht nur Score anzeigen, sondern in 3–5 klaren Gründen erklären warum die Aktie empfohlen oder abgelehnt wird — bezogen auf das konkrete Profil des Nutzers.
+
+Beispiel für einen Growth-Investor mit NVDA:
+- Wachstum stark ✓
+- Bewertung hoch, aber im Growth-Kontext plausibel ✓
+- Margen solide ✓
+- Risiko: starke Erwartungshaltung eingepreist ⚠
+
+So wird aus Daten ein Urteil. Das ist der Kernunterschied zu jedem anderen kostenlosen Tool.
+
+---
+
+## Roadmap: MVP / V1 / V2
+
+### MVP — Die Kernidee beweisen
+
+Nur was nötig ist um zu zeigen: "Ticker eingeben, Analyse sehen, Entscheidung verstehen."
+
+- Aktien-Suche (Ticker + Name)
+- Score mit klaren Teilbereichen und Erklärung pro Komponente
+- Fundamentaldaten (Margen, Wachstum, Bewertung)
+- Fair-Value-Schätzung (DCF einfach)
+- Kurze AI-Erklärung in Alltagssprache — warum passt die Aktie zum Profil oder nicht
+- Einfache Watchlist
+
+**Wichtig:** Lieber wenige, aber sehr zuverlässige Funktionen als ein überladenes erstes Produkt.
+
+**MVP-Grenze — was rausfliegt:**
+- AI-Chat (zu komplex für MVP)
+- Proaktive Vorschläge (braucht Portfolio-Kontext)
+- Timeline, Counterfactuals, Historian (Phase 3+)
+- Broker-Sync, Mobile App (Phase 4+)
+
+---
+
+### V1 — Personalisierung & Vergleichbarkeit
+
+Hier entsteht der eigentliche Mehrwert — pondex entscheidet nicht nur Daten sondern unterstützt Entscheidungen.
+
+- Strategie-Profil mit Investorentyp (Value / Growth / Dividend / Momentum)
+- Vergleich von 2–5 Aktien nebeneinander
+- Portfolio-Import (manuell, CSV)
+- News-Zusammenfassung pro Ticker
+- Insider- und Earnings-Events
+- Begründete Fit-Signale (Excellent Fit / Poor Fit statt Buy/Avoid)
+- Watchlist Alerts bei Fair-Value-Abweichungen
+- Datenquellen-Transparenz + Aktualisierungsfrequenz sichtbar
+- JSON Backup/Restore für localStorage
+
+---
+
+### V2 — Proaktiv & Intelligent
+
+pondex wird vom reaktiven Analyse-Tool zum aktiven Investment-Co-Pilot.
+
+- Personalisierte Aktienvorschläge (Profil + Portfolio + Makro)
+- AI-Chat mit Portfolio-Kontext
+- Szenario-Simulationen ("was wenn Zinsen +2%?")
+- Thesis Tracker — These beim Kauf definieren, automatisch überwachen
+- Investment Memo — generierbar nach jeder Analyse
+- Branchen- und Peer-Benchmarks
+- Lernmodus für Finanzbegriffe und Bewertungslogik
+- Mehrsprachigkeit (DE/EN mindestens)
+
+---
+
+### V3+ — Decision Intelligence
+
+pondex wird zum Betriebssystem für Investitionsentscheidungen.
+
+- Decision Quality Score
+- Bias Detector & Anomalien-Radar
+- Investment Autopsy für geschlossene Positionen
+- Portfolio Historian & Timeline
+- Investment GPS (Ziel + Wahrscheinlichkeit)
+- Portfolio Stress Test (Szenarien für das gesamte Depot)
+- Circle of Competence Score
+- Personal Investment Handbook (aus Nutzungshistorie generiert)
+
+---
+
+### Feature-Gruppierung für klare Produktstory
+
+**Core** — was pondex ist:
+Analyse · Score · Fair Value · Strategie-Profil
+
+**Differenzierung** — was pondex einzigartig macht:
+Personalisierte Einordnung · Proaktive Vorschläge · AI-Chat · Thesis Tracking
+
+**Später** — was pondex langfristig stärkt:
+Timeline · Counterfactuals · Portfolio-Historian · Noise Filter · Decision Intelligence
+
+---
+
+### Was jetzt wichtiger ist als neue Features
+
+1. **Die stärksten Features sauber machen** — Score-Erklärung, Datenquellen-Transparenz, AI-Begründung
+2. **Sprache weniger absolut** — keine Marketing-Versprechen die nicht messbar sind
+3. **MVP-Grenze klar halten** — lieber 5 außergewöhnliche Features als 50 mittelmäßige
+4. **Den "Warum?"-Layer bauen** — jede Empfehlung braucht eine Begründung in Alltagssprache
+
+> Der Text wirkt nicht "zu wenig" — er wirkt fast schon "zu viel auf einmal". Das ist ein gutes Zeichen für Ideenreichtum, aber ein Warnsignal für den ersten Release.
+
+**Die nächste große Verbesserung von pondex kommt nicht durch Feature Nummer 51, sondern dadurch dass die besten 5–10 Features außergewöhnlich gut zusammenarbeiten.**
