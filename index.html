@@ -3204,9 +3204,12 @@ var FACTOR_LABELS = {
   esg: 'ESG & Risk', val: 'Valuation / DCF'
 };
 
-function computeTotalScore(weights) {
+function computeTotalScore(weights, scoresOverride) {
+  var scores = scoresOverride || RAW_SCORES;
   var total = 0, sumW = 0;
-  Object.keys(weights).forEach(function(k){ total += RAW_SCORES[k] * weights[k]; sumW += weights[k]; });
+  Object.keys(weights).forEach(function(k){
+    if (scores[k] != null) { total += scores[k] * weights[k]; sumW += weights[k]; }
+  });
   return sumW > 0 ? total / sumW : 0;
 }
 
@@ -5644,27 +5647,49 @@ function setAssetClass(cls) {
 }
 
 // ─── TRADE JOURNAL ──────────────────────────────────────────────────────
-var journalEntries = [];
-// Demo seed entry showing retrospective concept
-journalEntries.push({ date:'2025-09-12', ticker:'NVDA', side:'BUY', price:180.00, qty:25, reason:'AI infrastructure cycle still early, strong earnings momentum.', scoreThen:3.90 });
+// Journal — persisted to localStorage
+function loadJournalEntries() {
+  try { return JSON.parse(localStorage.getItem('pondex_journal') || '[]'); } catch(e) { return []; }
+}
+function saveJournalEntries(entries) {
+  try { localStorage.setItem('pondex_journal', JSON.stringify(entries)); } catch(e) {}
+}
+// Seed demo entry on first load
+(function() {
+  if (!localStorage.getItem('pondex_journal')) {
+    var demo = [
+      { date:'2025-03-15', ticker:'NVDA',  side:'BUY',  price:145.00, qty:15, reason:'AI infrastructure supercycle, data center demand accelerating, dominant GPU position.', scoreThen: 4.20, scoreNow: null },
+      { date:'2025-06-01', ticker:'ASML',  side:'BUY',  price:720.00, qty:3,  reason:'Monopoly on EUV lithography, essential for next-gen chips. European tech quality at discount.', scoreThen: 4.10, scoreNow: null },
+      { date:'2025-11-20', ticker:'BABA',  side:'BUY',  price:80.00,  qty:30, reason:'Deeply undervalued vs. growth, regulatory headwinds priced in, cloud business profitable.', scoreThen: 3.30, scoreNow: null },
+    ];
+    saveJournalEntries(demo);
+  }
+})();
 
 function addJournalEntry() {
-  var date = document.getElementById('jr-date').value;
+  var date   = document.getElementById('jr-date').value;
   var ticker = document.getElementById('jr-ticker').value.trim().toUpperCase();
-  var side = document.getElementById('jr-side').value;
-  var price = parseFloat(document.getElementById('jr-price').value);
-  var qty = parseFloat(document.getElementById('jr-qty').value);
+  var side   = document.getElementById('jr-side').value;
+  var price  = parseFloat(document.getElementById('jr-price').value);
+  var qty    = parseFloat(document.getElementById('jr-qty').value);
   var reason = document.getElementById('jr-reason').value.trim();
   if (!date || !ticker || !price || !qty) { alert('Please fill date, ticker, price and quantity.'); return; }
-  // Simulated "score at time of trade" — slightly randomized for demo purposes
-  var scoreThen = Math.max(1.5, Math.min(5, 4.57 - (Math.random()*1.2 - 0.2)));
-  journalEntries.unshift({ date:date, ticker:ticker, side:side, price:price, qty:qty, reason:reason || '—', scoreThen: scoreThen });
+
+  var entries = loadJournalEntries();
+  // Get current score for this ticker as "scoreThen" — best proxy we have
+  var scoreNow = computeTotalScore(currentWeights);
+  entries.unshift({ date:date, ticker:ticker, side:side, price:price, qty:qty,
+    reason: reason || '—', scoreThen: parseFloat(scoreNow.toFixed(2)), scoreNow: null });
+  saveJournalEntries(entries);
   ['jr-ticker','jr-price','jr-qty','jr-reason'].forEach(function(id){ document.getElementById(id).value=''; });
+  showToast('Trade logged ✓');
   renderJournal();
 }
 
 function removeJournalEntry(idx) {
-  journalEntries.splice(idx,1);
+  var entries = loadJournalEntries();
+  entries.splice(idx, 1);
+  saveJournalEntries(entries);
   renderJournal();
 }
 
@@ -5672,32 +5697,90 @@ function renderJournal() {
   var tbody = document.getElementById('journal-rows');
   var empty = document.getElementById('journal-empty');
   if (!tbody) return;
-  if (journalEntries.length === 0) {
-    tbody.innerHTML = '';
-    empty.style.display = 'block';
-    return;
+  var entries = loadJournalEntries();
+  if (!entries.length) { tbody.innerHTML = ''; if (empty) empty.style.display = 'block'; return; }
+  if (empty) empty.style.display = 'none';
+
+  // Render immediately with stored scoreNow (or '…' if not yet fetched)
+  function renderRows(entries) {
+    tbody.innerHTML = entries.map(function(e, i) {
+      var scoreThen = e.scoreThen || 2.5;
+      var scoreNow  = e.scoreNow;
+      var diff = scoreNow != null ? scoreNow - scoreThen : null;
+      var retro = diff == null
+        ? '<span class="m" style="font-size:10px">fetching score…</span>'
+        : diff > 0.15
+          ? '<span class="retro-good">▲ +' + diff.toFixed(2) + ' — thesis playing out</span>'
+          : diff < -0.15
+            ? '<span class="retro-bad">▼ ' + diff.toFixed(2) + ' — re-check thesis</span>'
+            : '<span class="m">≈ roughly unchanged</span>';
+      // P&L if we have current price
+      var pnlStr = '';
+      if (e.currentPrice && e.side === 'BUY') {
+        var ret = (e.currentPrice - e.price) / e.price * 100;
+        var cls = ret >= 0 ? 'g' : 'r';
+        pnlStr = ' <span class="' + cls + '" style="font-size:10px">(' + (ret>=0?'+':'') + ret.toFixed(1) + '%)</span>';
+      }
+      var scoreNowStr = scoreNow != null ? '<strong>' + scoreNow.toFixed(2) + '</strong>' : '…';
+      return '<tr>' +
+        '<td class="m" style="font-size:11px">' + safeStr(e.date) + '</td>' +
+        '<td><span class="lnk" onclick="launchAnalytics(\'' + safeStr(e.ticker) + '\')" style="font-weight:600">' + safeStr(e.ticker) + '</span>' + pnlStr + '</td>' +
+        '<td><span class="ins-type ' + (e.side==='BUY'?'buy':'sell') + '">' + safeStr(e.side) + '</span></td>' +
+        '<td>$' + parseFloat(e.price).toFixed(2) + '</td>' +
+        '<td>' + e.qty + '</td>' +
+        '<td class="m" style="font-size:11px;max-width:200px">' + safeStr(e.reason) + '</td>' +
+        '<td style="font-size:11px">' + scoreThen.toFixed(2) + ' → ' + scoreNowStr + '</td>' +
+        '<td style="font-size:11px">' + retro + '</td>' +
+        '<td><button class="tile-btn close" onclick="removeJournalEntry(' + i + ')">✕</button></td>' +
+      '</tr>';
+    }).join('');
   }
-  empty.style.display = 'none';
-  tbody.innerHTML = journalEntries.map(function(e, i){
-    var scoreNow = currentWeights && e.ticker === 'NVDA' ? computeTotalScore(currentWeights) : 4.57;
-    var diff = scoreNow - e.scoreThen;
-    var retro = diff > 0.05
-      ? '<span class="retro-good">▲ Score improved by ' + diff.toFixed(2) + ' — thesis playing out</span>'
-      : diff < -0.05
-      ? '<span class="retro-bad">▼ Score dropped by ' + Math.abs(diff).toFixed(2) + ' — re-check thesis</span>'
-      : '<span class="m">≈ Score roughly unchanged</span>';
-    return '<tr>' +
-      '<td class="m" style="font-size:11px">' + e.date + '</td>' +
-      '<td><span class="lnk" onclick="launchAnalytics(\'' + e.ticker + '\')" style="font-weight:600">' + e.ticker + '</span></td>' +
-      '<td><span class="ins-type ' + (e.side==='BUY'?'buy':'sell') + '">' + e.side + '</span></td>' +
-      '<td>$' + e.price.toFixed(2) + '</td>' +
-      '<td>' + e.qty + '</td>' +
-      '<td class="m" style="font-size:11px;max-width:220px">' + e.reason + '</td>' +
-      '<td style="font-size:11px">' + e.scoreThen.toFixed(2) + ' → <strong>' + scoreNow.toFixed(2) + '</strong></td>' +
-      '<td style="font-size:11px">' + retro + '</td>' +
-      '<td><button class="tile-btn close" onclick="removeJournalEntry(' + i + ')">✕</button></td>' +
-    '</tr>';
-  }).join('');
+
+  renderRows(entries);
+
+  // Fetch live scores + prices for entries that need updating
+  var toFetch = entries.filter(function(e){ return e.scoreNow == null; });
+  if (!toFetch.length) return;
+
+  var tickers = [...new Set(toFetch.map(function(e){ return e.ticker; }))];
+  var scoreMap = {}; var priceMap = {};
+  var pending = tickers.length;
+
+  tickers.forEach(function(ticker) {
+    fetch(WORKER_BASE + '/yahoo/summary/' + ticker)
+      .then(function(r){ return r.json(); })
+      .then(function(data) {
+        var fd = data.financialData || {}; var ks = data.defaultKeyStatistics || {};
+        var price = fd.currentPrice;
+        var shares = ks.sharesOutstanding; var eps = ks.trailingEps;
+        var mktcap = ks.marketCap || (price && shares ? price * shares : null);
+        var pe = ks.trailingPE || (price && eps && eps > 0 ? price/eps : null) || ks.forwardPE;
+        var ratios = {
+          grossProfitMargin: fd.grossMargins, operatingProfitMargin: fd.operatingMargins,
+          revenueGrowth: fd.revenueGrowth, peRatio: pe,
+          freeCashFlowYield: (fd.freeCashflow && mktcap) ? fd.freeCashflow/mktcap : null,
+          enterpriseValueOverEBITDA: ks.enterpriseToEbitda,
+        };
+        var scores = computeRawScores(ratios, { beta: ks.beta }, []);
+        scoreMap[ticker] = computeTotalScore(currentWeights, scores);
+        if (price) priceMap[ticker] = price;
+      })
+      .catch(function(){})
+      .finally(function(){
+        pending--;
+        if (pending > 0) return;
+        // Update entries with real scores and save
+        var updated = loadJournalEntries();
+        updated.forEach(function(e) {
+          if (scoreMap[e.ticker] != null && e.scoreNow == null) {
+            e.scoreNow = parseFloat(scoreMap[e.ticker].toFixed(2));
+          }
+          if (priceMap[e.ticker]) e.currentPrice = priceMap[e.ticker];
+        });
+        saveJournalEntries(updated);
+        renderRows(updated);
+      });
+  });
 }
 
 function importCSV(file) {
@@ -5705,21 +5788,24 @@ function importCSV(file) {
   var reader = new FileReader();
   reader.onload = function(e) {
     var lines = e.target.result.split(/\r?\n/).filter(function(l){ return l.trim(); });
-    var startIdx = /[a-zA-Z]/.test(lines[0]) ? 1 : 0; // skip header row if present
+    var startIdx = /[a-zA-Z]/.test(lines[0]) ? 1 : 0;
+    var entries = loadJournalEntries();
     var added = 0;
     for (var i = startIdx; i < lines.length; i++) {
       var cols = lines[i].split(/[,;]/).map(function(c){ return c.trim().replace(/^"|"$/g,''); });
       if (cols.length < 5) continue;
-      journalEntries.unshift({
-        date: cols[0] || '—', ticker: (cols[1]||'').toUpperCase(), side: (cols[2]||'BUY').toUpperCase(),
+      entries.unshift({
+        date: cols[0] || '—', ticker: (cols[1]||'').toUpperCase(),
+        side: (cols[2]||'BUY').toUpperCase(),
         price: parseFloat(cols[3]) || 0, qty: parseFloat(cols[4]) || 0,
-        reason: cols[5] || 'Imported from CSV',
-        scoreThen: Math.max(1.5, Math.min(5, 4.57 - (Math.random()*1.2 - 0.2)))
+        reason: cols[5] || 'Imported',
+        scoreThen: 2.5, scoreNow: null
       });
       added++;
     }
+    saveJournalEntries(entries);
     renderJournal();
-    alert(added + ' trades imported from CSV. Expected columns: Date, Ticker, Side, Price, Quantity, Reason (Trade Republic export format).');
+    showToast(added + ' trades imported ✓');
   };
   reader.readAsText(file);
 }
