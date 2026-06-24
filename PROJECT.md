@@ -70,6 +70,46 @@ Serverlose Single-Page-App, globale Aktienabdeckung, keine kostenpflichtigen API
 - ✅ Onboarding nur für neue Nutzer
 - ✅ Profile-aware Scoring-Thresholds
 
+#### 2e — Source-based Discovery 🔜 GEPLANT
+**Idee:** Der Nutzer kann externe Quellen (YouTuber, Blogs, Websites) hinterlegen.
+pondex extrahiert daraus erwähnte Aktien, analysiert sie algorithmisch nach dem Nutzerprofil
+und gibt einen gefilterten, strategie-konformen Vorschlag zurück.
+
+**Feature A — Content-Source Feed (vom Nutzer konfigurierbar)**
+- Nutzer fügt Quellen hinzu: YouTube-Kanal-URL, Blog-URL, RSS-Feed, Newsletter-Link
+- pondex liest den aktuellen Content (via Cloudflare Worker → RSS oder YouTube transcript API)
+- Groq/LLM extrahiert erwähnte Ticker aus dem Text
+- Jede gefundene Aktie wird automatisch gescort (Yahoo Finance → pondex Scorecard)
+- Ergebnis: gefilterte Liste "Diese Aktien wurden in deinen Quellen genannt — hier ist der pondex-Check"
+- Nutzer sieht: Ticker, Erwähnung in welcher Quelle, pondex Score, Fit zu seiner Strategie
+
+**Feature B — Algorithmische Discovery (ohne Nutzereingabe)**
+- pondex schlägt proaktiv Aktien vor, die zu Profil + Portfolio + Makro passen
+- Basis: kurierte Watchlist von ~500 bekannten Qualitätsaktien (global)
+- Filter: Profil-Schwellenwerte (P/E, Margen, Wachstum), Portfolio-Lücken (fehlende Sektoren/Regionen)
+- Ranking: pondex Scorecard — nur Aktien über Schwellenwert werden gezeigt
+- Bereits vorhanden als Groq-basierte Empfehlung (2b) — Extension: algorithmisch statt AI-generiert
+
+**Quellen-Typen (geplant):**
+- YouTube-Kanäle (z.B. Finanzfluss, The Plain Bagel, Joseph Carlson, Dividend Bull)
+  → via YouTube Data API (free 10k req/day) oder Transcript-Extraktion
+- Blogs / Substack / Seeking Alpha Artikel → via RSS oder URL-Fetch + LLM-Extraktion
+- Reddit (r/investing, r/stocks, r/wallstreetbets) → via Reddit API (free, OAuth)
+- Eigene Link-Liste (beliebige URL, pondex versucht Ticker zu extrahieren)
+
+**Technischer Stack:**
+- Quellen werden in localStorage gespeichert (Name + URL + Typ)
+- Cloudflare Worker fetcht den Content (CORS-Problem umgehen)
+- Groq extrahiert Ticker aus dem Text ("Which stocks are mentioned in this content?")
+- Yahoo Finance holt Finanzdaten für jeden gefundenen Ticker
+- pondex Scorecard filtert nach Nutzerprofil
+
+**Einschränkungen:**
+- YouTube Transcripts: kostenpflichtige API oder Workaround via yt-dlp (nicht im Browser möglich)
+  → Lösung: User gibt manuell Video-URL ein, Worker holt Untertitel via YouTube API (free tier)
+- Paywalled Content (Seeking Alpha Premium etc.) → nicht zugänglich, nur free articles
+- RSS-Feeds: einfachste und zuverlässigste Option (die meisten Finanzblogs haben RSS)
+
 ---
 
 ### Phase 3 — Trade-Journal
