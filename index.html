@@ -115,15 +115,20 @@ body {
 .nav-links { display: flex; gap: 2px; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; }
 .nav-links::-webkit-scrollbar { display: none; }
 .nav-sep { color: var(--border2); margin: 0 12px; }
-.nav-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; margin-left: 8px; }
+.nav-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; margin-left: 8px; }
 .nl {
-  padding: 3px 10px; border-radius: 3px; cursor: pointer;
-  color: var(--soft); border: none; background: none;
-  font-family: var(--font); font-size: 12px; transition: color .15s;
-  flex-shrink: 0; white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 8px; border-radius: 4px; cursor: pointer;
+  color: var(--muted); border: none; background: none;
+  font-family: var(--font); font-size: 11px; transition: all .15s;
+  flex-shrink: 0; white-space: nowrap; overflow: hidden;
 }
-.nl:hover { color: var(--text); }
+.nl .nl-label { display: none; }
+.nl:hover { color: var(--text); background: var(--surface2); }
+.nl:hover .nl-label { display: inline; }
 .nl.active { color: var(--text); background: var(--surface2); }
+.nl.active .nl-label { display: inline; }
+.nl svg { width: 14px; height: 14px; flex-shrink: 0; }
 .nav-search {
   background: var(--surface); border: 1px solid var(--border);
   color: var(--text); padding: 2px 8px; font-family: var(--font);
@@ -922,8 +927,8 @@ input[type=range] {
       onblur="setTimeout(closeNavDropdown, 200)"
       autocomplete="off">
     <div id="nav-search-dropdown" style="display:none;position:absolute;top:calc(100% + 4px);right:0;min-width:280px;background:var(--surface);border:1px solid var(--border2);border-radius:3px;box-shadow:0 8px 24px rgba(0,0,0,.3);z-index:500;max-height:320px;overflow-y:auto"></div>
-    <button class="nav-btn" onclick="G('profile')" style="display:flex;align-items:center;gap:5px"><span data-lucide="user" style="width:14px;height:14px"></span> Profile</button>
-    <button class="nav-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle theme"><span data-lucide="moon" style="width:14px;height:14px"></span></button>
+    <button class="nav-btn nl" onclick="G('profile')"><span data-lucide="user" style="width:14px;height:14px"></span><span class="nl-label">Profile</span></button>
+    <button class="nav-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle theme" style="padding:4px 8px;border-radius:4px;background:none;border:none;cursor:pointer;color:var(--muted)"><span data-lucide="moon" style="width:14px;height:14px"></span></button>
   </div>
 </nav>
 
@@ -1003,19 +1008,19 @@ input[type=range] {
         <div class="recent-card" onclick="launchAnalytics('NVDA')">
           <div class="rc-sym g">NVDA</div>
           <div class="rc-name">Nvidia Corporation</div>
-          <div class="rc-score">⭐ 4.57 / 5.0 — <span class="g">Strong Buy</span></div>
+          <div class="rc-score"><span data-lucide="star" style="width:11px;height:11px;fill:var(--yellow);stroke:var(--yellow);margin-right:3px;vertical-align:middle"></span>4.57 / 5.0 — <span class="g">Strong Buy</span></div>
           <div class="rc-time">2 hours ago</div>
         </div>
         <div class="recent-card" onclick="launchAnalytics('TSLA')">
           <div class="rc-sym y">TSLA</div>
           <div class="rc-name">Tesla Inc.</div>
-          <div class="rc-score">⭐ 3.10 / 5.0 — <span class="y">Hold</span></div>
+          <div class="rc-score"><span data-lucide="star" style="width:11px;height:11px;fill:var(--yellow);stroke:var(--yellow);margin-right:3px;vertical-align:middle"></span>3.10 / 5.0 — <span class="y">Hold</span></div>
           <div class="rc-time">1 day ago</div>
         </div>
         <div class="recent-card" onclick="launchAnalytics('AMD')">
           <div class="rc-sym">AMD</div>
           <div class="rc-name">Advanced Micro Devices</div>
-          <div class="rc-score">⭐ 3.82 / 5.0 — <span class="g">Buy</span></div>
+          <div class="rc-score"><span data-lucide="star" style="width:11px;height:11px;fill:var(--yellow);stroke:var(--yellow);margin-right:3px;vertical-align:middle"></span>3.82 / 5.0 — <span class="g">Buy</span></div>
           <div class="rc-time">3 days ago</div>
         </div>
       </div>
@@ -1026,7 +1031,7 @@ input[type=range] {
       <div class="start-sec-title">Sector quick-start</div>
       <div class="sector-grid">
         <div class="sector-card" onclick="launchAnalytics('NVDA')"><div class="sc-icon">💻</div><div class="sc-name">Tech &amp; Semiconductors</div><div class="sc-pe">Avg. P/E: 21.1×</div><div class="sc-top">Top: MSFT (4.85)</div></div>
-        <div class="sector-card" onclick="launchAnalytics('JPM')"><div class="sc-icon">🏦</div><div class="sc-name">Banking &amp; Financials</div><div class="sc-pe">Avg. P/E: 11.4×</div><div class="sc-top">Top: JPM (4.12)</div></div>
+        <div class="sector-card" onclick="launchAnalytics('JPM')"><div class="sc-icon"><span data-lucide="landmark" style="width:22px;height:22px;stroke:var(--blue)"></span></div><div class="sc-name">Banking &amp; Financials</div><div class="sc-pe">Avg. P/E: 11.4×</div><div class="sc-top">Top: JPM (4.12)</div></div>
         <div class="sector-card" onclick="launchAnalytics('TSLA')"><div class="sc-icon">🔋</div><div class="sc-name">Automotive &amp; EV</div><div class="sc-pe">Avg. P/E: 15.8×</div><div class="sc-top">Top: BYD (3.95)</div></div>
         <div class="sector-card" onclick="launchAnalytics('XOM')"><div class="sc-icon">🛢️</div><div class="sc-name">Energy</div><div class="sc-pe">Avg. P/E: 9.8×</div><div class="sc-top">Top: XOM (3.70)</div></div>
         <div class="sector-card" onclick="launchAnalytics('LLY')"><div class="sc-icon">💊</div><div class="sc-name">Healthcare &amp; Pharma</div><div class="sc-pe">Avg. P/E: 18.2×</div><div class="sc-top">Top: LLY (4.30)</div></div>
@@ -1043,7 +1048,7 @@ input[type=range] {
     <span class="ph-title">🌎 Markets</span>
     <span class="ph-tag">Global Overview</span>
     <div class="ph-actions">
-      <button class="act-btn" onclick="refreshMarkets()">↺ Refresh</button>
+      <button class="act-btn" onclick="refreshMarkets()"><span data-lucide="refresh-cw" style="width:13px;height:13px;margin-right:4px;vertical-align:middle"></span>Refresh</button>
     </div>
   </div>
 
@@ -1245,7 +1250,7 @@ input[type=range] {
 
     <!-- Analytics page header -->
     <div class="page-header">
-      <span class="ph-title">📈 Analytics</span>
+      <span class="ph-title">Analytics</span>
       <span class="ph-tag">Algorithmic Engine</span>
       <div class="ph-actions">
         <button class="act-btn" onclick="toggleTileManager()" style="display:flex;align-items:center;gap:5px"><span data-lucide="layout-grid" style="width:13px;height:13px"></span> Manage tiles</button>
@@ -1308,10 +1313,10 @@ input[type=range] {
   <!-- Macro Tabs — by asset class, not country -->
   <div class="asset-tabs" id="macro-tabs">
     <button class="asset-tab active" data-macro="overview"    onclick="setMacroTab('overview')">🌐 Overview</button>
-    <button class="asset-tab"        data-macro="equities"   onclick="setMacroTab('equities')">📈 Equities</button>
+    <button class="asset-tab"        data-macro="equities"   onclick="setMacroTab('equities')"><span data-lucide="trending-up" style="width:13px;height:13px;margin-right:4px;vertical-align:middle"></span>Equities</button>
     <button class="asset-tab"        data-macro="fx"         onclick="setMacroTab('fx')">💱 FX &amp; Rates</button>
     <button class="asset-tab"        data-macro="commodities" onclick="setMacroTab('commodities')">🛢️ Commodities</button>
-    <button class="asset-tab"        data-macro="centralbanks" onclick="setMacroTab('centralbanks')">🏦 Central Banks</button>
+    <button class="asset-tab"        data-macro="centralbanks" onclick="setMacroTab('centralbanks')"><span data-lucide="landmark" style="width:13px;height:13px;margin-right:4px;vertical-align:middle"></span>Central Banks</button>
   </div>
 
   <div id="macro-content"></div>
@@ -1343,7 +1348,7 @@ input[type=range] {
         <div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Slot 3 (optional)</div>
         <input class="nav-search" id="comp-slot-3" placeholder="INTC" value="INTC" style="width:90px;font-size:14px;padding:6px 10px;text-transform:uppercase">
       </div>
-      <button class="act-btn" style="padding:7px 16px;font-size:12px" onclick="launchComparison()">🚀 Launch Matrix</button>
+      <button class="act-btn" style="padding:7px 16px;font-size:12px" onclick="launchComparison()"><span data-lucide="rocket" style="width:13px;height:13px;margin-right:4px;vertical-align:middle"></span>Launch Matrix</button>
     </div>
 
     <div style="margin-bottom:24px" id="comp-suggested"></div>
@@ -1355,7 +1360,7 @@ input[type=range] {
         <div class="sector-card" onclick="launchComparison('TSLA','BYD','RIVN')"><div class="sc-icon">🚗</div><div class="sc-name">EV Showdown</div><div class="sc-pe">TSLA vs BYD vs RIVN</div><div class="sc-top">⚡ Margins matchup</div></div>
         <div class="sector-card" onclick="launchComparison('MSFT','AMZN','GOOGL')"><div class="sc-icon">☁️</div><div class="sc-name">Cloud Giants</div><div class="sc-pe">MSFT vs AMZN vs GOOGL</div><div class="sc-top">Infrastructure play</div></div>
         <div class="sector-card" onclick="launchComparison('V','MA','PYPL')"><div class="sc-icon">💳</div><div class="sc-name">Digital Payments</div><div class="sc-pe">V vs MA vs PYPL</div><div class="sc-top">Fee models compared</div></div>
-        <div class="sector-card" onclick="launchComparison('AAPL','SSNLF')"><div class="sc-icon">📱</div><div class="sc-name">Smartphone Rivals</div><div class="sc-pe">AAPL vs SSNLF</div><div class="sc-top">Brand vs margin</div></div>
+        <div class="sector-card" onclick="launchComparison('AAPL','SSNLF')"><div class="sc-icon" style="display:flex;align-items:center;justify-content:center"><span data-lucide="smartphone" style="width:22px;height:22px;stroke:var(--blue)"></span></div><div class="sc-name">Smartphone Rivals</div><div class="sc-pe">AAPL vs SSNLF</div><div class="sc-top">Brand vs margin</div></div>
         <div class="sector-card" onclick="launchComparison('KO','PEP')"><div class="sc-icon">🥤</div><div class="sc-name">Consumer Giants</div><div class="sc-pe">KO vs PEP</div><div class="sc-top">👑 Dividend duel</div></div>
       </div>
     </div>
@@ -1372,7 +1377,7 @@ input[type=range] {
   <!-- Matrix view -->
   <div id="comp-matrix-view" style="display:none;padding:0 20px 20px">
     <div class="comp-matrix" id="comp-matrix-table"></div>
-    <div style="margin-top:12px"><button class="act-btn" onclick="document.getElementById('comp-matrix-view').style.display='none';document.getElementById('comp-builder').style.display='block'">← Back to builder</button></div>
+    <div style="margin-top:12px"><button class="act-btn" onclick="document.getElementById('comp-matrix-view').style.display='none';document.getElementById('comp-builder').style.display='block'"><span data-lucide="arrow-left" style="width:12px;height:12px;margin-right:3px;vertical-align:middle"></span>Back</button></div>
   </div>
   <div class="footer-placeholder"></div>
 </div>
@@ -1409,7 +1414,7 @@ input[type=range] {
         </div>
       </div>
       <div style="padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:2px;font-size:11px;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:8px">
-        <span>📌</span><span>Holdings entered manually. <strong style="color:var(--soft)">Broker API sync</strong> (Trade Republic, Scalable, IBKR) coming in Phase 4 — <span class="lnk" onclick="G('profile');setProfileTab('account')">see roadmap</span>.</span>
+        <span><span data-lucide="info" style="width:13px;height:13px;stroke:var(--muted)"></span></span><span>Holdings entered manually. <strong style="color:var(--soft)">Broker API sync</strong> (Trade Republic, Scalable, IBKR) coming in Phase 4 — <span class="lnk" onclick="G('profile');setProfileTab('account')">see roadmap</span>.</span>
       </div>
       <table class="holdings-table">
         <thead><tr><th>Asset</th><th>Qty</th><th>Avg Buy</th><th>Current</th><th>Alloc.</th><th>Return</th><th>P&amp;L</th><th></th></tr></thead>
@@ -1478,25 +1483,25 @@ input[type=range] {
 
 <div class="page" id="page-profile">
   <div class="page-header">
-    <span class="ph-title">👤 Profile &amp; Settings</span>
+    <span class="ph-title"><span data-lucide="user" style="width:16px;height:16px;margin-right:6px;vertical-align:middle"></span>Profile &amp; Settings</span>
   </div>
   <div style="display:flex;min-height:calc(100vh - 100px)">
 
     <!-- Left sidebar tabs -->
     <div style="width:220px;flex-shrink:0;border-right:1px solid var(--border);padding:16px 0;background:var(--surface)">
       <div style="padding:0 16px;margin-bottom:20px">
-        <div style="width:44px;height:44px;background:var(--surface2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:8px">👤</div>
+        <div style="width:44px;height:44px;background:var(--surface2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:8px"><span data-lucide="user" style="width:28px;height:28px;stroke:var(--muted)"></span></div>
         <div style="font-size:13px;font-weight:700" id="pf-name-badge">Balanced Investor</div>
         <div style="font-size:10px;color:var(--muted);margin-top:2px">Free Personal Tier</div>
       </div>
       <nav id="profile-nav">
-        <button class="pf-tab active" data-tab="strategy" onclick="setProfileTab('strategy')">🎯 Strategy</button>
-        <button class="pf-tab" data-tab="weights" onclick="setProfileTab('weights')">⚖ Score Weights</button>
-        <button class="pf-tab" data-tab="appearance" onclick="setProfileTab('appearance')">🎨 Appearance</button>
-        <button class="pf-tab" data-tab="data" onclick="setProfileTab('data')">🔗 Data &amp; API</button>
-        <button class="pf-tab" data-tab="storage" onclick="setProfileTab('storage')">💾 Storage</button>
-        <button class="pf-tab" data-tab="account" onclick="setProfileTab('account')">📦 Account</button>
-        <button class="pf-tab" data-tab="roadmap" onclick="setProfileTab('roadmap')">🗺 Roadmap</button>
+        <button class="pf-tab active" data-tab="strategy" onclick="setProfileTab('strategy')"><span data-lucide="target" style="width:13px;height:13px;margin-right:5px;vertical-align:middle"></span>Strategy</button>
+        <button class="pf-tab" data-tab="weights" onclick="setProfileTab('weights')"><span data-lucide="sliders-horizontal" style="width:13px;height:13px;margin-right:5px;vertical-align:middle"></span>Score Weights</button>
+        <button class="pf-tab" data-tab="appearance" onclick="setProfileTab('appearance')"><span data-lucide="palette" style="width:13px;height:13px;margin-right:5px;vertical-align:middle"></span>Appearance</button>
+        <button class="pf-tab" data-tab="data" onclick="setProfileTab('data')"><span data-lucide="link" style="width:13px;height:13px;margin-right:5px;vertical-align:middle"></span>Data &amp; API</button>
+        <button class="pf-tab" data-tab="storage" onclick="setProfileTab('storage')"><span data-lucide="hard-drive" style="width:13px;height:13px;margin-right:5px;vertical-align:middle"></span>Storage</button>
+        <button class="pf-tab" data-tab="account" onclick="setProfileTab('account')"><span data-lucide="box" style="width:13px;height:13px;margin-right:5px;vertical-align:middle"></span>Account</button>
+        <button class="pf-tab" data-tab="roadmap" onclick="setProfileTab('roadmap')"><span data-lucide="map" style="width:13px;height:13px;margin-right:5px;vertical-align:middle"></span>Roadmap</button>
       </nav>
     </div>
 
@@ -1512,7 +1517,7 @@ input[type=range] {
         <div class="ps-row"><span class="ps-label">Risk tolerance</span><span class="ps-val" id="profile-risk-display">Balanced</span></div>
         <div class="ps-row"><span class="ps-label">Focus</span><span class="ps-val" id="profile-focus-display">Quality &amp; Growth</span></div>
         <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
-          <button class="act-btn" style="padding:7px 16px" onclick="startOnboarding()">🎯 Retake strategy quiz</button>
+          <button class="act-btn" style="padding:7px 16px" onclick="startOnboarding()"><span data-lucide="target" style="width:13px;height:13px;margin-right:4px;vertical-align:middle"></span>Retake strategy quiz</button>
           <button class="act-btn" style="padding:7px 16px;color:var(--muted)" onclick="resetToDemo()">↺ Reset to demo data</button>
         </div>
       </div>
@@ -1528,8 +1533,8 @@ input[type=range] {
         <div class="weight-row"><div class="weight-label"><span class="wl-name">Valuation / DCF</span><span class="wl-val" id="w-val-val">5%</span></div><input type="range" min="0" max="100" value="5" id="w-val" oninput="updateWeights()"></div>
         <div class="weight-total ok" id="weight-total-box" style="margin-top:14px"><span>Total weight</span><span id="weight-total-val" style="font-weight:700">100%</span></div>
         <div style="margin-top:10px;display:flex;gap:8px">
-          <button class="act-btn" onclick="resetWeights()">↺ Reset to default</button>
-          <button class="act-btn" onclick="normalizeWeights()">⚖ Normalize to 100%</button>
+          <button class="act-btn" onclick="resetWeights()"><span data-lucide="rotate-ccw" style="width:13px;height:13px;margin-right:4px;vertical-align:middle"></span>Reset</button>
+          <button class="act-btn" onclick="normalizeWeights()"><span data-lucide="scale" style="width:13px;height:13px;margin-right:4px;vertical-align:middle"></span>Normalize</button>
         </div>
       </div>
 
@@ -1587,7 +1592,7 @@ input[type=range] {
           <strong style="color:var(--soft)">OpenRouter free tier</strong> — supports Llama 3.1 8B, Mistral 7B &amp; others at zero cost. Get a free key at <span class="lnk" onclick="window.open('https://openrouter.ai','_blank')">openrouter.ai</span>. No credit card required.
         </div>
         <div style="margin-top:20px;padding:12px 14px;border:1px solid var(--border);border-radius:2px;background:var(--surface2);font-size:11px;color:var(--muted);line-height:1.7">
-          <strong style="color:var(--text)">🔌 Broker connection (Phase 4)</strong><br>
+          <strong style="color:var(--text)"><span data-lucide="plug" style="width:13px;height:13px;margin-right:4px;vertical-align:middle"></span>Broker connection (Phase 4)</strong><br>
           Direct sync with Trade Republic, Scalable Capital, Interactive Brokers will be available in Phase 4.
         </div>
       </div>
@@ -1598,7 +1603,7 @@ input[type=range] {
         <div style="font-size:12px;color:var(--muted);margin-bottom:20px">Your profile, watchlist, and trades are stored locally. No external server tracking is active.</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
           <button class="act-btn">📥 Export (JSON)</button>
-          <button class="act-btn">📤 Import backup</button>
+          <button class="act-btn"><span data-lucide="upload" style="width:13px;height:13px;margin-right:4px;vertical-align:middle"></span>Import backup</button>
           <button class="act-btn" style="color:var(--red)">🗑 Wipe cache</button>
         </div>
         <div class="ps-row"><span class="ps-label">Last export</span><span class="m">Never</span></div>
@@ -1638,7 +1643,7 @@ input[type=range] {
 <div id="tile-manager">
   <div class="tm-title">
     <span>Manage Tiles</span>
-    <span class="tm-close" onclick="toggleTileManager()">✕</span>
+    <span class="tm-close" onclick="toggleTileManager()"><span data-lucide="x" style="width:14px;height:14px"></span></span>
   </div>
   <div style="font-size:11px;color:var(--muted);margin-bottom:12px;line-height:1.5">Click to add or remove tiles. Drag the small tiles above to reorder them.</div>
   <div id="tm-list"></div>
@@ -1698,21 +1703,22 @@ function buildNav(current) {
   var links = document.getElementById('nav-links');
   links.innerHTML = '';
   var defs = [
-    { id:'home', label:'home' },
-    { id:'markets', label:'markets' },
-    { id:'macro', label:'macro' },
-    { id:'analytics', label:'analytics' },
-    { id:'comparison', label:'comparison' },
-    { id:'portfolio', label:'portfolio' },
-    { id:'ideas', label:'ideas 💡' },
+    { id:'home',       label:'Home',       icon:'home' },
+    { id:'markets',    label:'Markets',    icon:'bar-chart-2' },
+    { id:'macro',      label:'Macro',      icon:'globe' },
+    { id:'analytics',  label:'Analytics',  icon:'trending-up' },
+    { id:'comparison', label:'Compare',    icon:'git-compare' },
+    { id:'portfolio',  label:'Portfolio',  icon:'briefcase' },
+    { id:'ideas',      label:'Ideas',      icon:'lightbulb' },
   ];
   defs.forEach(function(d) {
     var btn = document.createElement('button');
     btn.className = 'nl' + (d.id === current ? ' active' : '');
-    btn.textContent = d.label;
+    btn.innerHTML = '<span data-lucide="' + d.icon + '"></span><span class="nl-label">' + d.label + '</span>';
     btn.onclick = function() { G(d.id); };
     links.appendChild(btn);
   });
+  setTimeout(function(){ if(typeof lucide!=='undefined') lucide.createIcons(); }, 10);
 }
 
 // ── NAV SEARCH — live dropdown ─────────────────────────────────────────
@@ -1991,7 +1997,7 @@ function renderPortfolio() {
         '<td class="' + cls + '">' + (ret >= 0 ? '+' : '') + (ret * 100).toFixed(1) + '%</td>' +
         '<td class="' + cls + '">' + (pnl >= 0 ? '+$' : '-$') + Math.abs(pnl).toFixed(0) + '</td>' +
         '<td style="white-space:nowrap">' +
-          '<button class="tile-btn" onclick="launchAnalytics(\'' + pos.ticker + '\')" title="Analyze">↗</button> ' +
+          '<button class="tile-btn" onclick="launchAnalytics(\'' + pos.ticker + '\')" title="Analyze" style="display:inline-flex;align-items:center;justify-content:center"><span data-lucide="arrow-up-right" style="width:12px;height:12px"></span></button> ' +
           '<button class="tile-btn" onclick="removePosition(\'' + pos.ticker + '\')" title="Remove" style="color:var(--red)">✕</button>' +
         '</td>' +
       '</tr>';
@@ -2653,7 +2659,7 @@ function updateTileManager() {
     item.innerHTML =
       '<span class="ti-icon">' + li(def.icon, 'tile-icon') + '</span>' +
       '<div class="ti-info"><div class="ti-name">' + def.name + '</div><div class="ti-desc">' + def.desc + '</div></div>' +
-      '<span class="ti-check">✓</span>';
+      '<span class="ti-check"><span data-lucide="check" style="width:12px;height:12px"></span></span>';
     item.onclick = function() {
       if (activeTiles.indexOf(id) > -1) {
         removeTile(id);
@@ -3268,7 +3274,7 @@ function buildEtfTile(body, ticker, y, tileName) {
 
   body.innerHTML =
     '<div style="padding:8px 12px;background:rgba(72,136,204,.08);border:1px solid rgba(72,136,204,.2);border-radius:2px;font-size:10px;color:var(--blue);margin-bottom:16px">' +
-      '📦 ETF — ' + safeStr(cat) + ' · No income statements (expected for funds)' +
+      '<span data-lucide="package" style="width:12px;height:12px;margin-right:4px;vertical-align:middle"></span>ETF — ' + safeStr(cat) + ' · No income statements (expected for funds)' +
     '</div>' +
     '<div class="stat-grid col4" style="margin-bottom:16px">' +
       stat('Price', '$' + price.toFixed(2)) +
@@ -3340,7 +3346,7 @@ function buildScorecard(body) {
       '</div>' +
       '<div style="font-size:11px;color:var(--muted);margin-bottom:10px">Everything below feeds into this score for your <strong style="color:var(--text)">' + currentProfile.name + '</strong> profile. ' + topFactor + ' (' + currentWeights[sortedFactors[0]] + '%) drives the result most.</div>' +
       '<div id="sc-rows">' + rowsHtml + '</div>' +
-      '<div class="explain-toggle" onclick="toggleExplain(this)">💡 Why this score? <span class="kbd">explain</span></div>' +
+      '<div class="explain-toggle" onclick="toggleExplain(this)"><span data-lucide="help-circle" style="width:12px;height:12px;margin-right:5px;vertical-align:middle"></span>Why this score? <span class="kbd">explain</span></div>' +
       '<div class="explain-box" id="explain-box">' + generateExplanations().map(function(e){ return '<div class="ex-row">▸ ' + e + '</div>'; }).join('') + '</div>' +
       '<div style="margin-top:10px;padding-top:8px;border-top:1px solid rgba(128,128,128,.1);font-size:9px;color:var(--muted)">Scoring methodology: <span class="lnk" onclick="openModal(\'methodology\')">see rules & sources →</span></div>';
 
@@ -3625,7 +3631,7 @@ function renderOnboardStep() {
     '<div class="ob-nav">' +
       '<div class="ob-dots">' + OB_QUESTIONS.map(function(_,i){ return '<div class="ob-dot' + (i===obStep?' active':'') + '"></div>'; }).join('') + '</div>' +
       '<div style="display:flex;gap:8px">' +
-        (obStep > 0 ? '<button class="act-btn" onclick="obStep--;renderOnboardStep()">← Back</button>' : '<button class="act-btn" onclick="closeOnboarding()">Skip</button>') +
+        (obStep > 0 ? '<button class="act-btn" onclick="obStep--;renderOnboardStep()"><span data-lucide="arrow-left" style="width:12px;height:12px;margin-right:3px;vertical-align:middle"></span>Back</button>' : '<button class="act-btn" onclick="closeOnboarding()">Skip</button>') +
         '<button class="act-btn" id="ob-next" ' + (obAnswers[obStep]?'':'disabled style="opacity:.4;pointer-events:none"') + ' onclick="obNext()">' + (obStep === OB_QUESTIONS.length-1 ? 'Finish →' : 'Next →') + '</button>' +
       '</div>' +
     '</div>';
@@ -3655,23 +3661,23 @@ function renderOnboardResult() {
   // Derive a plain-English archetype label
   var archetypes = {
     'Growth / Aggressive': { label:'High-Conviction Growth Investor', icon:'🚀', color:'var(--green)', desc:'You target companies with strong revenue acceleration and are comfortable riding short-term volatility for outsized long-term returns. Scorecard weights favour financial momentum and competitive moat.' },
-    'Growth / Balanced':   { label:'Growth-Oriented Investor',        icon:'📈', color:'var(--green)', desc:'You look for expanding businesses but balance that with quality. Scorecard puts more weight on financial ratios and moat than on pure safety.' },
-    'Growth / Conservative':{ label:'Quality Growth Investor',        icon:'🌱', color:'var(--green)', desc:'You want growth but with a margin of safety. Scorecard balances expansion signals with risk and ESG controls.' },
-    'Value / Aggressive':  { label:'Contrarian Value Investor',       icon:'🔍', color:'var(--yellow)', desc:'You hunt for discounted assets others have overlooked and are willing to bet big on a recovery. DCF valuation is heavily weighted.' },
+    'Growth / Balanced':   { label:'Growth-Oriented Investor',        icon:'trending-up', color:'var(--green)', desc:'You look for expanding businesses but balance that with quality. Scorecard puts more weight on financial ratios and moat than on pure safety.' },
+    'Growth / Conservative':{ label:'Quality Growth Investor',        icon:'sprout', color:'var(--green)', desc:'You want growth but with a margin of safety. Scorecard balances expansion signals with risk and ESG controls.' },
+    'Value / Aggressive':  { label:'Contrarian Value Investor',       icon:'search', color:'var(--yellow)', desc:'You hunt for discounted assets others have overlooked and are willing to bet big on a recovery. DCF valuation is heavily weighted.' },
     'Value / Balanced':    { label:'Classic Value Investor',          icon:'⚖️', color:'var(--yellow)', desc:'You prioritise buying below intrinsic value with a clear margin of safety. Valuation weight is significantly elevated.' },
     'Value / Conservative':{ label:'Defensive Value Investor',        icon:'🛡️', color:'var(--yellow)', desc:'Capital preservation is paramount. You look for cheap, stable, low-risk businesses with predictable cash flows.' },
-    'Quality / Aggressive':{ label:'Quality-Growth Hybrid',           icon:'💎', color:'var(--blue)', desc:'You seek businesses with strong moats and excellent management, but accept premium valuations if the quality justifies it.' },
+    'Quality / Aggressive':{ label:'Quality-Growth Hybrid',           icon:'gem', color:'var(--blue)', desc:'You seek businesses with strong moats and excellent management, but accept premium valuations if the quality justifies it.' },
     'Quality / Balanced':  { label:'Quality Compounder',              icon:'🏛️', color:'var(--blue)', desc:'ROIC, management quality, and durable moats drive your decisions. You hold for years and let compounding do the work.' },
-    'Quality / Conservative':{ label:'Conservative Quality Investor', icon:'🔒', color:'var(--blue)', desc:'Rock-solid businesses with clean balance sheets and reliable earnings. ESG and risk management are a priority.' },
-    'Income / Aggressive': { label:'High-Yield Income Investor',      icon:'💵', color:'var(--yellow)', desc:'You chase yield and are willing to take on more credit or business risk to achieve it. FCF yield is the key metric.' },
-    'Income / Balanced':   { label:'Dividend Growth Investor',        icon:'📅', color:'var(--yellow)', desc:'Reliable, growing dividends from quality businesses. You want income today and more income tomorrow.' },
-    'Income / Conservative':{ label:'Defensive Income Investor',      icon:'🏦', color:'var(--yellow)', desc:'Stable, predictable income above all. Low-volatility dividend payers and bonds are your natural habitat.' },
+    'Quality / Conservative':{ label:'Conservative Quality Investor', icon:'lock', color:'var(--blue)', desc:'Rock-solid businesses with clean balance sheets and reliable earnings. ESG and risk management are a priority.' },
+    'Income / Aggressive': { label:'High-Yield Income Investor',      icon:'dollar-sign', color:'var(--yellow)', desc:'You chase yield and are willing to take on more credit or business risk to achieve it. FCF yield is the key metric.' },
+    'Income / Balanced':   { label:'Dividend Growth Investor',        icon:'calendar', color:'var(--yellow)', desc:'Reliable, growing dividends from quality businesses. You want income today and more income tomorrow.' },
+    'Income / Conservative':{ label:'Defensive Income Investor',      icon:'landmark', color:'var(--yellow)', desc:'Stable, predictable income above all. Low-volatility dividend payers and bonds are your natural habitat.' },
   };
 
   var focusLabel = obAnswers[2].charAt(0).toUpperCase() + obAnswers[2].slice(1);
   var riskLabel = obAnswers[1].charAt(0).toUpperCase() + obAnswers[1].slice(1);
   var arcKey = focusLabel + ' / ' + riskLabel;
-  var arc = archetypes[arcKey] || { label: focusLabel + ' Investor', icon:'📊', color:'var(--text)', desc:'Your scorecard weights have been calibrated to your answers.' };
+  var arc = archetypes[arcKey] || { label: focusLabel + ' Investor', icon:'bar-chart-2', color:'var(--text)', desc:'Your scorecard weights have been calibrated to your answers.' };
 
   var horizonMap = { short:'Short-term (<1 yr)', medium:'Medium-term (1–5 yrs)', long:'Long-term (5+ yrs)' };
   var horizonLabel = horizonMap[obAnswers[0]] || obAnswers[0];
@@ -3679,7 +3685,7 @@ function renderOnboardResult() {
   box.innerHTML =
     '<div class="ob-step">Profile Ready</div>' +
     '<div style="text-align:center;padding:8px 0 16px">' +
-      '<div style="font-size:40px;margin-bottom:8px">' + arc.icon + '</div>' +
+      '<div style="margin-bottom:12px;display:flex;justify-content:center"><span data-lucide="' + arc.icon + '" style="width:40px;height:40px;stroke:' + arc.color + '"></span></div>' +
       '<div style="font-size:20px;font-weight:800;color:' + arc.color + ';margin-bottom:6px">' + arc.label + '</div>' +
       '<div style="font-size:12px;color:var(--muted);line-height:1.6;max-width:340px;margin:0 auto">' + arc.desc + '</div>' +
     '</div>' +
@@ -4490,7 +4496,7 @@ function buildInsider(body) {
     if (ticker !== currentTicker) return;
     if (!cik) {
       body.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted);font-size:11px">' +
-        '<div style="font-size:28px;margin-bottom:8px">🌍</div>' +
+        '<div style="font-size:28px;margin-bottom:8px"><span data-lucide="globe" style="width:36px;height:36px;stroke:var(--muted)"></span></div>' +
         '<div style="font-weight:600;margin-bottom:6px">No SEC EDGAR data for ' + safeStr(ticker) + '</div>' +
         '<div style="font-size:10px;line-height:1.6">Insider transactions are sourced from SEC Form 4 filings,<br>which only apply to US-listed companies.</div>' +
         '</div>';
@@ -4734,7 +4740,7 @@ function buildPeriod(body) {
     var cf  = y.cashflows        || [];
 
     if (!inc.length) {
-      body.innerHTML = '<div style="padding:16px;font-size:12px;color:var(--muted);line-height:1.7"><div style="font-size:28px;margin-bottom:8px">📊</div>No historical statements available for <strong>' + safeStr(ticker) + '</strong> via Yahoo Finance.</div>';
+      body.innerHTML = '<div style="padding:16px;font-size:12px;color:var(--muted);line-height:1.7"><div style="font-size:28px;margin-bottom:8px"><span data-lucide="bar-chart-2" style="width:36px;height:36px;stroke:var(--muted)"></span></div>No historical statements available for <strong>' + safeStr(ticker) + '</strong> via Yahoo Finance.</div>';
       updateDockTab('period', '—', 'No data', 'm');
       return;
     }
@@ -4773,7 +4779,7 @@ function buildPeriod(body) {
       '</div>' +
       '<div class="fin-tabs">' +
         '<button class="ftab active" onclick="switchFinTab(this,\'inc\')">📄 Income</button>' +
-        '<button class="ftab" onclick="switchFinTab(this,\'bal\')">🏦 Balance Sheet</button>' +
+        '<button class="ftab" onclick="switchFinTab(this,\'bal\')"><span data-lucide="landmark" style="width:13px;height:13px;margin-right:4px;vertical-align:middle"></span>Balance Sheet</button>' +
         '<button class="ftab" onclick="switchFinTab(this,\'cf\')">💸 Cash Flow</button>' +
       '</div>' +
       '<div style="overflow-x:auto">' +
@@ -4934,8 +4940,8 @@ function buildAI(body) {
   body.style.position='relative'; body.insertAdjacentHTML('beforeend','<button class="act-btn explain-btn" onclick="showExplainBox(this,\'ai\')"></button>');
   body.innerHTML =
     '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px">' +
-      '<div style="font-size:16px;font-weight:700">🤖 AI Insights — Llama 3.3 70B</div>' +
-      '<button class="act-btn" onclick="runGroqAnalysis()" id="ai-refresh-btn">↺ Re-analyze</button>' +
+      '<div style="font-size:16px;font-weight:700"><span data-lucide="bot" style="width:15px;height:15px;margin-right:6px;vertical-align:middle"></span>AI Insights — Llama 3.3 70B</div>' +
+      '<button class="act-btn" onclick="runGroqAnalysis()" id="ai-refresh-btn"><span data-lucide="refresh-cw" style="width:13px;height:13px;margin-right:4px;vertical-align:middle"></span>Re-analyze</button>' +
     '</div>' +
     '<div id="ai-loading" class="ai-loading"><div class="ai-spinner"></div><span>Analyzing ' + safeStr(currentTicker) + ' with your ' + currentProfile.name + ' strategy profile…</span></div>' +
     '<div id="ai-output" style="display:none"><div id="ai-content"></div></div>' +
@@ -5217,7 +5223,7 @@ function renderCompMatrix(tickers) {
     var bi=bestIdx(vals,higher);
     return '<tr><td class="m" style="color:var(--muted)">'+label+'</td>'+
       vals.map(function(v,i){
-        return '<td>'+(i===bi&&bi>=0?'<span class="comp-badge g">'+(higher?'🏆':'💰')+' Best</span>':'<span class="m">—</span>')+'</td>';
+        return '<td>'+(i===bi&&bi>=0?'<span class="comp-badge g">'+(higher?'<span data-lucide="award" style="width:11px;height:11px;margin-right:2px;vertical-align:middle"></span>':'<span data-lucide="trending-up" style="width:11px;height:11px;margin-right:2px;vertical-align:middle"></span>')+' Best</span>':'<span class="m">—</span>')+'</td>';
       }).join('')+'</tr>';
   }
   function col(i){return['#1db954','#f0a32a','#4888cc'][i%3];}
@@ -5231,22 +5237,22 @@ function renderCompMatrix(tickers) {
     compRow('Financial Ratios (65%)',data.map(function(d){return d.fRat;}),true)+
     compRow('Management Quality',data.map(function(d){return d.mgmt;}),true)+
 
-    '<tr class="section-head"><td colspan="'+colSpan+'">🧮 Valuation</td></tr>'+
+    '<tr class="section-head"><td colspan="'+colSpan+'"><span data-lucide="calculator" style="width:12px;height:12px;margin-right:4px;vertical-align:middle"></span>Valuation</td></tr>'+
     '<tr><td class="m">Current Price</td>'+data.map(function(d){return '<td><strong>'+d.price+'</strong></td>';}).join('')+'</tr>'+
     '<tr><td class="m">DCF Fair Value<span style="font-size:9px;color:var(--muted);font-family:var(--font)"> · intrinsic value estimate</span></td>'+data.map(function(d){return '<td>'+d.fv+'</td>';}).join('')+'</tr>'+
     '<tr><td class="m">Margin of Safety</td>'+data.map(function(d){return '<td class="'+d.moscls+'">'+d.mos+' ('+d.mosTxt+')</td>';}).join('')+'</tr>'+
 
-    '<tr class="section-head"><td colspan="'+colSpan+'">📊 Key Metrics</td></tr>'+
+    '<tr class="section-head"><td colspan="'+colSpan+'"><span data-lucide="bar-chart-2" style="width:12px;height:12px;margin-right:4px;vertical-align:middle"></span>Key Metrics</td></tr>'+
     compRow('P/E Ratio',data.map(function(d){return d.pe;}),false,'Lower P/E = cheaper relative to earnings')+
     compRow('Gross Margin',data.map(function(d){return d.gm;}),true,'Higher gross margin = more pricing power')+
     compRow('Revenue Growth YoY',data.map(function(d){return d.rev;}),true)+
 
-    '<tr class="section-head"><td colspan="'+colSpan+'">📈 Technical &amp; Risk</td></tr>'+
+    '<tr class="section-head"><td colspan="'+colSpan+'"><span data-lucide="activity" style="width:12px;height:12px;margin-right:4px;vertical-align:middle"></span>Technical &amp; Risk</td></tr>'+
     '<tr><td class="m">vs. SMA 200 <span class="tip">ⓘ<span class="tipbox">Above SMA 200 = long-term uptrend. Below = downtrend.</span></span></td>'+
       data.map(function(d){return '<td class="'+d.smacls+'">'+d.sma+' — '+d.smaTxt+'</td>';}).join('')+'</tr>'+
     compRow('52W Beta',data.map(function(d){return d.beta;}),false,'Lower beta = less volatile vs. S&P 500')+
 
-    '<tr class="section-head"><td colspan="'+colSpan+'">🏆 Winner Highlights</td></tr>'+
+    '<tr class="section-head"><td colspan="'+colSpan+'"><span data-lucide="award" style="width:12px;height:12px;margin-right:4px;vertical-align:middle"></span>Winner Highlights</td></tr>'+
     winner(data.map(function(d){return d.score;}),true,'Best algorithmic score')+
     winner(data.map(function(d){return d.pe;}),false,'Best value (lowest P/E)')+
     winner(data.map(function(d){return d.rev;}),true,'Highest revenue growth')+
@@ -6373,7 +6379,7 @@ function renderIdeas(data) {
   var risksEl  = document.getElementById('ideas-risks');
   if (loadEl)  loadEl.style.display = 'none';
 
-  if (macroEl) macroEl.textContent = '📊 Macro: ' + (data.macro_context || '');
+  if (macroEl) macroEl.textContent = '<span data-lucide="globe" style="width:12px;height:12px;margin-right:4px;vertical-align:middle"></span>Macro: ' + (data.macro_context || '');
 
   if (cardsEl) {
     cardsEl.innerHTML = (data.recommendations || []).map(function(r) {
@@ -7111,14 +7117,14 @@ function fetchYahooNews(ticker, container, exchange) {
         <div id="screen-footer" style="margin-top:12px;font-size:10px;color:var(--muted)"></div>
       </div>
       <div id="screen-empty" style="padding:40px 20px;text-align:center;color:var(--muted)">
-        <div style="font-size:32px;margin-bottom:12px">📊</div>
+        <div style="margin-bottom:12px"><span data-lucide="filter" style="width:40px;height:40px;stroke:var(--muted)"></span></div>
         <div style="font-size:14px;font-weight:600;margin-bottom:8px">Algorithmic Stock Screen</div>
         <div style="font-size:12px;line-height:1.7;max-width:420px;margin:0 auto">
           Click <strong>Screen Stocks</strong> to scan ~300 global quality stocks and show only those
           that match your <span class="lnk" onclick="G('profile')">strategy profile</span> and
           complement your <span class="lnk" onclick="G('portfolio')">portfolio</span>.
         </div>
-        <button class="act-btn" style="margin-top:16px;padding:8px 20px" onclick="runAlgoScreen()">📊 Run Screen Now</button>
+        <button class="act-btn" style="margin-top:16px;padding:8px 20px" onclick="runAlgoScreen()"><span data-lucide="filter" style="width:13px;height:13px;margin-right:4px;vertical-align:middle"></span>Run Screen Now</button>
       </div>
     </div>
 
