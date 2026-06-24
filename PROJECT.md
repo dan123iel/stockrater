@@ -1,4 +1,4 @@
-# futara — Algorithmic Investment Intelligence
+# pondex — Algorithmic Investment Intelligence
 
 **Live:** https://dan123iel.github.io/stockrater/
 **Repo:** https://github.com/dan123iel/stockrater
@@ -9,10 +9,11 @@
 
 > „Ich will wissen ob diese Aktie zu meiner Strategie passt — algorithmisch, transparent, ohne Interessenskonflikt."
 
-futara ist eine algorithmische Investment-Plattform die:
-- Aktien nach objektiven Kennzahlen bewertet (Scorecard)
+pondex ist eine algorithmische Investment-Plattform die:
+- Aktien **weltweit** nach objektiven Kennzahlen bewertet (Scorecard)
 - Entscheidungen auf die persönliche Anlagestrategie abstimmt
 - Eigene Trades analysiert und bewertet
+- Aktien-Empfehlungen basierend auf Profil + Portfolio generiert
 - Eine Alternative zu Bankberatern und meinungsbasierten Quellen darstellt
 
 Zielgruppe: Privatanleger die selbst investieren und fundierte, nachvollziehbare Entscheidungsunterstützung wollen — kein Bloomberg-Abo, kein Youtuber-Opinion.
@@ -21,111 +22,106 @@ Zielgruppe: Privatanleger die selbst investieren und fundierte, nachvollziehbare
 
 ## Produktphasen
 
-### Phase 1 — MVP (aktuell)
-Serverlose Single-Page-App, Design von Logik getrennt.
-- Ticker-Suche + algorithmisches Scoring
-- DCF-Modell mit Stresstest
-- Vergleich (Peer-to-Peer Matrix)
-- Portfolio (manuell)
-- Live-Ticker (Finnhub WebSocket)
-- News (Finnhub REST)
+### Phase 1 — MVP ✅ DONE
+Serverlose Single-Page-App, globale Aktienabdeckung, keine kostenpflichtigen APIs.
+- ✅ Ticker-Suche (Name + Symbol) — weltweit über LOCAL_TICKER_MAP + Massive API
+- ✅ Algorithmisches Scoring (5 Faktoren, profilgewichtet)
+- ✅ DCF-Modell mit Stresstest (3 Szenarien)
+- ✅ 12 Analytics-Tiles: Scorecard, Chart, Valuation, News, Insiders, Dividends, Financials, Analysts, AI Insights, Company, Ownership, Stresstest
+- ✅ Live-Ticker-Band (Yahoo Finance, 60s Refresh)
+- ✅ Vergleich (Peer-to-Peer Matrix)
+- ✅ Portfolio (manuell)
+- ✅ AI Insights via Groq (Llama 3.3 70B, kein User-Key nötig)
+- ✅ Globale Abdeckung: US, Europa, Asien, Emerging Markets (Yahoo Finance)
 
-### Phase 2 — Strategie-Profil
-- Onboarding: Anlagehorizont, Risikotoleranz, Fokus (Value/Growth/Dividende)
-- Score wird relativ zur Strategie berechnet, nicht absolut
-- "Warum 4.2?" — Erklärung jeder Score-Komponente
+**Datenquellen (alle kostenlos):**
+- Yahoo Finance — Financials, Chart, News, alle globalen Aktien
+- Massive (Polygon) — Ticker-Details, Dividenden, Branding/Logo
+- SEC EDGAR — Insider-Trades (Form 4), EPS-History (US-Aktien)
+- Groq / Llama 3.3 70B — AI Insights (Worker Secret)
+- Cloudflare Worker — Proxy für alle APIs (kein Key im Browser)
+
+---
+
+### Phase 2 — Portfolio + Strategie-Empfehlungen 🚧 IN PROGRESS
+
+#### 2a — Portfolio-Verwaltung ✅ DONE
+- ✅ Portfolio-Eingabe: Ticker + Anzahl Shares + Kaufpreis (localStorage)
+- ✅ Live P&L: aktueller Preis via Yahoo Chart
+- ✅ Remove position
+- ❌ CSV-Import (Broker-Export) — Phase 3
+- ❌ Sektor/Region-Gewichtung + Donut-Chart mit echten Daten
+
+#### 2b — Strategie-basierte Empfehlungen ✅ DONE (Ideas page)
+- ✅ "ideas 💡" Seite in Navigation
+- ✅ AI generiert 6 Aktien-Empfehlungen basierend auf: Profil + Portfolio + Makro
+- ✅ Mindestens 1 internationale Aktie, 2 verschiedene Sektoren
+- ✅ Makro-Context (Zinsen, Regime) fließt in Prompt ein
+- ✅ Klick auf Karte öffnet direkt Analytics für die Aktie
+
+#### 2c — AI Chat ✅ DONE
+- ✅ Persistent Chat auf Ideas-Seite (Gesprächsverlauf bleibt in Session)
+- ✅ Context-aware: kennt Profil, aktuell betrachtete Aktie, Portfolio
+- ✅ "Compare NVDA and AMD for my Growth profile" funktioniert
+- ✅ Letzte 10 Exchanges als Kontext übergeben (20 Messages)
+
+#### 2d — Strategie-Profil Persistenz ✅ DONE
+- ✅ Profil in localStorage — überlebt Seitenreload
+- ✅ Onboarding nur für neue Nutzer
+- ✅ Profile-aware Scoring-Thresholds
+
+---
 
 ### Phase 3 — Trade-Journal
-- Manuelle Trade-Eingabe
+- Manuelle Trade-Eingabe mit Notizen ("Warum habe ich das gekauft?")
 - CSV-Import (Broker-Export)
-- Performance-Analyse: War meine Entscheidung gut?
-- Vergleich Entscheidungszeitpunkt vs. heutiger Score
+- Performance-Analyse: War meine Entscheidung gut? (Score zum Kaufzeitpunkt vs. heute)
+- Vergleich Entscheidungszeitpunkt vs. heutigem Score
+
+---
 
 ### Phase 4 — Broker-API
 - Trade Republic (inoffizielle WebSocket-API)
 - Scalable Capital (API-Beta)
+- IBKR (Interactive Brokers API)
 - Automatische Portfolio-Synchronisation
+
+---
 
 ### Phase 5 — Produkt / Multi-User
 - Auth (Supabase oder Clerk)
 - PostgreSQL-Datenbank (Supabase)
 - Nutzer-Profile mit eigener Strategie + Portfolio
 - Abo-Modell
+- Mobile App (PWA oder React Native)
+
+### Phase 6 — Mobile Optimierung 📱
+- Responsive Layout für Smartphones (Dock-Tabs scrollbar, Charts touch-optimiert)
+- PWA (Progressive Web App) — Add to Home Screen, Offline-Cache
+- Touch Gestures für Chart-Zoom
 
 ---
 
-## Architektur (aktuell)
+## Architektur (aktuell — Phase 1)
 
 ```
-Browser
-  └── index.html          ← Design (HTML + CSS only, austauschbar)
-  └── src/js/app.js       ← Logik (komplett design-unabhängig)
-  └── worker.js           ← Cloudflare Worker (Yahoo Finance Proxy)
+Browser (pondex.html)
+  └── Alle Logik in einer Datei (kein Build-System)
+  └── localStorage: Portfolio, Watchlist, Trades, Theme, Strategie-Profil
 
-Externe APIs
-  └── Finnhub             ← Live-Preise (WebSocket) + News (REST)
-  └── FMP                 ← Fundamentaldaten (optional)
-  └── Yahoo via Worker    ← Summary, Chart, Historische Daten
+Cloudflare Worker (trading.d-lenz-contact.workers.dev)
+  ├── /yahoo/summary/{ticker}     ← Financials, Margins, P/E (global, kein Key)
+  ├── /yahoo/chart/{ticker}       ← OHLC Chart-Daten (global, kein Key)
+  ├── /yahoo-news?q={ticker}      ← News (global, kein Key)
+  ├── /massive/{endpoint}         ← Ticker-Details, Dividenden, Logos (MASSIVE_KEY)
+  ├── /edgar/{path}               ← Insider-Trades, EPS (US, kein Key)
+  ├── /branding/{path}            ← Firmen-Logos (MASSIVE_KEY)
+  └── /ai/groq                    ← AI Insights Proxy (GROQ_KEY)
+
+Worker Secrets (Cloudflare Dashboard):
+  MASSIVE_KEY  — Massive/Polygon API Key
+  GROQ_KEY     — Groq API Key (Llama 3.3 70B)
 ```
-
-**Design wechseln:** `index.html` austauschen, `app.js` bleibt unverändert.
-Alle Designs liegen in `test2/`, `test3/`, `test4/` als Referenz.
-
----
-
-## Dateistruktur
-
-```
-index.html          ← Aktives Design (HTML + CSS)
-src/js/app.js       ← Gesamte Anwendungslogik
-worker.js           ← Cloudflare Worker (Backend-Proxy)
-test/index.html     ← Design V0 — Space Grotesk / Brutalist
-test2/index.html    ← Design V1 — Dark Purple (Syne)
-test3/index.html    ← Design V2 — Editorial Beige (DM Serif Display)
-test4/index.html    ← Design V3 — Minimalist Air (Cormorant Garamond)
-public/robots.txt   ← SEO
-sitemap.xml         ← SEO
-PROJECT.md          ← dieses Dokument
-README.md           ← öffentliche Beschreibung
-```
-
----
-
-## app.js — Logik-Übersicht
-
-| Bereich | Funktion |
-|---------|----------|
-| Navigation | `showPage()` |
-| Ticker-Tape | `buildTape()`, `connectFinnhubWS()`, `renderTape()` |
-| Market Pulse | `buildMarketPulse()` |
-| News | `loadMarketsNews()`, `loadTickerNews()`, `openNewsModal()` |
-| Suche | `toggleNavSearch()`, `navFilterSearch()`, `renderNavDropdown()` |
-| Analytics | `openTicker()`, `loadTickerData()`, `updateAnalyticsUI()` |
-| Chart | `drawPriceChart()` |
-| DCF | `updateDCF()` |
-| Comparison | `launchComparison()`, `loadComparison()` |
-| Theme | `setTheme()`, `toggleTheme()` |
-| Init | `init()` — läuft beim Start |
-
----
-
-## API-Keys & Konfiguration
-
-| Service | Key/URL | Wo |
-|---------|---------|-----|
-| Finnhub | `d8k2199r01qjgd6qgrugd8k2199r01qjgd6qgrv0` | `app.js` FINNHUB_KEY |
-| Yahoo Worker | `https://fragrant-wave-6bd7.d-lenz-contact.workers.dev` | localStorage `sr_workerurl` |
-| FMP (optional) | eigener Key | localStorage `fmpApiKey` |
-
----
-
-## Worker-Endpunkte
-
-| Endpunkt | Liefert |
-|----------|---------|
-| `/yahoo/summary/{TICKER}` | Fundamentals, Ratios, Financials |
-| `/yahoo/chart/{TICKER}?range={range}` | OHLC-Kursdaten |
-| `/yahoo/search` | **disabled** — nicht aufrufen |
 
 ---
 
@@ -133,51 +129,54 @@ README.md           ← öffentliche Beschreibung
 
 | Key | Inhalt |
 |-----|--------|
-| `sr_portfolio` | Positionen |
+| `pondex_strategy` | Strategie-Profil + Weights (JSON) |
+| `pondex_theme` | `light` / `dark` |
+| `pondex_groq_key` | Groq Key (optional, falls eigener Key) |
+| `sr_portfolio` | Portfolio-Positionen |
 | `sr_watchlist` | Watchlist |
 | `sr_trades` | Trade-Journal |
-| `sr_cache` | API-Cache (1h TTL) |
-| `sr_workerurl` | Worker-URL (überschreibbar) |
-| `fmpApiKey` | FMP API-Key |
-| `theme` | `light` / `dark` |
 
 ---
 
-## Scoring-Logik (Phase 1)
+## Scoring-Logik (Phase 1 + Phase 2a)
 
-Aktuell: 10-Faktoren gewichtet, absolut.
+5 Faktoren, profilgewichtet:
 
 ```
-Financial Ratios    65%  — P/E, Margins, Growth, EV/EBITDA
-Management          12%  — Insider-Aktivität, Vergütung
-Moat / Competitive  10%  — Marktposition, Pricing Power
-ESG & Risk           8%  — Beta, Volatilität, Governance
-DCF / Valuation      5%  — Margin of Safety
-```
+Financial Ratios    ~50-75%  — P/E*, Margins, Growth*, EV/EBITDA, FCF-Yield*
+Management          ~10-22%  — Insider-Aktivität (Form 4, US only)
+Moat / Competitive  ~10-15%  — Gross Margin Level + Trend
+ESG & Risk          ~5-13%   — Beta
+DCF / Valuation      ~5-20%  — P/E*, EV/EBITDA
 
-**Geplant Phase 2:** Score relativ zur Anlagestrategie des Nutzers.
-Ein P/E von 30x ist für einen Growth-Investor anders zu werten als für einen Value-Investor.
+* Thresholds passen sich dem Profil an:
+  Growth:  P/E excellent=40x, revenueGrowth excellent=30%
+  Value:   P/E excellent=12x, revenueGrowth excellent=10%
+  Income:  FCF-Yield excellent=7%
+  Balanced: Defaults (P/E 15x, growth 20%)
+```
 
 ---
 
-## Verbesserungspotenzial (Backlog)
+## Globale Aktienabdeckung
 
-- [ ] Strategie-Profil beim Onboarding (Horizont, Risiko, Fokus)
-- [ ] Score-Erklärung: "Warum zieht Valuation den Score runter?"
-- [ ] Trade-Journal mit Performance-Rückblick
-- [ ] CSV-Import (Broker-Export)
-- [ ] Strategie-gefilterter Score
-- [ ] Alerts (Kurs fällt unter SMA200, Score-Änderung)
-- [ ] Watchlist mit Benachrichtigungen
-- [ ] Supabase-Auth für Multi-User
-- [ ] Trade Republic / Scalable API
+**Weltweit funktioniert:** Jede Aktie die auf Yahoo Finance gelistet ist — das sind 70.000+ Ticker weltweit.
+
+**Einschränkungen:**
+- Insider-Trades (EDGAR Form 4): nur US-Aktien
+- EPS-History (EDGAR XBRL): nur US-Aktien (GAAP)
+- Dividenden (Massive): hauptsächlich US + große ADRs
+- Suche nach Name: LOCAL_TICKER_MAP (~150 bekannte Aktien) + Massive API (rate-limited)
+- Direkteingabe Ticker: immer 100% zuverlässig weltweit
+
+**Getestet ✅ (24.06.2026):** 60 Aktien aus US, Deutschland, Niederlande, Dänemark, Schweiz, Frankreich, UK, Spanien, Japan, Taiwan, China, Korea, Indien, Brasilien, Australien — alle pass.
 
 ---
 
 ## Regeln
 
-- Design und Logik sind getrennt — nie JS in `index.html` schreiben
-- `app.js` ist die einzige Logik-Datei
-- Worker-URL nie hardcoden — immer über localStorage
-- Keine farbigen Tabellen-Hintergründe — nur Text/Bars farbig
-- Auto-push Hook aktiv — jede Dateiänderung wird automatisch committed
+- Eine Datei — kein Build-System, kein npm
+- Keine kostenpflichtigen APIs (alles free-tier oder Worker-proxied)
+- Alle API-Keys server-seitig (Cloudflare Worker Secrets) — nie im Browser
+- Yahoo Finance für globale Finanz-Daten (kein Key, kein Limit)
+- Massive nur für: Ticker-Details, Dividenden, Logos (5 req/min free tier — cachen!)
