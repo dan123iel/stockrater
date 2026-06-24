@@ -2150,34 +2150,8 @@ var NAME_TO_TICKER = {
   'jp morgan':'JPM', 'exxon':'XOM', 'eli lilly':'LLY',
   'salesforce':'CRM', 'oracle':'ORCL', 'qualcomm':'QCOM', 'disney':'DIS',
   'netflix':'NFLX', 'uber':'UBER', 'spotify':'SPOT', 'shopify':'SHOP',
-  // European — use FMP symbol that has full coverage
-  // Note: For European stocks always use the primary exchange symbol FMP uses
-  // Allianz SE: ALVG on FMP (ALV is Autoliv on NYSE — different company!)
-  'allianz':'ALV.DE',
-  'siemens':'SIEGY',        // Siemens AG ADR on OTC — has FMP coverage
-  'volkswagen':'VWAGY',     // VW ADR
-  'bmw':'BMWKY',            // BMW ADR
-  'bayer':'BAYRY',          // Bayer ADR
-  'basf':'BASFY',           // BASF ADR
-  'mercedes':'MBG',
-  'sap':'SAP',              // SAP trades on NYSE as SAP
-  'adidas':'ADDYY',         // Adidas ADR
-  'airbus':'EADSY',         // Airbus ADR
-  'lvmh':'LVMHF',           // LVMH OTC
-  'nestle':'NSRGY',         // Nestlé ADR
-  'roche':'RHHBY',          // Roche ADR
-  'novartis':'NVS',         // Novartis NYSE
-  'ubs':'UBS',              // UBS NYSE
-  'credit suisse':'CS',
-  'hsbc':'HSBC',            // HSBC NYSE
-  'shell':'SHEL',           // Shell NYSE
-  'bp':'BP',                // BP NYSE
-  'astrazeneca':'AZN',      // AstraZeneca NASDAQ
-  'unilever':'UL',          // Unilever NYSE
-  'totalenergies':'TTE',    // TotalEnergies NYSE
-  'bnp paribas':'BNPQY',
-  'deutsche bank':'DB',     // Deutsche Bank NYSE
-  'porsche':'POAHY'
+  // European stocks — kept here for backward compat, duplicates resolved in map below
+  'porsche':'P911.DE','credit suisse':null,
 };
 
 // Detect if input looks like a real ticker symbol (not a company name)
@@ -2222,30 +2196,46 @@ var LOCAL_TICKER_MAP = {
   'mcdonalds':'MCD','coca cola':'KO','pepsi':'PEP','pepsico':'PEP','starbucks':'SBUX',
   'nike':'NKE','boeing':'BA','caterpillar':'CAT','deere':'DE','honeywell':'HON',
   'exxon':'XOM','chevron':'CVX','lockheed':'LMT','northrop':'NOC',
-  // European — Germany
-  'sap':'SAP','siemens':'SIEGY','volkswagen':'VWAGY','bmw':'BMWKY','mercedes':'MBGAF',
-  'bayer':'BAYRY','basf':'BASFY','adidas':'ADDYY','airbus':'EADSY',
-  'dhl':'DHL.DE','deutsche post':'DHL.DE','deutsche telekom':'DTEGY',
-  'allianz':'ALV.DE','deutsche bank':'DB','commerzbank':'CRZBY',
+  // European — Germany (native Frankfurt .DE tickers — best data quality)
+  'sap':'SAP',
+  'siemens':'SIE.DE','volkswagen':'VOW3.DE','vw':'VOW3.DE','bmw':'BMW.DE',
+  'mercedes':'MBG.DE','mercedes-benz':'MBG.DE','daimler':'MBG.DE',
+  'bayer':'BAYN.DE','basf':'BAS.DE','adidas':'ADS.DE','airbus':'AIR.DE',
+  'dhl':'DHL.DE','deutsche post':'DHL.DE','deutsche telekom':'DTE.DE','telekom':'DTE.DE',
+  'allianz':'ALV.DE','deutsche bank':'DB','commerzbank':'CBK.DE',
+  'munich re':'MUV2.DE','munichre':'MUV2.DE','munchener ruck':'MUV2.DE',
+  'infineon':'IFX.DE','henkel':'HEN3.DE','rwe':'RWE.DE','eon':'EOAN.DE','e.on':'EOAN.DE',
+  'porsche':'P911.DE','volkswagen ag':'VOW3.DE','porsche ag':'P911.DE',
+  'fresenius':'FRE.DE','continental':'CON.DE','mtu aero':'MTX.DE',
+  'brenntag':'BNR.DE','hannover re':'HNR1.DE','deutsche boerse':'DB1.DE',
+  'vonovia':'VNA.DE','heidelberg':'HEI.DE','puma':'PUM.DE',
   // European — Netherlands/Belgium
-  'asml':'ASML','ing':'ING','philips':'PHG','heineken':'HINKF',
-  'stellantis':'STLA','wolters kluwer':'WKL.AS',
-  // European — Switzerland
-  'nestle':'NSRGY','roche':'RHHBY','novartis':'NVS','ubs':'UBS',
-  'zurich insurance':'ZURVY','abb':'ABBNY','sika':'SXYAY',
+  'asml':'ASML','ing':'ING','philips':'PHG','heineken':'HEIA.AS',
+  'stellantis':'STLA','wolters kluwer':'WKL.AS','akzonobel':'AKZA.AS',
+  'arcelormittal':'MT','ab inbev':'BUD','anheuser busch':'BUD',
+  // European — Switzerland (native .SW tickers where available, else ADR)
+  'nestle':'NESN.SW','roche':'ROG.SW','novartis':'NOVN.SW','ubs':'UBS',
+  'zurich insurance':'ZURN.SW','abb':'ABBN.SW','sika':'SIKA.SW',
+  'richemont':'CFR.SW','lonza':'LONN.SW','partners group':'PGHN.SW',
   // European — France
   'lvmh':'LVMHF','louis vuitton':'LVMHF','totalenergies':'TTE','sanofi':'SNY',
   'bnp paribas':'BNPQY','axa':'AXAHY','loreal':'LRLCY','hermes':'HESAY',
+  'airbus france':'AIR.DE','michelin':'MGDDY','danone':'DANOY',
+  'kering':'PPRUY','saint-gobain':'CODGF','schneider':'SBGSY',
   // European — UK
   'shell':'SHEL','astrazeneca':'AZN','unilever':'UL','hsbc':'HSBC','bp':'BP',
   'british american tobacco':'BTI','bat':'BTI','glencore':'GLNCY','diageo':'DEO',
   'gsk':'GSK','rio tinto':'RIO','vodafone':'VOD','barclays':'BCS',
+  'lloyds':'LYG','natwest':'NWG','rolls royce':'RYCEY','arm holdings':'ARM',
+  'compass group':'CMGGY','burberry':'BURBY','standard chartered':'SCBFF',
   // European — Scandinavia
   'novo nordisk':'NVO','ericsson':'ERIC','volvo':'VLVLY','dnb':'DNBBY',
   'neste':'NTOIY','atlas copco':'ATLKY','hexagon':'HXGBY',
+  'nordea':'NRDBY','svenska handelsbanken':'SVNLY',
   // European — Other
   'ferrari':'RACE','enel':'ENLAY','eni':'E','inditex':'IDEXY','zara':'IDEXY',
-  'credit agricole':'CRARY','intesa':'ISNPY',
+  'credit agricole':'CRARY','intesa':'ISNPY','unicredit':'UNCRY',
+  'asml holding':'ASML',
   // Japan
   'toyota':'TM','honda':'HMC','sony':'SONY','nintendo':'NTDOY',
   'panasonic':'6752.T','hitachi':'HTHIY','mitsubishi':'MSBHF',
@@ -2289,7 +2279,7 @@ function resolveToTicker(query, callback) {
   var q = query.trim().toLowerCase();
 
   // 1. Check local map first (instant, no API call)
-  if (LOCAL_TICKER_MAP[q]) {
+  if (LOCAL_TICKER_MAP[q] && LOCAL_TICKER_MAP[q] !== null) {
     callback(LOCAL_TICKER_MAP[q], query);
     return;
   }
@@ -5996,7 +5986,228 @@ if (!location.hash) {
   setTimeout(function(){ launchAnalytics('NVDA', true); }, 100);
 }
 
-// ─── IDEAS PAGE — Recommendations + AI Chat ──────────────────────────
+function switchIdeasTab(btn, panel) {
+  btn.closest('.page-inner').querySelectorAll('.ftab').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  btn.closest('.page-inner').querySelectorAll('.ideas-tab-panel').forEach(function(el){
+    el.style.display = el.getAttribute('data-panel') === panel ? '' : 'none';
+  });
+}
+
+// ── Algorithmic Stock Screen ──────────────────────────────────────────
+// ~300 curated global quality stocks across all regions and sectors
+var SCREEN_UNIVERSE = [
+  // US Tech & AI
+  'NVDA','MSFT','AAPL','GOOGL','META','AMZN','TSLA','AVGO','AMD','QCOM',
+  'ORCL','CRM','ADBE','NOW','PLTR','DDOG','CRWD','NET','APP','RKLB',
+  'MRVL','MU','AMAT','LRCX','KLAC','INTC','IBM','CSCO','UBER','ABNB',
+  // US Finance
+  'JPM','GS','V','MA','AXP','BLK','SCHW','COF','MS','BAC',
+  // US Healthcare
+  'LLY','JNJ','UNH','PFE','MRK','ABBV','AMGN','GILD','ISRG','DXCM',
+  // US Consumer & Industrial
+  'COST','WMT','HD','MCD','SBUX','NKE','KO','PEP','PG','TGT',
+  'CAT','DE','HON','BA','LMT','RTX','GE','EMR','ETN',
+  // US Energy
+  'XOM','CVX','COP','EOG','OXY',
+  // US REIT & Utilities
+  'AMT','PLD','EQIX','NEE','DUK',
+  // US Growth/New
+  'SHOP','MELI','SE','GRAB','COIN','MSTR','IONQ','LUNR',
+  // Germany — Frankfurt natives
+  'SAP','SIE.DE','ALV.DE','BMW.DE','VOW3.DE','MBG.DE','BAS.DE','BAYN.DE',
+  'ADS.DE','DTE.DE','IFX.DE','DHL.DE','MUV2.DE','CBK.DE','DB',
+  'HEN3.DE','RWE.DE','EOAN.DE','DB1.DE','P911.DE','BNR.DE','CON.DE',
+  // Netherlands
+  'ASML','ING','PHG','HEIA.AS','AKZA.AS','WKL.AS',
+  // Switzerland
+  'NESN.SW','ROG.SW','NOVN.SW','UBS','ABBN.SW','ZURN.SW','SIKA.SW',
+  // France
+  'LVMHF','TTE','SNY','LRLCY','HESAY','BNPQY',
+  // UK
+  'SHEL','AZN','UL','HSBC','BP','GSK','RIO','DEO','BTI','VOD','ARM',
+  // Scandinavia
+  'NVO','ERIC','ATLKY','NTOIY',
+  // Italy/Spain/Other EU
+  'RACE','ENLAY','E','IDEXY',
+  // Japan
+  'TM','SONY','HMC','7751.T','6752.T','NTDOY','HTHIY','SFTBY','KYCCF',
+  // Taiwan/Korea
+  'TSM','SSNLF','000660.KS','PKX',
+  // China
+  'BABA','TCEHY','BIDU','JD','PDD','NIO','LI','NTES',
+  // India
+  'INFY','WIT','HDB','IBN','RDY',
+  // Australia
+  'BHP','RIO','CSL.AX',
+  // Latin America
+  'VALE','PBR','ITUB','MELI','AMX',
+  // Mining/Commodities
+  'GOLD','NEM','FCX','WPM',
+  // ETFs excluded — they have no financials to screen
+];
+
+var SCREEN_RESULTS = []; // cached results
+
+function runAlgoScreen() {
+  switchIdeasTab(
+    document.querySelector('.ftab'),  // first tab
+    'screen'
+  );
+  // Make sure screen tab is active
+  var tabs = document.querySelectorAll('#page-ideas .ftab');
+  var panels = document.querySelectorAll('.ideas-tab-panel');
+  tabs.forEach(function(t){ t.classList.remove('active'); });
+  panels.forEach(function(p){ p.style.display = 'none'; });
+  tabs[0].classList.add('active');
+  panels[0].style.display = '';
+
+  var loadEl   = document.getElementById('screen-loading');
+  var outputEl = document.getElementById('screen-output');
+  var emptyEl  = document.getElementById('screen-empty');
+  if (loadEl)   loadEl.style.display = 'block';
+  if (outputEl) outputEl.style.display = 'none';
+  if (emptyEl)  emptyEl.style.display = 'none';
+
+  // Get portfolio tickers to exclude from suggestions
+  var portfolioTickers = [];
+  try { portfolioTickers = JSON.parse(localStorage.getItem('pondex_portfolio') || '[]').map(function(p){ return p.ticker; }); } catch(e) {}
+
+  // Profile thresholds for filtering
+  var focus = currentProfile.focus ? currentProfile.focus.split(' ')[0].toLowerCase() : 'balanced';
+  var thresholds = {
+    growth:  { minGM: 0.25, minOM: 0.05, minRevG: 0.08, maxPE: 60 },
+    value:   { minGM: 0.15, minOM: 0.05, minRevG: -0.05, maxPE: 22 },
+    income:  { minGM: 0.20, minOM: 0.08, minDivY: 0.015, maxPE: 30 },
+    quality: { minGM: 0.35, minOM: 0.10, minROE: 0.10, maxPE: 45 },
+  };
+  var thr = thresholds[focus] || thresholds.quality;
+
+  // Screen in batches of 10, fetch in parallel
+  var universe = SCREEN_UNIVERSE.filter(function(t){ return portfolioTickers.indexOf(t) === -1; });
+  var passed = [];
+  var checked = 0;
+  var total = universe.length;
+  var BATCH = 15;
+
+  function updateProgress() {
+    if (loadEl) loadEl.querySelector('div:last-child').textContent =
+      'Screening ' + checked + ' / ' + total + ' stocks…';
+  }
+
+  function processBatch(idx) {
+    if (idx >= universe.length) {
+      // Done — sort by score and render
+      passed.sort(function(a,b){ return b.score - a.score; });
+      SCREEN_RESULTS = passed.slice(0, 30);
+      renderScreenResults(SCREEN_RESULTS, thr, focus);
+      if (loadEl) loadEl.style.display = 'none';
+      return;
+    }
+    var batch = universe.slice(idx, idx + BATCH);
+    var done = 0;
+    batch.forEach(function(ticker) {
+      fetch(WORKER_BASE + '/yahoo/summary/' + ticker)
+        .then(function(r){ return r.json(); })
+        .then(function(data) {
+          var fd = data.financialData || {};
+          var ks = data.defaultKeyStatistics || {};
+          var p     = fd.currentPrice;
+          var gm    = fd.grossMargins;
+          var om    = fd.operatingMargins;
+          var revG  = fd.revenueGrowth;
+          var roe   = fd.returnOnEquity;
+          var divY  = ks.dividendYield;
+          var beta  = ks.beta;
+          var shares= ks.sharesOutstanding;
+          var eps   = ks.trailingEps;
+          var mktcap= ks.marketCap || (p && shares ? p*shares : null);
+          var pe    = ks.trailingPE || (p && eps && eps>0 ? p/eps : null) || ks.forwardPE;
+          var name  = ks.shortName || ticker;
+
+          if (!p || gm == null) return; // skip — no data
+
+          // Apply profile filter
+          var fits = true;
+          if (thr.minGM   && gm   < thr.minGM)   fits = false;
+          if (thr.minOM   && om   != null && om   < thr.minOM)   fits = false;
+          if (thr.minRevG && revG != null && revG < thr.minRevG) fits = false;
+          if (thr.maxPE   && pe   != null && pe   > thr.maxPE)   fits = false;
+          if (thr.minROE  && roe  != null && roe  < thr.minROE)  fits = false;
+          if (thr.minDivY && (divY == null || divY < thr.minDivY)) fits = false;
+
+          if (fits) {
+            // Calculate pondex score
+            var ratios = {
+              grossProfitMargin: gm, operatingProfitMargin: om,
+              revenueGrowth: revG, peRatio: pe, freeCashFlowYield: null,
+              enterpriseValueOverEBITDA: ks.enterpriseToEbitda,
+            };
+            var rawScores = computeRawScores(ratios, { beta: beta }, []);
+            var score = computeTotalScore(currentWeights, rawScores);
+            passed.push({ ticker: ticker, name: name, price: p, gm: gm, om: om,
+              revG: revG, pe: pe, beta: beta, score: score, divY: divY });
+          }
+        })
+        .catch(function(){})
+        .finally(function(){
+          checked++;
+          done++;
+          updateProgress();
+          if (done >= batch.length) processBatch(idx + BATCH);
+        });
+    });
+  }
+
+  processBatch(0);
+}
+
+function renderScreenResults(results, thr, focus) {
+  var outputEl  = document.getElementById('screen-output');
+  var filterBar = document.getElementById('screen-filter-bar');
+  var cardsEl   = document.getElementById('screen-cards');
+  var footerEl  = document.getElementById('screen-footer');
+
+  if (filterBar) filterBar.innerHTML =
+    '<span style="background:var(--surface2);border:1px solid var(--border);border-radius:2px;padding:3px 8px">' + currentProfile.name + '</span>' +
+    (thr.minGM  ? '<span style="background:var(--surface2);border:1px solid var(--border);border-radius:2px;padding:3px 8px">GM ≥ ' + (thr.minGM*100).toFixed(0) + '%</span>' : '') +
+    (thr.maxPE  ? '<span style="background:var(--surface2);border:1px solid var(--border);border-radius:2px;padding:3px 8px">P/E ≤ ' + thr.maxPE + 'x</span>' : '') +
+    '<span style="color:var(--green)">' + results.length + ' stocks passed</span>';
+
+  if (cardsEl) {
+    if (!results.length) {
+      cardsEl.innerHTML = '<div style="padding:20px;color:var(--muted);font-size:12px">No stocks matched your current profile thresholds. Try a different strategy profile.</div>';
+    } else {
+      cardsEl.innerHTML = results.map(function(r) {
+        var scoreLabel2 = r.score >= 4.0 ? 'Strong Buy' : r.score >= 3.3 ? 'Buy' : r.score >= 2.5 ? 'Hold' : 'Avoid';
+        var scoreCls = r.score >= 3.3 ? 'g' : r.score >= 2.5 ? 'y' : 'r';
+        var gmStr  = r.gm  != null ? (r.gm*100).toFixed(1)+'%' : '—';
+        var peStr  = r.pe  != null ? r.pe.toFixed(1)+'x' : '—';
+        var revStr = r.revG != null ? (r.revG >= 0 ? '+' : '') + (r.revG*100).toFixed(1)+'% rev' : '';
+        var divStr = r.divY && r.divY > 0 ? ' · ' + (r.divY*100).toFixed(2)+'% yield' : '';
+        return '<div class="ai-rec-card" onclick="launchAnalytics(\'' + safeStr(r.ticker) + '\')" style="cursor:pointer">' +
+          '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">' +
+            '<div class="arc-sym lnk" style="font-size:15px">' + safeStr(r.ticker) + '</div>' +
+            '<span class="comp-badge ' + scoreCls + '" style="font-size:10px">' + r.score.toFixed(2) + ' · ' + scoreLabel2 + '</span>' +
+          '</div>' +
+          '<div class="arc-name" style="margin-bottom:6px">' + safeStr(r.name) + '</div>' +
+          '<div style="font-size:10px;color:var(--muted)">' +
+            'GM ' + gmStr + ' · P/E ' + peStr +
+            (revStr ? ' · ' + revStr : '') + divStr +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+  }
+
+  if (footerEl) footerEl.textContent =
+    'Screened ' + SCREEN_UNIVERSE.length + ' global stocks · Sorted by pondex score · ' +
+    'Profile: ' + currentProfile.name + ' · Click any card to open full analysis';
+
+  if (outputEl) outputEl.style.display = 'block';
+}
+
+// ─── Ideas page tab/init ──────────────────────────────────────────────
 var AI_CHAT_HISTORY = []; // persistent chat history for current session
 
 function initIdeasPage() {
@@ -6004,10 +6215,23 @@ function initIdeasPage() {
   var tickerHint  = document.getElementById('chat-ticker-hint');
   if (profileHint) profileHint.textContent = currentProfile.name;
   if (tickerHint)  tickerHint.textContent  = currentTicker || 'none';
-  // Show empty state if no ideas generated yet
-  var output = document.getElementById('ideas-output');
-  var empty  = document.getElementById('ideas-empty');
-  if (output && output.style.display === 'none' && empty) empty.style.display = '';
+  // Show screen empty state by default
+  var screenEmpty = document.getElementById('screen-empty');
+  var screenOutput = document.getElementById('screen-output');
+  if (screenOutput && screenOutput.style.display === 'none' && screenEmpty) screenEmpty.style.display = '';
+  // Auto-run screen if we have results already
+  if (SCREEN_RESULTS.length) {
+    var focus = currentProfile.focus ? currentProfile.focus.split(' ')[0].toLowerCase() : 'quality';
+    var thresholds = {
+      growth:{minGM:0.25,minOM:0.05,minRevG:0.08,maxPE:60},
+      value:{minGM:0.15,minOM:0.05,minRevG:-0.05,maxPE:22},
+      income:{minGM:0.20,minOM:0.08,minDivY:0.015,maxPE:30},
+      quality:{minGM:0.35,minOM:0.10,minROE:0.10,maxPE:45},
+    };
+    renderScreenResults(SCREEN_RESULTS, thresholds[focus] || thresholds.quality, focus);
+    var screenEmpty2 = document.getElementById('screen-empty');
+    if (screenEmpty2) screenEmpty2.style.display = 'none';
+  }
 }
 
 function buildIdeasPrompt() {
@@ -6809,19 +7033,53 @@ function fetchYahooNews(ticker, container, exchange) {
 <!-- IDEAS — Recommendations + AI Chat -->
 <div class="page" id="page-ideas">
   <div class="page-inner">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px">
       <div>
         <div style="font-size:22px;font-weight:800">💡 Ideas</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:4px">AI-powered suggestions based on your strategy, portfolio &amp; macro context</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">Stock suggestions based on your strategy, portfolio &amp; macro context</div>
       </div>
-      <button class="act-btn" style="padding:8px 16px" onclick="generateIdeas()">✨ Generate Ideas</button>
+      <div style="display:flex;gap:8px">
+        <button class="act-btn" style="padding:8px 16px" onclick="runAlgoScreen()">📊 Screen Stocks</button>
+        <button class="act-btn" style="padding:8px 16px" onclick="generateIdeas()">✨ AI Ideas</button>
+      </div>
     </div>
 
-    <!-- Recommendation cards -->
-    <div id="ideas-loading" style="display:none;padding:20px;text-align:center">
-      <div class="ai-spinner" style="margin:0 auto 12px"></div>
-      <div style="font-size:12px;color:var(--muted)">Analyzing your profile, portfolio &amp; macro environment…</div>
+    <!-- Tab bar -->
+    <div class="fin-tabs" style="margin-bottom:16px">
+      <button class="ftab active" onclick="switchIdeasTab(this,'screen')">📊 Algo Screen</button>
+      <button class="ftab" onclick="switchIdeasTab(this,'ai')">✨ AI Ideas</button>
+      <button class="ftab" onclick="switchIdeasTab(this,'chat')">💬 AI Chat</button>
     </div>
+
+    <!-- Algo Screen tab -->
+    <div class="ideas-tab-panel" data-panel="screen">
+      <div id="screen-loading" style="display:none;padding:20px;text-align:center">
+        <div class="ai-spinner" style="margin:0 auto 12px"></div>
+        <div style="font-size:12px;color:var(--muted)">Screening stocks against your profile…</div>
+      </div>
+      <div id="screen-output" style="display:none">
+        <div id="screen-filter-bar" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;font-size:11px;color:var(--muted)"></div>
+        <div id="screen-cards" class="ai-rec-grid"></div>
+        <div id="screen-footer" style="margin-top:12px;font-size:10px;color:var(--muted)"></div>
+      </div>
+      <div id="screen-empty" style="padding:40px 20px;text-align:center;color:var(--muted)">
+        <div style="font-size:32px;margin-bottom:12px">📊</div>
+        <div style="font-size:14px;font-weight:600;margin-bottom:8px">Algorithmic Stock Screen</div>
+        <div style="font-size:12px;line-height:1.7;max-width:420px;margin:0 auto">
+          Click <strong>Screen Stocks</strong> to scan ~300 global quality stocks and show only those
+          that match your <span class="lnk" onclick="G('profile')">strategy profile</span> and
+          complement your <span class="lnk" onclick="G('portfolio')">portfolio</span>.
+        </div>
+        <button class="act-btn" style="margin-top:16px;padding:8px 20px" onclick="runAlgoScreen()">📊 Run Screen Now</button>
+      </div>
+    </div>
+
+    <!-- AI Ideas tab -->
+    <div class="ideas-tab-panel" data-panel="ai" style="display:none">
+      <div id="ideas-loading" style="display:none;padding:20px;text-align:center">
+        <div class="ai-spinner" style="margin:0 auto 12px"></div>
+        <div style="font-size:12px;color:var(--muted)">Analyzing your profile, portfolio &amp; macro environment…</div>
+      </div>
     <div id="ideas-output" style="display:none">
       <div id="ideas-macro-context" style="margin-bottom:16px;padding:10px 14px;background:rgba(72,136,204,.07);border:1px solid rgba(72,136,204,.2);border-radius:3px;font-size:11px;color:var(--soft);line-height:1.6"></div>
       <div class="t-section">Recommended Stocks <span style="font-size:9px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">based on your strategy &amp; portfolio gaps</span></div>
@@ -6832,19 +7090,19 @@ function fetchYahooNews(ticker, container, exchange) {
     <div id="ideas-error" style="display:none;padding:12px;color:var(--red);font-size:12px"></div>
     <div id="ideas-empty" style="padding:40px 20px;text-align:center;color:var(--muted)">
       <div style="font-size:32px;margin-bottom:12px">💡</div>
-      <div style="font-size:14px;font-weight:600;margin-bottom:8px">No ideas yet</div>
+      <div style="font-size:14px;font-weight:600;margin-bottom:8px">No AI ideas yet</div>
       <div style="font-size:12px;line-height:1.6;max-width:400px;margin:0 auto">
-        Click <strong>Generate Ideas</strong> to get personalized stock recommendations based on your
-        <span class="lnk" onclick="G('profile')">strategy profile</span> and
-        <span class="lnk" onclick="G('portfolio')">portfolio holdings</span>.
+        Click <strong>✨ AI Ideas</strong> to get personalized recommendations based on your profile &amp; portfolio.
       </div>
     </div>
+    </div><!-- end AI Ideas tab panel -->
 
-    <!-- AI Chat -->
-    <div class="t-section" style="margin-top:28px">AI Chat <span style="font-size:9px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">ask anything about stocks, compare companies, get explanations</span></div>
+    <!-- Chat tab -->
+    <div class="ideas-tab-panel" data-panel="chat" style="display:none">
+    <div class="t-section" style="margin-bottom:10px">AI Chat <span style="font-size:9px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">ask anything about stocks, compare companies, get explanations</span></div>
     <div id="ai-chat-messages" style="min-height:120px;max-height:400px;overflow-y:auto;background:var(--surface2);border:1px solid var(--border);border-radius:3px;padding:12px;margin-bottom:10px;font-size:12px;line-height:1.7">
       <div class="chat-msg system" style="color:var(--muted);font-style:italic">
-        Ask me anything — e.g. "Compare NVDA and AMD for a growth investor", "Why is SAP's P/E lower than Microsoft?", "Which sectors benefit from rising interest rates?"
+        Ask me anything — e.g. "Compare Volkswagen and BMW", "Why is Allianz cheap vs peers?", "Which German stocks fit a Value strategy?"
       </div>
     </div>
     <div style="display:flex;gap:8px">
@@ -6856,6 +7114,8 @@ function fetchYahooNews(ticker, container, exchange) {
     <div style="margin-top:6px;font-size:10px;color:var(--muted)">
       Context-aware: knows your strategy (<span id="chat-profile-hint"></span>), current stock (<span id="chat-ticker-hint">none</span>), and portfolio
     </div>
+    </div><!-- end Chat tab panel -->
+
   </div>
 </div>
 
