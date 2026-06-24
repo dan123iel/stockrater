@@ -1232,6 +1232,103 @@ Aber keine:
 
 ---
 
+## Investment Timeline
+
+Nicht Watchlist. Nicht Portfolio. Sondern eine Zeitachse — jede Aktie bekommt ihre eigene Geschichte:
+
+```
+Jan 2026  → Kauf NVIDIA
+             These: AI-Wachstum >25%
+
+Apr 2026  → Q1 Earnings
+             These bestätigt ✓
+
+Jul 2026  → CEO verkauft Aktien
+             Warnsignal ⚠
+
+Nov 2026  → These gebrochen ✗
+
+Jan 2027  → Verkauf
+```
+
+Das verbindet Journal, Thesis Tracker und News-Timeline in einer einzigen Ansicht pro Aktie.
+
+---
+
+## Red Flag Timeline
+
+Für jede Aktie eine chronologische Warnsignal-Liste:
+
+```
+CEO verkauft große Position
+↓
+Guidance gesenkt
+↓
+Margen sinken
+↓
+Gewinnwarnung
+```
+
+> "Die ersten Warnsignale traten bereits vor 8 Monaten auf."
+
+Extrem lehrreich — man sieht rückwirkend wann man hätte handeln sollen.
+
+---
+
+## Portfolio Historian
+
+Viele Anleger vergessen ihre eigene Entwicklung. pondex zeigt nach einem Jahr:
+
+```
+Vor 12 Monaten:          Heute:
+90% Tech                 55% Tech
+0% Healthcare            15% Healthcare
+keine Dividendenwerte    10% Dividendenwerte
+```
+
+Man sieht die eigene Evolution als Investor.
+
+---
+
+## Portfolio Immune System
+
+Das Portfolio wird wie ein Organismus betrachtet. pondex erkennt:
+
+- Konzentrationsrisiken
+- Liquiditätsrisiken
+- Bewertungsrisiken
+- Währungsrisiken
+
+Und gibt einen **Gesundheitswert** — nicht Performance, sondern **Robustheit**.
+
+---
+
+## Earnings Importance Score
+
+Nicht jede Earnings-Meldung ist gleich wichtig.
+
+**Normale Earnings:** Keine wesentliche Änderung zur These.
+
+**Thesis Event:** Eine Kernannahme wurde bestätigt oder widerlegt — Handlungsbedarf.
+
+Der Nutzer muss nicht jede Quartalsmeldung lesen. pondex filtert was wirklich zählt.
+
+---
+
+## Versionierung von Überzeugungen
+
+```
+NVIDIA
+
+2025: Conviction 9/10
+2026: Conviction 7/10
+2027: Conviction 5/10
+```
+
+Man sieht wie sich die eigene Sicht über Zeit entwickelt — und wann die Überzeugung begann zu bröckeln, bevor man es bewusst wahrgenommen hat.
+
+---
+
 ## Personal Investment Handbook
 
 Nach 1–2 Jahren Nutzung schreibt pondex automatisch:
