@@ -604,3 +604,781 @@ Am Wochenende schaltet pondex in den Reflektions-Modus. Kursänderungen treten i
 pondex ist das Anti-Trading-Tool. Kein Dopamin, keine Gamification, kein Dark Pattern. Ruhe, Rationalität, langfristiger Vermögensaufbau.
 
 $$\text{Daten} + \text{AI-Kontext} + \text{Nutzer-Psychologie} = \text{Unschlagbares Produkt}$$
+
+---
+
+## Produktstrategie & Schärfung der Differenzierung
+
+> Der eigentliche USP ist nicht der Score, nicht der Chat und nicht die DCF-Modelle. Der eigentliche USP ist:
+> **"Ein Investment-Betriebssystem, das Entscheidungen begleitet statt Daten anzuzeigen."**
+
+---
+
+### Score-Formulierung überdenken
+
+Aktuell klingt der Score nach Anlageberatung. Besser: die **Passung zum Profil** bewerten, nicht die Aktie selbst.
+
+| Aktuell | Vorschlag |
+|---|---|
+| Strong Buy | Excellent Fit |
+| Buy | Good Fit |
+| Hold | Neutral Fit |
+| Avoid | Poor Fit |
+
+Rechtlich sauberer. Psychologisch präziser.
+
+---
+
+### Confidence Score
+
+Jeder Score-Output braucht zusätzlich einen **Confidence Score (0–100%)** der anzeigt auf wie vielen Datenpunkten der Score basiert.
+
+Beispiele:
+- Microsoft → 94% (10 Jahre Historie, Insider-Daten, vollständige Financials)
+- Novo Nordisk → 90%
+- Small Cap aus Polen → 58% (dünne Datenlage)
+
+> "Das Modell mag die Aktie, aber die Datenlage ist dünn."
+
+Das erhöht Vertrauen massiv — der Nutzer versteht warum ein Score unsicher ist.
+
+---
+
+### Data Coverage Indicator
+
+Da Insider-Daten (EDGAR) und EPS-History nur für US-Aktien verfügbar sind, bekommen SAP, ASML, LVMH automatisch schwächere Scores — nicht weil die Unternehmen schlechter sind, sondern weil die Datenlage dünner ist.
+
+Lösung: für jede Aktie eine Datenverfügbarkeits-Tabelle:
+
+| Bereich | Abdeckung |
+|---|---|
+| Financials | 100% |
+| Insider | 0% |
+| EPS History | 40% |
+| Ownership | 60% |
+
+Der Nutzer versteht sofort warum der Score anders ist.
+
+---
+
+### Bear Thesis — automatisch generiert
+
+Der Score sagt "4.7 — Excellent Fit". Aber warum handelt die Aktie dann 30% unter Fair Value?
+
+Jede Analyse braucht automatisch eine **Bull/Bear-Gegenüberstellung**:
+
+**Bull Case**
+- Umsatz wächst weiter
+- Hohe Margen
+- Marktführer
+
+**Bear Case**
+- China-Risiko
+- KI-Nachfrage zyklisch
+- Wettbewerbsdruck
+
+Das macht die Analyse viel glaubwürdiger — und zwingt den Nutzer zum Gegenargument.
+
+---
+
+### ESG im Score bereinigen
+
+Aktuell heißt die Kategorie "ESG & Risk" aber bewertet nur Beta. Das ist inkonsistent und verwirrt Nutzer.
+
+**Option A:** Umbenennen zu "Risk" (Beta, Verschuldung, Volatilität) — ehrlich und klar.
+**Option B:** Richtiges ESG integrieren sobald Daten verfügbar sind.
+
+Aktuell Option A umsetzen.
+
+---
+
+## Investment Memo — höchste Priorität
+
+Nach jeder Analyse ein Button: **"Generate Investment Memo"**
+
+Erzeugt ein strukturiertes Dokument:
+
+- **Kaufthese** — Warum kaufen?
+- **Risiken** — Warum nicht kaufen?
+- **Trigger** — Was muss passieren?
+- **Exit-Kriterien** — Wann verkaufen?
+- **Bewertung** — Fair Value, Margin of Safety
+- **Confidence** — Wie sicher ist die These?
+
+Landet direkt im Trade Journal. Das verknüpft Analyse → Entscheidung → Dokumentation in einem Schritt.
+
+---
+
+## Thesis Operating System — der stärkste Burggraben
+
+Das eine Feature das pondex von einem Analyse-Tool zu einem Entscheidungssystem macht:
+
+```
+These erstellen
+↓
+Kaufen
+↓
+These überwachen
+↓
+These verletzt?
+↓
+Benachrichtigung
+↓
+Lernen
+↓
+Bessere nächste Entscheidung
+```
+
+Beim Kauf definiert der Nutzer drei quantitative Bedingungen. Drei Monate später:
+
+```
+✓ Umsatzwachstum 18%
+✓ Bruttomarge 62%
+⚠ AI-Markt verlangsamt sich
+```
+
+Sechs Monate später:
+
+```
+✗ Umsatzwachstum 8%
+✗ Bruttomarge 56%
+These gebrochen.
+```
+
+Fast alle Wettbewerber hören beim Kauf auf. Die eigentliche Wertschöpfung beginnt danach. Das ist schwer kopierbar.
+
+---
+
+## Watchlist Alerts auf Thesen-Ebene
+
+Nicht: *"Aktie fällt 5%"*
+
+Sondern:
+- *"ASML jetzt 18% unter deinem Fair Value."*
+- *"Nvidia erreicht die von dir definierte Margin-of-Safety."*
+- *"Deine Kaufthese wurde verletzt."*
+
+Intelligente Alerts. Kein Trading-Noise.
+
+---
+
+## Shareable Thesis Card — virales Potenzial
+
+Nicht nur Screenshot. Eine schöne, teilbare Card:
+
+```
+ASML
+
+Fit Score: 4.4  Confidence: 91%
+
+Warum:
+✓ Monopolstellung
+✓ Hohe Margen
+✓ Unter Fair Value
+
+Risiken:
+✗ China
+✗ Zyklische Nachfrage
+```
+
+Perfekt für X, Reddit, LinkedIn, Substack. Organisches Wachstum ohne Marketing-Budget.
+
+---
+
+## Decision Quality Score
+
+pondex bewertet nicht nur Aktien — sondern Entscheidungen.
+
+Gute Entscheidung:
+- Score 4.5
+- 25% unter Fair Value
+- These dokumentiert
+- gute Diversifikation
+→ Decision Quality: 92/100
+
+Schlechte Entscheidung:
+- Meme-Aktie nach +80% FOMO
+- Keine These
+- Klumpenrisiko steigt
+→ Decision Quality: 28/100
+
+**Wichtig:** Nicht das Ergebnis bewerten. Eine schlechte Entscheidung kann zufällig gut ausgehen. Eine gute Entscheidung kann durch Pech verloren gehen. pondex bewertet die Rationalität des Prozesses.
+
+---
+
+## Investment GPS
+
+Der Nutzer definiert:
+- Ziel: 1 Mio €
+- Zeithorizont: 20 Jahre
+- Monatlich: 500€
+
+pondex zeigt:
+
+```
+Aktuelle Wahrscheinlichkeit: 62%
+Fehlende Rendite: +1.8% pro Jahr
+Risiko: angemessen
+
+Wenn Sparrate auf 600€:
+Wahrscheinlichkeit: 78%
+```
+
+Die meisten Leute investieren ohne Zielsystem. Das ändert sich.
+
+---
+
+## Portfolio Stress Test
+
+Nicht nur DCF für Einzelaktien — für das gesamte Depot.
+
+Szenarien:
+- AI-Blase platzt
+- Rezession
+- Ölpreis +50%
+- China-Taiwan-Konflikt
+- Zinsen +2%
+- USD -15%
+
+```
+Geschätzte Auswirkung:
+Portfolio: -22%
+Größter Risikotreiber: NVIDIA
+```
+
+---
+
+## Position Size Coach
+
+Viele Anleger fragen "Soll ich kaufen?" — die eigentliche Frage ist "Wie viel?"
+
+pondex sagt:
+```
+Fit Score: 4.8  Confidence: 92%
+
+Vorgeschlagene Positionsgröße: 3–6% Portfolio
+```
+
+Für Small Caps oder dünne Datenlage:
+```
+Max: 1.5%
+```
+
+---
+
+## Conviction Tracker
+
+Beim Kauf bewertet der Nutzer: *Überzeugung: 8/10*
+
+Wenn die Aktie -20% fällt fragt pondex:
+> "Überzeugung heute noch 8/10 oder hat sich etwas geändert?"
+
+Man erkennt ob jemand rational oder emotional handelt.
+
+---
+
+## Portfolio Doppelgänger
+
+pondex erkennt versteckte Konzentrationen:
+
+```
+Microsoft / Alphabet / Apple / Amazon / Meta
+→ "Du besitzt faktisch 5 Varianten derselben Wette."
+
+NVIDIA / AMD / TSMC / ASML / Broadcom
+→ "82% deines Risikos hängt vom KI-Halbleiterzyklus ab."
+```
+
+Das versteht jeder Nutzer sofort.
+
+---
+
+## Earnings Translator
+
+Nach Earnings statt roher Zahlen:
+
+```
+Was wirklich passiert:
+
+✓ Umsatz besser als erwartet
+✓ Gewinn besser als erwartet
+
+Aber:
+⚠ Management senkt Prognose
+⚠ Margen sinken nächstes Quartal
+
+Deshalb fällt die Aktie trotzdem.
+```
+
+---
+
+## Opportunity Cost Engine
+
+Wenn Aktie A gekauft wird speichert pondex die Alternativen. Ein Jahr später:
+
+```
+Gewählt: +12%
+Beste Alternative: +38%
+```
+
+oder:
+
+```
+Gewählt: +22%
+Alternative: -9%
+```
+
+Der Nutzer lernt ob sein Auswahlprozess funktioniert.
+
+---
+
+## Personal Bias Detector
+
+Nach 50 Trades erkennt pondex Muster:
+
+```
+Bias entdeckt:
+
+Du kaufst fast nie außerhalb USA.
+Du meidest Healthcare.
+Du verkaufst Gewinner zu früh.
+Du kaufst häufig nach Medienhype.
+```
+
+Pures Behavioral Finance — personalisiert.
+
+---
+
+## "What Would Break My Thesis?"
+
+Beim Öffnen einer Aktie zeigt pondex zusätzlich:
+
+```
+Was müsste passieren damit diese Aktie schlecht wird?
+
+NVIDIA:
+- AI-Nachfrage sinkt
+- AMD gewinnt Marktanteile
+- Margen <65%
+- Exportrestriktionen steigen
+```
+
+Das zwingt zum Gegenargument bevor man kauft.
+
+---
+
+## Portfolio Digital Twin
+
+Nicht nur das aktuelle Portfolio speichern — ein simuliertes Modell bauen.
+
+Fragen beantworten wie:
+- Was passiert wenn ich ASML für 5.000€ kaufe?
+- Was passiert wenn ich NVIDIA halbiere?
+- Was passiert wenn ich komplett auf Europa umschichte?
+
+Der Nutzer sieht Auswirkungen vor der Entscheidung.
+
+---
+
+## Regret Minimizer
+
+Bei jeder Entscheidung festhält pondex:
+- Welche Informationen lagen vor?
+- Welche Alternativen gab es?
+- Welche Unsicherheiten gab es?
+
+Später bewertet pondex:
+> "Mit den damals verfügbaren Informationen war die Entscheidung rational."
+
+Das verhindert Rückschaufehler (Hindsight Bias).
+
+---
+
+## Portfolio Narrative
+
+Automatisch generiert:
+
+> "Du investierst aktuell hauptsächlich in dominante Technologie-Plattformen mit hoher Kapitalrendite und KI-Exposure. 74% deines Risikos stammen aus den USA. Dein Portfolio setzt implizit auf weiterhin sinkende Zinsen und steigende Unternehmensinvestitionen in KI."
+
+Plötzlich versteht der Nutzer seine eigentliche Wette.
+
+---
+
+## Hidden Dependency Scanner
+
+```
+Apple / Microsoft / NVIDIA / TSMC / ASML
+
+→ 5 deiner 8 Positionen hängen indirekt von denselben Faktoren ab:
+  KI-Boom / Taiwan-Risiko / US-Konjunktur / Halbleiterzyklus
+```
+
+---
+
+## Historical Analog Engine
+
+Bei jeder Aktie:
+> "Wann sah diese Situation historisch ähnlich aus?"
+
+- NVIDIA heute ↔ Cisco 1999
+- Meta 2022 ↔ Microsoft 2011
+- Novo Nordisk ↔ frühe Pharma-Blockbuster
+
+Nicht als Vorhersage — als Denkhilfe.
+
+---
+
+## Opportunity Queue
+
+Nicht nur Watchlist. Eine priorisierte Liste:
+
+- **Jetzt attraktiv** — Score hoch, unter Fair Value
+- **Beobachten** — fundamental gut, Bewertung noch zu hoch
+- **Warten auf besseren Preis** — definierter Einstiegspreis fehlt noch
+- **These gebrochen** — aus Queue entfernen
+
+---
+
+## "Was muss wahr sein?" — Reverse Valuation
+
+Tesla steht bei 400$. pondex rechnet rückwärts:
+
+> "Damit dieser Preis gerechtfertigt ist müsste Tesla in den nächsten 10 Jahren im Schnitt um 28% pro Jahr wachsen. Hältst du das für realistisch?"
+
+Oft hilfreicher als ein klassisches DCF.
+
+---
+
+## Pre-Mortem Engine
+
+Vor dem Kauf muss der Nutzer beantworten:
+- Was könnte meine These zerstören?
+- Welche Annahme ist am kritischsten?
+- Woran erkenne ich früh dass ich falsch liege?
+
+> "Stell dir vor diese Investition war in 3 Jahren ein Desaster. Was war wahrscheinlich die Ursache?"
+
+Reduziert Confirmation Bias massiv.
+
+---
+
+## Thesis Drift Detector
+
+Viele Investoren merken nicht wenn sich ihre Gründe schleichend ändern.
+
+2025: *"Ich kaufe wegen langfristigem Wachstum."*
+2026: *"Ich halte nur noch weil ich im Minus bin."*
+
+pondex erkennt:
+> "Ursprüngliche These und aktuelles Verhalten widersprechen sich."
+
+---
+
+## Portfolio Dependency Map
+
+Visueller Graph der versteckten Abhängigkeiten:
+
+```
+Cloud Spending → Microsoft / Amazon / Nvidia
+AI Capex       → Nvidia / Broadcom / TSMC
+China Exposure → Apple / Tesla / ASML
+```
+
+Viele Risiken werden erst sichtbar wenn man sie visualisiert.
+
+---
+
+## Knowledge Gap Detector
+
+Wenn jemand wiederholt fragt "Was ist FCF?" / "Was ist WACC?" / "Was ist EV/EBITDA?" erkennt pondex die Wissenslücke und erstellt automatisch kleine Lernmodule.
+
+---
+
+## Investment Autopsy
+
+Für jede geschlossene Position:
+- Was war richtig?
+- Was war falsch?
+- Was war Glück?
+- Was war Pech?
+
+Systematisches Lernen statt Vergessen.
+
+---
+
+## AI Devil's Advocate
+
+Jede Analyse bekommt automatisch zwei Stimmen:
+
+**Optimist** — Warum kaufen?
+**Skeptiker** — Warum nicht kaufen?
+
+Verhindert Echo-Kammern.
+
+---
+
+## Circle of Competence Score
+
+pondex trackt in welchen Sektoren der Nutzer die meiste Zeit verbringt und visualisiert seinen Kompetenzradius:
+
+```
+Tech: 92  /  Industrials: 71  /  Healthcare: 28  /  Biotech: 12
+```
+
+Bei einer Biotech-Analyse:
+> "Diese Aktie liegt außerhalb deines üblichen Kompetenzbereichs."
+
+---
+
+## Personal Alpha Tracker
+
+Wo kommt die Outperformance wirklich her?
+
+```
+Beste Entscheidungen: Software / Semiconductors
+Schlechteste:         Biotech / China / Turnarounds
+```
+
+Der Nutzer weiß wo sein tatsächlicher Vorteil liegt.
+
+---
+
+## Portfolio Resilience Score
+
+Nicht Rendite. Nicht Risiko. Sondern **Robustheit**.
+
+Basierend auf: Währungen, Sektoren, Regionen, Bewertungen, Cashflow-Stabilität, Bilanzqualität.
+
+---
+
+## Market Noise Filter
+
+Jeden Tag tausende Finanznachrichten. pondex bewertet Relevanz für DICH:
+
+> Tesla verpasst Auslieferungen.
+> → Kein Tesla im Portfolio: Relevanz niedrig
+> → Tesla 12% des Depots: Relevanz sehr hoch
+
+---
+
+## Counterfactual Engine
+
+Die App merkt sich jede Analyse. Nach Jahren zeigt sie:
+
+> "Die 20 Aktien die du fast gekauft hättest — wie liefen sie?"
+
+War das Scoring-Modell zu konservativ? Hat der Nutzer Recht behalten?
+
+---
+
+## Explain My Returns
+
+Die meisten Anleger wissen nicht woher ihre Rendite kommt.
+
+```
++18% Gesamtrendite
+
++8% Fundamentale Verbesserung
++5% Bewertungsanstieg
++3% Währung
++2% Dividenden
+```
+
+---
+
+## Decision Journal Replay
+
+Nach einem Jahr:
+> "Zeige mir alle Entscheidungen vom Juni 2025."
+
+Damalige These, damalige News, damalige Bewertung, damaliger Score — wie eine Zeitmaschine für Investitionsentscheidungen.
+
+---
+
+## Portfolio Weather Report
+
+Täglich ein Satz. Nicht 100 Kennzahlen:
+
+> "Dein Portfolio ist aktuell fundamental gesund aber stark abhängig vom KI-Investitionszyklus. Größtes Risiko bleibt eine Verlangsamung der Unternehmensausgaben."
+
+---
+
+## Second-Level Thinking Engine
+
+Die meisten Anleger denken: *AI boomt → NVIDIA kaufen.*
+
+pondex denkt: *AI boomt → wer verkauft die Schaufeln? Wer profitiert indirekt?*
+
+Automatische Ideen aus zweiter Ableitung.
+
+---
+
+## The Missing Piece Detector
+
+pondex analysiert das Depot:
+
+```
+Du besitzt: Growth / Large Caps / USA / Tech
+
+Aber keine:
+- Defensive Werte
+- Europa
+- Small Caps
+- Cashflow-Stabilität
+
+→ Die größte Lücke in deinem Portfolio ist nicht
+  eine weitere KI-Aktie. Es ist Diversifikation.
+```
+
+---
+
+## Personal Investment Handbook
+
+Nach 1–2 Jahren Nutzung schreibt pondex automatisch:
+
+```
+Du investierst am erfolgreichsten wenn:
+- Score > 4.0
+- Large Caps
+- Tech oder Software
+- Haltedauer > 2 Jahre
+
+Du machst häufiger Fehler bei:
+- Turnaround-Stories
+- Biotech
+- Hype-Themen
+```
+
+---
+
+## AI Investment Committee
+
+Vier virtuelle Perspektiven auf jede Aktie:
+
+| Perspektive | Fokus |
+|---|---|
+| Buffett | Qualität & Burggraben |
+| Graham | Value & Sicherheitsmarge |
+| Lynch | Wachstum & Verständlichkeit |
+| Dalio | Makro & Diversifikation |
+
+```
+ASML kaufen?
+
+Buffett:  positiv
+Graham:   neutral
+Lynch:    sehr positiv
+Dalio:    positiv
+
+Zusammenfassung: ...
+```
+
+Unterhaltsam, lehrreich und einzigartig.
+
+---
+
+## Was pondex NICHT bauen wird
+
+Features die Nutzung erhöhen aber Entscheidungsqualität nicht verbessern:
+
+❌ Social Feed
+❌ Nutzer-Kommentare
+❌ Copy Trading
+❌ Like-System
+❌ Leaderboards
+❌ "Top Trending Stocks"
+❌ Gamification
+❌ Streaks
+❌ Push-Bombardement
+
+Diese Features würden der pondex-Philosophie direkt widersprechen.
+
+---
+
+## Priorisierungs-Framework
+
+Jedes Feature wird an drei Fragen gemessen:
+
+1. Macht es Entscheidungen besser?
+2. Macht es Lernen besser?
+3. Macht es Verhalten besser?
+
+Wenn keine dieser Fragen mit Ja beantwortet werden kann: nicht bauen.
+
+### Feature-Matrix
+
+| Feature | Nutzerwert | Einzigartigkeit | Aufwand |
+|---|---|---|---|
+| Thesis Tracker | 10 | 10 | 5 |
+| Investment Memo | 9 | 9 | 3 |
+| Confidence Score | 9 | 8 | 3 |
+| Decision Quality Score | 9 | 10 | 6 |
+| AI Chat | 9 | 5 | 7 |
+| Portfolio Intelligence | 8 | 8 | 5 |
+| Discovery Engine | 8 | 7 | 6 |
+| Bias Detection | 8 | 9 | 5 |
+| JSON Backup/Restore | 8 | 3 | 1 |
+| Broker Sync | 6 | 2 | 9 |
+| Mobile App | 5 | 1 | 8 |
+| Social Features | 3 | 0 | 7 |
+
+### Tier-Einteilung
+
+**Tier 1 — Kern, sofort**
+Thesis Tracker · Investment Memo · Decision Journal · Confidence Score · Portfolio Intelligence
+
+**Tier 2 — Differenzierung**
+Discovery Engine · AI Chat · Portfolio Health · Bias Detection
+
+**Tier 3 — Skalierung**
+Broker Sync · Mobile App · Multi-User · Community
+
+---
+
+## Die eigentliche Gefahr: Feature-Inflation
+
+Viele ambitionierte Produkte sterben nicht am Feature-Mangel. Sie sterben daran:
+
+> Version 1: "Gib mir Klarheit über eine Aktie."
+> Version 5: 37 Tabs / 18 Dashboards / 412 Kennzahlen / 9 AI-Assistenten
+
+Dann verliert das Produkt seine Identität.
+
+Der nächste große Schritt für pondex kommt nicht durch Feature Nummer 51 — sondern dadurch dass die besten 5–10 Features **außergewöhnlich gut zusammenarbeiten**.
+
+---
+
+## Die drei strategischen Richtungen
+
+| Richtung | Potenzial |
+|---|---|
+| Mehr Daten & Analysen | Mittel |
+| Mehr AI-Chat | Mittel |
+| Decision Intelligence & Behavioral Finance | Sehr hoch |
+
+Die ersten beiden machen pondex besser.
+Die dritte macht pondex **anders**.
+
+---
+
+## Produktpositionierung
+
+Nicht:
+> "AI-gestützter Investment-Assistent"
+
+Sondern:
+> **"pondex hilft Privatanlegern bessere Entscheidungen zu treffen — vor dem Kauf, während des Haltens und beim Verkaufen."**
+
+Das beschreibt den tatsächlichen Mehrwert präziser und schärfer als jeder Feature-Katalog.
+
+---
+
+## Der langfristige Burggraben
+
+Der stärkste verteidigbare Vorteil von pondex ist nicht der AI-Chat, nicht der Score und nicht die Vorschlags-Engine.
+
+Es ist die Kombination:
+
+> **These → Kauf → Monitoring → Lernen → bessere nächste Entscheidung**
+
+Diesen Kreislauf bildet aktuell praktisch kein großes Retail-Investing-Tool konsequent ab. Das ist die Kategorie die pondex besitzen kann.
