@@ -439,6 +439,7 @@ pre { font-family: var(--font); white-space: pre-wrap; word-break: break-word; }
 .dock-tab .dt-sub { font-size: 9px; color: var(--muted); }
 @media (max-width: 900px) {
   .dock-tab { flex: 0 0 auto; min-width: 88px; }
+  .an-toolbar-btn { display: none !important; }
 }
 
 /* ── PANELS ── */
@@ -1452,15 +1453,11 @@ input[type=range] {
           </div>
         </div>
         <div style="margin-left:auto;display:flex;gap:6px;align-items:center">
-          <button class="act-btn" onclick="G('portfolio')" style="display:flex;align-items:center;gap:5px"><span data-lucide="briefcase" style="width:13px;height:13px"></span> Portfolio</button>
-          <button class="act-btn" id="btn-watchlist" onclick="toggleWatchlist()" style="display:flex;align-items:center;gap:5px"><span data-lucide="bookmark" style="width:13px;height:13px"></span> Watchlist</button>
-          <button class="act-btn" onclick="shareAnalysis()" style="display:flex;align-items:center;gap:5px"><span data-lucide="share-2" style="width:13px;height:13px"></span> Share</button>
-          <button class="act-btn" onclick="exportAnalyticsPDF()" style="display:flex;align-items:center;gap:5px"><span data-lucide="printer" style="width:13px;height:13px"></span> Export</button>
-          <button class="act-btn" onclick="toggleTileManager()" style="display:flex;align-items:center;gap:5px"><span data-lucide="layout-grid" style="width:13px;height:13px"></span></button>
+          <button class="act-btn an-toolbar-btn" onclick="G('portfolio')" style="display:flex;align-items:center;gap:5px"><span data-lucide="briefcase" style="width:13px;height:13px"></span> Portfolio</button>
+          <button class="act-btn an-toolbar-btn" id="btn-watchlist" onclick="toggleWatchlist()" style="display:flex;align-items:center;gap:5px"><span data-lucide="bookmark" style="width:13px;height:13px"></span> Watchlist</button>
+          <button class="act-btn an-toolbar-btn" onclick="shareAnalysis()" style="display:flex;align-items:center;gap:5px"><span data-lucide="share-2" style="width:13px;height:13px"></span> Share</button>
+          <button class="act-btn an-toolbar-btn" onclick="exportAnalyticsPDF()" style="display:flex;align-items:center;gap:5px"><span data-lucide="printer" style="width:13px;height:13px"></span> Export</button>
           <button class="act-btn" onclick="showStart()" style="display:flex;align-items:center;gap:5px"><span data-lucide="arrow-left" style="width:13px;height:13px"></span></button>
-          <button class="an-search-btn" id="an-search-toggle" onclick="toggleAnSearch()" title="Search ticker">
-            <span data-lucide="search" style="width:14px;height:14px"></span>
-          </button>
         </div>
       </div>
 
@@ -2812,8 +2809,13 @@ function buildAnInnerTabs() {
       '<span class="at-label">' + t.label + '</span>' +
     '</button>';
   }).join('') +
-  '<button class="an-tab" onclick="toggleTileManager()" title="Manage tiles" style="margin-left:auto;opacity:.6" id="btn-manage-tiles">' +
-    ICON_SVG['sliders'] +
+  '<button class="an-tab" onclick="toggleAnSearch()" title="Search ticker" id="btn-tab-search" style="margin-left:auto">' +
+    '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>' +
+    '<span class="at-label">Search</span>' +
+  '</button>' +
+  '<button class="an-tab" onclick="toggleTileManager()" title="Manage tiles" id="btn-manage-tiles">' +
+    '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>' +
+    '<span class="at-label">Tiles</span>' +
   '</button>';
   if (border) border.classList.add('on');
   if (container) container.classList.add('on');
@@ -2975,7 +2977,7 @@ function toggleTileManager() {
   var tm = document.getElementById('tile-manager');
   tm.classList.toggle('on');
   var btn = document.getElementById('btn-manage-tiles');
-  if (btn) btn.style.opacity = tm.classList.contains('on') ? '1' : '.6';
+  if (btn) btn.classList.toggle('active', tm.classList.contains('on'));
   if (tm.classList.contains('on')) updateTileManager();
 }
 
