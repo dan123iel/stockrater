@@ -1791,12 +1791,13 @@ input[type=range] {
         <div style="font-size:16px;font-weight:700;margin-bottom:4px">Browser Storage</div>
         <div style="font-size:12px;color:var(--muted);margin-bottom:20px">Your profile, watchlist, and trades are stored locally. No external server tracking is active.</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
-          <button class="act-btn">📥 Export (JSON)</button>
-          <button class="act-btn"><span data-lucide="upload" style="width:13px;height:13px;margin-right:4px;vertical-align:middle"></span>Import backup</button>
-          <button class="act-btn" style="color:var(--red)">🗑 Wipe cache</button>
+          <button class="act-btn" onclick="exportBackup()" style="display:flex;align-items:center;gap:5px"><span data-lucide="download" style="width:13px;height:13px"></span> Export (JSON)</button>
+          <button class="act-btn" onclick="document.getElementById('import-file-input').click()" style="display:flex;align-items:center;gap:5px"><span data-lucide="upload" style="width:13px;height:13px"></span> Import backup</button>
+          <button class="act-btn" onclick="wipeCache()" style="color:var(--red);display:flex;align-items:center;gap:5px"><span data-lucide="trash-2" style="width:13px;height:13px"></span> Wipe cache</button>
+          <input type="file" id="import-file-input" accept=".json" style="display:none" onchange="importBackup(this)">
         </div>
-        <div class="ps-row"><span class="ps-label">Last export</span><span class="m">Never</span></div>
-        <div class="ps-row"><span class="ps-label">Data stored</span><span class="m">~12 KB (profile, journal, 1 trade)</span></div>
+        <div class="ps-row"><span class="ps-label">Last export</span><span class="m" id="last-export-label">Never</span></div>
+        <div class="ps-row"><span class="ps-label">Data stored</span><span class="m" id="data-size-label">—</span></div>
       </div>
 
       <!-- Account -->
@@ -2017,6 +2018,7 @@ function G(page, skipHash) {
   if (page === 'macro') setTimeout(function(){ setMacroTab(currentMacroTab || 'overview'); }, 0);
   if (page === 'markets') setTimeout(initMarketsPage, 50);
   if (page === 'ideas') setTimeout(initIdeasPage, 50);
+  if (page === 'profile') setTimeout(updateDataLabels, 50);
   // Re-render icons after page transition
   setTimeout(function(){ if(typeof lucide!=='undefined') lucide.createIcons(); }, 50);
 }
@@ -6225,6 +6227,107 @@ function exportAnalyticsPDF() {
 }
 
 // ─── THEME ────────────────────────────────────────────────────────────
+// ─── DATA BACKUP / RESTORE ───────────────────────────────────────────
+
+var BACKUP_KEYS = [
+  'pondex_strategy', 'pondex_theme', 'pondex_groq_key',
+  'pondex_fmp_key', 'pondex_or_key', 'pondex_ai_provider',
+  'pondex_language', 'pondex_theses',
+  'sr_portfolio', 'pondex_portfolio',
+  'sr_watchlist', 'pondex_watchlist',
+  'sr_trades', 'pondex_trades',
+  'pondex_tile_order', 'pondex_active_tiles',
+  'strategy_profile'
+];
+
+function exportBackup() {
+  var data = { version: 1, exportedAt: new Date().toISOString(), data: {} };
+  BACKUP_KEYS.forEach(function(k) {
+    var v = localStorage.getItem(k);
+    if (v !== null) data.data[k] = v;
+  });
+  var json = JSON.stringify(data, null, 2);
+  var blob = new Blob([json], { type: 'application/json' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'pondex-backup-' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  localStorage.setItem('pondex_last_export', new Date().toISOString());
+  updateDataLabels();
+}
+
+function importBackup(input) {
+  var file = input.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      var parsed = JSON.parse(e.target.result);
+      var keys = parsed.data || parsed; // support both versioned and legacy format
+      var count = 0;
+      Object.keys(keys).forEach(function(k) {
+        if (typeof keys[k] === 'string') {
+          localStorage.setItem(k, keys[k]);
+          count++;
+        }
+      });
+      alert('Backup restored — ' + count + ' items loaded. Reloading...');
+      location.reload();
+    } catch(err) {
+      alert('Import failed: invalid JSON file.');
+    }
+  };
+  reader.readAsText(file);
+  input.value = '';
+}
+
+function wipeCache() {
+  if (!confirm('This will delete all cached API data but keep your portfolio, journal, and profile. Continue?')) return;
+  var keep = {};
+  BACKUP_KEYS.forEach(function(k) {
+    var v = localStorage.getItem(k);
+    if (v !== null) keep[k] = v;
+  });
+  localStorage.clear();
+  Object.keys(keep).forEach(function(k) { localStorage.setItem(k, keep[k]); });
+  alert('Cache cleared. Your data is intact.');
+}
+
+function updateDataLabels() {
+  var lastExport = localStorage.getItem('pondex_last_export');
+  var labelEl = document.getElementById('last-export-label');
+  if (labelEl) {
+    labelEl.textContent = lastExport
+      ? new Date(lastExport).toLocaleDateString()
+      : 'Never';
+  }
+  var sizeEl = document.getElementById('data-size-label');
+  if (sizeEl) {
+    var total = 0;
+    BACKUP_KEYS.forEach(function(k) {
+      var v = localStorage.getItem(k);
+      if (v) total += v.length;
+    });
+    var kb = (total / 1024).toFixed(1);
+    var items = [];
+    if (localStorage.getItem('sr_portfolio') || localStorage.getItem('pondex_portfolio')) {
+      try {
+        var p = JSON.parse(localStorage.getItem('sr_portfolio') || localStorage.getItem('pondex_portfolio') || '[]');
+        if (p.length) items.push(p.length + ' position' + (p.length > 1 ? 's' : ''));
+      } catch(e) {}
+    }
+    if (localStorage.getItem('sr_trades') || localStorage.getItem('pondex_trades')) {
+      try {
+        var t = JSON.parse(localStorage.getItem('sr_trades') || localStorage.getItem('pondex_trades') || '[]');
+        if (t.length) items.push(t.length + ' trade' + (t.length > 1 ? 's' : ''));
+      } catch(e) {}
+    }
+    sizeEl.textContent = kb + ' KB' + (items.length ? ' · ' + items.join(', ') : '');
+  }
+}
+
 function toggleTheme() {
   var isLight = document.documentElement.hasAttribute('data-theme');
   setTheme(isLight ? 'dark' : 'light');
