@@ -3269,10 +3269,60 @@ function noKeyHtml(tileName) {
 }
 
 function apiErrorHtml(err, tileName) {
-  return '<div style="padding:16px;font-size:12px;color:var(--muted);line-height:1.7">' +
-    'Unable to load ' + tileName + '.<br>' +
-    '<span style="color:var(--red);font-size:10px">' + safeStr(err || 'Unknown error') + '</span><br>' +
-    '<button class="act-btn" style="font-size:10px;margin-top:8px;padding:4px 10px" onclick="renderTiles()">↺ Retry</button>' +
+  var isNetwork = err && (err.toString().indexOf('Failed to fetch') > -1 || err.toString().indexOf('NetworkError') > -1 || err.toString().indexOf('timed out') > -1);
+  var msg = isNetwork
+    ? 'Data temporarily unavailable. Check your connection and try again.'
+    : 'Unable to load ' + tileName + '.';
+  return '<div style="padding:20px;font-size:12px;color:var(--muted);line-height:1.8;text-align:center">' +
+    '<div style="font-size:20px;margin-bottom:8px">⚡</div>' +
+    '<div style="color:var(--soft);margin-bottom:4px">' + msg + '</div>' +
+    (isNetwork ? '' : '<div style="color:var(--red);font-size:10px;margin-bottom:8px">' + safeStr(err || 'Unknown error') + '</div>') +
+    '<button class="act-btn" style="font-size:10px;margin-top:6px;padding:4px 12px" onclick="renderTiles()">↺ Retry</button>' +
+  '</div>';
+}
+
+// ─── CONFIDENCE SCORE ─────────────────────────────────────────────────────
+// Returns 0-100 based on how many data points are available for this stock.
+// Used in Scorecard tile and Data Coverage Indicator.
+function calcConfidence(y, hasInsider, hasEps) {
+  if (!y) return 0;
+  var pts = 0;
+  if (y.grossMargin   != null) pts += 12;
+  if (y.operatingMargin != null) pts += 12;
+  if (y.revenueGrowth != null) pts += 12;
+  if (y.pe            != null) pts += 8;
+  if (y.fcfYield      != null) pts += 8;
+  if (y.beta          != null) pts += 8;
+  if (y.evEbitda      != null) pts += 8;
+  if (hasInsider)               pts += 16;
+  if (hasEps)                   pts += 8;
+  if (y.revenue       != null && y.revenue > 0) pts += 8;
+  return Math.min(100, pts);
+}
+
+function confidenceBadgeHtml(pct) {
+  var cls = pct >= 80 ? 'g' : (pct >= 50 ? 'y' : 'r');
+  return '<span class="' + cls + '" style="font-size:9px;margin-left:8px" title="Confidence: how many data points back this score">· ' + pct + '% confidence</span>';
+}
+
+// ─── DATA COVERAGE INDICATOR ──────────────────────────────────────────────
+function dataCoverageHtml(y, hasInsider, hasEps) {
+  var rows = [
+    { label: 'Financials',   ok: y && y.grossMargin != null && y.revenueGrowth != null },
+    { label: 'Valuation',    ok: y && y.pe != null },
+    { label: 'Insider data', ok: hasInsider },
+    { label: 'EPS history',  ok: hasEps },
+    { label: 'Beta / Risk',  ok: y && y.beta != null },
+  ];
+  return '<div style="margin-top:12px;padding:10px 12px;background:var(--surface2);border-radius:3px;font-size:10px">' +
+    '<div style="color:var(--soft);font-weight:600;margin-bottom:6px;letter-spacing:.06em;text-transform:uppercase;font-size:9px">Data Coverage</div>' +
+    rows.map(function(r) {
+      return '<div style="display:flex;justify-content:space-between;padding:2px 0;color:var(--muted)">' +
+        '<span>' + r.label + '</span>' +
+        '<span class="' + (r.ok ? 'g' : 'r') + '">' + (r.ok ? '✓' : '— not available') + '</span>' +
+      '</div>';
+    }).join('') +
+    (!hasInsider || !hasEps ? '<div style="color:var(--muted);font-size:9px;margin-top:6px">Insider & EPS data via SEC EDGAR — US-listed stocks only.</div>' : '') +
   '</div>';
 }
 
@@ -3629,13 +3679,16 @@ function buildScorecard(body) {
     var riskCls = RAW_SCORES.esg >= 3.5 ? 'g'   : (RAW_SCORES.esg >= 2.5 ? 'y' : 'r');
 
     var hasActualData = currentScoreDetail && currentScoreDetail.hasLiveData;
+    var confidence = calcConfidence(
+      currentScoreDetail ? currentScoreDetail._rawY : null,
+      currentScoreDetail && currentScoreDetail._hasInsider,
+      currentScoreDetail && currentScoreDetail._hasEps
+    );
     var dataNote;
     if (!isLive) {
       dataNote = '<span style="font-size:9px;color:var(--muted);margin-left:8px">· loading…</span>';
-    } else if (hasActualData) {
-      dataNote = '<span style="font-size:9px;color:var(--green);margin-left:8px">· live data</span>';
     } else {
-      dataNote = '<span style="font-size:9px;color:var(--yellow);margin-left:8px">· limited coverage — scores are estimates</span>';
+      dataNote = confidenceBadgeHtml(confidence);
     }
 
     body.innerHTML =
@@ -3654,7 +3707,12 @@ function buildScorecard(body) {
       '<div id="sc-rows">' + rowsHtml + '</div>' +
       '<div class="explain-toggle" onclick="toggleExplain(this)"><span data-lucide="help-circle" style="width:12px;height:12px;margin-right:5px;vertical-align:middle"></span>Why this score? <span class="kbd">explain</span></div>' +
       '<div class="explain-box" id="explain-box">' + generateExplanations().map(function(e){ return '<div class="ex-row">▸ ' + e + '</div>'; }).join('') + '</div>' +
-      '<div style="margin-top:10px;padding-top:8px;border-top:1px solid rgba(128,128,128,.1);font-size:9px;color:var(--muted)">Scoring methodology: <span class="lnk" onclick="openModal(\'methodology\')">see rules & sources →</span></div>';
+      '<div style="margin-top:10px;padding-top:8px;border-top:1px solid rgba(128,128,128,.1);font-size:9px;color:var(--muted)">Scoring methodology: <span class="lnk" onclick="openModal(\'methodology\')">see rules & sources →</span></div>' +
+      (isLive ? dataCoverageHtml(
+        currentScoreDetail ? currentScoreDetail._rawY : null,
+        currentScoreDetail && currentScoreDetail._hasInsider,
+        currentScoreDetail && currentScoreDetail._hasEps
+      ) : '');
 
     updateDockTab('scorecard', score.toFixed(2), lbl.text, score>=3.3?'g':(score>=2.5?'y':'r'));
   }
@@ -3664,6 +3722,12 @@ function buildScorecard(body) {
   // Single Yahoo Finance call covers all global stocks — no rate limits
   fetchYahooSummaryData(ticker, function(y, err) {
     if (ticker !== currentTicker) return;
+
+    // Hard API failure — show graceful error, don't leave tile blank
+    if (err && !y) {
+      body.innerHTML = apiErrorHtml(err, 'Scorecard');
+      return;
+    }
 
     // ETF — show fund info instead of stock scorecard
     if (y && y.isEtf) { buildEtfTile(body, ticker, y, 'scorecard'); return; }
@@ -3718,6 +3782,9 @@ function buildScorecard(body) {
       RAW_SCORES = { fin: scores.fin, mgmt: scores.mgmt, moat: scores.moat, esg: scores.esg, val: scores.val };
       currentScoreDetail = scores.detail;
       currentScoreDetail.hasLiveData = scores.hasLiveData;
+      currentScoreDetail._rawY = y;
+      currentScoreDetail._hasInsider = insiders && insiders.length > 0;
+      currentScoreDetail._hasEps = false; // updated by EPS fetch if available
       renderScorecard(true);
     }
   });
@@ -4611,6 +4678,7 @@ function buildDCF(body) {
 
   fetchYahooSummaryData(ticker, function(y, err) {
     if (ticker !== currentTicker) return;
+    if (err && !y) { body.innerHTML = apiErrorHtml(err, 'DCF Stresstest'); return; }
     if (y && y.isEtf) { buildEtfTile(body, ticker, y, 'dcf'); return; }
 
     var price    = (y && y.price)    || 0;
@@ -4656,7 +4724,11 @@ function buildDCF(body) {
         '<div class="stat-box highlight"><div class="sb-label">Enterprise Value</div><div class="sb-val g" style="font-size:17px" id="dcf-ev2">—</div></div>' +
         '<div class="stat-box"><div class="sb-label">Shares Outstanding</div><div class="sb-val" style="font-size:17px">' + sharesStr + '</div></div>' +
       '</div>' +
-      '<div style="font-size:11px;color:var(--muted);margin-top:14px;line-height:1.8">Simplified DCF · Revenue base: $' + revB.toFixed(1) + 'B · Terminal: 5% · Fair Value = EV ÷ shares · Not financial advice.</div>';
+      '<div style="font-size:11px;color:var(--muted);margin-top:14px;line-height:1.8">Simplified DCF · Revenue base: $' + revB.toFixed(1) + 'B · Terminal: 5% · Fair Value = EV ÷ shares · Not financial advice.</div>' +
+      '<div class="t-section" style="margin-top:28px">Reverse DCF — What the Market Is Pricing In</div>' +
+      '<div id="reverse-dcf-box" style="padding:14px;background:var(--surface2);border-radius:3px;font-size:12px;line-height:1.8">' +
+        calcReverseDCF(price, revB, sharesB, opMargin, wacc) +
+      '</div>';
 
     body._dcfRevB   = revB;
     body._dcfPrice  = price;
@@ -4699,6 +4771,53 @@ function updateSlider(el) {
   }
 }
 
+
+function calcReverseDCF(price, revB, sharesB, opMargin, wacc) {
+  if (!price || !revB || !sharesB || sharesB <= 0) {
+    return '<span style="color:var(--muted)">Insufficient data for reverse DCF.</span>';
+  }
+  // Target enterprise value from market price
+  var targetEV = price * sharesB;
+  // Solve for implied growth rate g (5-year CAGR) via binary search
+  var termGrowth = 0.05;
+  var waccDec = (wacc || 9) / 100;
+  function dcfAtGrowth(g) {
+    var gDec = g / 100;
+    var rev = revB;
+    var pv = 0;
+    for (var i = 1; i <= 5; i++) {
+      rev = rev * (1 + gDec);
+      var fcf = rev * (opMargin / 100);
+      pv += fcf / Math.pow(1 + waccDec, i);
+    }
+    var termOp = rev * (opMargin / 100) * (1 + termGrowth);
+    var term = termOp / (waccDec - termGrowth);
+    pv += term / Math.pow(1 + waccDec, 5);
+    return pv;
+  }
+  // Binary search: find g where dcfAtGrowth(g) ≈ targetEV
+  var lo = -20, hi = 60, g = 10;
+  for (var iter = 0; iter < 40; iter++) {
+    g = (lo + hi) / 2;
+    var val = dcfAtGrowth(g);
+    if (Math.abs(val - targetEV) < 0.001) break;
+    if (val < targetEV) lo = g; else hi = g;
+  }
+  var impliedG = Math.round(g * 10) / 10;
+  var cls = impliedG > 20 ? 'r' : (impliedG > 10 ? 'y' : 'g');
+  var judgment = impliedG > 30
+    ? 'This implies very high expectations. A meaningful slowdown would justify a significantly lower price.'
+    : impliedG > 15
+    ? 'The market is pricing in above-average growth. Verify whether this aligns with your thesis.'
+    : impliedG > 5
+    ? 'The implied growth rate looks achievable based on recent trends.'
+    : 'The market is pricing in very modest or no growth — may represent upside if fundamentals improve.';
+  return '<div style="margin-bottom:8px">At the current price of <strong style="color:var(--text)">$' + price.toFixed(2) + '</strong>, the market implies:</div>' +
+    '<div style="font-size:18px;font-weight:700;margin-bottom:4px" class="' + cls + '">' + impliedG + '% annual revenue growth</div>' +
+    '<div style="font-size:10px;color:var(--muted);margin-bottom:10px">sustained over 5 years, using current margins (' + opMargin.toFixed(1) + '%) and WACC (' + (wacc||9).toFixed(1) + '%)</div>' +
+    '<div style="font-size:11px;color:var(--soft)">' + judgment + '</div>' +
+    '<div style="font-size:9px;color:var(--muted);margin-top:8px">Not financial advice · Simplified model · Sensitive to margin and WACC assumptions</div>';
+}
 
 function calcDCF() {
   var sliders = document.querySelectorAll('#tbody-dcf input[type=range]');
@@ -5273,25 +5392,39 @@ function runGroqAnalysis() {
   var horizon = currentProfile.horizon;
   var risk = currentProfile.risk;
   var score = computeTotalScore(currentWeights).toFixed(2);
+  var fitLabel = score >= 4.0 ? 'Excellent Fit' : score >= 3.3 ? 'Good Fit' : score >= 2.5 ? 'Neutral Fit' : 'Poor Fit';
   var topWeight = Object.keys(currentWeights).sort(function(a,b){return currentWeights[b]-currentWeights[a];})[0];
   var topWeightLabel = { fin:'Financial Ratios', mgmt:'Management Quality', moat:'Moat', esg:'ESG & Risk', val:'Valuation/DCF' }[topWeight];
 
-  var prompt = 'You are a professional investment analyst assistant for pondex, a market intelligence platform.\n\n' +
-    'Analyze ' + ticker + ' for an investor with the following profile:\n' +
+  // Build live data context from currentScoreDetail to ground the AI
+  var dataContext = '';
+  var d = currentScoreDetail;
+  if (d && d.fin) {
+    if (d.fin.grossMargin && d.fin.grossMargin.raw != null) dataContext += '- Gross margin: ' + (d.fin.grossMargin.raw*100).toFixed(1) + '%\n';
+    if (d.fin.operatingMargin && d.fin.operatingMargin.raw != null) dataContext += '- Operating margin: ' + (d.fin.operatingMargin.raw*100).toFixed(1) + '%\n';
+    if (d.fin.revenueGrowth && d.fin.revenueGrowth.raw != null) dataContext += '- Revenue growth (TTM): ' + (d.fin.revenueGrowth.raw*100).toFixed(1) + '%\n';
+    if (d.fin.pe && d.fin.pe.raw != null) dataContext += '- P/E ratio: ' + parseFloat(d.fin.pe.raw).toFixed(1) + 'x\n';
+    if (d.fin.fcfYield && d.fin.fcfYield.raw != null) dataContext += '- FCF yield: ' + (d.fin.fcfYield.raw*100).toFixed(1) + '%\n';
+  }
+  if (d && d.esg && d.esg.beta && d.esg.beta.raw != null) dataContext += '- Beta: ' + parseFloat(d.esg.beta.raw).toFixed(2) + '\n';
+  if (!dataContext) dataContext = '- Live financial data not yet loaded. Use publicly available TTM data for ' + ticker + '.\n';
+
+  var prompt = 'You are a professional investment analyst assistant for pondex.\n\n' +
+    'IMPORTANT: Only use the financial data provided below. Do not invent or estimate figures not listed here.\n\n' +
+    'Investor profile:\n' +
     '- Strategy: ' + profile + '\n' +
     '- Investment horizon: ' + horizon + '\n' +
     '- Risk tolerance: ' + risk + '\n' +
-    '- Top scoring factor: ' + topWeightLabel + ' (weight: ' + currentWeights[topWeight] + '%)\n\n' +
-    'Key data points for ' + ticker + ':\n' +
-    '- Algorithmic Score: ' + score + '/5.0 (based on your ' + profile + ' profile)\n' +
-    '- Use publicly available data for ' + ticker + ' to ground your analysis.\n\n' +
-    'Please provide:\n' +
-    '1. A 3-4 sentence summary of why ' + ticker + ' fits (or doesn\'t fit) this investor\'s strategy\n' +
-    '2. Top 2-3 specific reasons to consider buying (be concrete, reference the data)\n' +
+    '- Most important factor: ' + topWeightLabel + ' (' + currentWeights[topWeight] + '% weight)\n\n' +
+    'pondex algorithmic score for ' + ticker + ': ' + score + '/5.0 (' + fitLabel + ' for this profile)\n\n' +
+    'Available financial data for ' + ticker + ':\n' + dataContext + '\n' +
+    'Based only on the data above, provide:\n' +
+    '1. A 3-4 sentence summary of why ' + ticker + ' fits or does not fit this investor\'s strategy\n' +
+    '2. Top 2-3 concrete reasons to consider buying (reference the data above)\n' +
     '3. Top 2 key risks to monitor\n' +
-    '4. Exactly 3 alternative stocks to consider (similar sector/risk profile), with 1 sentence each explaining why\n\n' +
-    'Format your response as JSON with keys: summary, buy_reasons (array), risks (array), alternatives (array of {ticker, name, reason})\n' +
-    'Keep it concise and actionable. No markdown, pure JSON only.';
+    '4. Exactly 3 alternative stocks with 1 sentence each\n\n' +
+    'Format as JSON: { summary, buy_reasons (array), risks (array), alternatives (array of {ticker, name, reason}) }\n' +
+    'Pure JSON only, no markdown.';
 
   var errEl = document.getElementById('ai-error');
   var loadEl = document.getElementById('ai-loading');
