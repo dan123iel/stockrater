@@ -2811,7 +2811,10 @@ function buildAnInnerTabs() {
       '<span data-lucide="' + t.icon + '"></span>' +
       '<span class="at-label">' + t.label + '</span>' +
     '</button>';
-  }).join('');
+  }).join('') +
+  '<button class="an-tab" onclick="toggleTileManager()" title="Manage tiles" style="margin-left:auto;opacity:.6" id="btn-manage-tiles">' +
+    ICON_SVG['sliders'] +
+  '</button>';
   if (border) border.classList.add('on');
   if (container) container.classList.add('on');
   setTimeout(function(){ if(typeof lucide!=='undefined') lucide.createIcons(); }, 10);
@@ -2971,6 +2974,8 @@ function removeTile(id) {
 function toggleTileManager() {
   var tm = document.getElementById('tile-manager');
   tm.classList.toggle('on');
+  var btn = document.getElementById('btn-manage-tiles');
+  if (btn) btn.style.opacity = tm.classList.contains('on') ? '1' : '.6';
   if (tm.classList.contains('on')) updateTileManager();
 }
 
