@@ -1,31 +1,49 @@
 # Strategy
 
-Wie pondex gewinnt — in einem Satz: durch den vollständigen Entscheidungszyklus, den kein anderes kostenloses Tool abbildet.
+## Positioning Statement
+
+For self-directed retail investors who analyze individual stocks, pondex is a decision intelligence platform that scores every stock relative to their personal strategy and tracks their investment thesis over time. Unlike Yahoo Finance or Seeking Alpha, pondex doesn't just show data — it interprets it in the context of who you are as an investor.
 
 ---
 
-## Differenzierung
+## Competitive Moat
 
-**Strategy-relative Scoring.** Dieselbe Aktie bekommt verschiedene Scores für verschiedene Profile. Das ist der Moment wo Nutzer verstehen dass pondex sie kennt.
+**Short-term:** Strategy-relative scoring. No free competitor personalizes the score to the investor's profile. First mover on a feature that's simple to understand but not yet built.
 
-**Thesis Tracking.** Fast alle Wettbewerber enden beim Kauf. pondex begleitet: These → Kauf → Monitoring → Lernen. Je länger ein Nutzer pondex benutzt desto wertvoller wird es.
+**Medium-term:** Thesis tracking data. Once a user has 6–12 months of documented theses and outcomes, switching cost becomes real. The data is theirs — but the intelligence layer is pondex.
 
-**Privacy als Feature.** Kein Account, kein Server, alles lokal. Kein Marketing nötig — das erzeugt Vertrauen von selbst.
-
----
-
-## Wachstum
-
-Organisch durch Qualität. Privatanleger teilen Tools die sie wirklich benutzen. Die Shareable Thesis Card ist die Vertriebsmaschine.
+**Long-term:** Decision quality feedback loop. After 2+ years, pondex knows which conditions correlate with good decisions for this specific user. That's a personalized model no competitor can replicate without the same data history.
 
 ---
 
-## Monetarisierung
+## Growth Hypothesis
 
-Die lokale Version bleibt immer kostenlos. Das Abo verkauft nur was zwingend Server braucht: Broker-Sync, Cloud-Backup (Ende-zu-Ende verschlüsselt), erweiterte AI.
+**0 → 100 users:** Direct sharing. The Shareable Thesis Card (a clean PNG of score + reasoning) is posted on X, Reddit, and Substack by investors who want to show their work. Each card is an organic ad.
+
+**100 → 1,000 users:** Word of mouth in investor communities (r/investing, r/Finanzen, finanzielle Freiheit communities). The "no account, no tracking" positioning is a strong pull for privacy-conscious users.
+
+**1,000 → 10,000 users:** Content discovery. Tutorial content around "how I use pondex" from early adopters. Potential integration with financial YouTube/newsletter ecosystem (Source-based Discovery feature).
 
 ---
 
-## Wo pondex nicht kämpft
+## Business Model Hypothesis
 
-Nicht gegen Bloomberg. Nicht gegen Robo-Advisor. Nicht gegen Neo-Broker. Pondex kämpft gegen den Status Quo: den überforderten Privatanleger mit fünf Tabs offen.
+The local single-file version stays **free forever**. The privacy guarantee is the product — breaking it would destroy the core differentiator.
+
+Paid tier (Phase 5) sells only features that require server infrastructure:
+- Broker sync (Trade Republic, Scalable, IBKR)
+- Cross-device cloud backup (end-to-end encrypted — pondex cannot read the data)
+- Extended AI features requiring higher-cost models
+
+Pricing hypothesis: €8–12/month. Comparable to one month of Seeking Alpha Basic.
+
+---
+
+## Where pondex Does Not Compete
+
+- Not against Bloomberg (different price segment, different user)
+- Not against robo-advisors (different philosophy — pondex teaches, not decides)
+- Not against neo-brokers (different job — analysis, not execution)
+- Not against social trading platforms (explicitly opposite values)
+
+pondex competes against the status quo: the overwhelmed retail investor with five tabs open.

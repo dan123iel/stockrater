@@ -1,63 +1,66 @@
 # pondex
 
-**Live:** https://dan123iel.github.io/stockrater/
+**Live:** https://dan123iel.github.io/stockrater/  
 **Repo:** https://github.com/dan123iel/stockrater
 
-> pondex ist das Investment-Betriebssystem für selbstbestimmte Privatanleger — es begleitet Entscheidungen statt Daten anzuzeigen.
+> pondex helps self-directed retail investors make better investment decisions — not by showing more data, but by providing context, structure, and a system that thinks alongside them.
 
 ---
 
-## Dokumentation
+## Documentation
 
-### Produkt
-| Dokument | Inhalt |
+### Product
+| | |
 |---|---|
-| [VISION.md](doc/product/VISION.md) | Vision Statement, Kernprobleme, Positionierung, Zielgruppe, Prinzipien |
-| [STRATEGY.md](doc/product/STRATEGY.md) | Wie pondex gewinnt, Wachstumsstrategie, Erfolgsmetriken |
-| [ROADMAP.md](doc/product/ROADMAP.md) | MVP / V1 / V2 / V3 mit Exit-Kriterien |
-| [BACKLOG.md](doc/product/BACKLOG.md) | Alle Feature-Ideen mit Priorität, Phase, Bewertung |
-| [RISKS.md](doc/product/RISKS.md) | Technische Risiken, Constraints, offene Baustellen |
+| [vision.md](doc/product/vision.md) | Why pondex exists. Problem, success, what it's not. |
+| [strategy.md](doc/product/strategy.md) | How pondex wins. Positioning, moat, growth, monetization. |
+| [personas.md](doc/product/personas.md) | Who uses it and why. Jobs-to-be-done. |
+| [metrics.md](doc/product/metrics.md) | North Star metric, phase exit criteria, what we don't measure. |
+| [principles.md](doc/product/principles.md) | What pondex will never do — and why. |
 
-### Engineering
-| Dokument | Inhalt |
+### Roadmap
+| | |
 |---|---|
-| [ARCHITECTURE.md](doc/ARCHITECTURE.md) | Technischer Aufbau, Worker, Datenfluss |
-| [CODING-CONVENTIONS.md](doc/CODING-CONVENTIONS.md) | Code-Standards |
-| [ENGINEERING-PRINCIPLES.md](doc/ENGINEERING-PRINCIPLES.md) | Entwicklungs-Prinzipien |
-| [DATA-COVERAGE.md](doc/DATA-COVERAGE.md) | Datenverfügbarkeit nach Region/Aktie |
-| [DATA-GOVERNANCE.md](doc/DATA-GOVERNANCE.md) | Datenquellen, Caching, Privacy |
-| [SECURITY.md](doc/SECURITY.md) | Sicherheitsüberlegungen |
-| [TECH-DEBT.md](doc/TECH-DEBT.md) | Bekannte technische Schulden |
-| [RISK-REGISTER.md](doc/RISK-REGISTER.md) | Technisches Risiko-Register |
-| [DEFINITION-OF-DONE.md](doc/DEFINITION-OF-DONE.md) | Was "fertig" bedeutet |
+| [now.md](doc/roadmap/now.md) | Current phase (MVP) — scope, exit criteria, open questions. |
+| [next.md](doc/roadmap/next.md) | Next phase (V1) — scope, dependencies, open questions. |
+| [later.md](doc/roadmap/later.md) | Prioritized backlog — V2, V3, V4+, never. |
+| [decisions.md](doc/roadmap/decisions.md) | Architectural Decision Records (ADRs). |
 
 ### Specs
-| Dokument | Inhalt |
+| | |
 |---|---|
-| [DISCOVERY-AI-CHAT-SPEC.md](doc/DISCOVERY-AI-CHAT-SPEC.md) | AI-Chat & Discovery Engine Spezifikation |
-| [INTELLIGENCE-ARCHITECTURE.md](doc/INTELLIGENCE-ARCHITECTURE.md) | Intelligence Layer Architektur |
-| [PROJECT-BRIEF.md](doc/PROJECT-BRIEF.md) | Ursprüngliches Project Brief |
+| [scoring-engine.md](doc/specs/scoring-engine.md) | How the score is calculated. Weights, thresholds, confidence. |
+| [thesis-tracker.md](doc/specs/thesis-tracker.md) | Thesis Tracker feature spec. |
+| [ai-chat.md](doc/specs/ai-chat.md) | AI Chat feature spec. |
+| [discovery-engine.md](doc/specs/discovery-engine.md) | Discovery Engine feature spec. |
+| [dcf-model.md](doc/specs/dcf-model.md) | DCF Stresstest + Reverse DCF spec. |
+
+### Research
+| | |
+|---|---|
+| [problem-validation.md](doc/research/problem-validation.md) | Assumptions vs. validated evidence. |
+| [competitor-analysis.md](doc/research/competitor-analysis.md) | Direct, paid, and indirect competitors. |
+| [user-interviews.md](doc/research/user-interviews.md) | Interview guide + findings. |
+
+### Technical
+| | |
+|---|---|
+| [architecture.md](doc/technical/architecture.md) | System overview, Worker endpoints, data flow. |
+| [data-sources.md](doc/technical/data-sources.md) | APIs, limits, caching strategy. |
+| [risks.md](doc/technical/risks.md) | Technical risks with likelihood, impact, mitigation, status. |
+
+### Brand
+| | |
+|---|---|
+| [positioning.md](doc/brand/positioning.md) | How we talk about pondex. |
+| [tone-of-voice.md](doc/brand/tone-of-voice.md) | Writing principles and UI copy rules. |
+| [naming-conventions.md](doc/brand/naming-conventions.md) | Feature names, score labels, code conventions. |
 
 ---
 
-## Technischer Stack (Kurzfassung)
+## Quick Reference
 
-```
-Browser (index.html — single file, kein Framework)
-  └── localStorage: Portfolio, Watchlist, Trades, Theme, Profil
-
-Cloudflare Worker (trading.d-lenz-contact.workers.dev)
-  ├── /yahoo/summary + /yahoo/chart   ← Financials, Charts (global)
-  ├── /yahoo-news                     ← News
-  ├── /massive/{endpoint}             ← Ticker-Details, Dividenden, Logos
-  ├── /edgar/{path}                   ← Insider-Trades, EPS (US only)
-  └── /ai/groq                        ← AI Proxy (Llama 3.3 70B)
-```
-
-## Entwicklungsregeln
-
-- Eine Datei — kein Build-System, kein npm, kein Framework (bis Vite-Migration in V1)
-- Keine kostenpflichtigen APIs für Nutzer
-- Alle API-Keys server-seitig (Cloudflare Worker Secrets)
-- Kein Backend, keine Datenbank, keine Server-seitige Nutzerdaten
-- Jedes neue Feature muss den Filter bestehen: Macht es Entscheidungen, Lernen oder Verhalten besser?
+**Two MVP blockers before shipping:** JSON backup/restore · Yahoo Finance graceful fallback  
+**One constraint before V1:** Vite build system migration  
+**One constraint before Discovery Engine:** Cloudflare KV cache for scored universe  
+**One constraint before AI Chat:** RAG architecture audit (ADR-005)
