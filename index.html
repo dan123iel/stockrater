@@ -432,7 +432,8 @@ pre { font-family: var(--font); white-space: pre-wrap; word-break: break-word; }
 .dock-tab:last-child { border-right: none; }
 .dock-tab:hover { color: var(--text); background: var(--surface2); }
 .dock-tab.active { color: var(--text); border-bottom-color: var(--blue); background: var(--surface2); }
-.dock-tab .dt-icon { font-size: 13px; }
+.dock-tab .dt-icon { font-size: 13px; display:flex; align-items:center; justify-content:center; opacity:.7; margin-bottom:1px; }
+.dock-tab.active .dt-icon { opacity:1; }
 .dock-tab .dt-label { font-size: 9px; letter-spacing: .1em; text-transform: uppercase; }
 .dock-tab .dt-val { font-size: 12px; color: var(--text); font-weight: 600; }
 .dock-tab .dt-sub { font-size: 9px; color: var(--muted); }
@@ -629,12 +630,15 @@ pre { font-family: var(--font); white-space: pre-wrap; word-break: break-word; }
 .score-label.avoid { background: rgba(232,69,60,.1); color: var(--red); border: 1px solid rgba(232,69,60,.2); }
 .score-label.hold { background: rgba(240,163,42,.1); color: var(--yellow); border: 1px solid rgba(240,163,42,.2); }
 .score-bar { margin: 8px 0 2px; }
-.score-row { display: flex; align-items: center; gap: 8px; margin: 4px 0; font-size: 11px; }
+.score-row { display: flex; align-items: center; gap: 10px; margin: 6px 0; font-size: 11px; }
 .score-row .sr-label { color: var(--soft); flex: 1; }
 .score-row .sr-pct { color: var(--muted); font-size: 9px; width: 30px; text-align: right; }
-.score-row .sr-track { flex: 2; height: 3px; background: var(--surface2); border-radius: 1px; }
-.score-row .sr-fill { height: 3px; border-radius: 1px; background: var(--blue); }
-.score-row .sr-val { color: var(--text); font-size: 10px; width: 28px; text-align: right; }
+.score-row .sr-track { flex: 2; height: 5px; background: rgba(255,255,255,.07); border-radius: 3px; position: relative; }
+.score-row .sr-fill { height: 5px; border-radius: 3px; background: var(--blue); position: relative; transition: width .4s ease; }
+.score-row .sr-fill::after { content:''; position:absolute; right:-3px; top:50%; transform:translateY(-50%); width:7px; height:7px; border-radius:50%; background:inherit; box-shadow:0 0 0 2px var(--bg); }
+.score-row .sr-fill.g { background: var(--green); }
+.score-row .sr-fill.r { background: var(--red); }
+.score-row .sr-val { color: var(--text); font-size: 10px; font-weight: 600; width: 32px; text-align: right; }
 
 /* ── TILE: RATIOS ── */
 .ratio-tabs { display: flex; gap: 0; margin-bottom: 10px; border-bottom: 1px solid var(--border); }
@@ -1841,11 +1845,27 @@ input[type=range] {
 
 <script>
 // ── Lucide icon helper ─────────────────────────────────────────────────
-// li('trending-up', 'nav-icon') → <span class="icon"><svg ...></svg></span>
-// Icons are rendered after Lucide CDN loads. Falls back to emoji gracefully.
+// Inline SVG map for tile dock icons — no CDN dependency, always render instantly
+var ICON_SVG = {
+  'star':           '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+  'trending-up':    '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>',
+  'percent':        '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>',
+  'sliders':        '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>',
+  'newspaper':      '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>',
+  'users':          '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+  'pie-chart':      '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>',
+  'coins':          '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82"/></svg>',
+  'table-2':        '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>',
+  'target':         '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
+  'sparkles':       '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>',
+  'building-2':     '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>'
+};
+
 function li(name, cls) {
   cls = cls || 'tile-icon';
-  // Return a placeholder span that gets replaced after Lucide loads
+  if (ICON_SVG[name]) {
+    return '<span class="icon ' + cls + '" style="display:inline-flex;align-items:center;justify-content:center">' + ICON_SVG[name] + '</span>';
+  }
   return '<span class="icon ' + cls + '" data-lucide="' + name + '"></span>';
 }
 
