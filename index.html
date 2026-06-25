@@ -1184,7 +1184,7 @@ input[type=range] {
         <div class="recent-card" onclick="launchAnalytics('NVDA')">
           <div class="rc-sym g">NVDA</div>
           <div class="rc-name">Nvidia Corporation</div>
-          <div class="rc-score"><span data-lucide="star" style="width:11px;height:11px;fill:var(--yellow);stroke:var(--yellow);margin-right:3px;vertical-align:middle"></span>4.57 / 5.0 — <span class="g">Strong Buy</span></div>
+          <div class="rc-score"><span data-lucide="star" style="width:11px;height:11px;fill:var(--yellow);stroke:var(--yellow);margin-right:3px;vertical-align:middle"></span>4.57 / 5.0 — <span class="g">Excellent Fit</span></div>
           <div class="rc-time">2 hours ago</div>
         </div>
         <div class="recent-card" onclick="launchAnalytics('TSLA')">
@@ -3557,10 +3557,10 @@ function computeTotalScore(weights, scoresOverride) {
 }
 
 function scoreLabel(score) {
-  if (score >= 4.0) return { cls:'buy', text:'Strong Buy' };
-  if (score >= 3.3) return { cls:'buy', text:'Buy' };
-  if (score >= 2.5) return { cls:'hold', text:'Hold' };
-  return { cls:'avoid', text:'Avoid' };
+  if (score >= 4.0) return { cls:'buy', text:'Excellent Fit' };
+  if (score >= 3.3) return { cls:'buy', text:'Good Fit' };
+  if (score >= 2.5) return { cls:'hold', text:'Neutral Fit' };
+  return { cls:'avoid', text:'Poor Fit' };
 }
 
 // ETF tile — shows when ticker is detected as an ETF (no income statements)
@@ -5425,19 +5425,19 @@ function buildCompany(body) {
 // ─── COMPARISON ───────────────────────────────────────────────────────
 // ─── COMPARISON (dynamic) ─────────────────────────────────────────────
 var COMP_DATA = {
-  NVDA:  { name:'Nvidia Corp.', score:'4.57', lbl:'Strong Buy', lcls:'g', fRat:'4.9/5', mgmt:'3.5/5', price:'$205.10', fv:'$97 (DCF)', mos:'−53%', moscls:'r', mosTxt:'Premium-priced', pe:'16.2×', pecls:'g', peTxt:'Cheap', gm:'74.1%', gmcls:'g', rev:'+85.2%', revcls:'g', revTxt:'Hyper', sma:'Above', smacls:'g', smaTxt:'Uptrend', beta:'1.25×' },
-  AMD:   { name:'Adv. Micro Dev.', score:'3.82', lbl:'Buy', lcls:'y', fRat:'3.5/5', mgmt:'3.0/5', price:'$160.40', fv:'$155.00', mos:'−3.3%', moscls:'y', mosTxt:'Fair Value', pe:'28.4×', pecls:'r', peTxt:'Exp.', gm:'48.2%', gmcls:'y', rev:'+12.2%', revcls:'y', revTxt:'Steady', sma:'Above', smacls:'g', smaTxt:'Uptrend', beta:'1.35×' },
-  INTC:  { name:'Intel Corp.', score:'2.10', lbl:'Avoid', lcls:'r', fRat:'1.8/5', mgmt:'2.0/5', price:'$31.15', fv:'$22.00', mos:'−29.3%', moscls:'r', mosTxt:'Overpriced', pe:'19.5×', pecls:'y', peTxt:'Fair', gm:'32.0%', gmcls:'r', rev:'−5.1%', revcls:'r', revTxt:'Declining', sma:'Below', smacls:'r', smaTxt:'Downtrend', beta:'0.85×' },
-  MSFT:  { name:'Microsoft', score:'4.85', lbl:'Strong Buy', lcls:'g', fRat:'4.8/5', mgmt:'4.5/5', price:'$431.20', fv:'$480.00', mos:'+11.3%', moscls:'g', mosTxt:'Underpriced', pe:'34.1×', pecls:'y', peTxt:'Fair', gm:'69.8%', gmcls:'g', rev:'+16.4%', revcls:'g', revTxt:'Strong', sma:'Above', smacls:'g', smaTxt:'Uptrend', beta:'0.90×' },
-  GOOGL: { name:'Alphabet Inc.', score:'4.62', lbl:'Strong Buy', lcls:'g', fRat:'4.6/5', mgmt:'4.2/5', price:'$175.80', fv:'$210.00', mos:'+19.4%', moscls:'g', mosTxt:'Underpriced', pe:'22.8×', pecls:'y', peTxt:'Fair', gm:'57.1%', gmcls:'g', rev:'+14.2%', revcls:'g', revTxt:'Strong', sma:'Above', smacls:'g', smaTxt:'Uptrend', beta:'1.05×' },
-  TSLA:  { name:'Tesla Inc.', score:'3.10', lbl:'Hold', lcls:'y', fRat:'2.8/5', mgmt:'3.2/5', price:'$175.20', fv:'$165.00', mos:'−5.8%', moscls:'r', mosTxt:'Overpriced', pe:'65.4×', pecls:'r', peTxt:'Exp.', gm:'17.1%', gmcls:'r', rev:'−3.4%', revcls:'r', revTxt:'Declining', sma:'Below', smacls:'r', smaTxt:'Downtrend', beta:'2.30×' },
-  AAPL:  { name:'Apple Inc.', score:'4.20', lbl:'Buy', lcls:'g', fRat:'4.0/5', mgmt:'4.6/5', price:'$182.10', fv:'$195.00', mos:'+7.1%', moscls:'g', mosTxt:'Slight Upside', pe:'29.2×', pecls:'y', peTxt:'Fair', gm:'45.6%', gmcls:'g', rev:'+4.8%', revcls:'y', revTxt:'Steady', sma:'Above', smacls:'g', smaTxt:'Uptrend', beta:'1.20×' },
-  META:  { name:'Meta Platforms', score:'4.40', lbl:'Buy', lcls:'g', fRat:'4.4/5', mgmt:'3.8/5', price:'$511.80', fv:'$560.00', mos:'+9.4%', moscls:'g', mosTxt:'Underpriced', pe:'24.6×', pecls:'y', peTxt:'Fair', gm:'82.1%', gmcls:'g', rev:'+20.5%', revcls:'g', revTxt:'Strong', sma:'Above', smacls:'g', smaTxt:'Uptrend', beta:'1.28×' },
-  AMZN:  { name:'Amazon', score:'4.35', lbl:'Buy', lcls:'g', fRat:'4.2/5', mgmt:'4.0/5', price:'$197.60', fv:'$220.00', mos:'+11.3%', moscls:'g', mosTxt:'Underpriced', pe:'42.8×', pecls:'r', peTxt:'Exp.', gm:'49.7%', gmcls:'g', rev:'+11.9%', revcls:'g', revTxt:'Strong', sma:'Above', smacls:'g', smaTxt:'Uptrend', beta:'1.35×' },
-  V:     { name:'Visa Inc.', score:'4.55', lbl:'Strong Buy', lcls:'g', fRat:'4.6/5', mgmt:'4.2/5', price:'$285.40', fv:'$320.00', mos:'+12.1%', moscls:'g', mosTxt:'Underpriced', pe:'28.4×', pecls:'y', peTxt:'Fair', gm:'80.4%', gmcls:'g', rev:'+9.7%', revcls:'g', revTxt:'Steady', sma:'Above', smacls:'g', smaTxt:'Uptrend', beta:'0.95×' },
-  MA:    { name:'Mastercard', score:'4.48', lbl:'Buy', lcls:'g', fRat:'4.5/5', mgmt:'4.1/5', price:'$478.20', fv:'$530.00', mos:'+10.8%', moscls:'g', mosTxt:'Underpriced', pe:'36.2×', pecls:'y', peTxt:'Fair', gm:'78.2%', gmcls:'g', rev:'+11.3%', revcls:'g', revTxt:'Steady', sma:'Above', smacls:'g', smaTxt:'Uptrend', beta:'1.05×' },
-  KO:    { name:'Coca-Cola', score:'3.80', lbl:'Buy', lcls:'g', fRat:'3.6/5', mgmt:'3.8/5', price:'$68.40', fv:'$72.00', mos:'+5.3%', moscls:'g', mosTxt:'Slight Upside', pe:'24.2×', pecls:'y', peTxt:'Fair', gm:'58.9%', gmcls:'g', rev:'+3.1%', revcls:'y', revTxt:'Stable', sma:'Above', smacls:'g', smaTxt:'Uptrend', beta:'0.55×' },
-  PEP:   { name:'PepsiCo', score:'3.75', lbl:'Buy', lcls:'g', fRat:'3.5/5', mgmt:'3.8/5', price:'$162.30', fv:'$170.00', mos:'+4.7%', moscls:'g', mosTxt:'Slight Upside', pe:'22.1×', pecls:'y', peTxt:'Fair', gm:'54.8%', gmcls:'g', rev:'+2.4%', revcls:'y', revTxt:'Stable', sma:'Above', smacls:'g', smaTxt:'Uptrend', beta:'0.52×' },
+  NVDA:  { name:'Nvidia Corp.', score:'4.57', lbl:'Excellent Fit', lcls:'g', fRat:'4.9/5', mgmt:'3.5/5', price:'$205.10', fv:'$97 (DCF)', mos:'−53%', moscls:'r', mosTxt:'Premium-priced', pe:'16.2×', pecls:'g', peTxt:'Cheap', gm:'74.1%', gmcls:'g', rev:'+85.2%', revcls:'g', revTxt:'Hyper', sma:'Above', smacls:'g', smaTxt:'Uptrend', beta:'1.25×' },
+  AMD:   { name:'Adv. Micro Dev.', score:'3.82', lbl:'Good Fit', lcls:'y', fRat:'3.5/5', mgmt:'3.0/5', price:'$160.40', fv:'$155.00', mos:'−3.3%', moscls:'y', mosTxt:'Fair Value', pe:'28.4×', pecls:'r', peTxt:'Exp.', gm:'48.2%', gmcls:'y', rev:'+12.2%', revcls:'y', revTxt:'Steady', sma:'Above', smacls:'g', smaTxt:'Uptrend', beta:'1.35×' },
+  INTC:  { name:'Intel Corp.', score:'2.10', lbl:'Poor Fit', lcls:'r', fRat:'1.8/5', mgmt:'2.0/5', price:'$31.15', fv:'$22.00', mos:'−29.3%', moscls:'r', mosTxt:'Overpriced', pe:'19.5×', pecls:'y', peTxt:'Fair', gm:'32.0%', gmcls:'r', rev:'−5.1%', revcls:'r', revTxt:'Declining', sma:'Below', smacls:'r', smaTxt:'Downtrend', beta:'0.85×' },
+  MSFT:  { name:'Microsoft', score:'4.85', lbl:'Excellent Fit', lcls:'g', fRat:'4.8/5', mgmt:'4.5/5', price:'$431.20', fv:'$480.00', mos:'+11.3%', moscls:'g', mosTxt:'Underpriced', pe:'34.1×', pecls:'y', peTxt:'Fair', gm:'69.8%', gmcls:'g', rev:'+16.4%', revcls:'g', revTxt:'Strong', sma:'Above', smacls:'g', smaTxt:'Uptrend', beta:'0.90×' },
+  GOOGL: { name:'Alphabet Inc.', score:'4.62', lbl:'Excellent Fit', lcls:'g', fRat:'4.6/5', mgmt:'4.2/5', price:'$175.80', fv:'$210.00', mos:'+19.4%', moscls:'g', mosTxt:'Underpriced', pe:'22.8×', pecls:'y', peTxt:'Fair', gm:'57.1%', gmcls:'g', rev:'+14.2%', revcls:'g', revTxt:'Strong', sma:'Above', smacls:'g', smaTxt:'Uptrend', beta:'1.05×' },
+  TSLA:  { name:'Tesla Inc.', score:'3.10', lbl:'Neutral Fit', lcls:'y', fRat:'2.8/5', mgmt:'3.2/5', price:'$175.20', fv:'$165.00', mos:'−5.8%', moscls:'r', mosTxt:'Overpriced', pe:'65.4×', pecls:'r', peTxt:'Exp.', gm:'17.1%', gmcls:'r', rev:'−3.4%', revcls:'r', revTxt:'Declining', sma:'Below', smacls:'r', smaTxt:'Downtrend', beta:'2.30×' },
+  AAPL:  { name:'Apple Inc.', score:'4.20', lbl:'Good Fit', lcls:'g', fRat:'4.0/5', mgmt:'4.6/5', price:'$182.10', fv:'$195.00', mos:'+7.1%', moscls:'g', mosTxt:'Slight Upside', pe:'29.2×', pecls:'y', peTxt:'Fair', gm:'45.6%', gmcls:'g', rev:'+4.8%', revcls:'y', revTxt:'Steady', sma:'Above', smacls:'g', smaTxt:'Uptrend', beta:'1.20×' },
+  META:  { name:'Meta Platforms', score:'4.40', lbl:'Good Fit', lcls:'g', fRat:'4.4/5', mgmt:'3.8/5', price:'$511.80', fv:'$560.00', mos:'+9.4%', moscls:'g', mosTxt:'Underpriced', pe:'24.6×', pecls:'y', peTxt:'Fair', gm:'82.1%', gmcls:'g', rev:'+20.5%', revcls:'g', revTxt:'Strong', sma:'Above', smacls:'g', smaTxt:'Uptrend', beta:'1.28×' },
+  AMZN:  { name:'Amazon', score:'4.35', lbl:'Good Fit', lcls:'g', fRat:'4.2/5', mgmt:'4.0/5', price:'$197.60', fv:'$220.00', mos:'+11.3%', moscls:'g', mosTxt:'Underpriced', pe:'42.8×', pecls:'r', peTxt:'Exp.', gm:'49.7%', gmcls:'g', rev:'+11.9%', revcls:'g', revTxt:'Strong', sma:'Above', smacls:'g', smaTxt:'Uptrend', beta:'1.35×' },
+  V:     { name:'Visa Inc.', score:'4.55', lbl:'Excellent Fit', lcls:'g', fRat:'4.6/5', mgmt:'4.2/5', price:'$285.40', fv:'$320.00', mos:'+12.1%', moscls:'g', mosTxt:'Underpriced', pe:'28.4×', pecls:'y', peTxt:'Fair', gm:'80.4%', gmcls:'g', rev:'+9.7%', revcls:'g', revTxt:'Steady', sma:'Above', smacls:'g', smaTxt:'Uptrend', beta:'0.95×' },
+  MA:    { name:'Mastercard', score:'4.48', lbl:'Good Fit', lcls:'g', fRat:'4.5/5', mgmt:'4.1/5', price:'$478.20', fv:'$530.00', mos:'+10.8%', moscls:'g', mosTxt:'Underpriced', pe:'36.2×', pecls:'y', peTxt:'Fair', gm:'78.2%', gmcls:'g', rev:'+11.3%', revcls:'g', revTxt:'Steady', sma:'Above', smacls:'g', smaTxt:'Uptrend', beta:'1.05×' },
+  KO:    { name:'Coca-Cola', score:'3.80', lbl:'Good Fit', lcls:'g', fRat:'3.6/5', mgmt:'3.8/5', price:'$68.40', fv:'$72.00', mos:'+5.3%', moscls:'g', mosTxt:'Slight Upside', pe:'24.2×', pecls:'y', peTxt:'Fair', gm:'58.9%', gmcls:'g', rev:'+3.1%', revcls:'y', revTxt:'Stable', sma:'Above', smacls:'g', smaTxt:'Uptrend', beta:'0.55×' },
+  PEP:   { name:'PepsiCo', score:'3.75', lbl:'Good Fit', lcls:'g', fRat:'3.5/5', mgmt:'3.8/5', price:'$162.30', fv:'$170.00', mos:'+4.7%', moscls:'g', mosTxt:'Slight Upside', pe:'22.1×', pecls:'y', peTxt:'Fair', gm:'54.8%', gmcls:'g', rev:'+2.4%', revcls:'y', revTxt:'Stable', sma:'Above', smacls:'g', smaTxt:'Uptrend', beta:'0.52×' },
 };
 
 var recentMatchups = [];
@@ -6640,7 +6640,7 @@ function renderScreenResults(results, thr, focus) {
       cardsEl.innerHTML = '<div style="padding:20px;color:var(--muted);font-size:12px">No stocks matched your current profile thresholds. Try a different strategy profile.</div>';
     } else {
       cardsEl.innerHTML = results.map(function(r) {
-        var scoreLabel2 = r.score >= 4.0 ? 'Strong Buy' : r.score >= 3.3 ? 'Buy' : r.score >= 2.5 ? 'Hold' : 'Avoid';
+        var scoreLabel2 = r.score >= 4.0 ? 'Excellent Fit' : r.score >= 3.3 ? 'Good Fit' : r.score >= 2.5 ? 'Neutral Fit' : 'Poor Fit';
         var scoreCls = r.score >= 3.3 ? 'g' : r.score >= 2.5 ? 'y' : 'r';
         var gmStr  = r.gm  != null ? (r.gm*100).toFixed(1)+'%' : '—';
         var peStr  = r.pe  != null ? r.pe.toFixed(1)+'x' : '—';
@@ -6736,7 +6736,7 @@ function buildIdeasPrompt() {
     '{\n' +
     '  "macro_context": "1-2 sentence macro summary relevant to this profile",\n' +
     '  "recommendations": [\n' +
-    '    {"ticker": "NVDA", "name": "Nvidia", "reason": "...", "fit": "Strong Buy", "region": "US", "sector": "Tech"}\n' +
+    '    {"ticker": "NVDA", "name": "Nvidia", "reason": "...", "fit": "Excellent Fit", "region": "US", "sector": "Tech"}\n' +
     '  ],\n' +
     '  "risks": ["risk 1", "risk 2"]\n' +
     '}\n' +
