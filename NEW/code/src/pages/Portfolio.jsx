@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Plus, Trash2, ArrowUpRight, AlertTriangle } from 'lucide-react';
-import { getPortfolio, setPortfolio, getThesis, getFmpKey } from '../lib/storage';
+import { getPortfolio, setPortfolio, getThesis } from '../lib/storage';
 import { fetchCurrentPrice } from '../lib/fmp';
 
 function ThesisStatusBadge({ ticker }) {
@@ -20,7 +20,6 @@ export default function Portfolio() {
   const [form, setForm] = useState(EMPTY_TRADE);
   const [prices, setPrices] = useState({});
   const [loadingPrices, setLoadingPrices] = useState(false);
-  const fmpKey = getFmpKey();
 
   const positions = trades.reduce((acc, trade) => {
     const t = trade.ticker.toUpperCase();
@@ -30,14 +29,14 @@ export default function Portfolio() {
   }, {});
 
   useEffect(() => {
-    if (!fmpKey || !Object.keys(positions).length) return;
+    if (!Object.keys(positions).length) return;
     setLoadingPrices(true);
-    Promise.allSettled(Object.keys(positions).map(t => fetchCurrentPrice(t, fmpKey).then(d => ({ ticker: t, price: d?.price })))).then(results => {
+    Promise.allSettled(Object.keys(positions).map(t => fetchCurrentPrice(t).then(d => ({ ticker: t, price: d?.price })))).then(results => {
       const map = {};
       results.forEach(r => { if (r.status === 'fulfilled' && r.value) map[r.value.ticker] = r.value.price; });
       setPrices(map); setLoadingPrices(false);
     });
-  }, [trades, fmpKey]);
+  }, [trades]);
 
   const calcPosition = (pos) => {
     const buys = pos.trades.filter(t => t.type === 'buy');

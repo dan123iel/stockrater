@@ -1,15 +1,13 @@
 import { useState } from 'react';
 import { X, Download, Upload } from 'lucide-react';
-import { getFmpKey, setFmpKey, getGroqKey, setGroqKey, getPortfolio, setPortfolio, getTheses, set, KEYS, getProfile, setProfile } from '../lib/storage';
+import { getGroqKey, setGroqKey, getPortfolio, setPortfolio, getTheses, set, KEYS, getProfile, setProfile } from '../lib/storage';
 import { getWatchlist, setWatchlist } from '../pages/Watchlist';
 
 export default function SettingsPanel({ onClose, onEditProfile }) {
-  const [fmpKey, setFmpKeyState] = useState(getFmpKey());
   const [groqKey, setGroqKeyState] = useState(getGroqKey());
   const [saved, setSaved] = useState(false);
 
   const save = () => {
-    setFmpKey(fmpKey.trim());
     setGroqKey(groqKey.trim());
     setSaved(true);
     setTimeout(() => setSaved(false), 1500);
@@ -61,29 +59,24 @@ export default function SettingsPanel({ onClose, onEditProfile }) {
         </div>
         <div style={{ padding: '32px 36px' }} className="space-y-10">
           <div>
-            <div className="mono-label mb-3">FMP API Key</div>
-            <p style={{ fontFamily: 'Inter', fontSize: '13px', opacity: 0.5, marginBottom: '10px', lineHeight: 1.5 }}>Required for all stock data. Get a free key at <a href="https://financialmodelingprep.com/developer/docs" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-signal)', textDecoration: 'underline' }}>financialmodelingprep.com</a> — free tier covers 250 requests/day.</p>
-            <input type="password" value={fmpKey} onChange={e => setFmpKeyState(e.target.value)} placeholder="Enter your FMP API key…" className="settings-input" />
-          </div>
-          <div>
             <div className="mono-label mb-3">Groq API Key</div>
-            <p style={{ fontFamily: 'Inter', fontSize: '13px', opacity: 0.5, marginBottom: '10px', lineHeight: 1.5 }}>Required for AI Insights chat. Get a free key at <a href="https://console.groq.com" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-signal)', textDecoration: 'underline' }}>console.groq.com</a>.</p>
+            <p style={{ fontFamily: 'Inter', fontSize: '13px', opacity: 0.5, marginBottom: '10px', lineHeight: 1.5 }}>Required for AI Insights. Free at <a href="https://console.groq.com" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-signal)', textDecoration: 'underline' }}>console.groq.com</a>. All stock data works without it.</p>
             <input type="password" value={groqKey} onChange={e => setGroqKeyState(e.target.value)} placeholder="Enter your Groq API key…" className="settings-input" />
           </div>
-          <button onClick={save} className="btn-primary" style={{ width: '100%', justifyContent: 'center' }}>{saved ? '✓ Keys saved' : 'Save API Keys'}</button>
+          <button onClick={save} className="btn-primary" style={{ width: '100%', justifyContent: 'center' }}>{saved ? '✓ Saved' : 'Save'}</button>
           <div style={{ borderTop: '0.5px solid var(--color-divider)', paddingTop: '28px' }}>
             <div className="mono-label mb-3">Your Profile</div>
             <button onClick={onEditProfile} className="btn-ghost" style={{ width: '100%', justifyContent: 'center' }}>Edit Strategy Profile</button>
           </div>
           <div style={{ borderTop: '0.5px solid var(--color-divider)', paddingTop: '28px' }}>
             <div className="mono-label mb-1">Backup & Restore</div>
-            <p style={{ fontFamily: 'Inter', fontSize: '13px', opacity: 0.45, marginBottom: '12px', lineHeight: 1.5 }}>Exports portfolio, watchlist, theses, and profile in one file.</p>
+            <p style={{ fontFamily: 'Inter', fontSize: '13px', opacity: 0.45, marginBottom: '12px', lineHeight: 1.5 }}>Exports portfolio, watchlist, theses, and profile.</p>
             <div className="flex gap-3">
-              <button onClick={exportAll} className="btn-ghost flex-1 justify-center"><Download size={13} />Export Backup</button>
-              <label className="btn-ghost flex-1 justify-center" style={{ cursor: 'pointer' }}><Upload size={13} />Import Backup<input type="file" accept=".json" onChange={importAll} style={{ display: 'none' }} /></label>
+              <button onClick={exportAll} className="btn-ghost flex-1 justify-center"><Download size={13} />Export</button>
+              <label className="btn-ghost flex-1 justify-center" style={{ cursor: 'pointer' }}><Upload size={13} />Import<input type="file" accept=".json" onChange={importAll} style={{ display: 'none' }} /></label>
             </div>
           </div>
-          <p style={{ fontFamily: 'Inter', fontSize: '12px', opacity: 0.35, textAlign: 'center', lineHeight: 1.5 }}>All data is stored locally in your browser.<br />Nothing is transmitted to pondex servers.</p>
+          <p style={{ fontFamily: 'Inter', fontSize: '12px', opacity: 0.35, textAlign: 'center', lineHeight: 1.5 }}>All data is stored locally in your browser.<br />Nothing is sent to pondex servers.</p>
         </div>
       </div>
     </>

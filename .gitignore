@@ -7,12 +7,19 @@ Thumbs.db
 node_modules/
 npm-debug.log*
 
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.env
+
 # Editor
 .vscode/
 .idea/
 *.swp
 *.swo
 
-# Build output (if added later)
+# Build output
 dist/
 build/

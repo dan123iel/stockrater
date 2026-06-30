@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Plus, X, Loader2 } from 'lucide-react';
 import { fetchAllData } from '../../lib/fmp';
 import { calculateScore, getFitLabel } from '../../lib/scoring';
-import { getFmpKey, getProfile } from '../../lib/storage';
+import { getProfile } from '../../lib/storage';
 
 const MetricRow = ({ label, peers, field, format }) => {
   const fmt = (v) => {
@@ -45,7 +45,7 @@ export default function PeerComparisonTile({ mainTicker, mainData, mainScore }) 
     setAdding(true);
     setInput('');
     try {
-      const data = await fetchAllData(sym, getFmpKey());
+      const data = await fetchAllData(sym);
       const score = calculateScore(data, getProfile());
       setPeers(prev => [...prev, { ticker: sym, data: flattenData(data), score, loading: false }]);
     } catch { /* silently skip */ } finally {

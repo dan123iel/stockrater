@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { setProfile, setFmpKey, getFmpKey } from '../lib/storage';
+import { setProfile } from '../lib/storage';
 
 const QUESTIONS = [
   { id: 'strategy', question: 'What is your investment strategy?', subtext: 'pondex recalibrates the Fit Score weights to match how you actually invest.', options: [{ value: 'value', label: 'Value', sub: 'Low multiples. Margin of safety. Long horizon.' }, { value: 'growth', label: 'Growth', sub: 'Revenue expansion. Competitive moat. High reinvestment.' }, { value: 'dividend', label: 'Dividend', sub: 'Consistent income. Stable cash flows. Lower volatility.' }, { value: 'momentum', label: 'Momentum', sub: 'Price strength. Trend following. Shorter holds.' }] },
@@ -12,19 +12,17 @@ export default function Onboarding({ onComplete }) {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({});
   const [selected, setSelected] = useState(null);
-  const [fmpKeyInput, setFmpKeyInput] = useState(getFmpKey());
   const [transitioning, setTransitioning] = useState(false);
 
-  const totalSteps = QUESTIONS.length + 1;
-  const isKeyStep = step === QUESTIONS.length;
+  const totalSteps = QUESTIONS.length;
   const currentQ = QUESTIONS[step];
 
   const advance = () => {
     setTransitioning(true);
     setTimeout(() => {
       setSelected(null); setTransitioning(false);
-      if (step < QUESTIONS.length) setStep(s => s + 1);
-      else { setProfile({ ...answers }); if (fmpKeyInput.trim()) setFmpKey(fmpKeyInput.trim()); onComplete(); }
+      if (step < QUESTIONS.length - 1) setStep(s => s + 1);
+      else { setProfile({ ...answers }); onComplete(); }
     }, 200);
   };
 
@@ -41,37 +39,19 @@ export default function Onboarding({ onComplete }) {
         <span className="mono-label">{step + 1} / {totalSteps}</span>
       </div>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '80px 10vw', maxWidth: '900px', margin: '0 auto', width: '100%', opacity: transitioning ? 0 : 1, transform: transitioning ? 'translateY(8px)' : 'translateY(0)', transition: 'opacity 0.2s ease, transform 0.2s ease' }}>
-        {!isKeyStep ? (
-          <>
-            <div className="mb-12">
-              <p className="mono-label mb-4" style={{ opacity: 0.4 }}>Question {step + 1}</p>
-              <h1 style={{ fontFamily: 'Instrument Serif', fontSize: 'clamp(36px, 5vw, 64px)', lineHeight: 1.05, marginBottom: '16px' }}>{currentQ.question}</h1>
-              <p style={{ fontFamily: 'Inter', fontSize: '16px', opacity: 0.5, lineHeight: 1.6 }}>{currentQ.subtext}</p>
-            </div>
-            <div className="grid grid-cols-2 gap-3" style={{ maxWidth: '640px' }}>
-              {currentQ.options.map(opt => (
-                <button key={opt.value} className={`onboarding-option text-left ${selected === opt.value ? 'selected' : ''}`} onClick={() => selectOption(opt.value)}>
-                  <div style={{ fontFamily: 'Instrument Serif', fontSize: '24px', marginBottom: '6px' }}>{opt.label}</div>
-                  <div style={{ fontFamily: 'Inter', fontSize: '13px', opacity: 0.5 }}>{opt.sub}</div>
-                </button>
-              ))}
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="mb-12">
-              <p className="mono-label mb-4" style={{ opacity: 0.4 }}>Step {step + 1}</p>
-              <h1 style={{ fontFamily: 'Instrument Serif', fontSize: 'clamp(36px, 5vw, 64px)', lineHeight: 1.05, marginBottom: '16px' }}>One last thing.</h1>
-              <p style={{ fontFamily: 'Inter', fontSize: '16px', opacity: 0.5, lineHeight: 1.6, marginBottom: '8px' }}>pondex uses Financial Modeling Prep for stock data.</p>
-              <p style={{ fontFamily: 'Inter', fontSize: '14px', opacity: 0.5, lineHeight: 1.6 }}>Get a free key at <a href="https://financialmodelingprep.com/developer/docs" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-signal)', textDecoration: 'underline' }}>financialmodelingprep.com</a> — free tier covers 250 requests/day.</p>
-            </div>
-            <div style={{ maxWidth: '500px' }}>
-              <input type="text" value={fmpKeyInput} onChange={e => setFmpKeyInput(e.target.value)} placeholder="Paste your FMP API key here…" className="settings-input mb-6" style={{ fontSize: '14px' }} />
-              <button className="btn-primary" onClick={advance}>{fmpKeyInput.trim() ? 'Save & Start →' : 'Skip for now →'}</button>
-              {!fmpKeyInput.trim() && <p style={{ fontFamily: 'Inter', fontSize: '12px', opacity: 0.4, marginTop: '12px' }}>You can add it later in Settings. Without a key, stock analysis is unavailable.</p>}
-            </div>
-          </>
-        )}
+        <div className="mb-12">
+          <p className="mono-label mb-4" style={{ opacity: 0.4 }}>Question {step + 1}</p>
+          <h1 style={{ fontFamily: 'Instrument Serif', fontSize: 'clamp(36px, 5vw, 64px)', lineHeight: 1.05, marginBottom: '16px' }}>{currentQ.question}</h1>
+          <p style={{ fontFamily: 'Inter', fontSize: '16px', opacity: 0.5, lineHeight: 1.6 }}>{currentQ.subtext}</p>
+        </div>
+        <div className="grid grid-cols-2 gap-3" style={{ maxWidth: '640px' }}>
+          {currentQ.options.map(opt => (
+            <button key={opt.value} className={`onboarding-option text-left ${selected === opt.value ? 'selected' : ''}`} onClick={() => selectOption(opt.value)}>
+              <div style={{ fontFamily: 'Instrument Serif', fontSize: '24px', marginBottom: '6px' }}>{opt.label}</div>
+              <div style={{ fontFamily: 'Inter', fontSize: '13px', opacity: 0.5 }}>{opt.sub}</div>
+            </button>
+          ))}
+        </div>
       </div>
       <div style={{ padding: '24px 48px', borderTop: '0.5px solid var(--color-divider)' }}>
         <div style={{ display: 'flex', gap: '4px' }}>
