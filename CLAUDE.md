@@ -1,62 +1,66 @@
 # pondex_ — CLAUDE.md
 
-> This file is loaded automatically by Claude Code on every session in this repository.
-> Read this before touching any file.
+> Wird von Claude Code bei jeder Session automatisch geladen.
+> Vor jeder Aktion lesen.
 
 ---
 
-## 1. What is this project?
+## 1. Was ist dieses Projekt?
 
-pondex_ is a stock research tool. It gives any stock a plain-language verdict with a traceable source for every number. Built for self-directed investors who are priced out of Bloomberg or frustrated by AI that hallucinates numbers.
+pondex_ ist ein Stock-Research-Tool. Klares Plain-Language-Urteil für jede Aktie, jede Zahl mit benannter Quelle. Zielnutzer: selbstständiger Value-Investor (EU-NW), hat bereits für Research-Tools bezahlt, hat gekündigt weil Noise nicht gelöst wurde.
 
-**The one rule that overrides everything else:** Every metric and every AI output must show its named primary source. No number without attribution.
-
----
-
-## 2. Read these files first
-
-In this order, before writing any code:
-
-1. `.project-context/MASTER.md` — purpose, current milestone, hard rules
-2. `.project-context/context/architecture.md` — where every file lives, all API endpoints
-3. `.project-context/context/tech-stack.md` — approved tech only
-4. `.project-context/context/coding-guidelines.md` — code rules + Definition of Done
+**Die eine Regel die alles übersteuert:** Jede angezeigte Kennzahl und jeder AI-Output muss seine primäre Datenquelle namentlich ausweisen. Keine Zahl ohne Quellenangabe.
 
 ---
 
-## 3. Where things belong — no guessing
+## 2. Diese Dateien zuerst lesen
 
-| What | Where |
-|---|---|
-| Frontend pages | `code/src/pages/` |
-| Reusable components | `code/src/components/` |
-| API client (calls backend) | `code/src/lib/fmp.js` |
-| User data (localStorage) | `code/src/lib/storage.js` |
-| CSS variables / design tokens | `code/src/index.css` |
-| All backend endpoints | `backend/main.py` |
-| Product decisions, roadmap | `doc/ROADMAP.md`, `doc/PRD.md` |
-| Survey data, research | `doc/research/` |
-| Architecture decisions | `doc/adr/ADR-NNN-*.md` |
-| AI agent rules | `.project-context/` |
-| Persistent AI memory | `~/.claude/projects/.../memory/` |
+In dieser Reihenfolge, bevor Code geschrieben wird:
+
+1. `.project-context/MASTER.md` — Zweck, aktueller Milestone, Hard Rules
+2. `.project-context/context/architecture.md` — wo jede Datei liegt, alle API-Endpoints
+3. `.project-context/context/tech-stack.md` — nur approved Tech (keine FMP, kein OpenAI)
+4. `.project-context/context/coding-guidelines.md` — Code-Regeln + Definition of Done
 
 ---
 
-## 4. Hard rules
+## 3. Wo was hingehört — keine Verwechslungen
 
-- **No FMP.** Data comes from `backend/main.py` via `yfinance`. `lib/fmp.js` calls the backend, not FMP.
-- **No OpenAI / Claude for AI features.** Groq Llama 3.3 70B only.
-- **Every metric shows its source.** `explanations{}` and `sources[]` from `/score` must render in the UI.
-- **Score is a conclusion.** Explanation renders first, score number last. Never show score on screen 1.
-- **Verify before reporting done.** Run `npm run build`, check files exist, grep for FMP refs, commit, push.
+| Was | Wo | Niemals in |
+|---|---|---|
+| Frontend-Seiten | `frontend/src/pages/` | `components/` |
+| Wiederverwendbare Komponenten | `frontend/src/components/` | `pages/` |
+| API-Client (ruft Backend auf) | `frontend/src/lib/fmp.js` | Direkt in Komponenten |
+| User-Daten (localStorage) | `frontend/src/lib/storage.js` | Hardcoded |
+| CSS-Variablen / Design-Tokens | `frontend/src/index.css` | Inline-Styles |
+| shadcn-Komponenten | `frontend/src/components/ui/` | NICHT BEARBEITEN |
+| Alle Backend-Endpoints | `backend/main.py` | Separate Dateien |
+| Produktentscheidungen, Roadmap | `doc/ROADMAP.md`, `doc/PRD.md` | Memory, Chat |
+| GTM, ICP, Messaging | `doc/product/strategy.md` | Root-Ebene |
+| Survey-Daten, Research | `doc/research/` | Memory |
+| Architektur-Entscheidungen | `doc/adr/ADR-NNN-*.md` | Code-Kommentare |
+| AI-Agent-Regelwerk | `.project-context/` | CLAUDE.md direkt |
+| Persistente AI-Memory | `~/.claude/projects/.../memory/` | Dieses Repo |
 
 ---
 
-## 5. Current milestone
+## 4. Hard Rules
 
-**Phase 1 — MVP** · Target: 15 July 2026
+- **Kein FMP.** Daten kommen aus `backend/main.py` via `yfinance`. `lib/fmp.js` ruft das Backend auf, nicht FMP.
+- **Kein OpenAI / Claude für AI-Features.** Nur Groq Llama 3.3 70B.
+- **Jede Kennzahl zeigt ihre Quelle.** `explanations{}` und `sources[]` aus `/score` müssen gerendert werden.
+- **Score ist eine Schlussfolgerung.** Erklärung rendert zuerst, Score-Zahl zuletzt.
+- **`frontend/src/components/ui/` nicht bearbeiten.** Das sind shadcn-generierte Dateien.
+- **Vor "fertig" verifizieren.** `npm run build`, Dateien prüfen, FMP-grep, commit, push.
 
-In scope: 12-tab analytics, explanation-first UX, source attribution, 6 nav pages.
-Not yet: Login, Stripe, Macro Hub, Multilingual, Dark mode.
+---
 
-→ `doc/ROADMAP.md` for full breakdown.
+## 5. Aktueller Milestone
+
+**Phase 1 — MVP** · Target: 15. Juli 2026
+
+In scope: 12-Tab-Analytics, Explanation-first UX, Source Attribution, 6 Nav-Seiten, Backend auf Railway.
+Noch nicht: Login, Stripe, Macro Hub, Multilingual, Dark Mode.
+
+→ `doc/ROADMAP.md` für vollständige Phase-Details.
+→ `doc/product/strategy.md` für ICP, Messaging, Wachstumshypothese.

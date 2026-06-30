@@ -2,7 +2,7 @@
 
 ## 1. Core Purpose
 
-pondex_ reduces signal-to-noise in stock research. It gives any stock a plain-language verdict with a traceable source for every number. Target user: self-directed value investor (EU-NW), previously paid for research tools, churned because noise wasn't solved.
+pondex_ reduces signal-to-noise in stock research. Plain-language verdict for any stock, every number cites its named source. Target user: self-directed value investor (EU-NW), previously paid for research tools, churned because noise wasn't solved.
 
 **The one constraint that overrides everything:** Every AI output and every displayed metric must cite its named primary source. No number without attribution. This is not optional.
 
@@ -20,6 +20,7 @@ pondex_ reduces signal-to-noise in stock research. It gives any stock a plain-la
 | `doc/PRD.md` | User segments, feature requirements, acceptance criteria |
 | `doc/ROADMAP.md` | Phase 1/2/3 — what's in scope now |
 | `doc/USER-STORIES.md` | User stories (INVEST format) derived from survey |
+| `doc/product/strategy.md` | GTM, ICP, messaging, growth hypothesis |
 | `doc/research/survey-wave1.md` | Survey Wave 1 results (n=45) |
 | `doc/research/survey-dashboard.md` | How the live dashboard works + Wave 2 plan |
 | `doc/research/user-interviews.md` | Interview guide + contact list (Gunnar Leu priority) |
@@ -33,8 +34,9 @@ pondex_ reduces signal-to-noise in stock research. It gives any stock a plain-la
 2. **No unapproved dependencies.** Check `tech-stack.md` before adding any library or API.
 3. **Source attribution is mandatory.** Every metric in the UI must show its data source. Every AI response includes `sources[]`. See ADR-007.
 4. **Explanation before score.** Plain-language text renders before the score number. See ADR-007.
-5. **Update docs when structure changes.** New page, endpoint, or component → update `architecture.md`.
-6. **Verify before done.** Run `npm run build`, check files, grep for FMP refs, commit, push. See `coding-guidelines.md`.
+5. **Do not touch `frontend/src/components/ui/`.** These are shadcn-generated files. Editing them breaks updates.
+6. **Update docs when structure changes.** New page, endpoint, or component → update `architecture.md` and `MASTER.md`.
+7. **Verify before done.** Run `npm run build`, check files, grep for FMP refs, commit, push. See `coding-guidelines.md`.
 
 ---
 
@@ -43,6 +45,8 @@ pondex_ reduces signal-to-noise in stock research. It gives any stock a plain-la
 - Do not use FMP (Financial Modeling Prep) — use Yahoo Finance via yfinance. ADR-005.
 - Do not use OpenAI or Anthropic/Claude for AI features — use Groq Llama 3.3 70B. ADR-006.
 - Do not show a score before showing an explanation. ADR-007.
+- Do not edit `frontend/src/components/ui/` — shadcn-generated, update via CLI only.
+- Do not put GTM/strategy content at root level — it belongs in `doc/product/strategy.md`.
 - Do not add features outside `doc/ROADMAP.md` Phase 1 without updating the roadmap first.
 - Do not commit `venv/`, `node_modules/`, `.env`, `dist/`, `__pycache__/`.
 
@@ -61,3 +65,4 @@ In scope:
 Not in scope until Phase 2: Login, Stripe, Macro Hub, Multilingual, Dark mode.
 
 → `doc/ROADMAP.md` for full phase breakdown.
+→ `doc/product/strategy.md` for ICP, messaging, growth hypothesis.

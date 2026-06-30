@@ -8,83 +8,92 @@ Two-tier: React frontend + FastAPI backend. No database. No auth (Phase 1).
 Browser (React + Vite)  →  fetch()  →  FastAPI (port 8000)  →  yfinance / SEC EDGAR / Groq
 ```
 
+Start everything: `docker compose up` (see `docker-compose.yml` in root)
+
 ---
 
 ## 2. Full Directory Map
 
 ```
-pondex/                         ← Git repo root (.git is here)
+pondex/                              ← Git repo root
 │
-├── CLAUDE.md                   ← Auto-loaded AI context
-├── README.md                   ← Human quick start
-├── STRATEGY.md                 ← GTM, ICP, messaging (non-technical)
+├── CLAUDE.md                        ← Auto-loaded AI context
+├── README.md
+├── docker-compose.yml               ← Starts backend + frontend together
 ├── .gitignore
 │
-├── .project-context/           ← AI agent rules (this system)
+├── .project-context/                ← AI agent rules (this system)
 │   ├── MASTER.md
 │   └── context/
-│       ├── architecture.md     ← This file
+│       ├── architecture.md          ← This file
 │       ├── tech-stack.md
 │       └── coding-guidelines.md
 │
-├── backend/                    ← FastAPI Python backend
-│   ├── main.py                 ← ALL endpoints are here (single file)
+├── backend/                         ← FastAPI Python backend
+│   ├── main.py                      ← ALL endpoints (single file, intentional)
 │   ├── requirements.txt
-│   └── .env.example
+│   ├── Dockerfile
+│   └── .env.example                 ← GROQ_API_KEY
 │
-├── code/                       ← React + Vite frontend
+├── frontend/                        ← React + Vite (formerly "code/")
 │   ├── index.html
 │   ├── package.json
 │   ├── vite.config.js
 │   ├── tailwind.config.js
+│   ├── Dockerfile
+│   ├── .env.example                 ← VITE_API_URL
 │   └── src/
-│       ├── App.jsx             ← Router (single route → Home)
+│       ├── App.jsx                  ← Router (single route → Home)
 │       ├── main.jsx
-│       ├── index.css           ← ALL CSS variables / design tokens
+│       ├── index.css                ← ALL CSS variables / design tokens
 │       ├── pages/
-│       │   ├── Home.jsx        ← View switcher (no URL routes)
-│       │   ├── Analysis.jsx    ← 12-tab analytics (main feature)
-│       │   ├── Markets.jsx     ← Index overview + quick analyze
+│       │   ├── Home.jsx             ← View switcher (no URL routes)
+│       │   ├── Analysis.jsx         ← 12-tab analytics (main feature)
+│       │   ├── Markets.jsx
 │       │   ├── Macro.jsx
 │       │   ├── Ideas.jsx
 │       │   ├── Portfolio.jsx
 │       │   └── Watchlist.jsx
 │       ├── components/
-│       │   ├── Nav.jsx         ← 6 links: Analyze, Markets, Macro, Ideas, Watchlist, Portfolio
-│       │   ├── ScoreHero.jsx   ← Explanation-first score panel (ADR-007)
+│       │   ├── Nav.jsx              ← 6 links
+│       │   ├── ScoreHero.jsx        ← Explanation-first score panel (ADR-007)
 │       │   ├── SettingsPanel.jsx
 │       │   ├── ThesisDrawer.jsx
 │       │   ├── InvestmentMemo.jsx
-│       │   ├── tiles/          ← ChartTile, ValuationTile, DCFTile, NewsTile, InsiderTile, AllInsightsTile
-│       │   └── ui/             ← shadcn components (do not edit)
+│       │   ├── tiles/               ← ChartTile, ValuationTile, DCFTile, NewsTile, InsiderTile, AllInsightsTile
+│       │   └── ui/                  ← ⚠ shadcn-generated — DO NOT EDIT MANUALLY
 │       └── lib/
-│           ├── fmp.js          ← API client → calls backend (NOT FMP directly)
-│           ├── storage.js      ← localStorage helpers
-│           └── scoring.js      ← Client-side scoring (fallback; backend /score is primary)
+│           ├── fmp.js               ← API client → calls backend (NOT FMP directly)
+│           ├── storage.js           ← localStorage helpers
+│           └── scoring.js           ← Client-side fallback (backend /score is primary)
 │
-├── doc/                        ← All documentation
-│   ├── PROJECT-BRIEF.md
-│   ├── PRD.md
-│   ├── ROADMAP.md
-│   ├── ARCHITECTURE.md         ← Extended version of this file
-│   ├── research/
-│   │   └── survey-wave1.md     ← n=45, June 2026
-│   └── adr/
-│       ├── ADR-005-yahoo-finance-no-fmp.md
-│       ├── ADR-006-groq-llama-no-openai.md
-│       └── ADR-007-explanation-first-ux.md
+├── design/
+│   ├── wireframes/                  ← 21 ASCII wireframes — readable by AI agents
+│   └── reference/
+│       └── pondex-v1.html           ← Original single-file prototype
 │
-└── design/
-    ├── wireframes/             ← ASCII wireframes (all screens)
-    └── reference/
-        └── pondex-v1.html      ← Original single-file prototype
+└── doc/
+    ├── PROJECT-BRIEF.md
+    ├── PRD.md
+    ├── ROADMAP.md
+    ├── USER-STORIES.md
+    ├── adr/                         ← ADR-001 through ADR-007
+    ├── research/
+    │   ├── survey-wave1.md
+    │   ├── survey-dashboard.md
+    │   └── user-interviews.md
+    ├── brand/
+    └── product/
+        ├── strategy.md              ← GTM, ICP, messaging (single source of truth)
+        ├── personas.md
+        └── metrics.md
 ```
 
 ---
 
 ## 3. Backend API Endpoints (backend/main.py)
 
-Base URL: `http://localhost:8000` (dev) / Railway URL (prod)
+Base URL: `http://localhost:8000` (dev) / Railway URL (prod, set via `VITE_API_URL`)
 
 | Endpoint | Method | Key response fields |
 |---|---|---|
@@ -97,7 +106,7 @@ Base URL: `http://localhost:8000` (dev) / Railway URL (prod)
 | `/score/{ticker}` | GET | fitScore, scores{}, **explanations{}**, **sources[]** |
 | `/ai/chat` | POST | content (AI text), **sources[]** |
 
-`/score` returns `explanations{}` (plain-language per factor) and `sources[]` (named attribution per metric). Both must be rendered. Non-negotiable — ADR-007.
+`/score` returns `explanations{}` (plain-language per factor) and `sources[]` (named attribution per metric). Both must render in the UI — ADR-007.
 
 ---
 
@@ -114,5 +123,6 @@ Base URL: `http://localhost:8000` (dev) / Railway URL (prod)
 ## 5. State
 
 - No Redux/Zustand — component `useState` only
-- Persistence: `localStorage` via `lib/storage.js` (profile, watchlist, portfolio, thesis, chat)
-- Backend cache: 5-min TTL in-memory (`_cache` dict in main.py)
+- Persistence: `localStorage` via `lib/storage.js`
+- Backend cache: 5-min TTL in-memory (`_cache` dict in `main.py`)
+- API base URL: `import.meta.env.VITE_API_URL || 'http://localhost:8000'` in `lib/fmp.js`

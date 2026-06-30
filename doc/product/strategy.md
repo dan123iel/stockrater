@@ -1,49 +1,118 @@
-# Strategy
+# pondex_ — Product Strategy
 
-## Positioning Statement
+_Single source of truth. Letzte Aktualisierung: 30. Juni 2026 nach Survey Wave 1 (n=45)._
 
-For self-directed retail investors who analyze individual stocks, pondex is a decision intelligence platform that scores every stock relative to their personal strategy and tracks their investment thesis over time. Unlike Yahoo Finance or Seeking Alpha, pondex doesn't just show data — it interprets it in the context of who you are as an investor.
+> Die goldene Regel: Nie mehr als 2 Wochen bauen ohne mit echten Menschen zu reden.
+
+---
+
+## Positioning
+
+**Für** selbstständige Privatinvestoren die Einzelaktien analysieren,
+**ist** pondex_ ein Noise-Filter mit Quellennachweis,
+**der** jeder Aktie ein klares Plain-Language-Urteil gibt — jede Zahl mit benannter Quelle.
+**Anders als** Yahoo Finance, ChatGPT oder der Broker-eigene Screener
+**liefert** pondex_ kein Datenchaos, sondern einen klaren Audit-Trail.
+
+**Was wir pitchen:** "Research with a clear audit trail"
+**Was wir NICHT pitchen:** "AI-powered analysis" — AI ist Mechanismus, nicht Message
+
+---
+
+## Messaging nach Segment
+
+| Segment | Pitch |
+|---|---|
+| Active Investors (ICP) | "Bloomberg-quality signal. Fraction of the cost." |
+| Passive Investors | "Tells you what matters in 60 seconds." |
+| Aspirers | "Research with a clear audit trail — no jargon." |
+
+---
+
+## ICP (Ideal Customer Profile)
+
+**Primär — Zahlender Churner:**
+Value/Semi-active Investor · EU-NW · Business/Finance Background · hat bereits $15–50/Mo für Research-Tools bezahlt · churnte weil Signal noch noisig war · konditionelles AI-Vertrauen (nur mit Quellenangabe) · **Prototyp: Gunnar Leu**
+
+**Sekundär — Priced-out Power User:**
+Active Trader · NA · Finance Professional · priced out von Bloomberg ($50–200/Mo Budget) · Full AI trust
+
+**Wachstumssegment — Aspirer:**
+Will anfangen, blockiert durch Komplexität oder Angst · braucht Plain Language + $5 Entry, keinen Score auf Screen 1
 
 ---
 
 ## Competitive Moat
 
-**Short-term:** Strategy-relative scoring. No free competitor personalizes the score to the investor's profile. First mover on a feature that's simple to understand but not yet built.
+**Kurzfristig:** Explanation-first + Source Attribution. Kein kostenloser Wettbewerber zeigt Quellenangaben als Default-UI — und kein kostenpflichtiger hat das Noise-Problem wirklich gelöst (Beweis: beide Churner aus Survey haben nach dem Bezahlen gekündigt).
 
-**Medium-term:** Thesis tracking data. Once a user has 6–12 months of documented theses and outcomes, switching cost becomes real. The data is theirs — but the intelligence layer is pondex.
+**Mittelfristig:** Thesis-Tracking-Daten. Sobald ein User 6–12 Monate dokumentierte Thesen hat, entstehen echte Switching Costs.
 
-**Long-term:** Decision quality feedback loop. After 2+ years, pondex knows which conditions correlate with good decisions for this specific user. That's a personalized model no competitor can replicate without the same data history.
-
----
-
-## Growth Hypothesis
-
-**0 → 100 users:** Direct sharing. The Shareable Thesis Card (a clean PNG of score + reasoning) is posted on X, Reddit, and Substack by investors who want to show their work. Each card is an organic ad.
-
-**100 → 1,000 users:** Word of mouth in investor communities (r/investing, r/Finanzen, finanzielle Freiheit communities). The "no account, no tracking" positioning is a strong pull for privacy-conscious users.
-
-**1,000 → 10,000 users:** Content discovery. Tutorial content around "how I use pondex" from early adopters. Potential integration with financial YouTube/newsletter ecosystem (Source-based Discovery feature).
+**Langfristig:** Decision Quality Feedback Loop. Nach 2+ Jahren kennt pondex welche Bedingungen mit guten Entscheidungen für diesen spezifischen User korrelieren — ein personalisiertes Modell das kein Wettbewerber ohne dieselbe Datenhistorie replizieren kann.
 
 ---
 
-## Business Model Hypothesis
+## Was pondex NICHT ist
 
-The local single-file version stays **free forever**. The privacy guarantee is the product — breaking it would destroy the core differentiator.
+- Kein Bloomberg-Konkurrent (anderes Preissegment, anderer User)
+- Kein Robo-Advisor (pondex lehrt, entscheidet nicht)
+- Kein Neo-Broker-Konkurrent (Analyse, nicht Execution)
+- Kein Social Trading (explizit gegenteilige Werte)
 
-Paid tier (Phase 5) sells only features that require server infrastructure:
-- Broker sync (Trade Republic, Scalable, IBKR)
-- Cross-device cloud backup (end-to-end encrypted — pondex cannot read the data)
-- Extended AI features requiring higher-cost models
-
-Pricing hypothesis: €8–12/month. Comparable to one month of Seeking Alpha Basic.
+pondex konkurriert gegen den Status quo: den überforderten Privatinvestor mit fünf Tabs offen.
 
 ---
 
-## Where pondex Does Not Compete
+## Roadmap-Übersicht
 
-- Not against Bloomberg (different price segment, different user)
-- Not against robo-advisors (different philosophy — pondex teaches, not decides)
-- Not against neo-brokers (different job — analysis, not execution)
-- Not against social trading platforms (explicitly opposite values)
+| Phase | Ziel | Target |
+|---|---|---|
+| 1 — MVP | Noise-filter core · Source attribution · 60s UX | Juli 2026 |
+| 2 — Pro | Macro Hub · DE/ES · Login · Stripe | Sept 2026 |
+| 3 — Growth | SEO-Pages · Newsletter · Affiliate · Mobile | 2027 |
 
-pondex competes against the status quo: the overwhelmed retail investor with five tabs open.
+→ Vollständige Roadmap mit Scope-Details: `doc/ROADMAP.md`
+
+---
+
+## Wachstumshypothese
+
+**0 → 100 User:** Direkte Ansprache der 6 Survey-Follow-up-Kontakte + Gunnar-Leu-Interview-Netzwerk.
+
+**100 → 1.000 User:** Word of Mouth in Investor-Communities (r/eupersonalfinance, r/Finanzen). "No account, no tracking" als Pull für Privacy-bewusste User.
+
+**1.000 → 10.000 User:** Content-Discovery via Finanz-YouTuber/Newsletter-Affiliate (30% Provision).
+
+---
+
+## Business Model
+
+**Free:** Kernfunktion ohne Login (Phase 1)
+
+**Pro ~$15–19/Mo (Phase 2):**
+- Macro Hub
+- Multilingual (DE/ES)
+- Watchlist + Portfolio-Tracking
+- Erweiterte AI-Features
+
+**Preisvalidierung:** Van Westendorp bei $9/$19/$49 — vor Paywall-Bau.
+→ Kein Preispunkt ohne Daten.
+
+---
+
+## Die eine Metrik die zählt
+
+> **30-Day-Retention > 40%**
+> Nicht Registrierungen. Nicht Page Views. Nur das.
+
+---
+
+## Was ein Profi NICHT tut
+
+```
+✗ 6 Monate bauen bevor jemand es sieht
+✗ Signal/Noise-Problem mit mehr Daten lösen — macht es schlimmer
+✗ AI als USP pitchen — als Infrastruktur behandeln
+✗ Preis ohne Daten festlegen
+✗ Consolidation als Value Prop pitchen (nur 3/26 nennen "zu viele Tabs")
+```
