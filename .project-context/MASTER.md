@@ -19,7 +19,10 @@ pondex_ reduces signal-to-noise in stock research. It gives any stock a plain-la
 | `doc/PROJECT-BRIEF.md` | What, for whom, why |
 | `doc/PRD.md` | User segments, feature requirements, acceptance criteria |
 | `doc/ROADMAP.md` | Phase 1/2/3 — what's in scope now |
+| `doc/USER-STORIES.md` | User stories (INVEST format) derived from survey |
 | `doc/research/survey-wave1.md` | Survey Wave 1 results (n=45) |
+| `doc/research/survey-dashboard.md` | How the live dashboard works + Wave 2 plan |
+| `doc/research/user-interviews.md` | Interview guide + contact list (Gunnar Leu priority) |
 | `doc/adr/` | All architecture decisions |
 
 ---
