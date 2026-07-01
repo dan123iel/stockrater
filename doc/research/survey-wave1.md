@@ -1,6 +1,13 @@
-# Survey Wave 1 — Ergebnisse & Erkenntnisse
+# Survey — Ergebnisse & Erkenntnisse
 
-**Datum:** 29.–30. Juni 2026 · n=45 · Warm-Network (WhatsApp-Blast)
+> **Zahlen sind immer live.**
+> Aktuelle Auswertung: **https://dan123iel.github.io/survey/**
+> Rohdaten (Google Sheets, live): [Spreadsheet](https://docs.google.com/spreadsheets/d/1Y6UaYRc0lWz7TTdhzLFDuVsk-T7wowrWExAhiUsquew/edit)
+>
+> Dieses Dokument enthält die **strategischen Erkenntnisse und Entscheidungen** aus der Survey — keine hardcoded Zahlen. Für aktuelle n, %-Werte und Cross-Tabs → Live-Dashboard.
+
+**Survey gestartet:** 29. Juni 2026 · Kanal: WhatsApp-Blast (Warm Network)
+**Tally-Link:** https://tally.so/r/QKXBEG
 
 ---
 
