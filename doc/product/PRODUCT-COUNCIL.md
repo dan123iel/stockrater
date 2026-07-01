@@ -91,7 +91,11 @@ A single dashboard displaying corrupted financial data destroys user trust perma
 
 ## Reference
 
-- Survey findings (n=51): `doc/research/survey-wave1.md` → live dashboard
-- Interview guide (Gunnar Leu): `doc/discovery/user-interviews.md`
+- **Live survey data (always current):** https://dan123iel.github.io/survey/
+- Survey findings + strategic conclusions: `doc/research/survey-wave1.md`
+- Future wave files will appear in `doc/research/` — always use the most recent one
+- Interview guide (Gunnar Leu priority): `doc/discovery/user-interviews.md`
 - Architecture decisions: `doc/adr/`
 - Feature roadmap: `doc/ROADMAP.md`
+
+> **Note for AI agents:** Before evaluating Value Risk for any feature, scan `doc/research/` for all available survey files and cross-reference with the live dashboard. The target group is predominantly passive investors and aspirers with low risk tolerance — features that increase complexity or cost without addressing confirmed pain points (signal/noise, plain language, source attribution) will fail the Value Risk gate.
