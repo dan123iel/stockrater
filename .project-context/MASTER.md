@@ -52,7 +52,13 @@ pondex_ reduces signal-to-noise in stock research. Plain-language verdict for an
 | API client | `frontend/src/lib/fmp.js` | Calls backend, not FMP |
 | LocalStorage | `frontend/src/lib/storage.js` | All user persistence |
 | CSS variables | `frontend/src/index.css` | All design tokens |
-| All API endpoints | `backend/main.py` | Single file, intentional |
+| Backend entry point | `backend/app/main.py` | App init + router registration only |
+| Market data routes | `backend/app/api/analysis.py` | quote, ratios, history, financials, insider, news |
+| Scoring + AI routes | `backend/app/api/score.py` | /score, /ai/chat |
+| Yahoo Finance | `backend/app/services/yahoo.py` | yf_info, safe helpers |
+| SEC EDGAR | `backend/app/services/sec_edgar.py` | Form 4 trades |
+| Groq AI | `backend/app/services/groq.py` | chat() |
+| Config + Cache | `backend/app/core/` | config.py, cache.py |
 | ASCII wireframes | `design/wireframes/` | Readable by AI agents |
 | Original prototype | `design/reference/pondex-v1.html` | Phase 3 reference |
 

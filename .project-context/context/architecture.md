@@ -30,10 +30,22 @@ pondex/                              ← Git repo root
 │       └── coding-guidelines.md
 │
 ├── backend/                         ← FastAPI Python backend
-│   ├── main.py                      ← ALL endpoints (single file, intentional)
+│   ├── app/                         ← Python package (modular — ADR-009)
+│   │   ├── main.py                  ← App init + router registration only
+│   │   ├── api/
+│   │   │   ├── analysis.py          ← quote, ratios, history, financials, insider, news
+│   │   │   └── score.py             ← /score, /ai/chat
+│   │   ├── services/
+│   │   │   ├── yahoo.py             ← yfinance helpers
+│   │   │   ├── sec_edgar.py         ← SEC EDGAR Form 4
+│   │   │   └── groq.py              ← Groq API client
+│   │   └── core/
+│   │       ├── config.py            ← GROQ_API_KEY, CACHE_TTL
+│   │       └── cache.py             ← in-memory cache
+│   ├── main.py                      ← Legacy reference (not imported)
 │   ├── requirements.txt
 │   ├── Dockerfile
-│   └── .env.example                 ← GROQ_API_KEY
+│   └── .env.example
 │
 ├── frontend/                        ← React + Vite (formerly "code/")
 │   ├── index.html
@@ -60,7 +72,8 @@ pondex/                              ← Git repo root
 │       │   ├── SettingsPanel.jsx
 │       │   ├── ThesisDrawer.jsx
 │       │   ├── InvestmentMemo.jsx
-│       │   ├── tiles/               ← ChartTile, ValuationTile, DCFTile, NewsTile, InsiderTile, AllInsightsTile
+│       │   ├── tiles/               ← Base tile components (ChartTile, ValuationTile, etc.)
+│       │   └── tabs/                ← Lazy-loaded tab wrappers (TabScorecard, TabChart, etc.)
 │       │   └── ui/                  ← ⚠ shadcn-generated — DO NOT EDIT MANUALLY
 │       └── lib/
 │           ├── fmp.js               ← API client → calls backend (NOT FMP directly)
