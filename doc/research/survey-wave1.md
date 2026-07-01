@@ -1,23 +1,23 @@
-# Survey — Ergebnisse & Erkenntnisse
+# Survey — Results & Insights
 
-> **Zahlen sind immer live.**
-> Aktuelle Auswertung: **https://dan123iel.github.io/survey/**
-> Rohdaten (Google Sheets, live): [Spreadsheet](https://docs.google.com/spreadsheets/d/1Y6UaYRc0lWz7TTdhzLFDuVsk-T7wowrWExAhiUsquew/edit)
+> **Numbers are always live.**
+> Current analysis: **https://dan123iel.github.io/survey/**
+> Raw data (Google Sheets, live): [Spreadsheet](https://docs.google.com/spreadsheets/d/1Y6UaYRc0lWz7TTdhzLFDuVsk-T7wowrWExAhiUsquew/edit)
 >
-> Dieses Dokument enthält die **strategischen Erkenntnisse und Entscheidungen** aus der Survey — keine hardcoded Zahlen. Für aktuelle n, %-Werte und Cross-Tabs → Live-Dashboard.
+> This document contains the **strategic insights and decisions** from the survey — no hardcoded numbers. For current n, %-values and cross-tabs → Live Dashboard.
 
-**Survey gestartet:** 29. Juni 2026 · Kanal: WhatsApp-Blast (Warm Network)
-**Tally-Link:** https://tally.so/r/QKXBEG
+**Survey started:** 29. Juni 2026 · Channel: WhatsApp Blast (Warm Network)
+**Tally link:** https://tally.so/r/QKXBEG
 
 ---
 
 ## Executive Summary
 
-Build it — aber Zielgruppe und Core-Feature-Framing zuerst schärfen. 93% haben broken research process oder haben nicht angefangen (zu einschüchternd). 71% vertrauen KI konditionell — nur wenn Quellen gezeigt werden. Dominanter Pain: Signal/Noise **innerhalb** Tools, nicht Anzahl Tools. 5 Personen haben WTP bewiesen; beide Churner verließen wegen nicht gelöstem Noise-Problem.
+Build it — but sharpen the target audience and core feature framing first. 93% have a broken research process or haven't started (too intimidating). 71% trust AI conditionally — only when sources are shown. Dominant pain: Signal/Noise **within** tools, not the number of tools. 5 people have demonstrated WTP; both churners left because the noise problem wasn't solved.
 
 ---
 
-## Marktsegmente
+## Market Segments
 
 | Segment | n | % |
 |---|---|---|
@@ -26,11 +26,11 @@ Build it — aber Zielgruppe und Core-Feature-Framing zuerst schärfen. 93% habe
 | Want to start | 16 | 36% |
 | Not interested | 3 | 7% |
 
-**Key Reframe:** Passive + Aspirer = 33 Personen (73%) mit identischen Frustrationen. Realer underserved pool = 42/45 (93%).
+**Key Reframe:** Passive + Aspirer = 33 people (73%) with identical frustrations. Real underserved pool = 42/45 (93%).
 
 ---
 
-## #1 Pain: Signal/Noise (n=26 Investoren)
+## #1 Pain: Signal/Noise (n=26 investors)
 
 | Frustration | n | % |
 |---|---|---|
@@ -40,15 +40,15 @@ Build it — aber Zielgruppe und Core-Feature-Framing zuerst schärfen. 93% habe
 | Scattered/too many tabs | 3 | 12% |
 | Cost | 3 | 12% |
 
-Signal/Noise dominiert bei **jedem** Tool-Count-Level — auch Single-Tool-User berichten es.
+Signal/Noise dominates at **every** tool-count level — even single-tool users report it.
 
 ---
 
 ## AI Trust
 
-58% (wortgleich): _"only if the AI displays the exact primary source and formula used."_
+58% (verbatim): _"only if the AI displays the exact primary source and formula used."_
 
-→ Nicht Marketing-Problem. Buildable UX-Requirement.
+→ Not a marketing problem. Buildable UX requirement.
 
 | Level | n | % |
 |---|---|---|
@@ -56,16 +56,16 @@ Signal/Noise dominiert bei **jedem** Tool-Count-Level — auch Single-Tool-User 
 | Skeptical | 11 | 24% |
 | Full trust | 4 | 9% |
 
-AI-Nutzer sind 5× weniger skeptisch als Nicht-Nutzer (7% vs. 42%).
+AI users are 5× less skeptical than non-users (7% vs. 42%).
 
 ---
 
-## ICP — Wer hat bereits bezahlt (n=5)
+## ICP — Who has already paid (n=5)
 
-### Churner #1 — Gunnar Leu (Interview-Priorität #1)
+### Churner #1 — Gunnar Leu (Interview Priority #1)
 - Business/Value investor · EU-NW · churned $15–50/mo
 - Pain: Signal/Noise
-- Warum churned: Noise not solved after paying
+- Why churned: Noise not solved after paying
 - Q9: _"Value investing — geopolitics + fundamentals + charts in one place"_
 - LinkedIn: Gunnar Leu
 
@@ -74,10 +74,10 @@ AI-Nutzer sind 5× weniger skeptisch als Nicht-Nutzer (7% vs. 42%).
 - Pain: Signal/Noise — signal still noisy after paying
 
 ### Currently paying — Finance professional NA
-- $50–200/mo · Bloomberg-User · Full AI trust
+- $50–200/mo · Bloomberg user · Full AI trust
 - Pain: Cost — good tools too expensive
 
-**Kernerkenntnis:** Beide Churner: gleiche Frustration + gleiche AI-Trust-Stance. Sie zahlen — aber Noise-Reduktion muss tatsächlich funktionieren.
+**Key insight:** Both churners: same frustration + same AI trust stance. They pay — but noise reduction must actually work.
 
 ---
 
@@ -89,59 +89,59 @@ AI-Nutzer sind 5× weniger skeptisch als Nicht-Nutzer (7% vs. 42%).
 | Fear of losing money | 6 |
 | Not enough capital | 3 |
 
-**3 User-Typen:**
-1. **"Too complicated"** (10/16) → Plain language zuerst, Score nach der Erklärung — Score NICHT auf Screen 1
-2. **"Fearful"** (6/16) → Micro-investing ($5 start), weniger Info = weniger Risiko
-3. **"Distrustful"** (3/16) → Education + Micro first; Score als Einstieg repelliert dieses Segment
+**3 user types:**
+1. **"Too complicated"** (10/16) → Plain language first, score after the explanation — score NOT on screen 1
+2. **"Fearful"** (6/16) → Micro-investing ($5 start), less info = less risk
+3. **"Distrustful"** (3/16) → Education + micro first; score as entry point repels this segment
 
 ---
 
-## Produktanforderungen (direkt aus Daten)
+## Product Requirements (directly from data)
 
-| Anforderung | Quelle |
+| Requirement | Source |
 |---|---|
-| Noise-filtered signal — kein Aggregator | Q4A cross-tab |
-| Jeder AI-Output mit Named Source | Q6 + cross-tab (58% wortgleich) |
-| 60-Sekunden Default, Drill-down optional | Q2A: 80% < 1h/Woche |
-| Plain-language, multilingual DE+ES | Q3B + Q9 Verbatims |
-| Score = Schlussfolgerung, nicht Einstieg | Q3B cross-tab |
+| Noise-filtered signal — not an aggregator | Q4A cross-tab |
+| Every AI output with named source | Q6 + cross-tab (58% verbatim) |
+| 60-second default, drill-down optional | Q2A: 80% < 1h/week |
+| Plain language, multilingual DE+ES | Q3B + Q9 verbatims |
+| Score = conclusion, not entry point | Q3B cross-tab |
 
 ---
 
-## Geographie × AI Trust
+## Geography × AI Trust
 
-| Region | n | Skeptisch | Conditional |
+| Region | n | Skeptical | Conditional |
 |---|---|---|---|
 | EU-NW | 24 | 33% | 63% |
 | NA | 14 | 14% | 64% |
 
-EU-NW: 2× mehr Skepsis. Pitch: "audit trail" — nicht "AI-powered".
+EU-NW: 2× more skepticism. Pitch: "audit trail" — not "AI-powered".
 
 ---
 
-## Wave-Timing (Warm-Network-Disclosure)
+## Wave Timing (Warm-Network Disclosure)
 
-- Wave 1 (29. Jun, n=35): 21% AI-skeptisch, 63% Investoren
-- Wave 2 (30. Jun, n=10): 44% AI-skeptisch, 40% Investoren
-- 25/45 Antworten in 2h-Fenster → WhatsApp-Blast-Pattern
+- Wave 1 (29. Jun, n=35): 21% AI-skeptical, 63% investors
+- Wave 2 (30. Jun, n=10): 44% AI-skeptical, 40% investors
+- 25/45 responses in 2h window → WhatsApp blast pattern
 
-**Wichtig:** Cold audience ist konservativer. Vor Investor-Pitches auf r/eupersonalfinance replizieren.
+**Important:** Cold audience is more conservative. Replicate on r/eupersonalfinance before investor pitches.
 
 ---
 
-## Risiken
+## Risks
 
-| Risiko | Schwere |
+| Risk | Severity |
 |---|---|
-| WTP unvalidiert bei Preispunkt | Hoch — Van Westendorp vor Paywall |
-| Warm-Network-Sample | Hoch — Reddit-Replikation nötig |
-| Habit Formation ungelöst | Mittel |
+| WTP unvalidated at price point | High — Van Westendorp before paywall |
+| Warm-network sample | High — Reddit replication needed |
+| Habit formation unsolved | Medium |
 
 ---
 
-## Follow-up Kontakte (6 Personen)
+## Follow-up Contacts (6 people)
 
-| Kontakt | Segment | Key Signal |
+| Contact | Segment | Key Signal |
 |---|---|---|
 | Gunnar Leu | Investor | Value investing, geopolitics+fundamentals — **Interview #1** |
 | linkedin.com/in/saderomo/ | Aspirer | "stocks for dummies to advanced" |
@@ -152,8 +152,8 @@ EU-NW: 2× mehr Skepsis. Pitch: "audit trail" — nicht "AI-powered".
 
 ---
 
-## Nächste Schritte
+## Next Steps
 
-1. Gunnar Leu anschreiben (erstes Interview)
-2. Wave 2 Survey auf r/eupersonalfinance + r/personalfinance
-3. Pricing-Test ($9/$19/$49) — nur an die 5 WTP-Profile
+1. Reach out to Gunnar Leu (first interview)
+2. Wave 2 survey on r/eupersonalfinance + r/personalfinance
+3. Pricing test ($9/$19/$49) — only to the 5 WTP profiles

@@ -1,129 +1,129 @@
 # User Interviews — pondex_
 
-> Interviews sind wertvoller als jede Survey. Eine 20-Minuten-Konversation mit Gunnar Leu
-> sagt mehr als 200 weitere Antworten. Dieses Dokument enthält den Gesprächsleitfaden,
-> den Kontaktstatus und die dokumentierten Erkenntnisse.
+> Interviews are more valuable than any survey. A 20-minute conversation with Gunnar Leu
+> tells us more than 200 additional responses. This document contains the discussion guide,
+> contact status, and documented insights.
 
 ---
 
-## Kontakte (aus Survey Wave 1)
+## Contacts (from Survey Wave 1)
 
-| Priorität | Name | Segment | Kontakt | Key Signal | Status |
+| Priority | Name | Segment | Contact | Key Signal | Status |
 |---|---|---|---|---|---|
-| 🔴 #1 | Gunnar Leu | Investor (Churner) | LinkedIn: "Gunnar Leu" | Zahlte $15–50/mo, kündigte weil Noise nicht gelöst. Detailliertestes Q9 im Datensatz. | Offen |
-| 🔴 #2 | Churner #2 (Tech, EU-NW) | Investor (Churner) | Kein Name, kein Kontakt hinterlassen | Zahlte <$15/mo, AI-Nutzer, gleiche Frustration wie Gunnar | Nicht erreichbar |
-| 🟡 #3 | linkedin.com/in/saderomo/ | Aspirer | LinkedIn | "stocks for dummies to advanced" | Offen |
-| 🟡 #4 | Karen García | Aspirer | LinkedIn-Name | "Ethics behind investing, VERY simplified" | Offen |
-| 🟡 #5 | Patricia G. Parnet | Investor | LinkedIn-Name | "Daily personal overview + annual reports" | Offen |
-| 🟡 #6 | José Bernardo S. | Investor | linkedin.com/in/jos%C3%A9-bernardo... | "Everything in one place" | Offen |
-| 🟢 #7 | carolinademuner | Aspirer | LinkedIn-Name | "Expert on it, confident and regular basis" | Offen |
+| 🔴 #1 | Gunnar Leu | Investor (Churner) | LinkedIn: "Gunnar Leu" | Paid $15–50/mo, cancelled because noise wasn't solved. Most detailed Q9 in the dataset. | Open |
+| 🔴 #2 | Churner #2 (Tech, EU-NW) | Investor (Churner) | No name, no contact left | Paid <$15/mo, AI user, same frustration as Gunnar | Unreachable |
+| 🟡 #3 | linkedin.com/in/saderomo/ | Aspirer | LinkedIn | "stocks for dummies to advanced" | Open |
+| 🟡 #4 | Karen García | Aspirer | LinkedIn name | "Ethics behind investing, VERY simplified" | Open |
+| 🟡 #5 | Patricia G. Parnet | Investor | LinkedIn name | "Daily personal overview + annual reports" | Open |
+| 🟡 #6 | José Bernardo S. | Investor | linkedin.com/in/jos%C3%A9-bernardo... | "Everything in one place" | Open |
+| 🟢 #7 | carolinademuner | Aspirer | LinkedIn name | "Expert on it, confident and regular basis" | Open |
 
-**Ziel:** Interviews mit Gunnar Leu + 1-2 Aspirers vor Wave 2 Survey.
+**Goal:** Interviews with Gunnar Leu + 1-2 aspirers before Wave 2 survey.
 
 ---
 
-## Anschreiben — Vorlage (LinkedIn)
+## Outreach template (LinkedIn)
 
 ```
-Betreff: Kurze Folgefrage zu deiner Survey-Antwort
+Subject: Quick follow-up question about your survey response
 
 Hey [Name],
 
-danke für deine Antwort in unserer Umfrage — dein Feedback war eines der
-detailliertesten und hilfreichsten überhaupt.
+thanks for your response in our survey — your feedback was one of the
+most detailed and helpful we received.
 
-Ich baue gerade pondex_, ein Stock-Research-Tool das genau das Problem
-angeht das du beschrieben hast: Signal/Noise in der eigenen Recherche.
+I'm currently building pondex_, a stock research tool that addresses exactly
+the problem you described: signal/noise in personal research.
 
-Hättest du 20 Minuten Zeit für ein kurzes Gespräch? Kein Sales-Pitch —
-ich will nur verstehen was dein Research-Prozess heute aussieht und
-was eine Lösung wirklich brauchbar machen würde.
+Would you have 20 minutes for a quick conversation? No sales pitch —
+I just want to understand what your research process looks like today and
+what would make a solution genuinely useful.
 
-[Link zum Calendly oder "Wann passt es dir?"]
+[Calendly link or "When works for you?"]
 ```
 
 ---
 
-## Gesprächsleitfaden
+## Discussion guide
 
-**Dauer:** 20 Minuten max.
-**Format:** Video-Call oder Telefon
-**Ziel:** Verstehen wie der Research-Prozess heute aussieht — nicht das Produkt pitchen
+**Duration:** 20 minutes max.
+**Format:** Video call or phone
+**Goal:** Understand what the research process looks like today — not pitching the product
 
 ### Intro (2 min)
 
-> "Danke dass du dir Zeit nimmst. Ich stelle keine Fangfragen — erzähl einfach
-> was wirklich passiert, auch wenn es negativ ist. Das hilft uns mehr als Lob.
-> Darf ich notieren / aufnehmen?"
+> "Thanks for making the time. I'm not asking trick questions — just tell me
+> what actually happens, even if it's negative. That helps us more than praise.
+> May I take notes / record?"
 
-### Warm-up: Aktueller Prozess (5 min)
+### Warm-up: Current process (5 min)
 
-1. "Wie schaut dein typischer Research-Prozess aus wenn du eine Aktie analysierst?"
-2. "Welche Tools nutzt du? In welcher Reihenfolge?"
-3. "Wie lange dauert das in der Regel?"
+1. "What does your typical research process look like when you analyse a stock?"
+2. "Which tools do you use? In what order?"
+3. "How long does it usually take?"
 
-→ *Zuhören, nicht unterbrechen. Notieren: welche Tools, welche Reihenfolge, wo Reibung entsteht.*
+→ *Listen, don't interrupt. Note: which tools, what order, where friction arises.*
 
-### Hauptteil: Pain und bisherige Lösungen (8 min)
+### Main section: Pain and previous solutions (8 min)
 
-4. "Was nervt dich am meisten an deinem aktuellen Setup?"
-5. "Hast du schon Tools ausprobiert um das zu lösen? Was ist passiert?"
+4. "What annoys you most about your current setup?"
+5. "Have you tried tools to fix that? What happened?"
 
-*(Für Churner wie Gunnar:)*
-6. "Du hast in der Survey erwähnt dass du für ein Tool bezahlt hast und es dann gekündigt hast. Was hat gefehlt?"
-7. "Was hätte das Tool tun müssen damit du geblieben wärst?"
+*(For churners like Gunnar:)*
+6. "You mentioned in the survey that you paid for a tool and then cancelled. What was missing?"
+7. "What would the tool have had to do for you to stay?"
 
-*(Für Aspirers:)*
-6. "Was hat dich bisher davon abgehalten anzufangen?"
-7. "Stell dir vor du wärst morgen investiert. Was hat dir jemand erklärt?"
+*(For aspirers:)*
+6. "What has stopped you from getting started so far?"
+7. "Imagine you were invested tomorrow. What did someone explain to you?"
 
-### Produkt-Reaktion (3 min)
+### Product reaction (3 min)
 
-*Kurze Beschreibung zeigen — KEIN Demo, nur Text:*
+*Show a short description — NO demo, text only:*
 
-> "Wir bauen ein Tool das dir für jede Aktie in 60 Sekunden ein klares Urteil gibt —
-> auf normale Sprache, ohne Fachjargon, und jede Zahl zeigt woher sie stammt."
+> "We're building a tool that gives you a clear verdict on any stock in 60 seconds —
+> in plain language, no jargon, and every number shows where it comes from."
 
-8. "Was ist deine erste Reaktion?"
-9. "Was fehlt in dieser Beschreibung?"
-10. "Würdest du dafür zahlen? Wenn ja: was wäre fair?"
+8. "What's your first reaction?"
+9. "What's missing from this description?"
+10. "Would you pay for it? If yes: what would be fair?"
 
-### Abschluss (2 min)
+### Wrap-up (2 min)
 
-11. "Was sollte ich dich noch gefragt haben?"
-12. "Darf ich mich nochmal melden wenn wir eine Beta haben?"
-
----
-
-## Interview-Protokoll
-
-*Für jedes Interview eine neue Sektion anlegen:*
+11. "What should I have asked you?"
+12. "May I reach out again when we have a beta?"
 
 ---
 
-### Interview 001 — [Name] · [Datum]
+## Interview log
+
+*Create a new section for each interview:*
+
+---
+
+### Interview 001 — [Name] · [Date]
 
 **Segment:** [Investor / Aspirer / Churner]
-**Dauer:** [x min]
-**Durchgeführt von:** [Name]
+**Duration:** [x min]
+**Conducted by:** [Name]
 
-**Top 3 Erkenntnisse:**
+**Top 3 insights:**
 1.
 2.
 3.
 
-**Direkte Zitate (wörtlich):**
+**Direct quotes (verbatim):**
 >
 
-**Was das für das Produkt bedeutet:**
+**What this means for the product:**
 
-**Offene Fragen:**
+**Open questions:**
 
 ---
 
-## Was nach den Interviews passiert
+## What happens after the interviews
 
-1. Erkenntnisse in `survey-wave1.md` ergänzen (Abschnitt "Interview-Updates")
-2. Falls neue User-Stories entstehen → `USER-STORIES.md` updaten
-3. Falls Roadmap-Änderung nötig → `ROADMAP.md` updaten, ADR anlegen wenn Architektur betroffen
-4. Wave 2 Survey finalisieren und deployen (Spec → `survey-wave1.md` Ende)
+1. Add insights to `survey-wave1.md` (section "Interview Updates")
+2. If new user stories emerge → update `USER-STORIES.md`
+3. If roadmap change needed → update `ROADMAP.md`, create ADR if architecture is affected
+4. Finalise and deploy Wave 2 survey (spec → end of `survey-wave1.md`)

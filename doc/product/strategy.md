@@ -1,25 +1,25 @@
 # pondex_ — Product Strategy
 
-_Single source of truth. Letzte Aktualisierung: 30. Juni 2026 nach Survey Wave 1 (n=45)._
+_Single source of truth. Last updated: 30. Juni 2026 after Survey Wave 1 (n=45)._
 
-> Die goldene Regel: Nie mehr als 2 Wochen bauen ohne mit echten Menschen zu reden.
+> The golden rule: Never build for more than 2 weeks without talking to real people.
 
 ---
 
 ## Positioning
 
-**Für** selbstständige Privatinvestoren die Einzelaktien analysieren,
-**ist** pondex_ ein Noise-Filter mit Quellennachweis,
-**der** jeder Aktie ein klares Plain-Language-Urteil gibt — jede Zahl mit benannter Quelle.
-**Anders als** Yahoo Finance, ChatGPT oder der Broker-eigene Screener
-**liefert** pondex_ kein Datenchaos, sondern einen klaren Audit-Trail.
+**For** independent retail investors who analyse individual stocks,
+**pondex_** is a noise filter with source attribution
+**that** gives every stock a clear plain-language verdict — every number with a named source.
+**Unlike** Yahoo Finance, ChatGPT, or the broker's own screener,
+**pondex_** delivers no data chaos, but a clear audit trail.
 
-**Was wir pitchen:** "Research with a clear audit trail"
-**Was wir NICHT pitchen:** "AI-powered analysis" — AI ist Mechanismus, nicht Message
+**What we pitch:** "Research with a clear audit trail"
+**What we do NOT pitch:** "AI-powered analysis" — AI is mechanism, not message
 
 ---
 
-## Messaging nach Segment
+## Messaging by segment
 
 | Segment | Pitch |
 |---|---|
@@ -31,88 +31,88 @@ _Single source of truth. Letzte Aktualisierung: 30. Juni 2026 nach Survey Wave 1
 
 ## ICP (Ideal Customer Profile)
 
-**Primär — Zahlender Churner:**
-Value/Semi-active Investor · EU-NW · Business/Finance Background · hat bereits $15–50/Mo für Research-Tools bezahlt · churnte weil Signal noch noisig war · konditionelles AI-Vertrauen (nur mit Quellenangabe) · **Prototyp: Gunnar Leu**
+**Primary — Paying churner:**
+Value/semi-active investor · EU-NW · Business/Finance background · has already paid $15–50/mo for research tools · churned because signal was still noisy · conditional AI trust (only with source attribution) · **prototype: Gunnar Leu**
 
-**Sekundär — Priced-out Power User:**
-Active Trader · NA · Finance Professional · priced out von Bloomberg ($50–200/Mo Budget) · Full AI trust
+**Secondary — Priced-out power user:**
+Active trader · NA · Finance professional · priced out of Bloomberg ($50–200/mo budget) · Full AI trust
 
-**Wachstumssegment — Aspirer:**
-Will anfangen, blockiert durch Komplexität oder Angst · braucht Plain Language + $5 Entry, keinen Score auf Screen 1
+**Growth segment — Aspirer:**
+Wants to start, blocked by complexity or fear · needs plain language + $5 entry, not a score on screen 1
 
 ---
 
 ## Competitive Moat
 
-**Kurzfristig:** Explanation-first + Source Attribution. Kein kostenloser Wettbewerber zeigt Quellenangaben als Default-UI — und kein kostenpflichtiger hat das Noise-Problem wirklich gelöst (Beweis: beide Churner aus Survey haben nach dem Bezahlen gekündigt).
+**Short-term:** Explanation-first + source attribution. No free competitor shows source citations as default UI — and no paid one has truly solved the noise problem (proof: both churners from the survey cancelled after paying).
 
-**Mittelfristig:** Thesis-Tracking-Daten. Sobald ein User 6–12 Monate dokumentierte Thesen hat, entstehen echte Switching Costs.
+**Medium-term:** Thesis-tracking data. Once a user has 6–12 months of documented theses, real switching costs emerge.
 
-**Langfristig:** Decision Quality Feedback Loop. Nach 2+ Jahren kennt pondex welche Bedingungen mit guten Entscheidungen für diesen spezifischen User korrelieren — ein personalisiertes Modell das kein Wettbewerber ohne dieselbe Datenhistorie replizieren kann.
-
----
-
-## Was pondex NICHT ist
-
-- Kein Bloomberg-Konkurrent (anderes Preissegment, anderer User)
-- Kein Robo-Advisor (pondex lehrt, entscheidet nicht)
-- Kein Neo-Broker-Konkurrent (Analyse, nicht Execution)
-- Kein Social Trading (explizit gegenteilige Werte)
-
-pondex konkurriert gegen den Status quo: den überforderten Privatinvestor mit fünf Tabs offen.
+**Long-term:** Decision quality feedback loop. After 2+ years, pondex knows which conditions correlate with good decisions for this specific user — a personalised model that no competitor can replicate without the same data history.
 
 ---
 
-## Roadmap-Übersicht
+## What pondex is NOT
 
-| Phase | Ziel | Target |
+- Not a Bloomberg competitor (different price segment, different user)
+- Not a robo-advisor (pondex teaches, it doesn't decide)
+- Not a neo-broker competitor (analysis, not execution)
+- Not social trading (explicitly opposite values)
+
+pondex competes against the status quo: the overwhelmed retail investor with five tabs open.
+
+---
+
+## Roadmap overview
+
+| Phase | Goal | Target |
 |---|---|---|
 | 1 — MVP | Noise-filter core · Source attribution · 60s UX | Juli 2026 |
 | 2 — Pro | Macro Hub · DE/ES · Login · Stripe | Sept 2026 |
-| 3 — Growth | SEO-Pages · Newsletter · Affiliate · Mobile | 2027 |
+| 3 — Growth | SEO pages · Newsletter · Affiliate · Mobile | 2027 |
 
-→ Vollständige Roadmap mit Scope-Details: `doc/ROADMAP.md`
-
----
-
-## Wachstumshypothese
-
-**0 → 100 User:** Direkte Ansprache der 6 Survey-Follow-up-Kontakte + Gunnar-Leu-Interview-Netzwerk.
-
-**100 → 1.000 User:** Word of Mouth in Investor-Communities (r/eupersonalfinance, r/Finanzen). "No account, no tracking" als Pull für Privacy-bewusste User.
-
-**1.000 → 10.000 User:** Content-Discovery via Finanz-YouTuber/Newsletter-Affiliate (30% Provision).
+→ Full roadmap with scope details: `doc/ROADMAP.md`
 
 ---
 
-## Business Model
+## Growth hypothesis
 
-**Free:** Kernfunktion ohne Login (Phase 1)
+**0 → 100 users:** Direct outreach to the 6 survey follow-up contacts + Gunnar Leu interview network.
 
-**Pro ~$15–19/Mo (Phase 2):**
+**100 → 1,000 users:** Word of mouth in investor communities (r/eupersonalfinance, r/Finanzen). "No account, no tracking" as a pull for privacy-conscious users.
+
+**1,000 → 10,000 users:** Content discovery via finance YouTubers/newsletter affiliates (30% commission).
+
+---
+
+## Business model
+
+**Free:** Core function without login (Phase 1)
+
+**Pro ~$15–19/mo (Phase 2):**
 - Macro Hub
 - Multilingual (DE/ES)
-- Watchlist + Portfolio-Tracking
-- Erweiterte AI-Features
+- Watchlist + portfolio tracking
+- Extended AI features
 
-**Preisvalidierung:** Van Westendorp bei $9/$19/$49 — vor Paywall-Bau.
-→ Kein Preispunkt ohne Daten.
-
----
-
-## Die eine Metrik die zählt
-
-> **30-Day-Retention > 40%**
-> Nicht Registrierungen. Nicht Page Views. Nur das.
+**Price validation:** Van Westendorp at $9/$19/$49 — before building the paywall.
+→ No price point without data.
 
 ---
 
-## Was ein Profi NICHT tut
+## The one metric that matters
+
+> **30-Day Retention > 40%**
+> Not registrations. Not page views. Just that.
+
+---
+
+## What a professional does NOT do
 
 ```
-✗ 6 Monate bauen bevor jemand es sieht
-✗ Signal/Noise-Problem mit mehr Daten lösen — macht es schlimmer
-✗ AI als USP pitchen — als Infrastruktur behandeln
-✗ Preis ohne Daten festlegen
-✗ Consolidation als Value Prop pitchen (nur 3/26 nennen "zu viele Tabs")
+✗ Build for 6 months before anyone sees it
+✗ Solve the signal/noise problem with more data — that makes it worse
+✗ Pitch AI as USP — treat it as infrastructure
+✗ Set a price without data
+✗ Pitch consolidation as value prop (only 3/26 cite "too many tabs")
 ```

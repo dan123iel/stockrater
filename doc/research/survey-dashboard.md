@@ -1,116 +1,116 @@
 # Survey Dashboard — pondex_ Wave 1
 
-> Wie die Survey gebaut wurde, wo sie läuft, wie man sie liest, und wie man sie für Wave 2 erweitert.
+> How the survey was built, where it runs, how to read it, and how to extend it for Wave 2.
 
 ---
 
 ## Links
 
-| Was | URL |
+| What | URL |
 |---|---|
 | Survey (Tally) | https://tally.so/r/QKXBEG |
 | Live Dashboard | https://dan123iel.github.io/survey/ |
 | Dashboard Repo | https://github.com/dan123iel/survey |
-| Rohdaten (Google Sheets) | https://docs.google.com/spreadsheets/d/1Y6UaYRc0lWz7TTdhzLFDuVsk-T7wowrWExAhiUsquew/edit |
+| Raw data (Google Sheets) | https://docs.google.com/spreadsheets/d/1Y6UaYRc0lWz7TTdhzLFDuVsk-T7wowrWExAhiUsquew/edit |
 
 ---
 
-## Wie das Dashboard funktioniert
+## How the dashboard works
 
-Das Dashboard ist eine einzelne `index.html` Datei im Repo `dan123iel/survey`, deployed via GitHub Pages.
+The dashboard is a single `index.html` file in the repo `dan123iel/survey`, deployed via GitHub Pages.
 
-**Datenfluss:**
+**Data flow:**
 ```
-Google Sheets (Tally-Antworten)
-    → "Publish to web" als CSV
-    → Dashboard fetcht CSV on load
-    → Client-side JS parst + rendert alles
-    → Live bei jedem Refresh
+Google Sheets (Tally responses)
+    → "Publish to web" as CSV
+    → Dashboard fetches CSV on load
+    → Client-side JS parses + renders everything
+    → Live on every refresh
 ```
 
-**Kein Backend nötig.** Alles passiert im Browser. Google Sheets ist die einzige Datenquelle.
+**No backend required.** Everything happens in the browser. Google Sheets is the only data source.
 
-**Wo die CSV-URL steht:**
+**Where the CSV URL is defined:**
 ```javascript
-// dashboard/index.html, Zeile 321
+// dashboard/index.html, line 321
 const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-.../pub?gid=0&single=true&output=csv";
 ```
 
-Um die Datenquelle zu wechseln (z.B. für Wave 2): nur diese URL austauschen.
+To switch the data source (e.g. for Wave 2): just replace this URL.
 
 ---
 
-## Struktur des Dashboards (5 Parts)
+## Dashboard structure (5 parts)
 
-| Part | Inhalt |
+| Part | Content |
 |---|---|
-| Executive Summary | Verdict-Hero + 3 Signal-Kacheln (Problem strength, WTP, Sample quality) |
-| Part 1 — The Opportunity | Marktsegmente, Pain-Chart, Tool-Stack der Investoren |
-| Part 2 — The User | Demographie, ICP-Profile (Churner + Paying), AI-Trust-Split |
-| Part 3 — What to Build | Non-Investor-Barriers, Produktanforderungen (aus Daten abgeleitet) |
-| Part 4 — The Risks | 6 Risiken mit Schweregrad-Badges |
-| Part 5 — The Evidence | Cross-Tabs, Verbatims (Q9), Follow-up-Kontakte, Wave 2 Spec, Methodology |
+| Executive Summary | Verdict hero + 3 signal tiles (Problem strength, WTP, Sample quality) |
+| Part 1 — The Opportunity | Market segments, pain chart, investors' tool stack |
+| Part 2 — The User | Demographics, ICP profiles (churners + paying), AI trust split |
+| Part 3 — What to Build | Non-investor barriers, product requirements (derived from data) |
+| Part 4 — The Risks | 6 risks with severity badges |
+| Part 5 — The Evidence | Cross-tabs, verbatims (Q9), follow-up contacts, Wave 2 spec, methodology |
 
 ---
 
-## Survey-Fragen (Tally, 16 Seiten)
+## Survey questions (Tally, 16 pages)
 
 **Branching:**
-- Q1 → Investor? → Sektion A (Investoren-Fragen)
-- Q1 → "Nein, will anfangen" → Sektion B (Aspirer-Fragen)
-- Q1 → "Nein, kein Interesse" → Exit
+- Q1 → Investor? → Section A (investor questions)
+- Q1 → "No, want to start" → Section B (aspirer questions)
+- Q1 → "No, not interested" → Exit
 
-**Investoren (Sektion A):**
-- Q2A: Wöchentliche Research-Zeit
-- Q3A: Welche Tools (Multi-Select)
-- Q4A: Größte Frustration (Single)
-- Q5A: Paid for tools? + Wie viel?
+**Investors (Section A):**
+- Q2A: Weekly research time
+- Q3A: Which tools (multi-select)
+- Q4A: Biggest frustration (single)
+- Q5A: Paid for tools? + How much?
 
-**Aspirers (Sektion B):**
-- Q2B: Hauptbarrier (Multi-Select)
-- Q3B: Was würde ersten Schritt ermöglichen (Multi-Select)
+**Aspirers (Section B):**
+- Q2B: Main barrier (multi-select)
+- Q3B: What would enable the first step (multi-select)
 
-**Alle:**
-- Q6: AI-Trust-Level
-- Q7: Beruf
+**Everyone:**
+- Q6: AI trust level
+- Q7: Profession
 - Q8: Region
-- Q9: "Magic Wand" — offene Frage
-- Q10: Follow-up-Kontakt OK?
+- Q9: "Magic Wand" — open question
+- Q10: Follow-up contact OK?
 
 ---
 
-## Wave 2 — Geplante Verbesserungen
+## Wave 2 — Planned improvements
 
-Bekannte Schwächen von Wave 1 die Wave 2 beheben soll:
+Known weaknesses of Wave 1 that Wave 2 should address:
 
-| Problem Wave 1 | Lösung Wave 2 |
+| Problem Wave 1 | Solution Wave 2 |
 |---|---|
-| Multi-Select bei Barriers → kein primärer Pain erkennbar | Forced single choice |
-| Feature-Fragen vor Konzept-Präsentation → inflated demand | Konzept zeigen, dann fragen |
-| Kein WTP-Preispunkt | Direkte Preis-Frage ($9/$19/$49) |
-| Warm-Network-Sample | Deployment auf r/eupersonalfinance + r/finanzen |
-| Inkonsistente Skalen | Überall 5-Punkt-Likert |
+| Multi-select for barriers → no primary pain identifiable | Forced single choice |
+| Feature questions before concept presentation → inflated demand | Show concept, then ask |
+| No WTP price point | Direct price question ($9/$19/$49) |
+| Warm-network sample | Deployment on r/eupersonalfinance + r/finanzen |
+| Inconsistent scales | 5-point Likert throughout |
 
-**Wave 2 starten sobald:** Gunnar Leu Interview abgeschlossen, Phase 1 MVP deployed.
-
----
-
-## Dashboard updaten (für Wave 2)
-
-1. Neue Tally-Survey erstellen (Wave 2 Spec → `survey-wave1.md` Ende)
-2. Tally → Google Sheets verbinden
-3. Neues Sheet als CSV publishen (File → Share → Publish to web → CSV)
-4. In `dashboard/index.html` die `CSV_URL` ersetzen
-5. Commit + push → GitHub Pages deployed automatisch
-
-Alternativ: separates Dashboard für Wave 2, um Wave 1 als historischen Snapshot zu erhalten.
+**Start Wave 2 once:** Gunnar Leu interview completed, Phase 1 MVP deployed.
 
 ---
 
-## Methodologische Einschränkungen
+## Updating the dashboard (for Wave 2)
 
-- n=45, Warm-Network (WhatsApp-Blast)
-- 25/45 Antworten in 2h-Fenster → kein repräsentativer Querschnitt
-- Wave 2 (n=10) zeigt 44% AI-Skepsis vs. 21% in Wave 1 → cold audiences konservativer
-- Alle Zahlen sind **direktionale Signale**, keine statistisch signifikanten Befunde
-- Nicht für externe Präsentation geeignet ohne Cold-Audience-Replikation
+1. Create new Tally survey (Wave 2 spec → end of `survey-wave1.md`)
+2. Connect Tally → Google Sheets
+3. Publish new sheet as CSV (File → Share → Publish to web → CSV)
+4. Replace `CSV_URL` in `dashboard/index.html`
+5. Commit + push → GitHub Pages deploys automatically
+
+Alternatively: separate dashboard for Wave 2 to preserve Wave 1 as a historical snapshot.
+
+---
+
+## Methodological limitations
+
+- n=45, warm network (WhatsApp blast)
+- 25/45 responses in 2h window → not a representative cross-section
+- Wave 2 (n=10) shows 44% AI skepticism vs. 21% in Wave 1 → cold audiences are more conservative
+- All numbers are **directional signals**, not statistically significant findings
+- Not suitable for external presentation without cold-audience replication

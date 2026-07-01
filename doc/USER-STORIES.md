@@ -1,193 +1,193 @@
 # User Stories — pondex_
 
-> Abgeleitet aus Survey Wave 1 (n=45, Juni 2026) und ICP-Interviews.
+> Derived from Survey Wave 1 (n=45, Juni 2026) and ICP interviews.
 > Format: "As a [who], I want to [what], so that [why]."
-> Jede Story hat Akzeptanzkriterien (Given / When / Then).
+> Each story has acceptance criteria (Given / When / Then).
 
 ---
 
-## Segmente
+## Segments
 
-| Kürzel | Wer |
+| Code | Who |
 |---|---|
-| **VA** | Value Investor (Active) — zahlt/zahlte bereits, EU-NW, ICP |
+| **VA** | Value Investor (Active) — pays/has paid, EU-NW, ICP |
 | **PI** | Passive Investor — ETF-only, rarely checks |
-| **AS** | Aspirer — will anfangen, noch kein Investment |
+| **AS** | Aspirer — wants to start, no investment yet |
 
 ---
 
-## Phase 1 — MVP (in Scope)
+## Phase 1 — MVP (in scope)
 
-### US-001 · Ticker suchen und analysieren
+### US-001 · Search and analyse a ticker
 
 ```
-Als VA/PI
-möchte ich einen Ticker eingeben und innerhalb von 60 Sekunden ein klares Urteil sehen,
-damit ich nicht durch mehrere Tools scrollen muss um eine Einschätzung zu bekommen.
+As a VA/PI
+I want to enter a ticker and see a clear verdict within 60 seconds,
+so that I don't have to scroll through multiple tools to get an assessment.
 ```
 
-**Akzeptanzkriterien:**
-- Given: Ich bin auf der Analyze-Seite
-- When: Ich tippe "NVDA" und drücke Enter
-- Then: Score, Erklärung und Quellenangabe erscheinen in < 3 Sekunden
+**Acceptance criteria:**
+- Given: I am on the Analyse page
+- When: I type "NVDA" and press Enter
+- Then: Score, explanation and source attribution appear in < 3 seconds
 
 ---
 
-### US-002 · Plain-language Erklärung vor dem Score
+### US-002 · Plain-language explanation before the score
 
 ```
-Als AS
-möchte ich zuerst eine Erklärung in normaler Sprache lesen (kein Fachjargon),
-damit ich verstehe was der Score bedeutet bevor ich ihm vertraue.
+As an AS
+I want to read an explanation in plain language first (no jargon),
+so that I understand what the score means before I trust it.
 ```
 
-**Akzeptanzkriterien:**
-- Given: Ich habe einen Ticker analysiert
-- When: Die Ergebnisse laden
-- Then: Der Text "Strong fundamentals — healthy margins..." erscheint vor der Score-Zahl
-- And: Kein unerklärtes Akronym (P/E, EBITDA, etc.) im Primary-Text
+**Acceptance criteria:**
+- Given: I have analysed a ticker
+- When: The results load
+- Then: The text "Strong fundamentals — healthy margins..." appears before the score number
+- And: No unexplained acronym (P/E, EBITDA, etc.) in the primary text
 
 ---
 
-### US-003 · Quellenangabe für jede Zahl
+### US-003 · Source attribution for every number
 
 ```
-Als VA (Gunnar Leu-Typ)
-möchte ich für jede angezeigte Kennzahl die genaue Datenquelle sehen,
-damit ich dem Urteil vertrauen kann ohne es blind hinzunehmen.
+As a VA (Gunnar Leu type)
+I want to see the exact data source for every metric displayed,
+so that I can trust the verdict without taking it blindly.
 ```
 
-**Akzeptanzkriterien:**
-- Given: Score-Panel ist geladen
-- When: Ich klicke das ▾-Icon neben einem Faktor
-- Then: Ich sehe z.B. "P/E Ratio · 24.3x · Yahoo Finance – trailing twelve months"
-- And: Jede Zeile hat Label, Wert und Quelle
+**Acceptance criteria:**
+- Given: Score panel is loaded
+- When: I click the ▾ icon next to a factor
+- Then: I see e.g. "P/E Ratio · 24.3x · Yahoo Finance – trailing twelve months"
+- And: Every row has a label, value and source
 
 ---
 
-### US-004 · AI-Insights mit Quellennachweis
+### US-004 · AI insights with source attribution
 
 ```
-Als VA
-möchte ich dem AI-Chat eine Frage stellen und eine Antwort bekommen,
-die nur Fakten aus benannten Quellen enthält,
-damit ich keine halluzinierten Zahlen als Entscheidungsgrundlage benutze.
+As a VA
+I want to ask the AI chat a question and get an answer
+that contains only facts from named sources,
+so that I don't use hallucinated numbers as a basis for decisions.
 ```
 
-**Akzeptanzkriterien:**
-- Given: AI-Insights Tab ist offen, Groq Key ist gesetzt
-- When: Ich frage "What is the biggest risk?"
-- Then: Die Antwort enthält keine Zahlen ohne Quellenangabe
-- And: Das sources[]-Array zeigt die verwendeten Datenpunkte
+**Acceptance criteria:**
+- Given: AI Insights tab is open, Groq key is set
+- When: I ask "What is the biggest risk?"
+- Then: The answer contains no numbers without source attribution
+- And: The sources[] array shows the data points used
 
 ---
 
-### US-005 · Zwischen 12 Analyse-Tabs wechseln
+### US-005 · Switch between 12 analysis tabs
 
 ```
-Als VA/PI
-möchte ich zwischen Scorecard, Chart, Valuation, DCF, News, Insider und AI wechseln,
-damit ich tief in den Bereich einsteigen kann der mich gerade interessiert.
+As a VA/PI
+I want to switch between Scorecard, Chart, Valuation, DCF, News, Insider and AI,
+so that I can dive deep into whichever area interests me at the moment.
 ```
 
-**Akzeptanzkriterien:**
-- Given: Analyse ist geladen
-- When: Ich klicke "Insider"
-- Then: Die Insider-Trades-Ansicht öffnet sich ohne Page Reload
-- And: Der aktive Tab ist visuell hervorgehoben
-- And: "Financials", "Dividends", "Analysts" zeigen "coming soon"
+**Acceptance criteria:**
+- Given: Analysis is loaded
+- When: I click "Insider"
+- Then: The insider trades view opens without a page reload
+- And: The active tab is visually highlighted
+- And: "Financials", "Dividends", "Analysts" show "coming soon"
 
 ---
 
-### US-006 · Watchlist aufbauen
+### US-006 · Build a watchlist
 
 ```
-Als PI
-möchte ich Aktien auf eine Watchlist setzen,
-damit ich sie beim nächsten Besuch schnell wieder aufrufen kann.
+As a PI
+I want to add stocks to a watchlist,
+so that I can quickly pull them up again on my next visit.
 ```
 
-**Akzeptanzkriterien:**
-- Given: Ich habe AAPL analysiert
-- When: Ich navigiere zu Watchlist
-- Then: AAPL erscheint in der Liste
-- And: Klick auf AAPL öffnet direkt die Analyse
+**Acceptance criteria:**
+- Given: I have analysed AAPL
+- When: I navigate to Watchlist
+- Then: AAPL appears in the list
+- And: Clicking AAPL opens the analysis directly
 
 ---
 
-### US-007 · Schnell zwischen Markets-Übersicht und Analyse wechseln
+### US-007 · Quickly switch between markets overview and analysis
 
 ```
-Als VA/PI
-möchte ich auf der Markets-Seite einen Index oder eine Aktie anklicken,
-damit ich direkt in die Analyse springe ohne den Ticker manuell einzugeben.
+As a VA/PI
+I want to click on an index or stock on the Markets page,
+so that I jump directly into the analysis without entering the ticker manually.
 ```
 
-**Akzeptanzkriterien:**
-- Given: Ich bin auf der Markets-Seite
-- When: Ich klicke "ASML"
-- Then: Die Analyze-Seite öffnet sich mit ASML vorgeladen
+**Acceptance criteria:**
+- Given: I am on the Markets page
+- When: I click "ASML"
+- Then: The Analyse page opens with ASML pre-loaded
 
 ---
 
-## Phase 2 — Geplant (nicht in Phase 1)
+## Phase 2 — Planned (not in Phase 1)
 
-### US-008 · Macro-Kontext zur Aktienanalyse
+### US-008 · Macro context alongside stock analysis
 
 ```
-Als VA (Gunnar Leu-Typ)
-möchte ich geopolitische Ereignisse und externe Marktfaktoren zusammen mit der Aktienanalyse sehen,
-damit ich nicht zwischen Handelsblatt, YouTube und dem Analyse-Tool wechseln muss.
+As a VA (Gunnar Leu type)
+I want to see geopolitical events and external market factors together with the stock analysis,
+so that I don't have to switch between Handelsblatt, YouTube and the analysis tool.
 ```
 
-**Survey-Basis:** Q9-Verbatim von Gunnar Leu — sein expliziter #1-Request.
+**Survey basis:** Q9 verbatim from Gunnar Leu — his explicit #1 request.
 **Status:** Phase 2, Macro Hub.
 
 ---
 
-### US-009 · Erklärungen auf Deutsch oder Spanisch
+### US-009 · Explanations in German or Spanish
 
 ```
-Als AS (EU-NW / Lateinamerika)
-möchte ich die Erklärungen in meiner Muttersprache lesen,
-damit mir kein Sprachbarriere die Entscheidung erschwert.
+As an AS (EU-NW / Latin America)
+I want to read the explanations in my native language,
+so that no language barrier complicates my decision.
 ```
 
-**Survey-Basis:** 57% EU-Respondents, mehrere Verbatims auf Spanisch (Q9).
+**Survey basis:** 57% EU respondents, several verbatims in Spanish (Q9).
 **Status:** Phase 2, Multilingual.
 
 ---
 
-### US-010 · Konto erstellen und Einstellungen speichern
+### US-010 · Create an account and save settings
 
 ```
-Als VA
-möchte ich mich einloggen können,
-damit mein Strategie-Profil, meine Watchlist und mein Portfolio-Track nicht verloren gehen
-wenn ich den Browser-Cache lösche.
+As a VA
+I want to be able to log in,
+so that my strategy profile, watchlist and portfolio track are not lost
+when I clear the browser cache.
 ```
 
-**Status:** Phase 2, Login + Backend-Persistenz.
+**Status:** Phase 2, Login + backend persistence.
 
 ---
 
-## Won't build (begründet)
+## Won't build (with rationale)
 
-| Story | Warum nicht |
+| Story | Why not |
 |---|---|
-| "Als User möchte ich Aktien direkt kaufen" | Broker-Lizenz erforderlich |
-| "Als User möchte ich Empfehlungen bekommen (Buy/Sell)" | Regulatorisches Risiko |
-| "Als User möchte ich Echtzeit-Streaming-Preise" | Infrastrukturkosten vs. Nutzen |
-| "Als User möchte ich Aktien mit Freunden teilen" | Kein Survey-Signal, Phase 3+ |
+| "As a user I want to buy stocks directly" | Broker licence required |
+| "As a user I want to receive recommendations (Buy/Sell)" | Regulatory risk |
+| "As a user I want real-time streaming prices" | Infrastructure cost vs. benefit |
+| "As a user I want to share stocks with friends" | No survey signal, Phase 3+ |
 
 ---
 
-## Story Map (nach User Journey)
+## Story map (by user journey)
 
 ```
-[Entdecken]          [Analysieren]          [Entscheiden]         [Wiederkommen]
+[Discover]           [Analyse]              [Decide]              [Return]
       ↓                    ↓                       ↓                     ↓
-US-007 Markets       US-001 Suche           US-003 Quellen         US-006 Watchlist
-                     US-002 Erklärung       US-004 AI-Chat
+US-007 Markets       US-001 Search          US-003 Sources         US-006 Watchlist
+                     US-002 Explanation     US-004 AI Chat
                      US-005 Tabs
 ```
