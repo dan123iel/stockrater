@@ -203,3 +203,11 @@ Week N+2: Delivery  → Engineers pick up Macro Hub from validated spec
 ```
 
 Discovery is always one sprint ahead of Delivery. The spec only gets written after validation.
+
+---
+
+## Governance & Process
+
+Before any feature moves from Phase 3 (Prototype) to Phase 4 (Delivery), it must pass the Product Council review.
+
+→ **`doc/product/PRODUCT-COUNCIL.md`** — 2-phase council structure, risk gates, 48h SLA, Go/No-Go process

@@ -10,6 +10,23 @@ pondex_ reduces signal-to-noise in stock research. Plain-language verdict for an
 
 ---
 
+## Feature Discovery & Product Governance (Automatic Trigger)
+
+Whenever the user asks to design, plan, or implement a **NEW FEATURE**, a **NEW DATA SOURCE**, or a **MAJOR ARCHITECTURAL CHANGE**, you MUST automatically execute the following workflow before writing any code:
+
+1. **Context Retrieval:** Read and analyze `doc/product/PRODUCT-COUNCIL.md`.
+2. **Phase 1 & 2 Audit:** Explicitly evaluate the proposal against Usability Risk, Feasibility Risk, Regulatory Risk, and Unit Economics.
+3. **Structured Response:** Open your response with this assessment block:
+
+> 🏛️ **Product Council Context Audit**
+> - **Phase 1 (Trio):** [1 sentence on Usability/Design challenge + 1 sentence on Tech Feasibility]
+> - **Phase 2 (Viability):** [1 sentence on Legal/Compliance risk + 1 sentence on Finance/API costs]
+> - **File Layout:** [Exact paths where new files will be placed per the Repository Structure Rulebook]
+
+*Skip this entire step ONLY if the request is a simple bug fix, minor refactoring of existing logic, or a pure informational Q&A.*
+
+---
+
 ## 2. Workspace Map
 
 ### Product context (read before any product decision)
