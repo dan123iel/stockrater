@@ -6,63 +6,95 @@ pondex_ reduces signal-to-noise in stock research. Plain-language verdict for an
 
 **The one constraint that overrides everything:** Every AI output and every displayed metric must cite its named primary source. No number without attribution. This is not optional.
 
+**How we build:** Continuous Discovery (Cagan) running in parallel with Delivery. We never ship a feature that hasn't passed all four risk gates. See `doc/product/PRODUCT-JOURNEY.md`.
+
 ---
 
 ## 2. Workspace Map
 
+### Product context (read before making any product decision)
+
+| File | Phase | Purpose |
+|---|---|---|
+| `doc/product/PRODUCT-JOURNEY.md` | All | **Start here** — full Cagan journey, where code lives, weekly rhythm |
+| `doc/product/vision.md` | 1 — Framing | 2–5 year direction |
+| `doc/product/strategy.md` | 1 — Framing | GTM, ICP, messaging, growth hypothesis |
+| `doc/product/personas.md` | 1 — Framing | ICP profiles from survey |
+| `doc/product/metrics.md` | 1 — Framing | OKRs, 30-day retention target |
+| `doc/PROJECT-BRIEF.md` | 1 — Framing | What, for whom, why |
+| `doc/discovery/user-interviews.md` | 2 — Discovery | Interview guide, Gunnar Leu contact, session notes |
+| `doc/discovery/competitor-analysis.md` | 2 — Discovery | What exists, why it fails |
+| `doc/research/survey-wave1.md` | 2 — Discovery | Survey findings (→ live: dan123iel.github.io/survey/) |
+| `doc/research/survey-dashboard.md` | 2 — Discovery | Dashboard docs, Wave 2 plan |
+| `doc/PRD.md` | 3 — Prototype | Requirements after validation |
+| `doc/USER-STORIES.md` | 3 — Prototype | Stories in INVEST format |
+| `doc/specs/` | 3 — Prototype | Feature specs (only written after validation) |
+| `doc/ROADMAP.md` | 4 — Delivery | What's in scope now vs later |
+| `doc/adr/` | 4 — Delivery | Architecture decisions (ADR-001 → ADR-007) |
+
+### Engineering context (read before writing any code)
+
 | File | Purpose |
 |---|---|
-| `.project-context/MASTER.md` | This file — entry point, rules, current milestone |
-| `.project-context/context/architecture.md` | Stack, data flow, API endpoints, full directory map |
+| `.project-context/context/architecture.md` | Full directory map, all API endpoints, data sources |
 | `.project-context/context/tech-stack.md` | Approved tech only — no FMP, no OpenAI |
 | `.project-context/context/coding-guidelines.md` | Code style, error handling, Definition of Done |
-| `doc/PROJECT-BRIEF.md` | What, for whom, why |
-| `doc/PRD.md` | User segments, feature requirements, acceptance criteria |
-| `doc/ROADMAP.md` | Phase 1/2/3 — what's in scope now |
-| `doc/USER-STORIES.md` | User stories (INVEST format) derived from survey |
-| `doc/product/strategy.md` | GTM, ICP, messaging, growth hypothesis |
-| `doc/research/survey-wave1.md` | Survey Wave 1 results (n=45) |
-| `doc/research/survey-dashboard.md` | How the live dashboard works + Wave 2 plan |
-| `doc/research/user-interviews.md` | Interview guide + contact list (Gunnar Leu priority) |
-| `doc/adr/` | All architecture decisions |
 
 ---
 
-## 3. Execution Rules
+## 3. Where Code Lives
 
-1. **Read this file first.** Before any code or file change, read MASTER.md and the relevant context sub-files.
-2. **No unapproved dependencies.** Check `tech-stack.md` before adding any library or API.
-3. **Source attribution is mandatory.** Every metric in the UI must show its data source. Every AI response includes `sources[]`. See ADR-007.
-4. **Explanation before score.** Plain-language text renders before the score number. See ADR-007.
-5. **Do not touch `frontend/src/components/ui/`.** These are shadcn-generated files. Editing them breaks updates.
-6. **Update docs when structure changes.** New page, endpoint, or component → update `architecture.md` and `MASTER.md`.
-7. **Verify before done.** Run `npm run build`, check files, grep for FMP refs, commit, push. See `coding-guidelines.md`.
+| What | Path | Notes |
+|---|---|---|
+| Frontend pages | `frontend/src/pages/` | One file per view |
+| Reusable components | `frontend/src/components/` | Tiles, Nav, Panels |
+| shadcn UI | `frontend/src/components/ui/` | ⚠ DO NOT EDIT |
+| API client | `frontend/src/lib/fmp.js` | Calls backend, not FMP |
+| LocalStorage | `frontend/src/lib/storage.js` | All user persistence |
+| CSS variables | `frontend/src/index.css` | All design tokens |
+| All API endpoints | `backend/main.py` | Single file, intentional |
+| ASCII wireframes | `design/wireframes/` | Readable by AI agents |
+| Original prototype | `design/reference/pondex-v1.html` | Phase 3 reference |
 
 ---
 
-## 4. What NOT to do
+## 4. Execution Rules
 
-- Do not use FMP (Financial Modeling Prep) — use Yahoo Finance via yfinance. ADR-005.
-- Do not use OpenAI or Anthropic/Claude for AI features — use Groq Llama 3.3 70B. ADR-006.
-- Do not show a score before showing an explanation. ADR-007.
-- Do not edit `frontend/src/components/ui/` — shadcn-generated, update via CLI only.
-- Do not put GTM/strategy content at root level — it belongs in `doc/product/strategy.md`.
-- Do not add features outside `doc/ROADMAP.md` Phase 1 without updating the roadmap first.
+1. **Read `doc/product/PRODUCT-JOURNEY.md` first** for any product decision.
+2. **Read this file + relevant context sub-files** before any code change.
+3. **No unapproved dependencies.** Check `tech-stack.md` before adding anything.
+4. **Source attribution is mandatory.** Every metric shows its source. Every AI response includes `sources[]`. ADR-007.
+5. **Explanation before score.** Plain-language text renders before the number. ADR-007.
+6. **Do not touch `frontend/src/components/ui/`** — shadcn-generated.
+7. **Specs only after validation.** Don't write a spec for something that hasn't passed all 4 Cagan risk gates.
+8. **Update docs when structure changes.** New page, endpoint, or component → update `architecture.md` and this file.
+9. **Verify before done.** `npm run build` + file check + FMP grep + commit + push. See `coding-guidelines.md`.
+
+---
+
+## 5. What NOT to do
+
+- Do not use FMP — Yahoo Finance via yfinance only. ADR-005.
+- Do not use OpenAI or Claude for AI — Groq Llama 3.3 70B only. ADR-006.
+- Do not show score before explanation. ADR-007.
+- Do not edit `frontend/src/components/ui/`.
+- Do not add features outside Phase 1 scope without updating `doc/ROADMAP.md`.
+- Do not write a spec before passing all 4 risk gates (Value, Usability, Feasibility, Viability).
 - Do not commit `venv/`, `node_modules/`, `.env`, `dist/`, `__pycache__/`.
 
 ---
 
-## 5. Current Milestone
+## 6. Current Milestone
 
-**Phase 1 — MVP** (Target: 15 July 2026)
+**Phase 1 — MVP** · OKR: 30-day retention > 40% with first 10 real users · Target: 15 July 2026
 
 In scope:
 - 12-tab analytics (Scorecard, Chart, Valuation, DCF, News, Insider, AI, Ownership, Profile + 3× coming soon)
-- Explanation-first UX with source attribution per metric
+- Explanation-first UX + source attribution per metric
 - 6 nav pages: Analyze, Markets, Macro, Ideas, Watchlist, Portfolio
-- Backend deployable on Railway
+- Live at: https://dan123iel.github.io/stockrater/
 
 Not in scope until Phase 2: Login, Stripe, Macro Hub, Multilingual, Dark mode.
 
-→ `doc/ROADMAP.md` for full phase breakdown.
-→ `doc/product/strategy.md` for ICP, messaging, growth hypothesis.
+→ Full phase breakdown: `doc/ROADMAP.md`
+→ Full journey: `doc/product/PRODUCT-JOURNEY.md`

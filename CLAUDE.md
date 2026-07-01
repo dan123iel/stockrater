@@ -1,66 +1,72 @@
 # pondex_ — CLAUDE.md
 
-> Wird von Claude Code bei jeder Session automatisch geladen.
-> Vor jeder Aktion lesen.
+> Auto-loaded by Claude Code on every session. Read before touching anything.
 
 ---
 
-## 1. Was ist dieses Projekt?
+## 1. What is this?
 
-pondex_ ist ein Stock-Research-Tool. Klares Plain-Language-Urteil für jede Aktie, jede Zahl mit benannter Quelle. Zielnutzer: selbstständiger Value-Investor (EU-NW), hat bereits für Research-Tools bezahlt, hat gekündigt weil Noise nicht gelöst wurde.
+pondex_ is a stock research tool. Plain-language verdict for any stock, every number cites its source. Built for self-directed investors who are priced out of Bloomberg or frustrated by AI that hallucinates numbers.
 
-**Die eine Regel die alles übersteuert:** Jede angezeigte Kennzahl und jeder AI-Output muss seine primäre Datenquelle namentlich ausweisen. Keine Zahl ohne Quellenangabe.
-
----
-
-## 2. Diese Dateien zuerst lesen
-
-In dieser Reihenfolge, bevor Code geschrieben wird:
-
-1. `.project-context/MASTER.md` — Zweck, aktueller Milestone, Hard Rules
-2. `.project-context/context/architecture.md` — wo jede Datei liegt, alle API-Endpoints
-3. `.project-context/context/tech-stack.md` — nur approved Tech (keine FMP, kein OpenAI)
-4. `.project-context/context/coding-guidelines.md` — Code-Regeln + Definition of Done
+**How we build:** Continuous Discovery (Cagan's *Inspired*) running in parallel with Delivery.
+Full process: `doc/product/PRODUCT-JOURNEY.md`
 
 ---
 
-## 3. Wo was hingehört — keine Verwechslungen
+## 2. Read first
 
-| Was | Wo | Niemals in |
+1. `.project-context/MASTER.md` — rules, workspace map, current milestone
+2. `doc/product/PRODUCT-JOURNEY.md` — full Cagan journey + where code lives
+3. `.project-context/context/architecture.md` — directory map, all API endpoints
+4. `.project-context/context/tech-stack.md` — approved tech only
+5. `.project-context/context/coding-guidelines.md` — code rules + Definition of Done
+
+---
+
+## 3. Where things belong
+
+### Product documents (by Cagan phase)
+
+| Phase | What | Where |
 |---|---|---|
-| Frontend-Seiten | `frontend/src/pages/` | `components/` |
-| Wiederverwendbare Komponenten | `frontend/src/components/` | `pages/` |
-| API-Client (ruft Backend auf) | `frontend/src/lib/fmp.js` | Direkt in Komponenten |
-| User-Daten (localStorage) | `frontend/src/lib/storage.js` | Hardcoded |
-| CSS-Variablen / Design-Tokens | `frontend/src/index.css` | Inline-Styles |
-| shadcn-Komponenten | `frontend/src/components/ui/` | NICHT BEARBEITEN |
-| Alle Backend-Endpoints | `backend/main.py` | Separate Dateien |
-| Produktentscheidungen, Roadmap | `doc/ROADMAP.md`, `doc/PRD.md` | Memory, Chat |
-| GTM, ICP, Messaging | `doc/product/strategy.md` | Root-Ebene |
-| Survey-Daten, Research | `doc/research/` | Memory |
-| Architektur-Entscheidungen | `doc/adr/ADR-NNN-*.md` | Code-Kommentare |
-| AI-Agent-Regelwerk | `.project-context/` | CLAUDE.md direkt |
-| Persistente AI-Memory | `~/.claude/projects/.../memory/` | Dieses Repo |
+| 1 — Framing | Vision, OKRs, ICP, strategy | `doc/product/` |
+| 2 — Discovery | Interviews, survey, competitor analysis | `doc/discovery/` + `doc/research/` |
+| 3 — Prototype | PRD, user stories, feature specs | `doc/PRD.md`, `doc/USER-STORIES.md`, `doc/specs/` |
+| 4 — Delivery | Roadmap, ADRs, technical docs | `doc/ROADMAP.md`, `doc/adr/`, `doc/technical/` |
+
+### Code
+
+| What | Where |
+|---|---|
+| Frontend pages | `frontend/src/pages/` |
+| Reusable components | `frontend/src/components/` |
+| shadcn UI components | `frontend/src/components/ui/` — ⚠ DO NOT EDIT |
+| API client (→ backend) | `frontend/src/lib/fmp.js` |
+| localStorage | `frontend/src/lib/storage.js` |
+| CSS variables / tokens | `frontend/src/index.css` |
+| All backend endpoints | `backend/main.py` |
+| Wireframes | `design/wireframes/` |
+| AI agent rules | `.project-context/` |
+| Persistent AI memory | `~/.claude/projects/.../memory/` |
 
 ---
 
-## 4. Hard Rules
+## 4. Hard rules
 
-- **Kein FMP.** Daten kommen aus `backend/main.py` via `yfinance`. `lib/fmp.js` ruft das Backend auf, nicht FMP.
-- **Kein OpenAI / Claude für AI-Features.** Nur Groq Llama 3.3 70B.
-- **Jede Kennzahl zeigt ihre Quelle.** `explanations{}` und `sources[]` aus `/score` müssen gerendert werden.
-- **Score ist eine Schlussfolgerung.** Erklärung rendert zuerst, Score-Zahl zuletzt.
-- **`frontend/src/components/ui/` nicht bearbeiten.** Das sind shadcn-generierte Dateien.
-- **Vor "fertig" verifizieren.** `npm run build`, Dateien prüfen, FMP-grep, commit, push.
+- **No FMP.** `lib/fmp.js` calls the backend, not FMP. ADR-005.
+- **No OpenAI / Claude for AI.** Groq Llama 3.3 70B only. ADR-006.
+- **Every metric shows its source.** `explanations{}` + `sources[]` must render. ADR-007.
+- **Score is a conclusion.** Explanation first, score last. ADR-007.
+- **No spec before validation.** Write specs only after all 4 Cagan risk gates pass.
+- **Verify before done.** `npm run build` + file check + FMP grep + commit + push.
 
 ---
 
-## 5. Aktueller Milestone
+## 5. Current milestone
 
-**Phase 1 — MVP** · Target: 15. Juli 2026
+**Phase 1 — MVP** · Target: 15 July 2026
+OKR: 30-day retention > 40% with first 10 real users
 
-In scope: 12-Tab-Analytics, Explanation-first UX, Source Attribution, 6 Nav-Seiten, Backend auf Railway.
-Noch nicht: Login, Stripe, Macro Hub, Multilingual, Dark Mode.
+Live: https://dan123iel.github.io/stockrater/
 
-→ `doc/ROADMAP.md` für vollständige Phase-Details.
-→ `doc/product/strategy.md` für ICP, Messaging, Wachstumshypothese.
+Not yet: Login, Stripe, Macro Hub, Multilingual, Dark mode.
