@@ -41,7 +41,10 @@ Whenever the user asks to design, plan, or implement a **NEW FEATURE**, a **NEW 
 | `doc/product/metrics.md` | 1 — Framing | OKRs, 30-day retention target |
 | `doc/PROJECT-BRIEF.md` | 1 — Framing | What, for whom, why |
 | `doc/discovery/user-interviews.md` | 2 — Discovery | Interview guide, Gunnar Leu contact, session notes |
-| `doc/research/survey-wave1.md` | 2 — Discovery | Survey findings (→ live: dan123iel.github.io/survey/) |
+| `doc/research/surveys/2026-06-29_wave1/2026-06-29_survey-wave1-insights.md` | 2 — Discovery | Survey strategic insights (→ live: dan123iel.github.io/survey/) |
+| `doc/research/surveys/2026-06-29_wave1/2026-06-29_survey-wave1-analysis.md` | 2 — Discovery | Full playbook analysis report (Cagan phases 1–5, personas, so-what) |
+| `doc/research/_playbooks/` | 2 — Discovery | Analysis playbook (master + execution guide) — reuse for every wave |
+| `doc/regulatory/REGULATORY.md` | All | Legal boundaries, MiFID II / GDPR / EU AI Act, prohibited features, Phase 2 checklist |
 | `doc/PRD.md` | 3 — Prototype | Requirements after validation |
 | `doc/USER-STORIES.md` | 3 — Prototype | Stories in INVEST format |
 | `doc/specs/` | 3 — Prototype | Feature specs (only written after validation) |
@@ -115,6 +118,8 @@ This declaration is not optional. It prevents architectural drift before a singl
 ## 6. Current Milestone
 
 **Phase 1 — MVP** · OKR: 30-day retention > 40% with first 10 real users · Target: 15 July 2026
+
+→ **`doc/CURRENT-TODOS.md`** — Vollständige aktuelle To-Do-Liste (Discovery + Code), täglich lesen.
 
 In scope:
 - 12-tab analytics (Scorecard, Chart, Valuation, DCF, News, Insider, AI, Ownership, Profile + 3× coming soon)

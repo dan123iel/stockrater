@@ -77,6 +77,7 @@ export default function InsiderTile({ trades = [], loading, error }) {
           })
         )}
       </div>
+      <p style={{ fontFamily: 'IBM Plex Mono', fontSize: '10px', opacity: 0.3, padding: '8px 24px 12px', margin: 0 }}>Source: SEC EDGAR Form 4</p>
     </TileWrapper>
   );
 }

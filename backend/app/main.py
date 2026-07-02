@@ -10,11 +10,18 @@ from app.api.score import router as score_router
 
 app = FastAPI(title="pondex_ API", version="2.0.0")
 
+import os
+
+_ALLOWED_ORIGINS = os.getenv(
+    "ALLOWED_ORIGINS",
+    "http://localhost:5173,http://localhost:5174,https://dan123iel.github.io",
+).split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=_ALLOWED_ORIGINS,
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type", "Authorization"],
 )
 
 app.include_router(analysis_router)

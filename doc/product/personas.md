@@ -1,72 +1,105 @@
 # Personas
 
-> ⚠ These personas are hypothesis-based. No formal user research has been conducted yet. Assumptions should be validated through interviews before V1.
+> Letzte Aktualisierung: 2026-07-02 · Basis: Survey Wave 1 (n=56, 29. Juni 2026)
+> Alle Personas sind datenbasiert, nicht hypothetisch.
+> Vollständige Analyse → `doc/research/surveys/2026-06-29_wave1/2026-06-29_survey-wave1-analysis.md`
 
 ---
 
-## Primary Persona — The Self-Directed Investor
+## Primär-Persona — "The Passive Noise-Reducer" (Phase 1 ICP)
 
-**Profile**
-- Age: 28–42, professionally employed
-- Invests in individual stocks + ETFs, manages own portfolio
-- Analyzes evenings and weekends — time is limited
-- Tools today: Yahoo Finance, Reddit, YouTube, maybe Seeking Alpha free tier
-- Does not pay for premium financial tools
+**Datenbasis:** 41% des Samples (n=23 passive Investoren)
 
-**Frustrations**
-- Spends 2+ hours per stock analysis, still feels uncertain
-- Gets contradictory information across sources
-- Has no systematic way to document why he bought something
-- Realizes 6 months later he can't remember his original thesis
+**Profil**
+- Investiert passiv: ETFs + vereinzelt Einzelaktien, checkt selten
+- Verbringt < 1h/Woche mit Stock Research (80% der Investoren gesamt)
+- Nutzt Broker-Tool (60%) und AI-Tools wie ChatGPT (47%) — beides kostenlos
+- Bezahlt €0 für Research-Tools (85% der Investoren insgesamt nie bezahlt)
+- EU-NW dominant (41% des Gesamtsamples)
 
 **Jobs-to-be-done**
 
-| Type | Job |
-|---|---|
-| Functional | "I want to know if this stock fits my strategy before I buy." |
-| Functional | "I want to be reminded why I bought something when I'm considering selling." |
-| Emotional | "I want to feel confident and rational about my investment decisions." |
-| Social | "I want to be able to explain my investments to others without sounding like I'm guessing." |
+| Typ | Job |
+|-----|-----|
+| Funktional | "Ich will in 60 Sekunden wissen ob dieser Stock es wert ist, ihn genauer anzuschauen." |
+| Funktional | "Ich will sicher sein dass die Zahlen stimmen — nicht vom AI halluziniert." |
+| Emotional | "Ich will mich nicht dumm fühlen wenn ich Zahlen sehe die ich nicht einordnen kann." |
+| Social | "Ich will erklären können warum ich einen Stock gekauft habe." |
 
-**When they come to pondex**
-- Trigger 1: Hears about a stock (podcast, article, colleague) and wants a quick reality check
-- Trigger 2: Portfolio is underperforming, wants to become more systematic
-- Trigger 3: About to make a significant purchase decision and wants to stress-test it
+**Größte Frustrationen (aus Survey)**
+1. Complexity / Noise (52% der passiven Investoren): *"Remove noise and get actual data to analyse"*
+2. Data Trust (24%): *"AI tools make things up or hallucinate numbers"*
+3. Fragmentation (35%): *"Everything is scattered — too many open tabs"*
 
-**When they leave pondex**
-- Score feels wrong and no explanation is given (trust broken)
-- Data is clearly outdated or incorrect
-- Interface is too complex to get to the answer quickly
+**Aktuelles Tool-Setup & Spend**
+- Broker-Tool (gratis), AI-Tools (gratis), gelegentlich Yahoo Finance
+- Monatlicher Spend: €0
+
+**Realistisches Budget für pondex**
+- €9–19/Monat — niedrige Konfidenz (abgeleitet aus 2 Churner-Profilen bei $15–50/mo; kein direkter Preistest)
+
+**Kaufauslöser**
+Probiert pondex für einen Stock den er/sie sowieso analysieren wollte. Bekommt in <60s ein Verdict mit erkennbarer Quelle. Realisiert: kein Yahoo Finance mehr nötig.
+
+**Dealbreaker**
+- Score ohne Erklärung
+- AI-Output ohne Quellenangabe
+- Noch ein Tab — muss ersetzen, nicht ergänzen
+- Mehr als 2 Minuten Setup
+
+**Evidenz-Konfidenz:** Pain: Hoch · Verhalten: Mittel · Budget: Niedrig (kein Preistest)
 
 ---
 
-## Secondary Persona — The Informed Beginner
+## Sekundär-Persona — "The Overwhelmed Aspirer" (Onboarding / Phase 2)
 
-**Profile**
-- Age: 24–32, recently started investing seriously
-- Has ETF savings plan, starting to look at individual stocks
-- Reads financial content but lacks systematic framework
-- Wants to learn, not just get a verdict
+**Datenbasis:** 32% des Samples (n=18 Aspirers)
+
+**Profil**
+- Hat noch nicht investiert
+- 61% sagen "zu kompliziert" ist die Hauptbarriere
+- 0% Zahlungshistorie in dieser Gruppe
+- Braucht Plain Language + Einfachheit, keinen Score auf Screen 1
 
 **Jobs-to-be-done**
 
-| Type | Job |
-|---|---|
-| Functional | "I want to understand what these financial metrics actually mean." |
-| Functional | "I want a structured starting point for analyzing a company." |
-| Emotional | "I don't want to feel stupid when talking about stocks." |
+| Typ | Job |
+|-----|-----|
+| Funktional | "Ich will verstehen ob ein Unternehmen gesund ist — ohne Finanz-Jargon." |
+| Emotional | "Ich will mich nicht blöd fühlen wenn ich mit Aktien anfange." |
 
-**When they come to pondex**
-- Trigger: Reads about a company and wants to go deeper than Wikipedia
+**Enabler (was würde helfen, aus Survey)**
+1. Plain-language Erklärungen (50%)
+2. Einfacher Score (44%)
+3. Micro-Investing ab $5 (44%)
 
-**When they leave pondex**
-- Feels talked down to (too basic) or overwhelmed (too complex)
-- Can't connect the numbers to a decision
+**Phase-1-Relevanz:** Informiert UX-Sprache und Onboarding-Ton. Keine Features für diese Gruppe vor Phase 1 Launch.
 
 ---
 
-## Out of Scope
+## Tertärer ICP — "The Churned Value Investor" (Zahlungs-Signal)
 
-- Day traders (wrong time horizon, wrong feature set)
-- Institutional investors (wrong scale, wrong tooling)
-- Pure ETF investors with no interest in individual stocks
+**Datenbasis:** 2 Churner im Sample (davon 1 identifiziert: Gunnar Leu)
+
+**Profil — Gunnar Leu (Prototyp)**
+- Value Investor mit basis Trading, NYSE inkl. Options
+- EU-NW, Business/Finance-Hintergrund
+- Hat $15–50/mo bezahlt, abgebrochen weil Noise-Problem nicht gelöst
+- Conditional AI Trust (nur mit Quellenattribution)
+- Braucht: Chart-Basics + Geopolitik + Fundamentals + Branchen-News in einem Place
+
+**Warum dieser Persona wichtig ist**
+Das ist der einzige Profil-Typ mit bewiesener Zahlungsbereitschaft UND identischem Kündigungsgrund wie das pondex-Versprechen. Zwei Churner mit gleichem Reason ist das stärkste qualitative WTP-Signal im Dataset.
+
+**Status:** Interview steht aus — Gunnar Leu auf LinkedIn kontaktiert (2026-07-02)
+
+---
+
+## Nicht in Scope
+
+| Segment | Warum nicht |
+|---------|-------------|
+| Day Trader | Falscher Zeithorizont, braucht Real-Time, andere Feature-Set |
+| Institutionelle Investoren | Falscher Maßstab, falsche Tooling-Anforderungen |
+| ETF-Pure-Passive (kein Interesse an Einzelaktien) | 5% "Not interested" im Sample — kein Markt |
+| Bloomberg-Tier ($50–200/mo, NA) | Anderes Problem (Cost, nicht Noise), out of Phase-1-ICP |

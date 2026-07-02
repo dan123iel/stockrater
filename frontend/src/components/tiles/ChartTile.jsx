@@ -169,7 +169,7 @@ export default function ChartTile({ ticker, apiKey, loading: parentLoading, erro
       <div className="p-4">
         <canvas ref={canvasRef} style={{ width: '100%', height: '220px', display: 'block' }} />
         <p className="mt-2" style={{ fontFamily: 'IBM Plex Mono', fontSize: '10px', opacity: 0.35, textAlign: 'right' }}>
-          SMA 50 — dashed blue
+          SMA 50 — dashed blue · Price data: Yahoo Finance
         </p>
       </div>
     </TileWrapper>

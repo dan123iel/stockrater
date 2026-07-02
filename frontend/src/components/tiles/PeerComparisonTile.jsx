@@ -107,6 +107,7 @@ export default function PeerComparisonTile({ mainTicker, mainData, mainScore }) 
         <MetricRow label="Dividend Yield" peers={peers} field="dividendYield" format="pct" />
         <MetricRow label="Return on Equity" peers={peers} field="roe" format="pct" />
         <MetricRow label="Debt/Equity" peers={peers} field="debtEquity" format="x" />
+        <p style={{ fontFamily: 'IBM Plex Mono', fontSize: '10px', opacity: 0.3, marginTop: '12px', marginBottom: '4px' }}>Source: Yahoo Finance TTM · Fit Score: pondex scoring model</p>
       </div>
     </div>
   );

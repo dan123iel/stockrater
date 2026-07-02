@@ -52,6 +52,7 @@ export default function ValuationTile({ ratios, keyMetrics, loading, error, comp
         {activeTab === 'valuation' && (<><Row label="P/E Ratio" value={ratios?.peRatio} format="x" /><Row label="EV/EBITDA" value={ratios?.enterpriseValueMultiple} format="x" /><Row label="Price/Sales" value={ratios?.priceToSalesRatio} format="x" /><Row label="FCF Yield" value={keyMetrics?.freeCashFlowYield} format="pct" /><Row label="Dividend Yield" value={ratios?.dividendYield} format="pct" /></>)}
         {activeTab === 'profitability' && (<><Row label="Gross Margin" value={ratios?.grossProfitMargin} format="pct" /><Row label="Operating Margin" value={ratios?.operatingProfitMargin} format="pct" /><Row label="Net Margin" value={ratios?.netProfitMargin} format="pct" /><Row label="Return on Equity" value={ratios?.returnOnEquity} format="pct" /></>)}
         {activeTab === 'liquidity' && (<><Row label="Current Ratio" value={ratios?.currentRatio} format="x" /><Row label="Debt/Equity" value={ratios?.debtEquityRatio} format="x" /><Row label="Interest Coverage" value={ratios?.interestCoverage} format="x" /></>)}
+        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', opacity: 0.3, marginTop: '12px', marginBottom: '4px' }}>Source: Yahoo Finance TTM</p>
       </div>
     </div>
   );

@@ -144,6 +144,12 @@ export default function AIInsightsTile({ ticker, scoreResult, profile, portfolio
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px' }}>Analyzing…</span>
           </div>
         )}
+
+        {messages.length > 0 && (
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', opacity: 0.3, lineHeight: 1.5, marginTop: '8px', padding: '0 0 4px' }}>
+            For informational purposes only. Not investment advice. AI output: Groq / Llama 3.3 · Data: Yahoo Finance / SEC EDGAR.
+          </p>
+        )}
       </div>
 
       {/* Input */}

@@ -83,6 +83,7 @@ export default function DCFTile({ profile, keyMetrics, incomeStatements, loading
         <SliderRow label="Revenue Growth" value={inputs.revenueGrowth} min={-0.2} max={0.5} step={0.01} format="pct" onChange={update('revenueGrowth')} />
         <SliderRow label="Operating Margin" value={inputs.operatingMargin} min={-0.1} max={0.6} step={0.01} format="pct" onChange={update('operatingMargin')} />
         <SliderRow label="WACC" value={inputs.wacc} min={0.05} max={0.2} step={0.005} format="pct" onChange={update('wacc')} />
+        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', opacity: 0.3, marginTop: '8px', marginBottom: '0' }}>Inputs derived from Yahoo Finance (revenue, margins, beta) · Model: pondex DCF</p>
       </div>
     </div>
   );

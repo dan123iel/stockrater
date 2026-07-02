@@ -1,6 +1,6 @@
 # pondex_ — Roadmap
 
-_Last updated: 30 June 2026 · Survey Wave 1 (n=45) incorporated_
+_Last updated: 2026-07-02 · Survey Wave 1 (n=56, korrigiert von n=45) incorporated_
 
 ## Status Overview
 
@@ -95,6 +95,44 @@ Directional ideas — not committed:
 |---|---|---|
 | 0.1.0 | June 2026 | Backend (Yahoo/SEC/Groq), React MVP, Paper design, Survey Wave 1 |
 | 0.2.0 | 30 June 2026 | Explanation-first UX, source attribution, Backend /score returns explanations[] + sources[], Analysis.jsx decoupled from FMP |
+| 0.3.0 | 2 July 2026 | Source attribution on all 5 tiles, AI disclaimer, Disclaimer opacity fix, CORS hardened, Personas updated (n=56), railway.toml, Council review passed (16/25 Refine) |
+
+---
+
+## Regulatory Obligations per Phase
+
+> Vollständiges Framework → `doc/regulatory/REGULATORY.md`
+> Regel: Kein Phase-Übergang ohne Regulatory-Checkpoint.
+
+### Phase 1 — Läuft (bis 15. Juli 2026)
+| Obligation | Status | Was |
+|---|---|---|
+| Disclaimer sichtbar (Opacity ≥ 0.5) | ✅ Erledigt | `Analysis.jsx` opacity .22 → .55 |
+| AI-Output niemals "buy/sell/recommend" | ✅ By design | System Prompt + Code-Kommentare |
+| Quellenattribution auf allen Tiles | ✅ Erledigt | Alle 5 Tiles + AI-Tab |
+| Keine Server-side User-Daten | ✅ By design | Nur localStorage |
+| Kein personalisierter Investment Advice | ✅ By design | Score = algorithmisches Signal, kein Ratschlag |
+
+### Phase 2 — Vor Launch (vor September 2026)
+| Obligation | Status | Was | Wann |
+|---|---|---|---|
+| Privacy Policy schreiben (GDPR + US) | ❌ Offen | Pflicht sobald Login/Accounts live gehen | Vor Phase 2 Launch |
+| Terms of Service schreiben | ❌ Offen | Pflicht bei Paywall / Abonnement | Vor Paywall |
+| Cookie / Consent Banner | ❌ Offen | Falls Analytics oder Tracking hinzukommt | Sobald Tracking live |
+| Data Retention Policy definieren | ❌ Offen | Was wird gespeichert, wie lang, wie löschen | Vor Phase 2 Launch |
+| Right-to-Erasure Mechanismus | ❌ Offen | GDPR Art. 17 — User kann Daten löschen | Vor Phase 2 Launch |
+| Jurisdiktionsfrage klären (DE/EU/US) | ❌ Offen | Welches Recht gilt? → Basis für AGB | Vor Phase 2 Start |
+| yfinance Lizenz bei >10k MAU prüfen | ❌ Offen | Inoffizielle API — bei Skalierung kritisch | Wenn MAU >1k |
+| EU AI Act Compliance prüfen | ❌ Offen | Ist pondex AI-System "high-risk"? | Vor Phase 2 Launch |
+| Paywall-Seite: Disclaimer vor Kauf | ❌ Offen | Explizite Bestätigung "kein Investment Advice" | Vor Stripe live |
+| DPA mit Railway / Supabase | ❌ Offen | GDPR Data Processing Agreement | Vor Phase 2 Launch |
+
+### Phase 3 — Später (2027)
+| Obligation | Was |
+|---|---|
+| SEC Registration prüfen (US) | Bei personalisierten Features / Empfehlungen gegen Bezahlung |
+| Affiliate-Disclosure | FTC-Pflicht bei Provisionen für Empfehlungen |
+| MiFID II Lizenzprüfung | Falls pondex in Richtung personalisierter Beratung expandiert |
 
 ---
 

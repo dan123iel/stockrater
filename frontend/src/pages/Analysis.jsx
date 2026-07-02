@@ -182,7 +182,7 @@ export default function Analysis({ initialTicker }) {
 
           {/* Disclaimer */}
           <div style={{ padding: '14px 20px', borderTop: '1px solid var(--color-divider)' }}>
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', opacity: .22, lineHeight: 1.6, letterSpacing: '.03em' }}>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', opacity: .55, lineHeight: 1.6, letterSpacing: '.03em' }}>
               Algorithmic signals, not financial advice. Data: Yahoo Finance + SEC EDGAR.
               {stockData._isDemo && ' · Demo data — start the backend for live data.'}
             </p>

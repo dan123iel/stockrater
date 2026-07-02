@@ -138,4 +138,13 @@ def get_score(ticker: str, strategy: str = "growth"):
 @router.post("/ai/chat")
 async def ai_chat(body: dict):
     content = await chat(body.get("messages", []))
-    return {"content": content, "sources": body.get("sources", [])}
+    # Sources come from the caller (scoreResult.sources) — the data context
+    # passed into the AI prompt. We return them alongside the AI response so
+    # the frontend can display which data sources informed this answer.
+    sources = body.get("sources", [
+        {"factor": "general", "metrics": [
+            {"label": "Fundamentals", "source": "Yahoo Finance – trailing twelve months"},
+            {"label": "Insider Activity", "source": "SEC EDGAR – Form 4 filings"},
+        ]}
+    ])
+    return {"content": content, "sources": sources}
