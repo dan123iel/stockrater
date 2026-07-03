@@ -6,7 +6,7 @@ pondex_ reduces signal-to-noise in stock research. Plain-language verdict for an
 
 **The one constraint that overrides everything:** Every AI output and every displayed metric must cite its named primary source. No number without attribution. This is not optional.
 
-**How we build:** Continuous Discovery (Cagan) running in parallel with Delivery. We never ship a feature that hasn't passed all four risk gates. See `doc/product/PRODUCT-JOURNEY.md`.
+**How we build:** Continuous Discovery (Cagan) running in parallel with Delivery. We never ship a feature that hasn't passed all four risk gates. See `docs/product/PRODUCT-JOURNEY.md`.
 
 ---
 
@@ -14,7 +14,7 @@ pondex_ reduces signal-to-noise in stock research. Plain-language verdict for an
 
 Whenever the user asks to design, plan, or implement a **NEW FEATURE**, a **NEW DATA SOURCE**, or a **MAJOR ARCHITECTURAL CHANGE**, you MUST automatically execute the following workflow before writing any code:
 
-1. **Context Retrieval:** Read `doc/product/PRODUCT-COUNCIL.md` AND scan all files in `doc/research/` — always use the most current survey data available (check `doc/research/survey-wave1.md` and any newer wave files). The live dashboard at `https://dan123iel.github.io/survey/` reflects the latest n — reference it for current numbers.
+1. **Context Retrieval:** Read `docs/product/PRODUCT-COUNCIL.md` AND scan all files in `docs/research/` — always use the most current survey data available (check `docs/research/survey-wave1.md` and any newer wave files). The live dashboard at `https://dan123iel.github.io/survey/` reflects the latest n — reference it for current numbers.
 2. **Phase 1 & 2 Audit:** Evaluate against the council criteria (Usability, Feasibility, Regulatory, Economics) AND validate against the empirical user data — does this feature solve a confirmed pain point of the target group, or does it clash with their preferences or willingness-to-pay?
 3. **Structured Response:** Open your response with the mandatory assessment block:
 
@@ -34,30 +34,30 @@ Whenever the user asks to design, plan, or implement a **NEW FEATURE**, a **NEW 
 
 | File | Phase | Purpose |
 |---|---|---|
-| `doc/product/PRODUCT-JOURNEY.md` | All | **Start here** — full Cagan journey, where code lives, weekly rhythm |
-| `doc/product/vision.md` | 1 — Framing | 2–5 year direction |
-| `doc/product/strategy.md` | 1 — Framing | GTM, ICP, messaging, growth hypothesis |
-| `doc/product/personas.md` | 1 — Framing | ICP profiles from survey |
-| `doc/product/metrics.md` | 1 — Framing | OKRs, 30-day retention target |
-| `doc/PROJECT-BRIEF.md` | 1 — Framing | What, for whom, why |
-| `doc/discovery/user-interviews.md` | 2 — Discovery | Interview guide, Gunnar Leu contact, session notes |
-| `doc/research/surveys/2026-06-29_wave1/2026-06-29_survey-wave1-insights.md` | 2 — Discovery | Survey strategic insights (→ live: dan123iel.github.io/survey/) |
-| `doc/research/surveys/2026-06-29_wave1/2026-06-29_survey-wave1-analysis.md` | 2 — Discovery | Full playbook analysis report (Cagan phases 1–5, personas, so-what) |
-| `doc/research/_playbooks/` | 2 — Discovery | Analysis playbook (master + execution guide) — reuse for every wave |
-| `doc/regulatory/REGULATORY.md` | All | Legal boundaries, MiFID II / GDPR / EU AI Act, prohibited features, Phase 2 checklist |
-| `doc/PRD.md` | 3 — Prototype | Requirements after validation |
-| `doc/USER-STORIES.md` | 3 — Prototype | Stories in INVEST format |
-| `doc/specs/` | 3 — Prototype | Feature specs (only written after validation) |
-| `doc/ROADMAP.md` | 4 — Delivery | What's in scope now vs later |
-| `doc/adr/` | 4 — Delivery | Architecture decisions (ADR-001 → ADR-009) |
+| `docs/product/PRODUCT-JOURNEY.md` | All | **Start here** — full Cagan journey, where code lives, weekly rhythm |
+| `docs/product/vision.md` | 1 — Framing | 2–5 year direction |
+| `docs/product/strategy.md` | 1 — Framing | GTM, ICP, messaging, growth hypothesis |
+| `docs/product/personas.md` | 1 — Framing | ICP profiles from survey |
+| `docs/product/metrics.md` | 1 — Framing | OKRs, 30-day retention target |
+| `docs/PROJECT-BRIEF.md` | 1 — Framing | What, for whom, why |
+| `docs/discovery/user-interviews.md` | 2 — Discovery | Interview guide, Gunnar Leu contact, session notes |
+| `docs/research/surveys/2026-06-29_wave1/2026-06-29_survey-wave1-insights.md` | 2 — Discovery | Survey strategic insights (→ live: dan123iel.github.io/survey/) |
+| `docs/research/surveys/2026-06-29_wave1/2026-06-29_survey-wave1-analysis.md` | 2 — Discovery | Full playbook analysis report (Cagan phases 1–5, personas, so-what) |
+| `docs/research/_playbooks/` | 2 — Discovery | Analysis playbook (master + execution guide) — reuse for every wave |
+| `docs/regulatory/REGULATORY.md` | All | Legal boundaries, MiFID II / GDPR / EU AI Act, prohibited features, Phase 2 checklist |
+| `docs/PRD.md` | 3 — Prototype | Requirements after validation |
+| `docs/USER-STORIES.md` | 3 — Prototype | Stories in INVEST format |
+| `docs/specs/` | 3 — Prototype | Feature specs (only written after validation) |
+| `docs/ROADMAP.md` | 4 — Delivery | What's in scope now vs later |
+| `docs/adr/` | 4 — Delivery | Architecture decisions (ADR-001 → ADR-009) |
 
 ### Engineering context (read before writing any code)
 
 | File | Purpose |
 |---|---|
-| `.project-context/context/architecture.md` | Full directory map, all API endpoints, data sources |
-| `.project-context/context/tech-stack.md` | Approved tech only — no FMP, no OpenAI |
-| `.project-context/context/coding-guidelines.md` | Code style, error handling, Definition of Done |
+| `context/architecture.md` | Full directory map, all API endpoints, data sources |
+| `context/tech-stack.md` | Approved tech only — no FMP, no OpenAI |
+| `context/coding-guidelines.md` | Code style, error handling, Definition of Done |
 
 ---
 
@@ -119,7 +119,7 @@ This declaration is not optional. It prevents architectural drift before a singl
 
 **Phase 1 — MVP** · OKR: 30-day retention > 40% with first 10 real users · Target: 15 July 2026
 
-→ **`doc/CURRENT-TODOS.md`** — Vollständige aktuelle To-Do-Liste (Discovery + Code), täglich lesen.
+→ **`docs/CURRENT-TODOS.md`** — Vollständige aktuelle To-Do-Liste (Discovery + Code), täglich lesen.
 
 In scope:
 - 12-tab analytics (Scorecard, Chart, Valuation, DCF, News, Insider, AI, Ownership, Profile + 3× coming soon)
@@ -129,5 +129,5 @@ In scope:
 
 Not in scope until Phase 2: Login, Stripe, Macro Hub, Multilingual, Dark mode.
 
-→ `doc/ROADMAP.md` for full phase breakdown.
-→ `doc/product/PRODUCT-JOURNEY.md` for the full Cagan journey.
+→ `docs/specs/ROADMAP.md` for full phase breakdown.
+→ `docs/product/PRODUCT-JOURNEY.md` for the full Cagan journey.

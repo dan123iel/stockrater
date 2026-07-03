@@ -1,14 +1,15 @@
 # pondex_ — CLAUDE.md
 
 > Auto-loaded by Claude Code at session start.
-> This file is intentionally short — the full rules live in `.project-context/`.
+> This file is intentionally short — the full rules live in `context/`.
 
 ---
 
 ## Start here
 
-1. Read `.project-context/MASTER.md` — workspace map, rules, current milestone
-2. Read `doc/product/PRODUCT-JOURNEY.md` — Cagan phases, where code lives
+1. Read `context/MASTER.md` — workspace map, rules, current milestone
+2. Read `docs/product/PRODUCT-JOURNEY.md` — Cagan phases, where code lives
+3. Read `docs/STRUCTURE.md` — canonical folder structure (permanent, do not deviate)
 
 ---
 
@@ -34,4 +35,4 @@ docker compose up
 Live: https://dan123iel.github.io/stockrater/
 Backend: Railway (not yet deployed — still localhost)
 
-Next action: Interview Gunnar Leu → `doc/discovery/user-interviews.md`
+Next action: Interview Gunnar Leu → `docs/discovery/user-interviews.md`
