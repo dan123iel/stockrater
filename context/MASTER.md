@@ -25,11 +25,14 @@ Whenever the user asks to design, plan, or implement a **NEW FEATURE**, a **NEW 
 3. **Structured Response:** Open your response with the mandatory assessment block:
 
 > 🏛️ **Product Council & Research Audit**
-> - **North Star Check:** [1 sentence: is this good enough that a user tells a friend? Is it a painkiller or a vitamin?]
-> - **User Research Validation:** [1 sentence: how does this feature match the empirical survey data and confirmed pain points? Reference the current n and relevant finding.]
-> - **Phase 1 (Trio):** [1 sentence on Usability/Design challenge + 1 sentence on Tech Feasibility]
-> - **Phase 2 (Viability):** [1 sentence on Legal/Compliance risk + 1 sentence on Finance/API costs]
-> - **File Layout:** [Exact paths where new files will be placed per the Repository Structure Rulebook below]
+> - **Law 1 — Word of Mouth:** Will users tell friends about this? Painkiller or vitamin?
+> - **Law 2 — Simplicity:** Does this keep the product explainable in 2–3 sentences?
+> - **Law 3 — Trend:** Does this ride a real trend (obsessive daily use) or a fake one?
+> - **Law 4 — Ambitious Vision:** Does this expand or shrink the vision?
+> - **User Research Validation:** Does this match confirmed survey pain points? (reference n + finding)
+> - **Phase 1 (Trio):** Usability challenge + Tech feasibility
+> - **Phase 2 (Viability):** Legal/compliance risk + API/cost impact
+> - **File Layout:** Exact paths per Repository Structure Rulebook
 
 *Skip this entire step ONLY if the request is a simple bug fix, minor refactoring of existing logic, or a pure informational Q&A.*
 
