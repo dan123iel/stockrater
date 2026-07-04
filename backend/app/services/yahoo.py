@@ -1,15 +1,7 @@
 import math
 import time
-import requests
 import yfinance as yf
 from fastapi import HTTPException
-
-# Yahoo Finance blocks cloud server IPs without a browser User-Agent
-_HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-    "Accept-Language": "en-US,en;q=0.5",
-}
 
 
 def safe(v, fallback=None):
@@ -27,9 +19,7 @@ def yf_info(ticker: str) -> dict:
     last_err = None
     for attempt in range(3):
         try:
-            session = requests.Session()
-            session.headers.update(_HEADERS)
-            t = yf.Ticker(ticker, session=session)
+            t = yf.Ticker(ticker)
             info = t.fast_info
             base = {
                 "currentPrice":      getattr(info, "last_price", None),
