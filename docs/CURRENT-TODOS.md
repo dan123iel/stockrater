@@ -1,9 +1,16 @@
 # pondex_ — Current To-Dos
 
-_Last updated: 2026-07-03 · Basis: Wave 1 Survey Analysis (n=56) + Opportunity Scorecard + Council Review_
+_Last updated: 2026-07-04 · Basis: Wave 1 Survey Analysis (n=56) + Opportunity Scorecard + Council Review_
 
 > Dieses Dokument ist die einzige Quelle der Wahrheit für aktuelle Aufgaben.
 > Regeln: Nichts wird gebaut was nicht hier steht. Nichts wird hier ergänzt ohne Survey- oder Interview-Evidenz.
+
+---
+
+## ✅ Smoke Test
+
+- [x] Backend live: https://stockrater-production.up.railway.app ✅ 2026-07-04
+- [x] AAPL Score + Quellenangaben funktionieren ✅ 2026-07-04
 
 ---
 
@@ -95,9 +102,17 @@ _Last updated: 2026-07-03 · Basis: Wave 1 Survey Analysis (n=56) + Opportunity 
 - [x] Railway-Account eingeloggt, Projekt angelegt ✅ 2026-07-02
 - [x] Dockerfile + Procfile fixes deployed ✅ 2026-07-02
 - [x] Backend live: **https://stockrater-production.up.railway.app** ✅ 2026-07-02
-- [ ] `VITE_API_URL=https://stockrater-production.up.railway.app` als Secret in GitHub Pages deployment eintragen
-- [ ] Health-Check verifizieren: `curl https://stockrater-production.up.railway.app/`
-- [ ] Smoke-Test: eine echte Stock-Analyse über Live-Frontend ausführen
+- [x] yfinance auf 1.2.0 upgraded (Breaking Change fix) ✅ 2026-07-04
+- [x] Smoke-Test bestanden (AAPL Score + Quellenangaben) ✅ 2026-07-04
+
+### H. Sentry Error Monitoring aktivieren
+**Warum:** INC-001 hat 3h gedauert weil der echte Fehler (KeyError) als generischer 429 erschien. Sentry zeigt sofort den Stack Trace.
+**Aufwand:** 5 Minuten
+**Wie:**
+- [ ] sentry.io → kostenloses Account → New Project → Python → FastAPI
+- [ ] DSN kopieren (sieht aus wie `https://abc@xyz.ingest.sentry.io/123`)
+- [ ] Railway → Variables → `SENTRY_DSN` = DSN eintragen
+- [ ] Testen: einen Fehler provozieren → erscheint in Sentry Dashboard
 
 ### G. Retention-Messung operationalisieren
 **Warum:** OKR "30-day retention >40% mit ersten 10 Usern" ist ohne Login nicht automatisch messbar.
