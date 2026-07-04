@@ -10,10 +10,10 @@ export default function ChartTile({ ticker, apiKey, loading: parentLoading, erro
   const canvasRef = useRef(null);
 
   useEffect(() => {
-    if (!ticker || !apiKey) { setLoading(false); return; }
+    if (!ticker) { setLoading(false); return; }
     setLoading(true);
     setError(null);
-    fetchHistoricalPrice(ticker, apiKey)
+    fetchHistoricalPrice(ticker)
       .then(data => {
         setPriceData(data.slice(0, 252).reverse());
         setLoading(false);
@@ -22,7 +22,7 @@ export default function ChartTile({ ticker, apiKey, loading: parentLoading, erro
         setError(err.message);
         setLoading(false);
       });
-  }, [ticker, apiKey]);
+  }, [ticker]);
 
   useEffect(() => {
     if (!priceData.length || !canvasRef.current) return;
