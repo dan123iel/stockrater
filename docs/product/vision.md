@@ -1,5 +1,19 @@
 # Vision
 
+## The North Star
+
+> **"A product so good, people tell their friends."**
+
+This is the single test every feature must pass. Not: does this add value? But: is this good enough that someone would recommend it unprompted?
+
+The second constraint that follows directly from this: **we never build vitamins.** Vitamins are nice-to-have — users take them when they remember, cancel when money is tight. Painkillers are used because not using them hurts. pondex must be a painkiller — indispensable, not optional.
+
+Every Council review, every feature decision, every UX tradeoff is held against these two questions:
+1. Is this good enough that someone tells a friend?
+2. Does this solve a real pain — or is it a vitamin?
+
+---
+
 ## The One Sentence
 
 pondex helps self-directed retail investors make better investment decisions — not by showing more data, but by providing context, structure, and a system that thinks alongside them.

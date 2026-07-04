@@ -4,6 +4,16 @@ These are the constraints that define what pondex is. Every feature decision is 
 
 ---
 
+## The Two Non-Negotiables (above everything else)
+
+### "A product so good, people tell their friends."
+This is the bar. Not "useful." Not "nice to have." Good enough that a user recommends it to someone they care about — unprompted. If a feature doesn't move toward that bar, it doesn't ship.
+
+### No vitamins. Only painkillers.
+Vitamins are optional. Users take them when they remember, cancel them when money is tight. Painkillers solve a problem so real that not using them hurts. pondex must be a painkiller — the signal/noise problem is real, expensive, and unsolved. Every feature either makes the pain go away or it doesn't belong here.
+
+---
+
 ## 1. Decisions over Data
 
 pondex exists to improve investment decisions, not to display more information. Every feature must answer: does this make decisions better, learning better, or behavior better? If none of those, it doesn't ship.

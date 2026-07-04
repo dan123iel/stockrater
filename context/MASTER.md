@@ -4,7 +4,13 @@
 
 pondex_ reduces signal-to-noise in stock research. Plain-language verdict for any stock, every number cites its named source. Target user: self-directed value investor (EU-NW), previously paid for research tools, churned because noise wasn't solved.
 
-**The one constraint that overrides everything:** Every AI output and every displayed metric must cite its named primary source. No number without attribution. This is not optional.
+**The North Star (overrides all other product decisions):**
+> "A product so good, people tell their friends."
+
+**The product law that follows from it:**
+> Never build vitamins. Only painkillers. pondex solves a real, expensive pain (signal/noise). Every feature either makes that pain go away — or it doesn't belong here.
+
+**The one technical constraint that overrides everything:** Every AI output and every displayed metric must cite its named primary source. No number without attribution. This is not optional.
 
 **How we build:** Continuous Discovery (Cagan) running in parallel with Delivery. We never ship a feature that hasn't passed all four risk gates. See `docs/product/PRODUCT-JOURNEY.md`.
 
@@ -19,6 +25,7 @@ Whenever the user asks to design, plan, or implement a **NEW FEATURE**, a **NEW 
 3. **Structured Response:** Open your response with the mandatory assessment block:
 
 > 🏛️ **Product Council & Research Audit**
+> - **North Star Check:** [1 sentence: is this good enough that a user tells a friend? Is it a painkiller or a vitamin?]
 > - **User Research Validation:** [1 sentence: how does this feature match the empirical survey data and confirmed pain points? Reference the current n and relevant finding.]
 > - **Phase 1 (Trio):** [1 sentence on Usability/Design challenge + 1 sentence on Tech Feasibility]
 > - **Phase 2 (Viability):** [1 sentence on Legal/Compliance risk + 1 sentence on Finance/API costs]
