@@ -25,14 +25,20 @@ Whenever the user asks to design, plan, or implement a **NEW FEATURE**, a **NEW 
 3. **Structured Response:** Open your response with the mandatory assessment block:
 
 > 🏛️ **Product Council & Research Audit**
+>
+> **7 Startup Laws:**
 > - **Law 1 — Word of Mouth:** Will users tell friends about this? Painkiller or vitamin?
 > - **Law 2 — Simplicity:** Does this keep the product explainable in 2–3 sentences?
 > - **Law 3 — Trend:** Does this ride a real trend (obsessive daily use) or a fake one?
 > - **Law 4 — Ambitious Vision:** Does this expand or shrink the vision?
-> - **User Research Validation:** Does this match confirmed survey pain points? (reference n + finding)
-> - **Phase 1 (Trio):** Usability challenge + Tech feasibility
-> - **Phase 2 (Viability):** Legal/compliance risk + API/cost impact
-> - **File Layout:** Exact paths per Repository Structure Rulebook
+>
+> **Cagan 4 Risk Gates:**
+> - **Value Risk:** Do we have evidence users want this? (survey n + finding)
+> - **Usability Risk:** Can users understand and use this without help?
+> - **Feasibility Risk:** Can we build this reliably with our current stack?
+> - **Viability Risk:** Legal/compliance exposure + API/infrastructure cost?
+>
+> **Verdict:** Go / Refine / Hold — and where new files will be placed.
 
 *Skip this entire step ONLY if the request is a simple bug fix, minor refactoring of existing logic, or a pure informational Q&A.*
 
