@@ -25,11 +25,8 @@ _Last updated: 2026-07-04 · Based on: Wave 1 Survey Analysis (n=56) + Opportuni
 ## 🔴 Discovery — This Week (do not postpone)
 
 ### 1. Message Gunnar Leu on LinkedIn
-**Why:** Only churner with complete profile — payment history ($15–50/mo), named pain (noise), detailed Q9 verbatim, consent to contact. Every other interview follows this one.
-**How:** Template in `docs/discovery/user-interviews.md` → "Outreach template" section. Copy-paste, add Calendly or "When works for you?"
-**Goal:** 45-min video call using the interview guide.
-- [ ] LinkedIn message sent
-- [ ] Call booked
+- [x] LinkedIn message sent ✅ 2026-07-04
+- [x] Call booked ✅ 2026-07-04
 - [ ] Interview conducted + documented in `user-interviews.md` → Interview Log
 
 ### 2. Message Patricia G. Parnet
