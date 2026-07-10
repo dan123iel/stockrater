@@ -24,7 +24,7 @@ app = FastAPI(title="pondex_ API", version="2.0.0")
 
 _ALLOWED_ORIGINS = os.getenv(
     "ALLOWED_ORIGINS",
-    "http://localhost:5173,http://localhost:5174,https://dan123iel.github.io",
+    "http://localhost:5173,http://localhost:5174,http://localhost:5175,http://localhost:5176,http://localhost:5177,http://localhost:5178,https://dan123iel.github.io",
 ).split(",")
 
 app.add_middleware(
