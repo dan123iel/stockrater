@@ -1,8 +1,9 @@
 import LandingNav from '../components/landing/LandingNav'
 import Hero from '../components/landing/Hero'
-import ProductDemo from '../components/landing/ProductDemo'
-import HowItWorks from '../components/landing/HowItWorks'
+import ScoreCardSection from '../components/landing/ScoreCardSection'
 import Testimonials from '../components/landing/Testimonials'
+import HowItWorks from '../components/landing/HowItWorks'
+import ProductDemo from '../components/landing/ProductDemo'
 import Differentiation from '../components/landing/Differentiation'
 import FeatureShowcase from '../components/landing/FeatureShowcase'
 import Pricing from '../components/landing/Pricing'
@@ -15,31 +16,34 @@ export default function Landing() {
     <div className="min-h-screen">
       <LandingNav />
 
-      {/* 1. Hero — Neugier wecken */}
+      {/* 1. Hero — clean, fullscreen, nur Headline + CTA + Trust */}
       <Hero />
 
-      {/* 2. Trust — Research-Zahlen + Quotes (Social Proof VOR Demo) */}
+      {/* 2. "Aha"-Moment — Score Card scrollt elegant rein */}
+      <ScoreCardSection />
+
+      {/* 3. Social Proof — Testimonials */}
       <Testimonials />
 
-      {/* 3. How it works — 3 Schritte */}
+      {/* 4. How it works — 3 Schritte */}
       <HowItWorks />
 
-      {/* 4. Product Proof — Demo direkt */}
+      {/* 5. Interaktive Demo */}
       <ProductDemo />
 
-      {/* 5. Differenzierung — vs. Yahoo / ChatGPT / Bloomberg */}
+      {/* 6. Differenzierung — vs. Yahoo / ChatGPT / Bloomberg */}
       <Differentiation />
 
-      {/* 6. Features — was genau bekommt man */}
+      {/* 7. Features */}
       <FeatureShowcase />
 
-      {/* 7. Pricing */}
+      {/* 8. Pricing */}
       <Pricing />
 
-      {/* 8. FAQ */}
+      {/* 9. FAQ */}
       <FAQ />
 
-      {/* 9. Final CTA */}
+      {/* 10. Final CTA */}
       <FinalCTA />
 
       <LandingFooter />

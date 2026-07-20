@@ -34,7 +34,7 @@ function TestimonialCard({ quote, index, total }) {
   const y = useTransform(scrollYProgress, [0, 1], ['100%', '0%'])
 
   return (
-    <div ref={ref} style={{ height: '100vh', position: 'sticky', top: 0 }}>
+    <div ref={ref} style={{ height: '55vh', position: 'sticky', top: '80px' }}>
       <motion.div
         style={{
           y,
@@ -42,11 +42,9 @@ function TestimonialCard({ quote, index, total }) {
           inset: 0,
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
-          borderRadius: '32px',
+          borderRadius: '24px',
           overflow: 'hidden',
-          height: '80vh',
-          top: '10vh',
-          // Each card sits slightly higher so they stack visually
+          height: '100%',
           zIndex: index + 1,
         }}
       >
@@ -59,7 +57,7 @@ function TestimonialCard({ quote, index, total }) {
         }}>
           <span style={{
             ...S,
-            fontSize: 'clamp(80px, 12vw, 160px)',
+            fontSize: 'clamp(60px, 8vw, 100px)',
             fontWeight: 500,
             color: C[200],
             lineHeight: 1,
@@ -73,13 +71,14 @@ function TestimonialCard({ quote, index, total }) {
         {/* Text */}
         <div style={{
           backgroundColor: C[100],
-          padding: '64px 56px',
+          padding: '48px 48px',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'center',
-          gap: '40px',
+          justifyContent: 'flex-end',
+          paddingBottom: '48px',
+          gap: '16px',
         }}>
-          <p style={{ ...S, fontSize: 'clamp(20px, 2vw, 28px)', fontWeight: 500, lineHeight: 1.35, color: C.black, letterSpacing: '-0.02em' }}>
+          <p style={{ ...S, fontSize: 'clamp(15px, 1.4vw, 20px)', fontWeight: 500, lineHeight: 1.45, color: C.black, letterSpacing: '-0.01em' }}>
             "{quote.text}"
           </p>
           <div>
