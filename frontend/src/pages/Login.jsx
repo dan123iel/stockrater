@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { C } from '../lib/colors'
+import LandingNav from '../components/landing/LandingNav'
 
 const S = { fontFamily: 'Interdisplay, Inter, Arial, sans-serif' }
 const M = { fontFamily: 'Chivo Mono, monospace' }
@@ -27,24 +28,9 @@ export default function Login() {
 
   return (
     <div style={{ minHeight: '100vh', background: C.white, display: 'flex', flexDirection: 'column' }}>
+      <LandingNav />
 
-      {/* Nav */}
-      <header style={{ padding: '24px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <svg width="24" height="24" viewBox="0 0 28 28" fill="none">
-            <path d="M4 3 L4 25" stroke={C.black} strokeWidth="3.5" strokeLinecap="round"/>
-            <circle cx="13" cy="11" r="6.5" stroke={C.black} strokeWidth="3.5" fill="none"/>
-            <path d="M13 25 L24 25" stroke={C.black} strokeWidth="3.5" strokeLinecap="round"/>
-          </svg>
-          <span style={{ ...M, fontSize: '12px', color: C[400], letterSpacing: '0.06em' }}>pondex_</span>
-        </Link>
-        <Link to="/signup" style={{ ...M, fontSize: '12px', color: C[400], textDecoration: 'none', letterSpacing: '0.04em' }}>
-          No account? Sign up →
-        </Link>
-      </header>
-
-      {/* Form */}
-      <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '32px' }}>
+      <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '32px', paddingTop: '120px' }}>
         <motion.div
           style={{ width: '100%', maxWidth: '400px' }}
           initial={{ opacity: 0, y: 20 }}
@@ -92,8 +78,11 @@ export default function Login() {
             </button>
           </form>
 
-          <p style={{ ...M, fontSize: '10px', color: C[300], textTransform: 'uppercase', letterSpacing: '0.08em', marginTop: '32px', textAlign: 'center' }}>
-            No credit card required · Free forever
+          <p style={{ ...S, fontSize: '15px', color: C[400], marginTop: '24px', textAlign: 'center' }}>
+            No account?{' '}
+            <a href="/signup" onClick={e => { e.preventDefault(); navigate('/signup') }} style={{ color: C.black, textDecoration: 'none', fontWeight: 500 }}>
+              Sign up →
+            </a>
           </p>
         </motion.div>
       </main>

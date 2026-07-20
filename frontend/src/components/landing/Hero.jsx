@@ -107,7 +107,7 @@ export default function Hero() {
         <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
           <p style={{
             ...S,
-            fontSize: 'clamp(36px, 5vw, 72px)',
+            fontSize: 'clamp(56px, 9vw, 128px)',
             fontWeight: 500,
             color: C.black,
             letterSpacing: '-1.5px',
@@ -140,7 +140,7 @@ export default function Hero() {
         <motion.p
           style={{
             ...S,
-            fontSize: 'clamp(36px, 5vw, 72px)',
+            fontSize: 'clamp(56px, 9vw, 128px)',
             fontWeight: 500,
             letterSpacing: '-1.5px',
             lineHeight: 1.1,
