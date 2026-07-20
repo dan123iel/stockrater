@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { C } from '../lib/colors'
 
@@ -127,6 +128,14 @@ export default function App() {
   const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const navigate = useNavigate()
+
+  const logout = () => {
+    localStorage.removeItem('pondex_user')
+    navigate('/')
+  }
+
+  const user = (() => { try { return JSON.parse(localStorage.getItem('pondex_user')) } catch { return null } })()
 
   const analyse = async (ticker) => {
     const key = ticker.toUpperCase().trim()
@@ -157,7 +166,15 @@ export default function App() {
           </svg>
           <span style={{ ...M, fontSize: '12px', color: C[400], letterSpacing: '0.06em' }}>pondex_</span>
         </a>
-        <span style={{ ...M, fontSize: '10px', color: C[300], textTransform: 'uppercase', letterSpacing: '0.1em', border: `1px solid ${C[200]}`, borderRadius: '50px', padding: '3px 10px' }}>BETA</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          {user && <span style={{ ...M, fontSize: '11px', color: C[400] }}>{user.email}</span>}
+          <button
+            onClick={logout}
+            style={{ ...M, fontSize: '11px', color: C[400], background: 'none', border: `1px solid ${C[200]}`, borderRadius: '8px', padding: '5px 12px', cursor: 'pointer' }}
+          >
+            Log out
+          </button>
+        </div>
       </header>
 
       {/* Main */}
