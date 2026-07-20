@@ -172,7 +172,7 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.45, duration: 0.5 }}
         >
-          <BungeeButton href="#demo">Analyse a stock — it's free</BungeeButton>
+          <BungeeButton href="/app">Analyse a stock — it's free</BungeeButton>
           <a href="#how-it-works" style={{ ...S, fontSize: '16px', color: C[400], textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px' }}>
             How it works ↓
           </a>
