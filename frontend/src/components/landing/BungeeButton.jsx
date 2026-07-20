@@ -1,11 +1,25 @@
+import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 
-// Bungee-style CTA: Text + Plus icon + underline appears ONLY on hover (starts at 0%)
+function isInternal(href) {
+  return href && href.startsWith('/') && !href.startsWith('//')
+}
+
 export function BungeeButton({ children, href = '#', onClick, className = '' }) {
+  const navigate = useNavigate()
+
+  const handleClick = (e) => {
+    if (isInternal(href)) {
+      e.preventDefault()
+      navigate(href)
+    }
+    if (onClick) onClick(e)
+  }
+
   return (
     <motion.a
       href={href}
-      onClick={onClick}
+      onClick={handleClick}
       className={className}
       style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', gap: '16px', fontFamily: 'Interdisplay, Inter, Arial, sans-serif', fontSize: '17.6px', fontWeight: 500, color: '#1e1e1e', paddingBottom: '4px', textDecoration: 'none', cursor: 'pointer' }}
       whileHover="hover"
@@ -19,7 +33,6 @@ export function BungeeButton({ children, href = '#', onClick, className = '' }) 
       >
         +
       </motion.span>
-      {/* Underline — 0% at rest, 100% on hover */}
       <motion.div
         style={{ position: 'absolute', bottom: 0, left: 0, height: '1px', background: '#1e1e1e' }}
         variants={{ rest: { width: '0%' }, hover: { width: '100%' } }}
@@ -29,11 +42,20 @@ export function BungeeButton({ children, href = '#', onClick, className = '' }) 
   )
 }
 
-// White variant for dark backgrounds
 export function BungeeButtonWhite({ children, href = '#' }) {
+  const navigate = useNavigate()
+
+  const handleClick = (e) => {
+    if (isInternal(href)) {
+      e.preventDefault()
+      navigate(href)
+    }
+  }
+
   return (
     <motion.a
       href={href}
+      onClick={handleClick}
       style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', gap: '16px', fontFamily: 'Interdisplay, Inter, Arial, sans-serif', fontSize: '17.6px', fontWeight: 500, color: '#ffffff', paddingBottom: '4px', textDecoration: 'none', cursor: 'pointer' }}
       whileHover="hover"
       initial="rest"

@@ -19,7 +19,7 @@ export default function LandingFooter() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             <div>
               <h3 style={{ ...S, fontSize: '48px', fontWeight: 500, color: C.black, letterSpacing: '-0.02em', lineHeight: 1.1 }}>Get research insights.</h3>
-              <p style={{ ...S, fontSize: '17.6px', color: C[400], marginTop: '8px' }}>No spam. Unsubscribe anytime.</p>
+              <p style={{ ...S, fontSize: '17.6px', color: C[400], marginTop: '8px' }}>Research insights, product updates, and early access.</p>
             </div>
             <form style={{ display: 'flex', gap: '12px', alignItems: 'center', borderBottom: `1px solid ${C[200]}`, paddingBottom: '16px', maxWidth: '480px' }}>
               <input

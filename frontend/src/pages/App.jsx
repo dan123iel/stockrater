@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { C } from '../lib/colors'
 
@@ -158,14 +158,14 @@ export default function App() {
 
       {/* Nav */}
       <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, height: '64px', background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(10px)', borderBottom: `1px solid ${C[100]}`, display: 'flex', alignItems: 'center', padding: '0 32px', justifyContent: 'space-between' }}>
-        <a href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}>
           <svg width="22" height="22" viewBox="0 0 28 28" fill="none">
             <path d="M4 3 L4 25" stroke={C.black} strokeWidth="3.5" strokeLinecap="round"/>
             <circle cx="13" cy="11" r="6.5" stroke={C.black} strokeWidth="3.5" fill="none"/>
             <path d="M13 25 L24 25" stroke={C.black} strokeWidth="3.5" strokeLinecap="round"/>
           </svg>
           <span style={{ ...M, fontSize: '12px', color: C[400], letterSpacing: '0.06em' }}>pondex_</span>
-        </a>
+        </Link>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           {user && <span style={{ ...M, fontSize: '11px', color: C[400] }}>{user.email}</span>}
           <button

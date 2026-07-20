@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { C } from '../../lib/colors'
 
@@ -29,22 +30,22 @@ export default function LandingNav() {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '100%', padding: '0 32px' }}>
 
           {/* Logo */}
-          <a href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', zIndex: 1002 }}>
+          <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', zIndex: 1002 }}>
             <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
               <path d="M4 3 L4 25" stroke={C.black} strokeWidth="3.5" strokeLinecap="round"/>
               <circle cx="13" cy="11" r="6.5" stroke={C.black} strokeWidth="3.5" fill="none"/>
               <path d="M13 25 L24 25" stroke={C.black} strokeWidth="3.5" strokeLinecap="round"/>
             </svg>
-          </a>
+          </Link>
 
           {/* Right side — Log in + hamburger */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '24px', zIndex: 1001 }}>
-            <a
-              href="/login"
+            <Link
+              to="/login"
               style={{ ...M, fontSize: '13px', color: C.black, textDecoration: 'none', letterSpacing: '0.02em' }}
             >
               Log in
-            </a>
+            </Link>
 
             <button
               onClick={() => setOpen(v => !v)}
