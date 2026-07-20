@@ -1,147 +1,166 @@
-# KI-Council — Methodology & Usage Guide
+# KI-Council — Methodik & Nutzungsleitfaden
 
-> A decision-making tool for situations with genuine uncertainty and a high cost of being wrong. Not a chatbot feature, not a creative tool — a structured multi-perspective process with anonymous peer review.
-
----
-
-## 1. Purpose
-
-A single AI response has a blind-spot problem: it can be brilliant or mediocre — you can't tell because you only see one perspective. The Council solves this by routing the same question through five independent, deliberately opposing thinking styles, having them anonymously evaluate each other, and forcing a chair verdict with a clear recommendation at the end.
+> Ein Entscheidungswerkzeug für Situationen mit echter Unsicherheit und
+> hohem Fehlerpreis. Kein Chatbot-Feature, kein Kreativ-Tool — ein
+> strukturierter Multi-Perspektiven-Prozess mit anonymer Gegenprüfung.
 
 ---
 
-## 2. When to use the Council
+## 1. Zweck
 
-**Rule of thumb:** Genuine uncertainty + high cost of a wrong decision.
+Eine einzelne KI-Antwort hat ein blindes-Fleck-Problem: Sie kann brillant
+oder mittelmäßig sein — man weiß es nicht, weil man nur eine Perspektive
+sieht. Das Council löst das, indem es dieselbe Frage durch fünf
+unabhängige, bewusst gegensätzliche Denkstile schickt, diese sich
+gegenseitig anonym bewerten lässt und am Ende ein Vorsitzender-Verdikt
+mit klarer Empfehlung erzwingt.
 
-| Good Council questions | Bad Council questions |
+---
+
+## 2. Wann das Council nutzen
+
+**Faustregel:** Echte Unsicherheit + hoher Preis für eine falsche
+Entscheidung.
+
+| Gute Council-Fragen                                              | Schlechte Council-Fragen                              |
+|--------------------------------------------------------------------|---------------------------------------------------------|
+| „97 € Workshop oder 497 € Kurs launchen?"                          | „Was ist die Hauptstadt von Frankreich?" *(faktisch, eine richtige Antwort)* |
+| „Welche von 3 Positionierungen ist am stärksten?"                  | „Schreib mir einen Tweet" *(Erstellungs-Task)*            |
+| „Pivot von X zu Y — bin ich verrückt?"                              | „Fasse diesen Artikel zusammen" *(Verarbeitungs-Task)*    |
+| „Hier ist meine Landingpage-Copy — wo ist sie schwach?"             |                                                           |
+| „VA einstellen oder erst Automation bauen?"                        |                                                           |
+
+> Wenn die Antwort schon feststeht und nur Bestätigung gesucht wird,
+> sagt das Council vermutlich Dinge, die man nicht hören will —
+> genau das ist der Zweck.
+
+---
+
+## 3. Die fünf Berater
+
+Keine Job-Titel, keine Personas — **Denkstile**, bewusst so gewählt,
+dass sie Spannung zueinander erzeugen.
+
+```
+                         DER AUSSENSEITER
+                     (hält alle ehrlich —
+                    kein Kontext, reine Reaktion)
+                              │
+              ┌───────────────┴───────────────┐
+              │                                │
+     DER KRITIKER                    DER CHANCEN-SUCHER
+   „Was scheitert hier?"      ◄────►   „Was ist möglich,
+   sucht den fatalen Fehler     Risiko    wenn es besser läuft
+                                 vs.       als erwartet?"
+                                Chance
+              │                                │
+              │                                │
+   DER GRUNDLAGEN-DENKER          ◄────►      DER UMSETZER
+  „Ist das die richtige Frage?"  Denken    „Was machst du
+   baut das Problem neu auf       vs.       Montagfrüh konkret?"
+                                 Handeln
+```
+
+| # | Berater | Fragt sich | Kernhaltung |
+|---|---------|-------------|-------------|
+| 1 | **Der Kritiker** | Was ist falsch, was fehlt, was wird scheitern? | Geht von einem fatalen Fehler aus und sucht ihn. Kein Pessimist — der Freund, der vor einem schlechten Deal warnt. |
+| 2 | **Der Grundlagen-Denker** | Was versuchen wir hier eigentlich zu lösen? | Streift Annahmen ab, baut das Problem neu auf. Stärkster Satz: „Du stellst die falsche Frage." |
+| 3 | **Der Chancen-Sucher** | Welches Aufwärtspotenzial übersehen alle? | Interessiert sich nicht für Risiko (Job des Kritikers), sondern für den Fall, dass es besser läuft als erwartet. |
+| 4 | **Der Außenseiter** | Was sehe ich, ganz ohne Vorwissen? | Kein Kontext über Person, Feld oder Historie. Fängt den „Fluch des Wissens" ab — was für Experten offensichtlich, für alle anderen verwirrend ist. |
+| 5 | **Der Umsetzer** | Lässt sich das umsetzen — und wie, schnellstmöglich? | Ignoriert Theorie und Strategie. Prüft jede Idee gegen: „Was machst du Montagfrüh konkret?" |
+
+**Warum genau diese fünf:** Sie erzeugen drei natürliche Spannungsachsen —
+Kritiker ↔ Chancen-Sucher (Risiko ↔ Chance), Grundlagen-Denker ↔ Umsetzer
+(alles neu denken ↔ einfach machen), mit dem Außenseiter als neutralem
+Korrektiv in der Mitte.
+
+---
+
+## 4. Ablauf einer Council-Session
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ SCHRITT 1 — FRAGE RAHMEN                                     │
+│   • Workspace nach relevanten Dateien scannen                │
+│   • Roh-Frage neutral umformulieren:                         │
+│     Kernentscheidung · Kontext · was auf dem Spiel steht      │
+│   • KEINE eigene Meinung einfließen lassen                   │
+└───────────────────────────┬────────────────────────────────┘
+                             ▼
+┌─────────────────────────────────────────────────────────────┐
+│ SCHRITT 2 — COUNCIL EINBERUFEN                                │
+│   • Alle 5 Berater GLEICHZEITIG starten                      │
+│   • Jeder bekommt: Denk-Brille + gerahmte Frage               │
+│   • Anweisung: voll reinlehnen, nicht hedgen, nicht ausgleichen│
+│   • Jede Antwort: 150–300 Wörter                              │
+└───────────────────────────┬────────────────────────────────┘
+                             ▼
+┌─────────────────────────────────────────────────────────────┐
+│ SCHRITT 3 — GEGENSEITIGE PRÜFUNG                              │
+│   • Antworten anonymisiert: A / B / C / D / E (zufällig gemischt)│
+│   • 5 neue Prüf-Agenten bewerten ALLE Antworten:               │
+│       (a) Welche ist am stärksten?                             │
+│       (b) Welche hat den größten blinden Fleck?                │
+│       (c) Was haben ALLE übersehen?                            │
+└───────────────────────────┬────────────────────────────────┘
+                             ▼
+┌─────────────────────────────────────────────────────────────┐
+│ SCHRITT 4 — SYNTHESE DURCH DEN VORSITZENDEN                   │
+│   Erhält: Frage + alle 5 Antworten (de-anonymisiert) + Reviews│
+│   Liefert feste Struktur:                                     │
+│     • Wo stimmt das Council überein?                          │
+│     • Wo widerspricht es sich?                                │
+│     • Welche blinden Flecken wurden aufgedeckt?                │
+│     • Klare Empfehlung (kein „kommt drauf an")                 │
+│     • DIE EINE SACHE, die zuerst zu tun ist                    │
+└───────────────────────────┬────────────────────────────────┘
+                             ▼
+┌─────────────────────────────────────────────────────────────┐
+│ SCHRITT 5 — HTML-BERICHT                                      │
+│   Scanbar: Verdikt prominent, Berater-Antworten ausklappbar   │
+└───────────────────────────┬────────────────────────────────┘
+                             ▼
+┌─────────────────────────────────────────────────────────────┐
+│ SCHRITT 6 — PROTOKOLL                                         │
+│   Vollständige Version zur späteren Referenz                  │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 5. Beispiel-Session
+
+**Frage:** „Ich überlege einen 297-€-Kurs zu Claude für Anfänger zu
+bauen. Zielgruppe: nicht-technische Solopreneure. Richtiger Schritt?"
+
+| Berater | Antwort (verkürzt) |
 |---|---|
-| "Launch a €97 workshop or a €497 course?" | "What is the capital of France?" *(factual — one right answer)* |
-| "Which of these 3 positionings is strongest?" | "Write me a tweet" *(creation task)* |
-| "Pivot from X to Y — am I crazy?" | "Summarise this article" *(processing task)* |
-| "Here's my landing page copy — where is it weak?" | |
-| "Hire a VA or build automation first?" | |
+| **Kritiker** | Markt überflutet mit KI-Kursen. Bei 297 € Konkurrenz zu kostenlosem YouTube-Content. Nicht-technische Zielgruppe → hoher Support-Aufwand, Refund-Risiko. |
+| **Grundlagen-Denker** | Was ist das eigentliche Ziel — Umsatz oder Autorität? Ein Kurs ist einer der langsamsten Wege zu Umsatz. |
+| **Chancen-Sucher** | Anfänger-KI für Solopreneure ist unterversorgt — alle lehren Fortgeschrittenes. Wer den Einstiegspunkt besetzt, besitzt den ganzen Bereich. 297 € könnte sogar zu niedrig sein. |
+| **Außenseiter** | „297-€-Kurs zu Claude für Anfänger" sagt mir nicht, ob das für mich ist. Die Landingpage muss das Ergebnis verkaufen, nicht das Tool. |
+| **Umsetzer** | Voller Kurs = 4–8 Wochen Produktion. Erst ein 97-€-Live-Workshop für 50 Leute: validiert Nachfrage, liefert Testimonials und Rohmaterial. Kaufen 50 den Workshop nicht, kaufen 500 den Kurs erst recht nicht. |
 
-> If the answer is already fixed and you're seeking confirmation, the Council will likely say things you don't want to hear — that's the point.
-
----
-
-## 3. The Five Advisors
-
-Not job titles, not personas — **thinking styles**, deliberately chosen to create tension with each other.
-
-```
-                        THE OUTSIDER
-                  (keeps everyone honest —
-                  no context, pure reaction)
-                            │
-            ┌───────────────┴───────────────┐
-            │                                │
-    THE CRITIC                     THE OPPORTUNITY FINDER
-  "What will fail here?"   ◄────►   "What's possible if
-  hunts for the fatal flaw   Risk      it goes better than
-                              vs.      expected?"
-                            Opportunity
-            │                                │
-            │                                │
-   THE FIRST PRINCIPLES          ◄────►    THE EXECUTOR
-       THINKER                  Thinking  "What do you actually
-  "Are we solving the right       vs.     do Monday morning?"
-   problem?" rebuilds from      Action
-   the ground up
-```
-
-| # | Advisor | Asks | Core stance |
-|---|---|---|---|
-| 1 | **The Critic** | What is wrong, what is missing, what will fail? | Assumes a fatal flaw exists and hunts for it. Not a pessimist — the friend who warns you before a bad deal. |
-| 2 | **The First Principles Thinker** | What are we actually trying to solve? | Strips away assumptions, rebuilds the problem from scratch. Strongest sentence: "You're asking the wrong question." |
-| 3 | **The Opportunity Finder** | What upside is everyone missing? | Not interested in risk (that's the Critic's job) — focused on the scenario where things go better than expected. |
-| 4 | **The Outsider** | What do I see with zero prior knowledge? | No context about the person, field, or history. Catches the "curse of knowledge" — what is obvious to experts but confusing to everyone else. |
-| 5 | **The Executor** | Can this be done — and how, as fast as possible? | Ignores theory and strategy. Tests every idea against: "What do you do Monday morning, concretely?" |
-
-**Why exactly these five:** Three natural tension axes — Critic ↔ Opportunity Finder (risk vs. upside), First Principles Thinker ↔ Executor (rethink everything vs. just do it), with the Outsider as the neutral corrective in the middle.
+**Vorsitzenden-Verdikt:** Echte Nachfrage vorhanden, aktuelles Framing
+zu tool-spezifisch. Wichtigste Erkenntnis (Außenseiter): Jeder außer ihm
+nahm an, die Zielgruppe kenne das Tool bereits. **Empfehlung:** Kurs
+noch nicht bauen — erst mit niedrigschwelligerem Angebot validieren,
+Ergebnis verkaufen statt Tool. **Erster Schritt:** 97-€-Live-Workshop
+für 50 Personen, Tool-Name nicht im Titel.
 
 ---
 
-## 4. Session Workflow
+## 6. Betriebsregeln
 
-```
-STEP 1 — FRAME THE QUESTION
-  • Scan workspace for relevant files
-  • Rephrase the raw question neutrally:
-    Core decision · Context · What is at stake
-  • NO personal opinion injected
-
-STEP 2 — CONVENE THE COUNCIL
-  • Launch all 5 advisors SIMULTANEOUSLY
-  • Each receives: thinking lens + framed question
-  • Instruction: lean in fully, don't hedge, don't balance
-  • Each response: 150–300 words
-
-STEP 3 — PEER REVIEW
-  • Responses anonymised: A / B / C / D / E (randomly shuffled)
-  • 5 new review agents evaluate ALL responses:
-      (a) Which is strongest?
-      (b) Which has the biggest blind spot?
-      (c) What have ALL of them missed?
-
-STEP 4 — CHAIR SYNTHESIS
-  Receives: question + all 5 responses (de-anonymised) + reviews
-  Delivers fixed structure:
-    • Where does the Council agree?
-    • Where does it disagree?
-    • Which blind spots were uncovered?
-    • Clear recommendation (no "it depends")
-    • THE ONE THING to do first
-
-STEP 5 — HTML REPORT
-  Scannable: verdict prominent, advisor responses collapsible
-
-STEP 6 — PROTOCOL
-  Full version saved for future reference
-```
-
----
-
-## 5. Example Session
-
-**Question:** "I'm considering building a €297 course on Claude for beginners. Target: non-technical solopreneurs. Right move?"
-
-| Advisor | Response (condensed) |
+| Regel | Warum |
 |---|---|
-| **Critic** | Market flooded with AI courses. At €297, competing against free YouTube content. Non-technical audience → high support load, refund risk. |
-| **First Principles Thinker** | What's the actual goal — revenue or authority? A course is one of the slowest paths to revenue. |
-| **Opportunity Finder** | Beginner AI for solopreneurs is underserved — everyone teaches advanced content. Whoever owns the entry point owns the whole category. €297 might even be too low. |
-| **Outsider** | "€297 Claude course for beginners" doesn't tell me if this is for me. The landing page must sell the outcome, not the tool. |
-| **Executor** | Full course = 4–8 weeks of production. Start with a €97 live workshop for 50 people: validates demand, generates testimonials and raw material. If 50 people won't buy the workshop, 500 won't buy the course. |
-
-**Chair Verdict:** Real demand exists, current framing is too tool-specific. Key insight (Outsider): everyone except him assumed the audience already knew the tool. **Recommendation:** Don't build the course yet — validate with a lower-barrier offer, sell the outcome not the tool. **First step:** €97 live workshop for 50 people, tool name not in the title.
+| Alle 5 Berater **gleichzeitig** starten | Nacheinander verschwendet Zeit und lässt frühe Antworten in spätere einfließen — zerstört Unabhängigkeit. |
+| Gegenseitige Prüfung **immer anonymisiert** | Sonst orientieren sich Bewerter am Denkstil-Label statt am Argument selbst. |
+| Vorsitzender **darf der Mehrheit widersprechen** | Wenn 4 von 5 zustimmen, aber das Argument des einen Abweichlers am stärksten ist, stellt er sich auf dessen Seite — mit Begründung. |
+| **Nicht** für triviale Fragen nutzen | Bei einer Frage mit einer eindeutig richtigen Antwort: einfach antworten. Das Council ist für echte Unsicherheit reserviert, in der mehrere Perspektiven tatsächlich Wert schaffen. |
 
 ---
 
-## 6. Operating Rules
-
-| Rule | Why |
-|---|---|
-| Launch all 5 advisors **simultaneously** | Sequential responses waste time and let early answers contaminate later ones — destroys independence. |
-| Peer review always **anonymised** | Otherwise reviewers orient to the thinking-style label rather than the argument itself. |
-| Chair **may disagree with the majority** | If 4 of 5 agree but the one dissenter has the strongest argument, the Chair sides with the dissenter — with reasoning. |
-| **Do not use** for trivial questions | For questions with one clearly correct answer: just answer. The Council is reserved for genuine uncertainty where multiple perspectives create real value. |
-
----
-
-## 7. For pondex_ — When to convene the Council
-
-**Good pondex Council questions:**
-- "$9, $19 or $49 — which price point?"
-- "Prioritise Macro Hub in Phase 2 or Multilingual first?"
-- "Should we approach a broker API partner?"
-- "Gunnar Leu's feedback shows X — pivot or stay the course?"
-
-**Bad pondex Council questions:**
-- "Which colour for the button?" *(too trivial)*
-- "Build me the login feature" *(creation task)*
-
----
-
-*Council reports (HTML + protocol) are saved in `doc/research/council-sessions/`.*
+*Dieses Dokument beschreibt den Prozess, nicht ein konkretes Ergebnis.
+Für Analyseergebnisse aus Projektdaten siehe die jeweiligen
+Council-Berichte (z. B. `council_report.html`, `council_report_v2.html`).*

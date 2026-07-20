@@ -1,0 +1,10 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Dark navy background square -->
+  <rect width="32" height="32" rx="6" fill="#1a2040"/>
+  <!-- p: stem -->
+  <path d="M8 7 L8 25" stroke="white" stroke-width="2.8" stroke-linecap="round"/>
+  <!-- p: bowl (circle) -->
+  <circle cx="16" cy="13" r="5.5" stroke="white" stroke-width="2.8" fill="none"/>
+  <!-- _: underscore -->
+  <path d="M16 25 L24 25" stroke="white" stroke-width="2.8" stroke-linecap="round"/>
+</svg>

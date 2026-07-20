@@ -1,4 +1,4 @@
-# Project Brief — pondex_
+# Project Brief — pondex
 
 _Based on Code Factory Berlin standard. Updated 30 June 2026 after Survey Wave 1 (n=45)._
 
@@ -6,7 +6,7 @@ _Based on Code Factory Berlin standard. Updated 30 June 2026 after Survey Wave 1
 
 ## What is this project?
 
-pondex_ is a stock research tool that reduces signal-to-noise in investment analysis. It gives any stock a plain-language verdict with a traceable source for every number — designed for self-directed investors who find current tools too expensive, too noisy, or too intimidating to start.
+pondex is a stock research tool that reduces signal-to-noise in investment analysis. It gives any stock a plain-language verdict with a traceable source for every number — designed for self-directed investors who find current tools too expensive, too noisy, or too intimidating to start.
 
 ## What problem does it solve?
 

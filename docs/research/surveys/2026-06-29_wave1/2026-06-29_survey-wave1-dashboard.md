@@ -1,4 +1,4 @@
-# Survey Dashboard — pondex_ Wave 1
+# Survey Dashboard — pondex Wave 1
 
 > How the survey was built, where it runs, how to read it, and how to extend it for Wave 2.
 

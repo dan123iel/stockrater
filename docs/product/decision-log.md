@@ -1,4 +1,4 @@
-# pondex_ — Product Decision Log
+# pondex — Product Decision Log
 
 > Key product decisions, their rationale, and scheduled review dates.
 > For architecture decisions see: `docs/architecture/adr/`
@@ -58,7 +58,7 @@
 
 ### D-005 · No broker integration in Phase 1
 - **Date:** 2026-06-01
-- **Decision:** pondex_ is read-only; no trade execution, no portfolio sync with broker
+- **Decision:** pondex is read-only; no trade execution, no portfolio sync with broker
 - **Rationale:** Regulatory risk (MiFID II execution services); focus on signal quality, not execution
 - **Alternatives considered:** IBKR API, Trade Republic API
 - **Review:** Phase 3 (if users request it and regulatory path is clear)

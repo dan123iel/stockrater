@@ -1,4 +1,4 @@
-# pondex_ — Incident Log
+# pondex — Incident Log
 
 > Jeder produktionsrelevante Fehler wird hier dokumentiert.
 > Ziel: Probleme schneller lösen, Muster erkennen, Wissen nicht verlieren.

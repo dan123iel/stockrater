@@ -1,4 +1,4 @@
-# User Stories — pondex_
+# User Stories — pondex
 
 > Derived from Survey Wave 1 (n=45, Juni 2026) and ICP interviews.
 > Format: "As a [who], I want to [what], so that [why]."

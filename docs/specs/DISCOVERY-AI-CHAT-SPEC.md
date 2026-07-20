@@ -138,7 +138,7 @@ What the AI remembers (stored in localStorage):
 }
 ```
 
-Storage key: `pondex_ai_memory` in localStorage.
+Storage key: `pondexai_memory` in localStorage.
 Upgrades to Supabase in Phase 4 — same data structure, different storage layer.
 
 ### Chat UI design
@@ -203,7 +203,7 @@ The following is locked scope for Intelligence Sprint 4:
 
 ### Sprint 4a — AI Chat UI + Memory
 - [ ] Replace AI Insights tile with chat interface (message list + input field)
-- [ ] `pondex_ai_memory` localStorage schema
+- [ ] `pondexai_memory` localStorage schema
 - [ ] AI system prompt reads from memory on every request
 - [ ] AI extracts and saves preferences from conversation
 - [ ] Conversation history persists across page reloads (last 20 messages)
@@ -216,7 +216,7 @@ The following is locked scope for Intelligence Sprint 4:
 - [ ] Results list: ticker, name, exchange, P/E, yield, pondex score (cached)
 - [ ] "Analyze →" button per result → launches Analytics
 - [ ] AI interprets free-text input into filters ("German pharma with dividend")
-- [ ] Save filter state to `pondex_ai_memory.preferences`
+- [ ] Save filter state to `pondexai_memory.preferences`
 
 ### What is NOT in MVP
 - ETFs, crypto, bonds, commodities — Phase 2+
@@ -235,7 +235,7 @@ The following is locked scope for Intelligence Sprint 4:
 - localStorage — already used for all user data.
 
 ### What needs to be built
-1. `pondex_ai_memory` module — read/write/clear in localStorage
+1. `pondexai_memory` module — read/write/clear in localStorage
 2. Chat UI — message list component (CSS only, no external deps)
 3. Preference extractor — AI side-task: "extract preferences from this message"
 4. FMP screener integration — new `buildDiscovery()` function
@@ -275,7 +275,7 @@ This is a drop-in replacement for the current single-message prompt.
 ## Phase 4 upgrade path
 
 In Phase 4 (Supabase Auth):
-- `pondex_ai_memory` migrates to `user_preferences` table in Supabase
+- `pondexai_memory` migrates to `user_preferences` table in Supabase
 - Conversation history migrates to `ai_conversations` table
 - Multiple users each get their own memory
 - The code interface stays identical — just swap localStorage for Supabase client calls

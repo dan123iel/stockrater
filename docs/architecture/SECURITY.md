@@ -56,7 +56,7 @@ This document covers Phase 1–3 (current) and flags what changes in Phase 4.
 
 ### API Key Handling
 
-- [x] Keys stored in `localStorage` under `pondex_fmp_key` and `pondex_groq_key`
+- [x] Keys stored in `localStorage` under `pondexfmp_key` and `pondexgroq_key`
 - [x] Keys shown masked in Profile UI (`abc123••••••••`)
 - [x] Keys travel only in HTTPS requests to FMP and Groq APIs directly — never to any pondex server
 - [x] Keys never committed to git — entered at runtime only
@@ -102,8 +102,8 @@ Phase 4 introduces user accounts, server-side storage, and broker API connection
 ## Secrets — What Must Never Be Committed
 
 ```
-pondex_fmp_key (from localStorage)
-pondex_groq_key (from localStorage)
+pondexfmp_key (from localStorage)
+pondexgroq_key (from localStorage)
 Any .env file
 Any service account JSON
 ```

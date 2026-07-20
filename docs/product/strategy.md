@@ -1,4 +1,4 @@
-# pondex_ — Product Strategy
+# pondex — Product Strategy
 
 _Single source of truth. Last updated: 30. Juni 2026 after Survey Wave 1 (n=45)._
 
@@ -9,10 +9,10 @@ _Single source of truth. Last updated: 30. Juni 2026 after Survey Wave 1 (n=45).
 ## Positioning
 
 **For** independent retail investors who analyse individual stocks,
-**pondex_** is a noise filter with source attribution
+**pondex** is a noise filter with source attribution
 **that** gives every stock a clear plain-language verdict — every number with a named source.
 **Unlike** Yahoo Finance, ChatGPT, or the broker's own screener,
-**pondex_** delivers no data chaos, but a clear audit trail.
+**pondex** delivers no data chaos, but a clear audit trail.
 
 **What we pitch:** "Research with a clear audit trail"
 **What we do NOT pitch:** "AI-powered analysis" — AI is mechanism, not message

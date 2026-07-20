@@ -1,4 +1,4 @@
-# pondex_ — Regulatory Framework
+# pondex — Regulatory Framework
 
 > Last updated: 2026-07-02  
 > Review trigger: Before Phase 2 launch, before any paywall, before any geo-expansion.

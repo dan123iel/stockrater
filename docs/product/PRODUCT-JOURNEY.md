@@ -1,6 +1,6 @@
-# pondex_ — Product Journey (Inspired by Marty Cagan)
+# pondex — Product Journey (Inspired by Marty Cagan)
 
-> This document describes how pondex_ is built — not just what we build, but how we discover, validate, and deliver.
+> This document describes how pondex is built — not just what we build, but how we discover, validate, and deliver.
 > Based on *Inspired* by Marty Cagan. The fundamental shift: Discovery and Delivery run in parallel, not sequentially.
 
 ---
@@ -39,7 +39,7 @@
 - OKRs (outcome-based goals, not feature lists) → `doc/product/metrics.md`
 - ICP definition → `doc/product/personas.md`
 
-**For pondex_:**
+**For pondex:**
 The OKR for Phase 1 is not "ship 12 tabs" — it is:
 > **"Achieve 30-day retention > 40% with the first 10 real users."**
 
@@ -68,7 +68,7 @@ doc/product/
 2. Find pain, inefficiency, workarounds
 3. After 5–6 interviews on the same problem: pattern recognition kicks in
 
-**For pondex_:**
+**For pondex:**
 - Primary contact: Gunnar Leu (churned, $15–50/mo, highest-signal Q9 in dataset)
 - Secondary: 6 follow-up contacts from Wave 1 survey
 - Cold outreach: r/eupersonalfinance after Wave 2 survey
@@ -106,7 +106,7 @@ Every idea must pass all four risk gates:
 
 **An idea only moves to Delivery when all four risks are validated.**
 
-**For pondex_ — what's already validated:**
+**For pondex — what's already validated:**
 - ✅ Value: 5 WTP proofs from survey, 2 churners confirmed they'd pay if noise solved
 - ✅ Usability: explanation-first UX from ADR-007, source attribution pattern tested
 - ✅ Feasibility: yfinance + Groq stack proven, backend running
@@ -129,7 +129,7 @@ design/reference/            ← pondex-v1.html original prototype
 
 **Purpose:** Build scalable, tested, production-grade code — no surprises, because engineers were in the room during Discovery.
 
-**For pondex_:**
+**For pondex:**
 ```
 frontend/src/
 ├── pages/          ← One file per route/view
@@ -158,7 +158,7 @@ backend/
 
 **The only question that matters:** Did we hit the outcome?
 
-**For pondex_ Phase 1:**
+**For pondex Phase 1:**
 - Target: **30-day retention > 40%** with first 10 real users
 - How to measure: manual check (ask users directly) until analytics are integrated
 - If yes → celebrate, move to Phase 2 OKR

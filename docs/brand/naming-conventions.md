@@ -48,6 +48,6 @@ Never use: Strong Buy / Buy / Hold / Avoid (implies financial advice).
 ## Code Naming (JS/CSS)
 
 - CSS variables: `--color-green`, `--surface`, `--border`
-- localStorage keys: prefix `pondex_` for new keys (legacy `sr_` keys maintained for backward compat)
+- localStorage keys: prefix `pondex` for new keys (legacy `sr_` keys maintained for backward compat)
 - Function names: camelCase, verb-first — `buildScorecard()`, `launchAnalytics()`, `renderThesis()`
 - IDs: kebab-case — `an-asset-bar`, `thesis-tracker`, `score-confidence`

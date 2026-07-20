@@ -1,4 +1,4 @@
-# pondex_ — Repository Structure Rules
+# pondex — Repository Structure Rules
 
 > This document is permanent. The folder structure defined here must be maintained forever.
 > When in doubt: put things where they belong, not where they are easiest to create.
@@ -77,9 +77,12 @@ pondex/
 │       ├── tone-of-voice.md
 │       └── naming-conventions.md
 │
-├── design/
-│   ├── wireframes/                   ← ASCII wireframes (readable by AI agents)
-│   └── reference/                    ← Original prototype HTML
+├── docs/brainstorming/               ← Design exploration (NOT in docs/ rules above — exception)
+│   ├── design-system/
+│   │   ├── BUNGEE-DESIGN-SYSTEM.md   ← Vollständige Bungee-Analyse (DOM-verifiziert)
+│   │   └── DESIGN-TOKENS.md          ← Alle exakten Werte: Farben, Type, Spacing, Animationen
+│   ├── app-structure.md              ← Nav-Struktur, Screens
+│   └── landing-page-content.md       ← Content für Landing Page
 │
 ├── backend/
 │   └── app/
@@ -90,13 +93,32 @@ pondex/
 │
 ├── frontend/
 │   └── src/
-│       ├── pages/                    ← One file per route
+│       ├── pages/                    ← Eine Datei pro Route
+│       │   ├── Landing.jsx           ← Öffentliche Marketing-Seite (/)
+│       │   ├── Home.jsx              ← App-Dashboard (/app)
+│       │   └── ...                   ← weitere App-Screens
 │       ├── components/
-│       │   ├── tabs/                 ← Tab contents (lazy-loaded)
-│       │   ├── tiles/                ← Reusable data tiles
-│       │   └── ui/                   ← Shadcn (never edit manually)
-│       └── lib/
-│           └── fmp.js                ← API client → backend only
+│       │   ├── landing/              ← Alle Landing-Page-Komponenten
+│       │   │   ├── LandingNav.jsx
+│       │   │   ├── Hero.jsx
+│       │   │   ├── PainMarquee.jsx
+│       │   │   ├── ProblemSection.jsx
+│       │   │   ├── HowItWorks.jsx
+│       │   │   ├── FeatureShowcase.jsx
+│       │   │   ├── ScoreDemo.jsx
+│       │   │   ├── Testimonials.jsx
+│       │   │   ├── Pricing.jsx
+│       │   │   ├── FAQ.jsx
+│       │   │   ├── FinalCTA.jsx
+│       │   │   ├── LandingFooter.jsx
+│       │   │   └── BungeeButton.jsx  ← Wiederverwendbarer CTA-Button
+│       │   ├── tabs/                 ← Tab-Inhalte (lazy-loaded)
+│       │   ├── tiles/                ← Wiederverwendbare Datenkacheln
+│       │   └── ui/                   ← Shadcn (nie manuell bearbeiten)
+│       ├── lib/
+│       │   └── ...
+│       ├── index.css                 ← Bungee Design Tokens als CSS Variables
+│       └── main.jsx
 │
 └── .github/
     └── workflows/

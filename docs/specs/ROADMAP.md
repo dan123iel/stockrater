@@ -1,147 +1,197 @@
-# pondex_ — Roadmap
+# pondex — Roadmap
+_Last updated: 2026-07-20 · Survey Wave 1 (n=56) + Wave 2 (n=35) + 3 depth interviews + Research Council (22 Experten) + Deep Research (107 Agents)_
 
-_Last updated: 2026-07-02 · Survey Wave 1 (n=56, korrigiert von n=45) incorporated_
+---
 
-## Status Overview
+## Gesamtüberblick
 
-| Phase | Status | Target |
+```
+Phase A — Landing Page fertig        → Juli 2026      (diese Woche)
+Phase B — App-Shell mit Demo         → August 2026    (nächste Woche)
+Phase C — Auth (Login/Signup)        → August 2026    (Ende August)
+Phase D — Echtes Backend + Daten     → Sept 2026
+Phase E — Pro Tier + Stripe          → Sept–Okt 2026
+Phase F — Growth + SEO               → Q4 2026
+```
+
+---
+
+## Phase A — Landing Page fertigstellen
+**Ziel:** Etwas Echtes das man Menschen zeigen kann. User Journey: Landing → App.
+**Timeline:** 20.–22. Juli 2026 (2–3 Tage)
+**Status:** 🟡 In Progress
+
+### Architektur
+```
+/ (Landing Page)
+├── Hero: "Still not sure where to invest"
+├── Testimonials (Social Proof — direkt nach Hero)
+├── How it Works (3 Schritte)
+├── ProductDemo (Ticker eingeben → Demo-Score)
+├── Differentiation (vs Yahoo/ChatGPT/Bloomberg)
+├── Features
+├── Pricing
+├── FAQ
+├── Final CTA
+└── Footer
+
+CTAs:
+├── "Analyse a stock — it's free" → scrollt zu #demo
+├── "Log in →" → /app  (vorerst direkt, kein Auth)
+└── "Sign up" → /app   (vorerst direkt, kein Auth)
+```
+
+### Offene Tasks (priorität)
+- [x] LP-1: Klick-Auslöser unter CTA ✅ 2026-07-20
+- [x] LP-2: Social Proof vor Demo ✅ 2026-07-20
+- [x] LP-5: Stats verständlicher ✅ 2026-07-20
+- [ ] LP-3: Hero Visual — Score-Card Screenshot einbauen (30 min)
+- [ ] LP-4: Testimonials — Initialen-Avatare statt Stock-Fotos (20 min)
+- [ ] LP-6: Meta Tags + Open Graph in index.html (15 min)
+- [ ] LP-7: GitHub Push + Live-URL deployen (15 min)
+
+---
+
+## Phase B — App-Shell mit Demo-Daten
+**Ziel:** User die von der Landing Page kommen sehen eine funktionierende App (mit Demo-Daten).
+**Timeline:** 23.–31. Juli 2026
+**Status:** ⬜ Planned
+
+### Architektur
+```
+/app
+├── Dashboard (Watchlist + Portfolio als Mockup)
+├── Analyse: Ticker eingeben → Demo-Score (wie ProductDemo auf LP)
+│   ├── Scorecard Tab (Score 0–100)
+│   ├── Chart Tab (mit 50/200-MA)
+│   ├── Valuation Tab
+│   └── weitere Tabs
+└── Nav: Analyse / Watchlist / Portfolio / Account
+```
+
+### Tasks
+- [ ] K: Score 0–100 (statt out of 5.0) — scoring.js + ScoreHero.jsx
+- [ ] L: 50/200-Tage Moving Averages im Chart
+- [ ] N: Tooltips für Fachbegriffe (ⓘ-Symbol)
+- [ ] O: "Profile" → "Account" umbenennen
+- [ ] P: Scroll-Indikator auf Analysis-Seite
+- [ ] Dashboard-Page: Watchlist + Portfolio als schöne Mockup-Seite
+- [ ] CTAs auf LP zu /app verlinken (Log in, Sign up)
+
+---
+
+## Phase C — Auth (Login / Signup)
+**Ziel:** Echte User-Accounts. Retention messbar machen.
+**Timeline:** 1.–15. August 2026
+**Status:** ⬜ Planned
+
+### Architektur
+```
+/login    → Email + Passwort → /app
+/signup   → Email + Passwort → Onboarding → /app
+/onboarding → 5 Fragen (Strategie, Risiko, Horizont, WHY)
+```
+
+### Tasks
+- [ ] Supabase Auth einrichten (Email + Google)
+- [ ] /login + /signup Pages
+- [ ] 5-Fragen Onboarding Flow
+- [ ] User-Profil in Supabase speichern
+- [ ] Watchlist + Portfolio an User-Account koppeln
+- [ ] Privacy Policy live (Pflicht vor Auth)
+
+---
+
+## Phase D — Echtes Backend + Live-Daten
+**Ziel:** Echte Stock-Analyse mit Yahoo Finance + SEC EDGAR.
+**Timeline:** 15. August – 15. September 2026
+**Status:** ⬜ Planned
+
+### Tasks
+- [ ] Railway Backend deployen (FastAPI)
+- [ ] Yahoo Finance Live-Daten (yfinance)
+- [ ] SEC EDGAR Daten
+- [ ] Groq AI Chat mit Source Attribution
+- [ ] Error Monitoring: Sentry DSN auf Railway
+- [ ] Rate-Limiting + Caching
+
+---
+
+## Phase E — Pro Tier + Stripe
+**Ziel:** Erste zahlende User.
+**Timeline:** September–Oktober 2026
+**Status:** ⬜ Planned
+
+### Tasks
+- [ ] Stripe Integration (€4.99/Monat)
+- [ ] Free Tier: 1 Verdict/Tag
+- [ ] Pro Tier: Unlimited + Peer Comparison + Portfolio Tracker
+- [ ] Paywall Disclaimer (regulatorisch)
+- [ ] Van Westendorp Pricing Test auswerten
+
+---
+
+## Phase F — Growth + SEO
+**Ziel:** Organischer Traffic. 1.000 zahlende User.
+**Timeline:** Q4 2026
+**Status:** ⬜ Planned
+
+### Tasks
+- [ ] SEO Landing Pages pro Persona (/value-investing, /passive-investor)
+- [ ] Multilingual DE + ES
+- [ ] Weekly Digest Email
+- [ ] Verdict Track Record Feature
+- [ ] Customizable Dashboard
+
+---
+
+## Strategische Entscheidungen (dokumentiert)
+
+| Entscheidung | Gewählt | Warum |
 |---|---|---|
-| Phase 1 — MVP (Noise-filter core) | In Progress | July 2026 |
-| Phase 2 — Pro (Macro + Monetisation) | Planned | Sept 2026 |
-| Phase 3 — Growth (SEO + Scale) | Later | 2027 |
+| Auth Timing | Phase C (nicht sofort) | Erst echte User sehen, dann Gate |
+| Demo vs. Live | Demo zuerst | Backend noch nicht produktionsreif |
+| Score-Format | 0–100 | Gunnar + Patricia Interview (2/3 eindeutig) |
+| Free Tier | 1 Verdict/Tag | Beweis vor Paywall |
+| LP-Struktur | Hero → Social Proof → Demo | Vercel/Raycast Pattern (verifiziert) |
+| Design-System | Grayscale #000–#D6D6D6 | Konsistent, premium, editorial |
 
 ---
 
-## Now — Phase 1: MVP
+## User Journey (End-to-End)
 
-**Goal:** A working noise-filter for stock research. Any user can search a ticker and get a clear, source-cited verdict in under 60 seconds.
-
-**In scope:**
-- Ticker search → plain-language explanation per factor → score as conclusion
-- Every metric shows named source (Yahoo Finance TTM / SEC EDGAR Form 4)
-- AI chat that only cites traceable sources
-- 12-tab analytics layout (Scorecard, Chart, Valuation, DCF, News, Insider, AI, Ownership, Profile + 3× coming soon)
-- All 7 navigation pages routed (Home, Analysis, Markets, Macro, Ideas, Portfolio, Watchlist)
-- doc/ structure: Tier 1 documents complete
-
-**Out of scope:**
-- Login / authentication
-- Stripe / payments
-- Portfolio tracking
-- Dark mode
-- Mobile
-
-**Success criteria:**
-- 30-day retention > 40% with first 10 real users
-- Every AI output has visible citation
-- Analysis page loads in < 3s on standard connection
-
-**Target:** 15 July 2026
+```
+Besucher landet auf /
+        ↓
+Sieht Hero + "Analyse a stock"
+        ↓
+Tippt AAPL → sieht Demo-Score (kein Login nötig)
+        ↓
+Interessiert → "Sign up" → /signup
+        ↓
+Onboarding (Investor-Profil)
+        ↓
+/app → Dashboard → eigene Analyse
+        ↓
+Nach 1 Verdict/Tag → Upgrade-Prompt → Pro €4.99/mo
+```
 
 ---
 
-## Next — Phase 2: Pro
+## Nächste 3 konkrete Schritte (heute)
 
-**Goal:** Monetisation-ready. First 10 paying users acquired directly (no marketing).
-
-**Likely scope:**
-- Macro Hub — geopolitics + sector context (Gunnar Leu's #1 request)
-- Login (Google Sign-In)
-- Stripe integration (pricing TBD — run Van Westendorp first)
-- Multilingual: Deutsch + Español (EU-NW 53% of sample, Spanish verbatims)
-- Watchlist + Portfolio tracking
-
-**Target:** September 2026
+1. **LP-3** — Hero Visual einbauen (Score-Card Screenshot oder Mockup)
+2. **LP-4** — Initialen-Avatare G / P / J statt Stock-Fotos
+3. **LP-6 + LP-7** — Meta Tags + GitHub Push → Live-URL
 
 ---
 
-## Later — Phase 3: Growth
+## Verweis-Dokumente
 
-Directional ideas — not committed:
-- SEO: individual page per ticker (`/analysis/NVDA`)
-- Weekly newsletter: "3 undervalued stocks this week — powered by pondex score"
-- Affiliate programme (30% commission for finance YouTubers/bloggers)
-- Mobile app (React Native)
-- API for third parties
-
----
-
-## Icebox
-
-| Idea | Why not now |
+| Dokument | Inhalt |
 |---|---|
-| Ticker tape (live prices) | Adds complexity, no survey signal for it |
-| Tile drag-and-drop reordering | Nice-to-have, Phase 2 |
-| PDF export | No survey signal |
-| Comparison tool (multi-ticker) | Useful but not the core pain |
-| Dark mode | Would require full design system fork |
-
----
-
-## Won't build (ever)
-
-| Feature | Reason |
-|---|---|
-| Broker execution / order placement | Requires broker licence |
-| Social/community features | Not the pain point |
-| Paid data APIs (FMP, Bloomberg) | Against cost constraint + free sources sufficient |
-| OpenAI / Claude for AI | Against cost constraint — Groq Llama 70B is sufficient |
-
----
-
-## Recently Shipped
-
-| Version | Date | What shipped |
-|---|---|---|
-| 0.1.0 | June 2026 | Backend (Yahoo/SEC/Groq), React MVP, Paper design, Survey Wave 1 |
-| 0.2.0 | 30 June 2026 | Explanation-first UX, source attribution, Backend /score returns explanations[] + sources[], Analysis.jsx decoupled from FMP |
-| 0.3.0 | 2 July 2026 | Source attribution on all 5 tiles, AI disclaimer, Disclaimer opacity fix, CORS hardened, Personas updated (n=56), railway.toml, Council review passed (16/25 Refine) |
-
----
-
-## Regulatory Obligations per Phase
-
-> Vollständiges Framework → `doc/regulatory/REGULATORY.md`
-> Regel: Kein Phase-Übergang ohne Regulatory-Checkpoint.
-
-### Phase 1 — Läuft (bis 15. Juli 2026)
-| Obligation | Status | Was |
-|---|---|---|
-| Disclaimer sichtbar (Opacity ≥ 0.5) | ✅ Erledigt | `Analysis.jsx` opacity .22 → .55 |
-| AI-Output niemals "buy/sell/recommend" | ✅ By design | System Prompt + Code-Kommentare |
-| Quellenattribution auf allen Tiles | ✅ Erledigt | Alle 5 Tiles + AI-Tab |
-| Keine Server-side User-Daten | ✅ By design | Nur localStorage |
-| Kein personalisierter Investment Advice | ✅ By design | Score = algorithmisches Signal, kein Ratschlag |
-
-### Phase 2 — Vor Launch (vor September 2026)
-| Obligation | Status | Was | Wann |
-|---|---|---|---|
-| Privacy Policy schreiben (GDPR + US) | ❌ Offen | Pflicht sobald Login/Accounts live gehen | Vor Phase 2 Launch |
-| Terms of Service schreiben | ❌ Offen | Pflicht bei Paywall / Abonnement | Vor Paywall |
-| Cookie / Consent Banner | ❌ Offen | Falls Analytics oder Tracking hinzukommt | Sobald Tracking live |
-| Data Retention Policy definieren | ❌ Offen | Was wird gespeichert, wie lang, wie löschen | Vor Phase 2 Launch |
-| Right-to-Erasure Mechanismus | ❌ Offen | GDPR Art. 17 — User kann Daten löschen | Vor Phase 2 Launch |
-| Jurisdiktionsfrage klären (DE/EU/US) | ❌ Offen | Welches Recht gilt? → Basis für AGB | Vor Phase 2 Start |
-| yfinance Lizenz bei >10k MAU prüfen | ❌ Offen | Inoffizielle API — bei Skalierung kritisch | Wenn MAU >1k |
-| EU AI Act Compliance prüfen | ❌ Offen | Ist pondex AI-System "high-risk"? | Vor Phase 2 Launch |
-| Paywall-Seite: Disclaimer vor Kauf | ❌ Offen | Explizite Bestätigung "kein Investment Advice" | Vor Stripe live |
-| DPA mit Railway / Supabase | ❌ Offen | GDPR Data Processing Agreement | Vor Phase 2 Launch |
-
-### Phase 3 — Später (2027)
-| Obligation | Was |
-|---|---|
-| SEC Registration prüfen (US) | Bei personalisierten Features / Empfehlungen gegen Bezahlung |
-| Affiliate-Disclosure | FTC-Pflicht bei Provisionen für Empfehlungen |
-| MiFID II Lizenzprüfung | Falls pondex in Richtung personalisierter Beratung expandiert |
-
----
-
-## How to read this roadmap
-
-**Now** = locked. Don't add to it unless something breaks. Remove things from it if they're blocked.
-
-**Next** = planned but scope can flex. A feature moves from Next → Now when: it has a survey-backed user need, it's achievable in <2 weeks solo, and Phase 1 retention target is met.
-
-**Later** = directional signals only. Don't design these yet.
-
-A feature gets promoted from Icebox → Next when at minimum one paying user has asked for it unprompted.
+| `docs/specs/LANDING-PAGE-PLAYBOOK.md` | Design + Copy Regeln |
+| `docs/product/WEBSITE-COUNCIL.md` | Council-System für Website-Entscheidungen |
+| `docs/CURRENT-TODOS.md` | Alle offenen Tasks |
+| `docs/research/interviews/` | Gunnar, Patricia, José Interviews |
+| `docs/research/surveys/` | Wave 1 + Wave 2 Analyse |

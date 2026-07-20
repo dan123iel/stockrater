@@ -1,4 +1,4 @@
-# pondex_ — Assumptions Log
+# pondex — Assumptions Log
 
 > Tracks all key assumptions underlying product decisions.
 > Status: Unvalidated → Validated → Refuted

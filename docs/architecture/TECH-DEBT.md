@@ -17,7 +17,7 @@
 | TD-003 | ~~Data accuracy~~ | ~~DCF assumptions hardcoded to NVDA — don't change per ticker~~ | ~~High~~ | Resolved 2026-06-21 |
 | TD-004 | UX / Navigation | No URL routing — browser back button broken, links not shareable | Medium | 2026-06-21 |
 | TD-005 | Testing | Zero automated test coverage | Medium | 2026-06-21 |
-| TD-006 | Consistency | Mixed localStorage key naming (`sr_*` vs `pondex_*`) | Low | 2026-06-21 |
+| TD-006 | Consistency | Mixed localStorage key naming (`sr_*` vs `pondex*`) | Low | 2026-06-21 |
 | TD-007 | ~~Security~~ | ~~Incomplete HTML escaping of FMP API data in innerHTML~~ | ~~High~~ | Resolved 2026-06-21 |
 | TD-008 | Security | Finnhub API key hardcoded in pondex.html | Low | 2026-06-21 |
 | TD-009 | Data accuracy | Chart price data is randomly generated — disclaimer added, real OHLC pending Phase 4 | Medium | 2026-06-21 |
@@ -144,16 +144,16 @@ Phase 4 (when build step is introduced): add Playwright end-to-end tests for the
 **Area:** `pondex.html` → various localStorage reads/writes, `PROJECT.md`
 
 **What is the problem?**
-Some code uses `sr_*` prefix (legacy: `sr_portfolio`, `sr_watchlist`, `sr_trades`, `sr_workerurl`) and some uses `pondex_*` prefix (new: `pondex_fmp_key`, `pondex_groq_key`, etc.). The old `sr_*` keys are referenced in `PROJECT.md` as documentation but the actual code may have diverged.
+Some code uses `sr_*` prefix (legacy: `sr_portfolio`, `sr_watchlist`, `sr_trades`, `sr_workerurl`) and some uses `pondex*` prefix (new: `pondexfmp_key`, `pondexgroq_key`, etc.). The old `sr_*` keys are referenced in `PROJECT.md` as documentation but the actual code may have diverged.
 
 **Why was this shortcut taken?**
 The app was renamed from "stockrater" (`sr_`) to "pondex" incrementally. Not all keys were migrated at once.
 
 **What is the risk if we never fix it?**
-Data loss if code reads `pondex_portfolio` but a user has data stored in `sr_portfolio`. Confusing for anyone reading the code.
+Data loss if code reads `pondexportfolio` but a user has data stored in `sr_portfolio`. Confusing for anyone reading the code.
 
 **What does the proper fix look like?**
-Audit all localStorage reads/writes. Standardize everything to `pondex_*`. Add a one-time migration on `init()` that moves data from `sr_*` keys to `pondex_*`. Estimated effort: 2–3 hours.
+Audit all localStorage reads/writes. Standardize everything to `pondex*`. Add a one-time migration on `init()` that moves data from `sr_*` keys to `pondex*`. Estimated effort: 2–3 hours.
 
 **Priority:** Low
 **Target:** Before Phase 4 launch (clean slate for new users)

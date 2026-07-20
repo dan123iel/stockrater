@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>pondex_ — Product Journey Map</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    background: #fff;
+    color: #111;
+    font-size: 11px;
+    line-height: 1.5;
+  }
+
+  @media print {
+    body { font-size: 10px; }
+    .page { page-break-after: always; }
+    .no-print { display: none; }
+  }
+
+  .page {
+    width: 297mm;
+    min-height: 210mm;
+    padding: 14mm 16mm;
+    margin: 0 auto 20px;
+    background: #fff;
+  }
+
+  /* HEADER */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 2px solid #111;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+  }
+  .header-left h1 { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
+  .header-left p { font-size: 11px; color: #555; margin-top: 2px; }
+  .header-right { font-size: 10px; color: #888; text-align: right; }
+
+  /* LEGEND */
+  .legend {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 14px;
+    padding: 6px 10px;
+    background: #f8f8f8;
+    border-radius: 4px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 10px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .dot-done { background: #111; }
+  .dot-active { background: #2563eb; }
+  .dot-open { background: #fff; border: 1.5px solid #999; }
+  .dot-blocked { background: #fff; border: 1.5px dashed #bbb; }
+
+  /* TIMELINE */
+  .timeline { display: flex; flex-direction: column; gap: 0; }
+
+  .track {
+    display: grid;
+    grid-template-columns: 130px 8px 1fr;
+    gap: 0 10px;
+    margin-bottom: 0;
+  }
+
+  .track-label {
+    text-align: right;
+    padding: 10px 0 10px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  .track-line {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .track-line .line { width: 2px; flex: 1; background: #ddd; }
+  .track-line .line.active { background: #2563eb; }
+  .track-line .line.done { background: #111; }
+
+  .track-content { padding: 8px 0 8px; }
+
+  /* SECTION */
+  .section {
+    border-left: 3px solid #eee;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    border-radius: 0 4px 4px 0;
+  }
+  .section.done { border-color: #111; background: #fafafa; }
+  .section.active { border-color: #2563eb; background: #eff6ff; }
+  .section.open { border-color: #ddd; background: #fff; }
+  .section.blocked { border-color: #ddd; background: #fff; opacity: 0.6; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .section-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+  }
+  .badge {
+    font-size: 9px;
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  .badge-done { background: #111; color: #fff; }
+  .badge-active { background: #2563eb; color: #fff; }
+  .badge-open { background: #e5e7eb; color: #555; }
+  .badge-blocked { background: #f3f4f6; color: #9ca3af; border: 1px dashed #d1d5db; }
+
+  .section-desc {
+    font-size: 10px;
+    color: #555;
+    margin-bottom: 6px;
+  }
+
+  /* ITEMS */
+  .items { display: flex; flex-wrap: wrap; gap: 4px; }
+  .item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+  }
+  .item.done { background: #f0fdf4; border-color: #bbf7d0; color: #166534; }
+  .item.active { background: #dbeafe; border-color: #93c5fd; color: #1e40af; }
+  .item.open { background: #fff; border-color: #e5e7eb; color: #374151; }
+  .item.blocked { background: #f9fafb; border-color: #e5e7eb; color: #9ca3af; font-style: italic; }
+  .item-icon { font-size: 9px; }
+
+  /* YOU ARE HERE */
+  .you-are-here {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #2563eb;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 3px;
+    margin-top: 8px;
+    letter-spacing: 0.2px;
+  }
+
+  /* FRAMEWORKS ROW */
+  .frameworks {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid #e5e7eb;
+  }
+  .framework {
+    padding: 8px 10px;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    background: #fafafa;
+  }
+  .framework h4 { font-size: 10px; font-weight: 700; margin-bottom: 4px; }
+  .framework p { font-size: 9px; color: #666; line-height: 1.4; }
+
+  /* NEXT ACTIONS */
+  .next-actions {
+    margin-top: 14px;
+    padding: 10px 12px;
+    background: #111;
+    color: #fff;
+    border-radius: 4px;
+  }
+  .next-actions h3 { font-size: 11px; font-weight: 700; margin-bottom: 8px; letter-spacing: 0.3px; text-transform: uppercase; }
+  .action-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .action { }
+  .action .num { font-size: 18px; font-weight: 700; color: #555; line-height: 1; margin-bottom: 3px; }
+  .action .title { font-size: 10px; font-weight: 600; margin-bottom: 2px; }
+  .action .desc { font-size: 9px; color: #aaa; line-height: 1.4; }
+
+  /* DIVIDER */
+  .divider {
+    text-align: center;
+    font-size: 9px;
+    color: #bbb;
+    margin: 4px 0 8px;
+    letter-spacing: 1px;
+  }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+  .okr-box {
+    padding: 10px 12px;
+    border: 2px solid #111;
+    border-radius: 4px;
+    margin-bottom: 12px;
+  }
+  .okr-box h3 { font-size: 11px; font-weight: 700; margin-bottom: 4px; }
+  .okr-box p { font-size: 10px; color: #333; }
+  .okr-box .date { font-size: 10px; font-weight: 700; color: #2563eb; float: right; }
+</style>
+</head>
+<body>
+
+<!-- PAGE 1: THE FULL JOURNEY -->
+<div class="page">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>pondex_ — Product Journey Map</h1>
+      <p>Discovery → Validation → Delivery → Measure · Stand: Juli 2026</p>
+    </div>
+    <div class="header-right">
+      Phase 1 MVP · Target: 15. Juli 2026<br>
+      OKR: 30-day retention &gt;40% mit ersten 10 Usern
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="dot dot-done"></div> Abgeschlossen</div>
+    <div class="legend-item"><div class="dot dot-active"></div> Aktiv / In Arbeit</div>
+    <div class="legend-item"><div class="dot dot-open"></div> Offen – nächster Schritt</div>
+    <div class="legend-item"><div class="dot dot-blocked"></div> Wartet auf Voraussetzung</div>
+  </div>
+
+  <div class="two-col">
+
+    <!-- LEFT COLUMN: DISCOVERY TRACK -->
+    <div>
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#555;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid #eee;">
+        DISCOVERY TRACK (Cagan + IMMPACT)
+      </div>
+
+      <div class="section done">
+        <div class="section-header">
+          <div class="dot dot-done"></div>
+          <span class="section-title">1. Framing</span>
+          <span class="badge badge-done">Done</span>
+        </div>
+        <div class="section-desc">Vision, OKRs, ICP, Strategie definiert</div>
+        <div class="items">
+          <div class="item done"><span class="item-icon">✓</span> Vision 2–5 Jahre</div>
+          <div class="item done"><span class="item-icon">✓</span> OKR Phase 1</div>
+          <div class="item done"><span class="item-icon">✓</span> ICP = Gunnar Leu</div>
+          <div class="item done"><span class="item-icon">✓</span> Personas (n=56)</div>
+          <div class="item done"><span class="item-icon">✓</span> Competitive Analysis</div>
+          <div class="item done"><span class="item-icon">✓</span> Problem Tree + 5-Whys</div>
+          <div class="item done"><span class="item-icon">✓</span> Assumptions Log</div>
+          <div class="item open"><span class="item-icon">○</span> TAM/SAM/SOM</div>
+        </div>
+      </div>
+
+      <div class="section active">
+        <div class="section-header">
+          <div class="dot dot-active"></div>
+          <span class="section-title">2. User Interviews</span>
+          <span class="badge badge-active">Du bist hier</span>
+        </div>
+        <div class="section-desc">Qualitative Tiefeninterviews — 2–3/Woche permanent (Cagan)</div>
+        <div class="items">
+          <div class="item open"><span class="item-icon">→</span> Gunnar Leu anschreiben</div>
+          <div class="item open"><span class="item-icon">→</span> Patricia G. Parnet</div>
+          <div class="item open"><span class="item-icon">→</span> José Bernardo S.</div>
+          <div class="item blocked"><span class="item-icon">◌</span> Interview #1 führen</div>
+          <div class="item blocked"><span class="item-icon">◌</span> Findings dokumentieren</div>
+        </div>
+        <div class="you-are-here">▶ Du bist hier</div>
+      </div>
+
+      <div class="section blocked">
+        <div class="section-header">
+          <div class="dot dot-blocked"></div>
+          <span class="section-title">3. Wave 2 Survey</span>
+          <span class="badge badge-blocked">Wartet auf Interview #1</span>
+        </div>
+        <div class="section-desc">Cold audience (Reddit) · Pricing testen · Signal replizieren</div>
+        <div class="items">
+          <div class="item blocked"><span class="item-icon">◌</span> Fragebogen erstellen</div>
+          <div class="item blocked"><span class="item-icon">◌</span> r/eupersonalfinance</div>
+          <div class="item blocked"><span class="item-icon">◌</span> $9/$19/$49 testen</div>
+        </div>
+      </div>
+
+      <div class="section blocked">
+        <div class="section-header">
+          <div class="dot dot-blocked"></div>
+          <span class="section-title">4. Van Westendorp Pricing</span>
+          <span class="badge badge-blocked">Wartet auf Interviews</span>
+        </div>
+        <div class="section-desc">WTP-Preisfenster mit 5 Zahlungshistorie-Kontakten aus Wave 1</div>
+        <div class="items">
+          <div class="item blocked"><span class="item-icon">◌</span> Landing Page $9/$19/$49</div>
+          <div class="item blocked"><span class="item-icon">◌</span> An WTP-Kontakte schicken</div>
+          <div class="item blocked"><span class="item-icon">◌</span> Preisfenster dokumentieren</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN: DELIVERY TRACK -->
+    <div>
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#555;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid #eee;">
+        DELIVERY TRACK (Build → Measure)
+      </div>
+
+      <div class="section done">
+        <div class="section-header">
+          <div class="dot dot-done"></div>
+          <span class="section-title">Prototype &amp; Validation</span>
+          <span class="badge badge-done">Done</span>
+        </div>
+        <div class="section-desc">4 Risk Gates (Value / Usability / Feasibility / Viability)</div>
+        <div class="items">
+          <div class="item done"><span class="item-icon">✓</span> pondex-v1.html Prototyp</div>
+          <div class="item done"><span class="item-icon">✓</span> Value Risk ✓</div>
+          <div class="item done"><span class="item-icon">✓</span> Feasibility Risk ✓</div>
+          <div class="item done"><span class="item-icon">✓</span> Viability Risk ✓</div>
+          <div class="item done"><span class="item-icon">✓</span> Council Review ✓</div>
+          <div class="item done"><span class="item-icon">✓</span> ADR-001 bis ADR-009</div>
+        </div>
+      </div>
+
+      <div class="section done">
+        <div class="section-header">
+          <div class="dot dot-done"></div>
+          <span class="section-title">Build — MVP</span>
+          <span class="badge badge-done">Done</span>
+        </div>
+        <div class="section-desc">Backend + Frontend + Deployment</div>
+        <div class="items">
+          <div class="item done"><span class="item-icon">✓</span> FastAPI Backend</div>
+          <div class="item done"><span class="item-icon">✓</span> Yahoo Finance + SEC EDGAR</div>
+          <div class="item done"><span class="item-icon">✓</span> Groq Llama 3.3 70B</div>
+          <div class="item done"><span class="item-icon">✓</span> 12-Tab Analytics</div>
+          <div class="item done"><span class="item-icon">✓</span> Source Attribution alle Tiles</div>
+          <div class="item done"><span class="item-icon">✓</span> Explanation-first UX</div>
+          <div class="item done"><span class="item-icon">✓</span> GitHub Pages live</div>
+          <div class="item done"><span class="item-icon">✓</span> Railway Backend live</div>
+        </div>
+      </div>
+
+      <div class="section active">
+        <div class="section-header">
+          <div class="dot dot-active"></div>
+          <span class="section-title">Smoke-Test / Go-Live</span>
+          <span class="badge badge-active">Fast fertig</span>
+        </div>
+        <div class="section-desc">Letzter Check bevor erste echte User</div>
+        <div class="items">
+          <div class="item done"><span class="item-icon">✓</span> VITE_API_URL gesetzt</div>
+          <div class="item done"><span class="item-icon">✓</span> 429-Fix deployed</div>
+          <div class="item open"><span class="item-icon">→</span> AAPL Smoke-Test bestehen</div>
+        </div>
+      </div>
+
+      <div class="section blocked">
+        <div class="section-header">
+          <div class="dot dot-blocked"></div>
+          <span class="section-title">Measure — Phase 1</span>
+          <span class="badge badge-blocked">Wartet auf Smoke-Test</span>
+        </div>
+        <div class="section-desc">OKR messen: 30-day retention &gt;40% mit ersten 10 Usern</div>
+        <div class="items">
+          <div class="item blocked"><span class="item-icon">◌</span> 10 erste User onboarden</div>
+          <div class="item blocked"><span class="item-icon">◌</span> User-Tracking-Tabelle</div>
+          <div class="item blocked"><span class="item-icon">◌</span> 7-Tage Follow-up</div>
+          <div class="item blocked"><span class="item-icon">◌</span> 30-Tage Follow-up</div>
+          <div class="item blocked"><span class="item-icon">◌</span> OKR-Check 15. Juli</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end two-col -->
+
+  <!-- NEXT ACTIONS -->
+  <div class="next-actions">
+    <h3>Nächste 3 Aktionen — in dieser Reihenfolge</h3>
+    <div class="action-grid">
+      <div class="action">
+        <div class="num">01</div>
+        <div class="title">AAPL Smoke-Test</div>
+        <div class="desc">Live-App aufmachen → AAPL analysieren → muss Score + Quellenangaben zeigen. 429-Fix ist deployed.</div>
+      </div>
+      <div class="action">
+        <div class="num">02</div>
+        <div class="title">Gunnar Leu anschreiben</div>
+        <div class="desc">LinkedIn-Vorlage in docs/discovery/user-interviews.md → Copy-paste → abschicken. Einziger Churner mit Zahlungshistorie.</div>
+      </div>
+      <div class="action">
+        <div class="num">03</div>
+        <div class="title">10 erste User onboarden</div>
+        <div class="desc">Sobald Smoke-Test grün: Link teilen, user-tracking-phase1.md anlegen, 30-Tage-Uhr startet.</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end page 1 -->
+
+
+<!-- PAGE 2: FRAMEWORKS + WHAT'S NEXT -->
+<div class="page">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>pondex_ — Frameworks &amp; Was danach kommt</h1>
+      <p>Wie die drei Methoden zusammenhängen · Roadmap Phase 2 &amp; 3</p>
+    </div>
+    <div class="header-right">Stand: Juli 2026</div>
+  </div>
+
+  <!-- FRAMEWORKS -->
+  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#555;margin-bottom:8px;">
+    Drei Frameworks — ein Prozess
+  </div>
+
+  <div class="three-col" style="margin-bottom:14px;">
+    <div class="framework">
+      <h4>📘 How to Build a Startup</h4>
+      <p><strong>Liefert:</strong> Kommerzielles Fundament</p>
+      <p style="margin-top:4px;">TAM/SAM/SOM · Geschäftsmodell · Pricing-Strategie · GTM · Battlecard · Van Westendorp · Pitch Deck</p>
+      <p style="margin-top:6px;color:#888;font-size:9px;">Wo: docs/product/strategy.md · docs/research/competitors/</p>
+    </div>
+    <div class="framework">
+      <h4>🔬 IMMPACT Lean Impact</h4>
+      <p><strong>Liefert:</strong> Tiefe der Nutzerforschung</p>
+      <p style="margin-top:4px;">Problembaum · 5-Whys · Wirkungstreppe · OMTM · Counterfactual · Negative Impact Analysis</p>
+      <p style="margin-top:6px;color:#888;font-size:9px;">Wo: docs/discovery/problem-validation.md · docs/product/assumptions.md</p>
+    </div>
+    <div class="framework">
+      <h4>⚙️ Inspired — Marty Cagan</h4>
+      <p><strong>Liefert:</strong> Delivery-Struktur</p>
+      <p style="margin-top:4px;">Continuous Discovery · 4 Risk Gates · Product Trio · Council Review · Build/Measure/Learn</p>
+      <p style="margin-top:6px;color:#888;font-size:9px;">Wo: docs/product/PRODUCT-JOURNEY.md · docs/product/PRODUCT-COUNCIL.md</p>
+    </div>
+  </div>
+
+  <!-- WIRKUNGSTREPPE -->
+  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#555;margin-bottom:8px;">
+    pondex_ Wirkungstreppe (IMMPACT)
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:14px;">
+    <div style="padding:6px;background:#111;color:#fff;border-radius:3px;text-align:center;">
+      <div style="font-size:9px;font-weight:700;">7 · IMPACT</div>
+      <div style="font-size:8px;margin-top:2px;color:#aaa;">Gesündere Retail-Investor­kultur in EU</div>
+    </div>
+    <div style="padding:6px;background:#1e293b;color:#fff;border-radius:3px;text-align:center;">
+      <div style="font-size:9px;font-weight:700;">6 · Lebenslage</div>
+      <div style="font-size:8px;margin-top:2px;color:#aaa;">Bessere finanzielle Entscheidungen</div>
+    </div>
+    <div style="padding:6px;background:#334155;color:#fff;border-radius:3px;text-align:center;">
+      <div style="font-size:9px;font-weight:700;">5 · Verhalten ← OMTM</div>
+      <div style="font-size:8px;margin-top:2px;color:#aaa;">Recherche­verhalten ändert sich</div>
+    </div>
+    <div style="padding:6px;background:#475569;color:#fff;border-radius:3px;text-align:center;">
+      <div style="font-size:9px;font-weight:700;">4 · Bewusstsein</div>
+      <div style="font-size:8px;margin-top:2px;color:#aaa;">Versteht warum Score X</div>
+    </div>
+    <div style="padding:6px;background:#64748b;color:#fff;border-radius:3px;text-align:center;">
+      <div style="font-size:9px;font-weight:700;">3 · Akzeptanz</div>
+      <div style="font-size:8px;margin-top:2px;color:#aaa;">Nutzt App wieder (Retention)</div>
+    </div>
+    <div style="padding:6px;background:#94a3b8;color:#fff;border-radius:3px;text-align:center;">
+      <div style="font-size:9px;font-weight:700;">2 · Erreicht</div>
+      <div style="font-size:8px;margin-top:2px;color:#333;">EU Retail Investoren</div>
+    </div>
+    <div style="padding:6px;background:#e2e8f0;color:#111;border-radius:3px;text-align:center;">
+      <div style="font-size:9px;font-weight:700;">1 · Output</div>
+      <div style="font-size:8px;margin-top:2px;">Stock-Analyse mit Quellenangabe</div>
+    </div>
+  </div>
+
+  <!-- ROADMAP -->
+  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#555;margin-bottom:8px;">
+    Roadmap
+  </div>
+
+  <div class="three-col">
+    <div style="border:2px solid #111;border-radius:4px;padding:10px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <div style="font-size:11px;font-weight:700;">Phase 1 — MVP</div>
+        <div style="font-size:9px;font-weight:700;color:#2563eb;">bis 15. Juli</div>
+      </div>
+      <div style="font-size:9px;color:#555;margin-bottom:6px;">Noise-Filter Core · Source Attribution</div>
+      <div style="font-size:9px;">
+        <div style="color:#16a34a;">✓ Backend + Frontend live</div>
+        <div style="color:#16a34a;">✓ Railway deployed</div>
+        <div style="color:#16a34a;">✓ Source Attribution</div>
+        <div style="color:#2563eb;">→ Smoke-Test</div>
+        <div style="color:#2563eb;">→ 10 erste User</div>
+        <div style="color:#2563eb;">→ Gunnar Leu Interview</div>
+      </div>
+      <div style="margin-top:6px;padding:4px 6px;background:#f0fdf4;border-radius:3px;font-size:9px;font-weight:600;color:#166534;">
+        OKR: Retention &gt;40%
+      </div>
+    </div>
+
+    <div style="border:1px solid #ddd;border-radius:4px;padding:10px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <div style="font-size:11px;font-weight:700;">Phase 2 — Pro</div>
+        <div style="font-size:9px;font-weight:700;color:#888;">Sep 2026</div>
+      </div>
+      <div style="font-size:9px;color:#555;margin-bottom:6px;">Monetisierung · Erste zahlende User</div>
+      <div style="font-size:9px;color:#666;">
+        <div>◌ Macro Hub (Gunnar's #1)</div>
+        <div>◌ Login (Google Sign-In)</div>
+        <div>◌ Stripe + Paywall</div>
+        <div>◌ Multilingual DE/ES</div>
+        <div>◌ Watchlist + Portfolio</div>
+        <div>◌ Privacy Policy + ToS</div>
+      </div>
+      <div style="margin-top:6px;padding:4px 6px;background:#f8f8f8;border-radius:3px;font-size:9px;color:#888;">
+        Startet nach: Phase 1 OKR + Wave 2 + Pricing
+      </div>
+    </div>
+
+    <div style="border:1px solid #eee;border-radius:4px;padding:10px;opacity:0.7;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <div style="font-size:11px;font-weight:700;">Phase 3 — Growth</div>
+        <div style="font-size:9px;font-weight:700;color:#bbb;">2027</div>
+      </div>
+      <div style="font-size:9px;color:#555;margin-bottom:6px;">SEO · Scale · Distribution</div>
+      <div style="font-size:9px;color:#999;">
+        <div>◌ SEO: /analysis/NVDA pages</div>
+        <div>◌ Weekly Newsletter</div>
+        <div>◌ Affiliate Programme</div>
+        <div>◌ Mobile App</div>
+        <div>◌ API für Dritte</div>
+      </div>
+      <div style="margin-top:6px;padding:4px 6px;background:#f9f9f9;border-radius:3px;font-size:9px;color:#bbb;">
+        Nicht designen bis Phase 2 stabil
+      </div>
+    </div>
+  </div>
+
+  <!-- DOCS MAP -->
+  <div style="margin-top:14px;padding:10px 12px;background:#f8f8f8;border-radius:4px;">
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Wo alles liegt — docs/</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;font-size:9px;">
+      <div><strong>product/</strong><br>vision · strategy · personas · metrics · assumptions · decision-log · journey · council</div>
+      <div><strong>discovery/</strong><br>user-interviews · problem-validation · opportunity-scorecard</div>
+      <div><strong>research/</strong><br>surveys/wave1 · competitors · experiments · _playbooks</div>
+      <div><strong>specs/ &amp; architecture/</strong><br>PRD · ROADMAP · USER-STORIES · adr/ADR-001–009 · REGULATORY</div>
+    </div>
+  </div>
+
+</div><!-- end page 2 -->
+
+<div class="no-print" style="text-align:center;padding:20px;color:#888;font-size:12px;">
+  Drucken: Cmd+P → Als PDF sichern oder direkt drucken (Querformat empfohlen)
+</div>
+
+</body>
+</html>

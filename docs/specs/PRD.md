@@ -1,4 +1,4 @@
-# pondex_ — Product Requirements Document
+# pondex — Product Requirements Document
 
 _Derived from Survey Wave 1 (n=45, 29–30 June 2026)_
 

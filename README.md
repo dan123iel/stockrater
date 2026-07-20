@@ -1,130 +1,136 @@
-# pondex_
+# pondex
 
-> Stock research with a clear audit trail. Plain-language verdicts. Every number cites its source.
+> Stock research with a clear audit trail.
+> Plain-language verdicts. Every number cites its source.
+
+**Status:** Phase 1 — Landing Page (Lovable) · July 2026
+**Live app:** https://dan123iel.github.io/stockrater/
+**Backend:** Railway (live) · Frontend: GitHub Pages
 
 ---
 
-## Quick Start
+## What is pondex?
 
-### Option A — Docker (ein Befehl)
+pondex is a stock research tool for self-directed retail investors.
+Source-cited verdict on any stock in under 60 seconds — no jargon, no noise.
 
-```bash
-cp backend/.env.example backend/.env   # GROQ_API_KEY eintragen
-cp frontend/.env.example frontend/.env
-docker compose up
-# Backend → http://localhost:8000
-# Frontend → http://localhost:5174
-```
+**USP:** Every number shows its named primary source + date.
+Broker-agnostic — works with IBKR, Trade Republic, Comdirect, Degiro.
 
-### Option B — Lokal ohne Docker
+---
+
+## Quick Start (existing React + FastAPI app)
 
 ```bash
 # Backend
 cd backend
 python -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env    # GROQ_API_KEY eintragen
-uvicorn main:app --reload --port 8000
+cp .env.example .env    # add GROQ_API_KEY
+uvicorn app.main:app --reload --port 8000
 
-# Frontend (neues Terminal)
+# Frontend
 cd frontend
-npm install
-cp .env.example .env
-npm run dev             # → http://localhost:5174
+npm install && npm run dev    # → http://localhost:5174
+
+# Or both
+docker compose up
 ```
 
 ---
 
-## Struktur
+## Project Structure
 
 ```
 pondex/
-├── CLAUDE.md                    ← AI agent context (auto-loaded by Claude Code)
+├── CLAUDE.md                    ← AI agent instructions
 ├── README.md
-├── docker-compose.yml           ← Startet Backend + Frontend mit einem Befehl
+├── docker-compose.yml
 │
-├── .project-context/            ← Regelwerk für alle AI-Agenten
-│   ├── MASTER.md
-│   └── context/
-│       ├── architecture.md
-│       ├── tech-stack.md
-│       └── coding-guidelines.md
+├── context/                     ← AI agent rules + workspace map
+│   └── MASTER.md
 │
-├── backend/                     ← FastAPI (Python)
-│   ├── main.py                  ← Alle Endpoints
-│   ├── requirements.txt
-│   ├── Dockerfile
-│   └── .env.example
+├── backend/                     ← FastAPI + Yahoo Finance + SEC EDGAR + Groq
+├── frontend/                    ← React + Vite + Tailwind + shadcn (existing app)
 │
-├── frontend/                    ← React + Vite + Tailwind
-│   ├── src/
-│   │   ├── pages/               ← Analysis, Markets, Macro, Ideas, Portfolio, Watchlist
-│   │   ├── components/
-│   │   │   ├── tiles/           ← Analyse-Tiles (Chart, Valuation, DCF, ...)
-│   │   │   └── ui/              ← shadcn — NICHT BEARBEITEN
-│   │   └── lib/
-│   │       ├── fmp.js           ← API-Client → ruft backend/ auf
-│   │       └── storage.js       ← localStorage
-│   ├── Dockerfile
-│   └── .env.example             ← VITE_API_URL
-│
-├── design/
-│   ├── wireframes/              ← 21 ASCII-Wireframes (lesbar für AI-Agenten)
-│   └── reference/
-│       └── pondex-v1.html       ← Original-Prototyp
-│
-└── doc/                         ← Single Source of Truth
-    ├── PROJECT-BRIEF.md
-    ├── PRD.md
-    ├── ROADMAP.md
-    ├── USER-STORIES.md
-    ├── adr/                     ← Architecture Decision Records
-    ├── research/
-    │   ├── survey-wave1.md      ← Survey-Ergebnisse (n=45)
-    │   ├── survey-dashboard.md  ← Dashboard-Doku + Wave 2
-    │   └── user-interviews.md   ← Interview-Guide (Gunnar Leu #1)
-    ├── brand/
-    └── product/
-        ├── strategy.md          ← GTM, ICP, Messaging, Roadmap-Übersicht
-        ├── personas.md
-        └── metrics.md
+├── docs/                        ← Single source of truth — all documentation
+│   ├── CURRENT-TODOS.md         ← Active tasks
+│   ├── STRUCTURE.md             ← Folder rules (permanent)
+│   │
+│   ├── specs/                   ← Feature specs + Lovable build prompts
+│   │   ├── ROADMAP.md           ← Phase 1–7 full roadmap
+│   │   ├── PRD.md
+│   │   ├── APP-DESIGN-SPEC.md          ← Master UI/UX spec (nav, screens, states)
+│   │   ├── EXIT-STRATEGY-SPEC.md
+│   │   ├── LOVABLE-PHASE1-LANDING.md   ← Lovable prompt: Landing Page  ← START HERE
+│   │   ├── LOVABLE-PHASE2-AUTH-SHELL.md
+│   │   └── LOVABLE-PHASE3-LIVE-SCORING-STRIPE.md
+│   │
+│   ├── product/
+│   │   ├── vision.md            ← North Star + Phase 1→7 journey
+│   │   └── strategy.md          ← ICP, positioning, competitive moat
+│   │
+│   ├── research/
+│   │   ├── surveys/             ← Wave 1 (n=56) + Wave 2 (n=35)
+│   │   ├── interviews/          ← Patricia, Gunnar, José transcripts
+│   │   ├── analysis/            ← Research Council reports (22 experts)
+│   │   └── competitors/
+│   │       ├── COMPETITIVE-INTELLIGENCE.md
+│   │       └── revolut-analysis.md   ← Full Revolut product teardown
+│   │
+│   ├── architecture/
+│   │   └── DATA-SOURCES-STRATEGY.md  ← Yahoo→Massive.com migration plan
+│   │
+│   └── regulatory/
+│       ├── REGULATORY-COUNCIL.md
+│       ├── PRIVACY-POLICY-TEMPLATE.md
+│       └── TERMS-OF-SERVICE-TEMPLATE.md
 ```
 
 ---
 
-## Stack
+## Tech Stack
 
-| Layer | Tech | Warum |
+| Layer | Tech | Note |
 |---|---|---|
-| Frontend | React 18 + Vite + Tailwind | `frontend/` |
+| Frontend (existing) | React 18 + Vite + Tailwind + shadcn | `frontend/` |
+| Frontend (Lovable) | React + Vite + Tailwind + Framer Motion | Phase 1 landing page |
 | Backend | Python FastAPI | `backend/` |
-| Marktdaten | Yahoo Finance (`yfinance`) | Kostenlos, kein API-Key |
-| Insider | SEC EDGAR Form 4 | Kostenlos |
-| AI | Groq Llama 3.3 70B | `GROQ_API_KEY` erforderlich |
-| Deploy | Vercel (FE) + Railway (BE) | ~$5/mo |
-
-**Keine bezahlten Daten-APIs. Kein OpenAI. Kein FMP.**
+| Market data | Yahoo Finance (Phase 1) → Massive.com (Phase 2+) | See DATA-SOURCES-STRATEGY.md |
+| Filings | SEC EDGAR XBRL | Free, official |
+| AI | Groq Llama 3.3 70B | `GROQ_API_KEY` required |
+| Auth + DB | Supabase (Phase 2+) | |
+| Payments | Stripe (Phase 2+) | |
+| 3D Globe | react-globe.gl (Phase 3) | World map feature |
 
 ---
 
-## Dokumentation
+## Build Roadmap
 
-| Was | Wo |
+| Phase | What | Status |
+|---|---|---|
+| 1 | Landing Page (Lovable) | 🔄 **Next — start here** |
+| 2 | Auth + Dashboard + Supabase Schema | ⏳ After Phase 1 deployed |
+| 3 | Live Data + Scoring + Stripe + 3D Globe | ⏳ After Phase 2 tested |
+| 4 | SEO, multilingual DE/ES, affiliate | 📋 2027 |
+| 5 | Broker affiliate links | 📋 Future |
+| 6 | White-label broker partner | 📋 Vision |
+| 7 | Licensed investment platform | 📋 Long-term |
+
+---
+
+## Key Documents
+
+| What | Where |
 |---|---|
-| Projektziele & Scope | `doc/PROJECT-BRIEF.md` |
-| User Segments & Features | `doc/PRD.md` |
-| Roadmap | `doc/ROADMAP.md` |
-| User Stories | `doc/USER-STORIES.md` |
-| GTM, ICP, Messaging | `doc/product/strategy.md` |
-| Architektur-Entscheidungen | `doc/adr/` |
-| Survey-Ergebnisse | `doc/research/survey-wave1.md` |
-| Interview-Guide | `doc/research/user-interviews.md` |
-
----
-
-## Status
-
-Active development — Phase 1 MVP · Target: 15 July 2026
+| **START HERE: Lovable Phase 1 prompt** | `docs/specs/LOVABLE-PHASE1-LANDING.md` |
+| Full app UI/UX spec (all screens, nav, states) | `docs/specs/APP-DESIGN-SPEC.md` |
+| Phase 1–7 roadmap | `docs/specs/ROADMAP.md` |
+| Active tasks | `docs/CURRENT-TODOS.md` |
+| Data provider strategy (Yahoo→Massive.com) | `docs/architecture/DATA-SOURCES-STRATEGY.md` |
+| Revolut product teardown | `docs/research/competitors/revolut-analysis.md` |
+| Research Council report | `docs/research/analysis/2026-07-16_research-council-report-internal.md` |
+| Regulatory checklist | `docs/regulatory/REGULATORY-COUNCIL.md` |
 
 ---
 

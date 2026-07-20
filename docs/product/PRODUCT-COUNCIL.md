@@ -16,12 +16,12 @@ The ultimate predictor of startup success. Not: is this useful? But: will a user
 ### Law 2 — Simplicity
 > The product must be explainable in 2–3 sentences. If it requires complex explanation, it signals unclear thinking or no market need.
 
-pondex_ in one sentence: *"Enter a ticker, get a plain-language verdict with every number sourced — in under 60 seconds."* Every new feature must preserve or improve this sentence. If the sentence gets longer, the feature is too complex.
+pondex in one sentence: *"Enter a ticker, get a plain-language verdict with every number sourced — in under 60 seconds."* Every new feature must preserve or improve this sentence. If the sentence gets longer, the feature is too complex.
 
 ### Law 3 — Exponential Market
 > Target small, nascent markets on the verge of exponential growth — not today's TAM.
 
-EU retail investing is growing fast: zero-commission brokers (Trade Republic, Scalable), passive ETF adoption, post-COVID financial awareness. The wave is already forming. pondex_ must ride it, not wait for it to peak.
+EU retail investing is growing fast: zero-commission brokers (Trade Republic, Scalable), passive ETF adoption, post-COVID financial awareness. The wave is already forming. pondex must ride it, not wait for it to peak.
 
 ### Law 4 — Real Trend vs. Fake Trend
 > Real trend: early adopters use it obsessively and tell friends (iPhone, ChatGPT).
@@ -37,13 +37,13 @@ Every product decision shapes the story. Features that are hard to explain in a 
 ### Law 6 — Ambitious Vision
 > It is often easier to start a hard, ambitious startup than a modest one. Large problems attract elite talent and retain motivation.
 
-pondex_ is not a stock screener. It is the research tool that makes every EU retail investor as informed as a professional — without Bloomberg costs. That vision is worth working on. Features that shrink the vision (e.g. adding a ticker tape, gamification, social feed) are distractions.
+pondex is not a stock screener. It is the research tool that makes every EU retail investor as informed as a professional — without Bloomberg costs. That vision is worth working on. Features that shrink the vision (e.g. adding a ticker tape, gamification, social feed) are distractions.
 
 ### Law 7 — Hard Startup Advantage
 > Startups compound advantage by making strategic decisions exponentially faster than incumbents.
 > One "yes" from a customer beats every "no" inside a corporation.
 
-Seeking Alpha, Morningstar, Koyfin cannot pivot overnight. pondex_ can. When Yahoo Finance changes its API — we fix it in hours. When users ask for EU stock coverage — we ship it in days. Speed is the moat. Every Council decision must be made fast — no paralysis.
+Seeking Alpha, Morningstar, Koyfin cannot pivot overnight. pondex can. When Yahoo Finance changes its API — we fix it in hours. When users ask for EU stock coverage — we ship it in days. Speed is the moat. Every Council decision must be made fast — no paralysis.
 
 ---
 
@@ -135,7 +135,7 @@ A single dashboard displaying corrupted financial data destroys user trust perma
 
 ---
 
-## For pondex_ Specifically
+## For pondex Specifically
 
 **Current council composition (solo founder phase):**
 
@@ -147,7 +147,7 @@ A single dashboard displaying corrupted financial data destroys user trust perma
 | Compliance | Pending — consult before any "recommendation" feature |
 | Market Data / Finance | Pending — validate before adding paid data sources |
 
-**Current regulatory boundary:** pondex_ shows algorithmic signals with named sources. It does not recommend buying or selling. This boundary must not be crossed without a Compliance review.
+**Current regulatory boundary:** pondex shows algorithmic signals with named sources. It does not recommend buying or selling. This boundary must not be crossed without a Compliance review.
 
 ---
 
@@ -221,7 +221,7 @@ A single dashboard displaying corrupted financial data destroys user trust perma
 
 ---
 
-## For pondex_ Specifically
+## For pondex Specifically
 
 **Current council composition (solo founder phase):**
 
@@ -233,7 +233,7 @@ A single dashboard displaying corrupted financial data destroys user trust perma
 | Compliance | Pending — consult before any "recommendation" feature |
 | Market Data / Finance | Pending — validate before adding paid data sources |
 
-**Current regulatory boundary:** pondex_ shows algorithmic signals with named sources. It does not recommend buying or selling. This boundary must not be crossed without a Compliance review.
+**Current regulatory boundary:** pondex shows algorithmic signals with named sources. It does not recommend buying or selling. This boundary must not be crossed without a Compliance review.
 
 ---
 

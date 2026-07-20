@@ -45,14 +45,14 @@ Browser (index.html)
 
 | Key | Type | Contents |
 |---|---|---|
-| `pondex_strategy` | JSON object | Strategy profile + score weights |
-| `pondex_theme` | string | `light` / `dark` |
-| `pondex_groq_key` | string | Optional user-provided Groq key |
+| `pondexstrategy` | JSON object | Strategy profile + score weights |
+| `pondextheme` | string | `light` / `dark` |
+| `pondexgroq_key` | string | Optional user-provided Groq key |
 | `sr_portfolio` | JSON array | Portfolio positions |
 | `sr_watchlist` | JSON array | Watchlist tickers |
 | `sr_trades` | JSON array | Trade journal entries |
-| `pondex_theses` | JSON array | Thesis Tracker entries (V1) |
-| `pondex_cache_{key}` | JSON object | API response cache with timestamp |
+| `pondextheses` | JSON array | Thesis Tracker entries (V1) |
+| `pondexcache_{key}` | JSON object | API response cache with timestamp |
 
 ---
 

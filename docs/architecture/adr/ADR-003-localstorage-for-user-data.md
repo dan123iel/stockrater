@@ -16,7 +16,7 @@ pondex needs to persist user state: strategy profile, portfolio holdings, trade 
 
 ## Decision
 
-All user data is stored in the browser's `localStorage` under `pondex_*` prefixed keys. No server, no database, no user accounts in Phase 1–3.
+All user data is stored in the browser's `localStorage` under `pondex*` prefixed keys. No server, no database, no user accounts in Phase 1–3.
 
 ---
 

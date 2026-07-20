@@ -54,7 +54,7 @@ As a self-directed investor, I want to define why I'm buying a stock before I bu
 
 ## Technical Notes
 
-- Stored in localStorage under key `pondex_theses` as array of objects
+- Stored in localStorage under key `pondextheses` as array of objects
 - Each thesis object: `{ ticker, conditions: [{label, operator, value, metric}], createdAt, history: [] }`
 - Condition evaluation runs client-side against latest Yahoo summary data
 - No server needed — all logic in browser

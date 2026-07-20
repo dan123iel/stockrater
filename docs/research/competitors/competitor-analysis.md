@@ -1,4 +1,4 @@
-# pondex_ — Competitor Analysis
+# pondex — Competitor Analysis
 
 _Last updated: 2026-07-03 · Sources: competitor websites, Reddit r/investing / r/eupersonalfinance, Wave 1 survey n=56_
 
@@ -77,7 +77,7 @@ _Last updated: 2026-07-03 · Sources: competitor websites, Reddit r/investing / 
 
 ---
 
-## Pricing Defensibility for pondex_
+## Pricing Defensibility for pondex
 
 Competitive anchor points:
 - Below: Stockanalysis (~$10/mo) — no intelligence layer
@@ -103,7 +103,7 @@ Competitive anchor points:
 
 ## Counterfactual
 
-Without pondex_, EU self-directed value investors continue to:
+Without pondex, EU self-directed value investors continue to:
 - Pay $19–35/mo for noise-heavy platforms with no source attribution
 - Piece together data from 3–5 tools (fragmentation = Wave 1 Cluster 3 pain)
 - Make decisions based on unverified AI summaries or opinion content

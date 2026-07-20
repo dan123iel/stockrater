@@ -24,14 +24,14 @@ This means:
 
 | Key | Data | Purpose | Classification | Retention | Transmitted to |
 |-----|------|---------|---------------|-----------|---------------|
-| `pondex_fmp_key` | FMP API key string | Authenticate FMP requests | Sensitive | Until user clears | FMP API only |
-| `pondex_groq_key` | Groq API key string | Authenticate Groq requests | Sensitive | Until user clears | Groq API only |
-| `pondex_strategy_profile` | `{horizon, risk, focus, scoreWeights}` | Scorecard weight calculation | Personal | Until user clears | Never |
-| `pondex_portfolio` | Array of `{sym, shares, avgPrice, addedAt}` | Portfolio P&L display | Personal-financial | Until user clears | Never |
-| `pondex_trades` | Array of `{sym, date, price, qty, side, reason, scoreAtTime}` | Trade journal | Personal-financial | Until user clears | Never |
-| `pondex_watchlist` | Array of ticker strings | Watchlist display | Personal | Until user clears | Never |
-| `pondex_theme` | `dark` or `light` | UI preference | Non-personal | Until user clears | Never |
-| `pondex_onboarded` | `1` | One-time onboarding flag | Non-personal | Until user clears | Never |
+| `pondexfmp_key` | FMP API key string | Authenticate FMP requests | Sensitive | Until user clears | FMP API only |
+| `pondexgroq_key` | Groq API key string | Authenticate Groq requests | Sensitive | Until user clears | Groq API only |
+| `pondexstrategy_profile` | `{horizon, risk, focus, scoreWeights}` | Scorecard weight calculation | Personal | Until user clears | Never |
+| `pondexportfolio` | Array of `{sym, shares, avgPrice, addedAt}` | Portfolio P&L display | Personal-financial | Until user clears | Never |
+| `pondextrades` | Array of `{sym, date, price, qty, side, reason, scoreAtTime}` | Trade journal | Personal-financial | Until user clears | Never |
+| `pondexwatchlist` | Array of ticker strings | Watchlist display | Personal | Until user clears | Never |
+| `pondextheme` | `dark` or `light` | UI preference | Non-personal | Until user clears | Never |
+| `pondexonboarded` | `1` | One-time onboarding flag | Non-personal | Until user clears | Never |
 | `FMP_CACHE` (in-memory) | FMP API responses | Performance cache (1hr TTL) | Non-personal | Page session only | Never |
 
 ### Data transmitted to third parties

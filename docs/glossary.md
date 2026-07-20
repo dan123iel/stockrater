@@ -1,4 +1,4 @@
-# pondex_ — Glossary
+# pondex — Glossary
 
 > Single source of truth for terminology used across product, code, and docs.
 > When in doubt, use these definitions — do not invent synonyms.
@@ -26,7 +26,7 @@ The main analysis view: Score + Verdict + factor breakdown + source attribution 
 Relevant, actionable information that helps an investor make a decision. The opposite of Noise.
 
 **Noise**
-Irrelevant, misleading, or unverifiable information. pondex_ exists to filter noise from signal.
+Irrelevant, misleading, or unverifiable information. pondex exists to filter noise from signal.
 
 **Fair Value**
 An estimate of what a stock is intrinsically worth, derived from DCF or comparable valuation. Not a price target. Always shown with methodology and source.
@@ -48,10 +48,10 @@ A collection of stocks a user holds or tracks. Phase 2 feature (not in MVP).
 ## User Research Terms
 
 **ICP (Ideal Customer Profile)**
-The specific type of user pondex_ is built for in Phase 1: self-directed value investor, EU/DACH region, previously paid for research tools, churned because noise wasn't solved. Named archetype: Gunnar Leu.
+The specific type of user pondex is built for in Phase 1: self-directed value investor, EU/DACH region, previously paid for research tools, churned because noise wasn't solved. Named archetype: Gunnar Leu.
 
 **WTP (Willingness to Pay)**
-Whether a user would pay for pondex_, and at what price point. Measured via Van Westendorp test (planned post-Interview #1).
+Whether a user would pay for pondex, and at what price point. Measured via Van Westendorp test (planned post-Interview #1).
 
 **Signal/Noise Pain**
 The core problem: existing tools produce too much noise relative to actionable signal. Validated as #1 pain in Wave 1 (n=56).

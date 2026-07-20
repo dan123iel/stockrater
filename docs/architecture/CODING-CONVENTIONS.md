@@ -186,18 +186,18 @@ Tile builders construct HTML strings and assign them to `body.innerHTML`. This i
 
 ## localStorage Keys
 
-All localStorage keys must use the `pondex_` prefix to avoid collisions with other apps:
+All localStorage keys must use the `pondex` prefix to avoid collisions with other apps:
 
 | Key | Type | Purpose |
 |-----|------|---------|
-| `pondex_fmp_key` | string | FMP API key |
-| `pondex_groq_key` | string | Groq API key |
-| `pondex_portfolio` | JSON array | Portfolio holdings |
-| `pondex_trades` | JSON array | Trade journal |
-| `pondex_strategy_profile` | JSON object | Horizon, risk, focus, weights |
-| `pondex_watchlist` | JSON array | Saved tickers |
-| `pondex_theme` | string | `dark` or `light` |
-| `pondex_onboarded` | string | `1` if onboarding completed |
+| `pondexfmp_key` | string | FMP API key |
+| `pondexgroq_key` | string | Groq API key |
+| `pondexportfolio` | JSON array | Portfolio holdings |
+| `pondextrades` | JSON array | Trade journal |
+| `pondexstrategy_profile` | JSON object | Horizon, risk, focus, weights |
+| `pondexwatchlist` | JSON array | Saved tickers |
+| `pondextheme` | string | `dark` or `light` |
+| `pondexonboarded` | string | `1` if onboarding completed |
 
 Do not use legacy keys (`sr_portfolio`, `fmpApiKey`, etc.) in new code. See TECH-DEBT.md TD-006.
 
