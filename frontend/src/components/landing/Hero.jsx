@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { BungeeButton } from './BungeeButton'
 import { C } from '../../lib/colors'
@@ -15,197 +16,228 @@ const rotatingLines = [
   'which source to trust.',
 ]
 
-// Subtle animated background — floating particles
-function ParticleBackground() {
-  const particles = Array.from({ length: 18 }, (_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    size: Math.random() * 1.5 + 0.5,
-    duration: Math.random() * 20 + 15,
-    delay: Math.random() * -20,
-  }))
-
+// Subtle grid overlay
+function GridOverlay() {
   return (
-    <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
-      {particles.map(p => (
-        <motion.div
-          key={p.id}
-          style={{
-            position: 'absolute',
-            left: `${p.x}%`,
-            top: `${p.y}%`,
-            width: `${p.size}px`,
-            height: `${p.size}px`,
-            borderRadius: '50%',
-            background: C[300],
-            opacity: 0.4,
-          }}
-          animate={{
-            y: [0, -40, 0],
-            opacity: [0.2, 0.5, 0.2],
-          }}
-          transition={{
-            duration: p.duration,
-            delay: p.delay,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-      ))}
-      {/* Subtle grid lines */}
-      <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', opacity: 0.04 }}>
-        <defs>
-          <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
-            <path d="M 80 0 L 0 0 0 80" fill="none" stroke={C.black} strokeWidth="0.5" />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#grid)" />
-      </svg>
-    </div>
+    <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', opacity: 0.06, pointerEvents: 'none' }}>
+      <defs>
+        <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+          <path d="M 80 0 L 0 0 0 80" fill="none" stroke="#ffffff" strokeWidth="0.5" />
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#grid)" />
+    </svg>
   )
 }
 
 export default function Hero() {
   const [lineIndex, setLineIndex] = useState(0)
+  const [email, setEmail] = useState('')
+  const navigate = useNavigate()
 
   useEffect(() => {
-    const id = setInterval(() => {
-      setLineIndex(i => (i + 1) % rotatingLines.length)
-    }, 3000)
+    const id = setInterval(() => setLineIndex(i => (i + 1) % rotatingLines.length), 3000)
     return () => clearInterval(id)
   }, [])
 
   return (
     <section style={{
       position: 'relative',
-      paddingTop: '80px',
-      background: C.white,
-      overflow: 'hidden',
       minHeight: '100vh',
       display: 'flex',
       flexDirection: 'column',
+      overflow: 'hidden',
     }}>
 
-      <ParticleBackground />
-
-      {/* Content — vertically centered in viewport */}
+      {/* Background image */}
       <div style={{
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        textAlign: 'center',
-        padding: '0 32px',
-        gap: '20px',
+        position: 'absolute',
+        inset: 0,
+        backgroundImage: 'url(https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1600&q=80&fit=crop)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        filter: 'grayscale(40%)',
+      }} />
+
+      {/* Dark overlay */}
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        background: 'linear-gradient(135deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.45) 60%, rgba(0,0,0,0.55) 100%)',
+      }} />
+
+      <GridOverlay />
+
+      {/* Content */}
+      <div style={{
         position: 'relative',
         zIndex: 1,
+        flex: 1,
+        display: 'grid',
+        gridTemplateColumns: '1fr 420px',
+        gap: '48px',
+        alignItems: 'center',
+        padding: '120px 64px 64px',
+        maxWidth: '1400px',
+        margin: '0 auto',
+        width: '100%',
+        boxSizing: 'border-box',
       }}>
 
-        {/* Line 1 — rotating */}
-        <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-          <p style={{
-            ...S,
-            fontSize: 'clamp(56px, 9vw, 128px)',
-            fontWeight: 500,
-            color: C.black,
-            letterSpacing: '-1.5px',
-            lineHeight: 1.15,
-            margin: 0,
-            display: 'flex',
-            alignItems: 'baseline',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            gap: '0 0.25em',
-            overflow: 'hidden',
-          }}>
-            <span style={{ flexShrink: 0 }}>Still not sure</span>
-            <AnimatePresence mode="wait">
-              <motion.span
-                key={lineIndex}
-                style={{ display: 'inline-block', whiteSpace: 'nowrap', color: C[500] }}
-                initial={{ y: -30, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: 30, opacity: 0 }}
-                transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-              >
-                {rotatingLines[lineIndex]}
-              </motion.span>
-            </AnimatePresence>
-          </p>
+        {/* Left — Headline */}
+        <div>
+          {/* Rotating line */}
+          <div style={{ overflow: 'hidden', marginBottom: '0' }}>
+            <motion.p style={{
+              ...S,
+              fontSize: 'clamp(48px, 7vw, 108px)',
+              fontWeight: 500,
+              color: 'rgba(255,255,255,0.5)',
+              letterSpacing: '-2px',
+              lineHeight: 1.05,
+              margin: 0,
+            }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              Still not sure
+            </motion.p>
+            <div style={{ height: 'clamp(52px, 7.5vw, 116px)', overflow: 'hidden' }}>
+              <AnimatePresence mode="wait">
+                <motion.p
+                  key={lineIndex}
+                  style={{
+                    ...S,
+                    fontSize: 'clamp(48px, 7vw, 108px)',
+                    fontWeight: 500,
+                    color: 'rgba(255,255,255,0.5)',
+                    letterSpacing: '-2px',
+                    lineHeight: 1.05,
+                    margin: 0,
+                  }}
+                  initial={{ y: '100%', opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: '-100%', opacity: 0 }}
+                  transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  {rotatingLines[lineIndex]}
+                </motion.p>
+              </AnimatePresence>
+            </div>
+          </div>
+
+          {/* Main headline */}
+          <motion.p
+            style={{
+              ...S,
+              fontSize: 'clamp(48px, 7vw, 108px)',
+              fontWeight: 500,
+              color: C.white,
+              letterSpacing: '-2px',
+              lineHeight: 1.05,
+              margin: '0 0 32px',
+            }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+          >
+            <span style={{
+              background: C.white,
+              color: C.black,
+              padding: '0.02em 0.16em',
+              borderRadius: '6px',
+            }}>pondex_</span>
+            {' '}gives you<br />one verdict.
+          </motion.p>
+
+          <motion.div
+            style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' }}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.5 }}
+          >
+            <a href="#demo" style={{ ...S, fontSize: '15px', color: 'rgba(255,255,255,0.6)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              How it works ↓
+            </a>
+          </motion.div>
+
+          {/* Trust line */}
+          <motion.p
+            style={{ ...M, fontSize: '10px', color: 'rgba(255,255,255,0.35)', letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: '48px' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.7 }}
+          >
+            No account required · Free forever · Every source cited
+          </motion.p>
         </div>
 
-        {/* Line 2 — pondex_ verdict */}
-        <motion.p
+        {/* Right — Signup Card */}
+        <motion.div
           style={{
-            ...S,
-            fontSize: 'clamp(56px, 9vw, 128px)',
-            fontWeight: 500,
-            letterSpacing: '-1.5px',
-            lineHeight: 1.1,
-            margin: 0,
+            background: 'rgba(255,255,255,0.96)',
+            backdropFilter: 'blur(16px)',
+            borderRadius: '24px',
+            padding: '36px',
+            boxShadow: '0 24px 64px rgba(0,0,0,0.3)',
           }}
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.25, duration: 0.6 }}
+          initial={{ opacity: 0, x: 32 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
         >
-          <span style={{
-            background: C.black,
-            color: C.white,
-            display: 'inline',
-            WebkitBoxDecorationBreak: 'clone',
-            boxDecorationBreak: 'clone',
-            padding: '0.04em 0.18em',
-            borderRadius: '6px',
-          }}>
-            pondex_
-          </span>
-          {' '}
-          <span style={{ color: C.black }}>gives you one verdict.</span>
-        </motion.p>
+          <p style={{ ...S, fontSize: '22px', fontWeight: 500, color: C.black, marginBottom: '6px', letterSpacing: '-0.5px' }}>
+            Start for free.
+          </p>
+          <p style={{ ...S, fontSize: '14px', color: C[400], marginBottom: '28px' }}>
+            Get your first verdict in 60 seconds.
+          </p>
 
-        {/* CTAs */}
-        <motion.div
-          style={{ display: 'flex', gap: '32px', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center', marginTop: '8px' }}
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.45, duration: 0.5 }}
-        >
-          <BungeeButton href="/signup">Analyse a stock — it's free</BungeeButton>
-          <a href="#how-it-works" style={{ ...S, fontSize: '16px', color: C[400], textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            How it works ↓
-          </a>
-        </motion.div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <input
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              placeholder="your@email.com"
+              style={{
+                background: C[100],
+                border: `1px solid ${C[200]}`,
+                borderRadius: '12px',
+                padding: '13px 16px',
+                ...S, fontSize: '15px',
+                color: C.black,
+                outline: 'none',
+                width: '100%',
+                boxSizing: 'border-box',
+              }}
+            />
+            <BungeeButton href="/signup" style={{ width: '100%' }}>
+              Create free account
+            </BungeeButton>
+          </div>
 
-        {/* Trust line */}
-        <motion.p
-          style={{ ...M, fontSize: '10px', color: C[300], letterSpacing: '0.1em', textTransform: 'uppercase' }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.65, duration: 0.5 }}
-        >
-          No account required · Free forever · Every source cited
-        </motion.p>
+          <div style={{ height: '1px', background: C[200], margin: '20px 0' }} />
 
-        {/* Scroll indicator */}
-        <motion.div
-          style={{ position: 'absolute', bottom: '32px', left: '50%', transform: 'translateX(-50%)' }}
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-        >
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M5 8l5 5 5-5" stroke={C[300]} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+          <p style={{ ...S, fontSize: '14px', color: C[400], textAlign: 'center' }}>
+            Already have an account?{' '}
+            <a href="/login" onClick={e => { e.preventDefault(); navigate('/login') }}
+              style={{ color: C.black, fontWeight: 500, textDecoration: 'none' }}>
+              Log in →
+            </a>
+          </p>
+
+          <p style={{ ...M, fontSize: '9px', color: C[300], textTransform: 'uppercase', letterSpacing: '0.08em', marginTop: '20px', textAlign: 'center' }}>
+            No credit card required · Cancel anytime
+          </p>
         </motion.div>
       </div>
 
       {/* Bottom bar */}
-      <div style={{ position: 'relative', zIndex: 1, padding: '0 32px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div style={{ display: 'flex', gap: '8px', ...M, fontSize: '13px', color: C[400] }}>
+      <div style={{ position: 'relative', zIndex: 1, padding: '0 64px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '8px', ...M, fontSize: '13px', color: 'rgba(255,255,255,0.35)' }}>
           <span>(</span><span>EUROPE</span><span>)</span>
         </div>
-        <div style={{ display: 'flex', gap: '12px', ...M, fontSize: '13px', color: C[400] }}>
+        <div style={{ display: 'flex', gap: '12px', ...M, fontSize: '13px', color: 'rgba(255,255,255,0.35)' }}>
           <span>LI</span><span>/</span><span>GH</span><span>/</span><span>X</span>
         </div>
       </div>
