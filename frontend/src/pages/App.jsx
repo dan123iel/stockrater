@@ -5,80 +5,57 @@ import { C } from '../lib/colors'
 const S = { fontFamily: 'Interdisplay, Inter, Arial, sans-serif' }
 const M = { fontFamily: 'Chivo Mono, monospace' }
 
-// ── Demo data ────────────────────────────────────────────────────────────────
-const STOCKS = {
-  AAPL: {
-    name: 'Apple Inc.', exchange: 'NASDAQ', price: '$182.40',
-    score: 78, verdict: 'HOLD', label: 'Good Fit', color: '#16a34a',
-    summary: 'Apple maintains strong fundamentals with a 44% gross margin and $74B in free cash flow. Valuation is fair but not cheap at P/E 28x. Insider buying remains healthy.',
-    factors: [
-      { name: 'Fundamentals', score: 82, explanation: 'Revenue $383B, gross margin 44.1%. FCF yield strong at 4.2%.', source: 'Yahoo Finance', date: 'TTM' },
-      { name: 'Valuation',    score: 68, explanation: 'P/E 28x — below sector avg 34x, but not cheap. EV/EBITDA at 21x.', source: 'Yahoo Finance', date: 'TTM' },
-      { name: 'Management',   score: 91, explanation: 'Insider buying ratio 3:1 over selling. Buyback program active.', source: 'SEC EDGAR', date: 'Form 4' },
-      { name: 'Moat',         score: 85, explanation: 'Ecosystem lock-in strong. Services revenue growing +16% YoY.', source: 'Yahoo Finance', date: 'TTM' },
-      { name: 'Risk',         score: 72, explanation: 'Beta 1.2 — moderate volatility. China exposure ~20% revenue.', source: 'Yahoo Finance', date: 'TTM' },
-    ],
-  },
-  NVDA: {
-    name: 'NVIDIA Corp.', exchange: 'NASDAQ', price: '$890.12',
-    score: 71, verdict: 'HOLD', label: 'Good Fit', color: '#16a34a',
-    summary: 'NVIDIA is riding the AI wave with +122% YoY revenue growth and 72% gross margins. However, the P/E of 68x prices in significant future growth — any miss will hurt.',
-    factors: [
-      { name: 'Fundamentals', score: 94, explanation: 'Revenue +122% YoY. Gross margin 72.7% — exceptional.', source: 'Yahoo Finance', date: 'TTM' },
-      { name: 'Valuation',    score: 38, explanation: 'P/E 68x — elevated. Priced for perfection, limited margin of safety.', source: 'Yahoo Finance', date: 'TTM' },
-      { name: 'Management',   score: 88, explanation: 'Jensen Huang continues to execute. R&D reinvestment disciplined.', source: 'SEC EDGAR', date: 'Form 4' },
-      { name: 'Moat',         score: 91, explanation: 'CUDA ecosystem near-impossible to replicate. Data center dominance.', source: 'Yahoo Finance', date: 'TTM' },
-      { name: 'Risk',         score: 52, explanation: 'Beta 1.68 — high volatility. Export control risks to China market.', source: 'Yahoo Finance', date: 'TTM' },
-    ],
-  },
-  MSFT: {
-    name: 'Microsoft Corp.', exchange: 'NASDAQ', price: '$415.22',
-    score: 84, verdict: 'BUY', label: 'Strong Fit', color: '#16a34a',
-    summary: 'Microsoft combines quality fundamentals with strong AI monetization through Copilot. Operating margin of 44% and cloud growth of 29% YoY make this a rare quality compounder.',
-    factors: [
-      { name: 'Fundamentals', score: 95, explanation: 'Operating margin 44%, FCF $74B. One of the highest quality businesses globally.', source: 'SEC EDGAR', date: 'FY2024' },
-      { name: 'Valuation',    score: 71, explanation: 'P/E 32x — fair for this quality. Growth justifies premium.', source: 'Yahoo Finance', date: 'TTM' },
-      { name: 'Management',   score: 90, explanation: 'Satya Nadella era track record exceptional. AI-first pivot executing.', source: 'SEC EDGAR', date: 'Form 4' },
-      { name: 'Moat',         score: 96, explanation: 'Azure cloud +29% YoY. Office 365 sticky. GitHub/LinkedIn moats.', source: 'Yahoo Finance', date: 'TTM' },
-      { name: 'Risk',         score: 78, explanation: 'Beta 0.9 — lower volatility. Regulatory scrutiny is a minor overhang.', source: 'Yahoo Finance', date: 'TTM' },
-    ],
-  },
-  TSLA: {
-    name: 'Tesla Inc.', exchange: 'NASDAQ', price: '$238.10',
-    score: 42, verdict: 'SELL', label: 'Weak Fit', color: '#dc2626',
-    summary: 'Tesla faces margin compression (-5pp YoY) while trading at P/E 78x. The EV market is getting crowded. The valuation requires near-perfect execution with significant upside priced in.',
-    factors: [
-      { name: 'Fundamentals', score: 52, explanation: 'Margin compression -5pp YoY. Revenue growth slowing to +8%.', source: 'SEC EDGAR', date: 'FY2024' },
-      { name: 'Valuation',    score: 18, explanation: 'P/E 78x — extreme premium. Priced as tech, fundamentals are auto.', source: 'Yahoo Finance', date: 'TTM' },
-      { name: 'Management',   score: 44, explanation: 'Elon distraction risk elevated. Insider net selling trend.', source: 'SEC EDGAR', date: 'Form 4' },
-      { name: 'Moat',         score: 58, explanation: 'Supercharger network valuable, but BYD + legacy OEMs closing gap.', source: 'Yahoo Finance', date: 'TTM' },
-      { name: 'Risk',         score: 22, explanation: 'Beta 2.4 — very high volatility. Sentiment-driven stock.', source: 'Yahoo Finance', date: 'TTM' },
-    ],
-  },
-  GOOGL: {
-    name: 'Alphabet Inc.', exchange: 'NASDAQ', price: '$178.85',
-    score: 76, verdict: 'BUY', label: 'Good Fit', color: '#16a34a',
-    summary: 'Google Search remains structurally dominant while Cloud is growing 28% YoY. Attractive P/E of 22x for a business of this quality. AI integration is proceeding well.',
-    factors: [
-      { name: 'Fundamentals', score: 88, explanation: 'Search +14%, Cloud +28% YoY. Operating margin expanding.', source: 'SEC EDGAR', date: 'FY2024' },
-      { name: 'Valuation',    score: 82, explanation: 'P/E 22x — attractive relative to quality and growth rate.', source: 'Yahoo Finance', date: 'TTM' },
-      { name: 'Management',   score: 76, explanation: 'Sundar Pichai steady execution. Cost discipline improving.', source: 'SEC EDGAR', date: 'Form 4' },
-      { name: 'Moat',         score: 91, explanation: 'Search monopoly + Android + YouTube = unparalleled data moat.', source: 'Yahoo Finance', date: 'TTM' },
-      { name: 'Risk',         score: 68, explanation: 'Beta 1.1. EU antitrust risk ongoing. AI competition from OpenAI real.', source: 'Yahoo Finance', date: 'TTM' },
-    ],
-  },
-  AMZN: {
-    name: 'Amazon.com Inc.', exchange: 'NASDAQ', price: '$192.45',
-    score: 65, verdict: 'HOLD', label: 'Moderate Fit', color: '#d97706',
-    summary: 'AWS growing 17% and is the profit engine. Retail margins recovering. P/E of 42x reflects high expectations — quality business but not cheap.',
-    factors: [
-      { name: 'Fundamentals', score: 78, explanation: 'AWS revenue +17% YoY. Retail operating income recovering strongly.', source: 'SEC EDGAR', date: 'Q4 2024' },
-      { name: 'Valuation',    score: 48, explanation: 'P/E 42x — reflects high expectations. Needs continued execution.', source: 'Yahoo Finance', date: 'TTM' },
-      { name: 'Management',   score: 82, explanation: 'Andy Jassy cost discipline delivered. Operational leverage improving.', source: 'SEC EDGAR', date: 'Form 4' },
-      { name: 'Moat',         score: 88, explanation: 'Prime ecosystem sticky. AWS #1 cloud provider. Logistics network.', source: 'Yahoo Finance', date: 'TTM' },
-      { name: 'Risk',         score: 58, explanation: 'Beta 1.4. EU regulatory exposure. Antitrust scrutiny in US.', source: 'SEC EDGAR', date: '10-K' },
-    ],
-  },
+const API = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+
+// ── API call ─────────────────────────────────────────────────────────────────
+async function fetchScore(ticker) {
+  const [scoreRes, quoteRes] = await Promise.all([
+    fetch(`${API}/score/${ticker}`),
+    fetch(`${API}/quote/${ticker}`),
+  ])
+  if (!scoreRes.ok) throw new Error(`Ticker "${ticker}" not found`)
+  const score = await scoreRes.json()
+  const quote = quoteRes.ok ? await quoteRes.json() : {}
+
+  const s100 = Math.round(Math.min(score.fitScore * 20, 100))
+  const verdict = s100 >= 70 ? 'BUY' : s100 >= 50 ? 'HOLD' : 'SELL'
+  const label = s100 >= 80 ? 'Strong Fit' : s100 >= 65 ? 'Good Fit' : s100 >= 45 ? 'Moderate Fit' : 'Weak Fit'
+
+  const FACTOR_NAMES = {
+    ratios: 'Fundamentals', moat: 'Moat',
+    esgRisk: 'Risk', valuation: 'Valuation', management: 'Management',
+  }
+
+  const factors = Object.entries(score.scores || {})
+    .filter(([, v]) => v !== null && v !== undefined)
+    .map(([key, val]) => {
+      const factorScore = Math.round(val * 20)
+      const sourceEntries = (score.sources || []).find(s => s.factor === key)?.metrics || []
+      const topSource = sourceEntries[0]
+      return {
+        name: FACTOR_NAMES[key] || key,
+        score: factorScore,
+        explanation: (score.explanations || {})[key] || '',
+        source: topSource?.source?.split('–')[0]?.trim() || 'Yahoo Finance',
+        date: topSource?.source?.split('–')[1]?.trim() || 'TTM',
+      }
+    })
+
+  const price = quote.price ? `$${parseFloat(quote.price).toFixed(2)}` : '—'
+
+  return {
+    ticker: ticker.toUpperCase(),
+    name: quote.companyName || ticker.toUpperCase(),
+    exchange: quote.exchangeShortName || '',
+    price,
+    score: s100,
+    verdict,
+    label,
+    color: s100 >= 70 ? '#16a34a' : s100 >= 45 ? '#d97706' : '#dc2626',
+    summary: score.explanations?.ratios || '',
+    factors,
+    confidence: score.confidence,
+  }
 }
 
 function verdictColor(v) {
@@ -151,18 +128,20 @@ export default function App() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  const analyse = (ticker) => {
+  const analyse = async (ticker) => {
     const key = ticker.toUpperCase().trim()
     if (!key) return
     setError(null)
-    const data = STOCKS[key]
-    if (!data) {
-      setError(`"${key}" not in demo data. Try: ${Object.keys(STOCKS).join(', ')}`)
-      return
-    }
     setLoading(true)
     setResult(null)
-    setTimeout(() => { setResult({ ticker: key, ...data }); setLoading(false) }, 600)
+    try {
+      const data = await fetchScore(key)
+      setResult(data)
+    } catch (e) {
+      setError(e.message || `Could not fetch data for "${key}"`)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -178,7 +157,7 @@ export default function App() {
           </svg>
           <span style={{ ...M, fontSize: '12px', color: C[400], letterSpacing: '0.06em' }}>pondex_</span>
         </a>
-        <span style={{ ...M, fontSize: '10px', color: C[300], textTransform: 'uppercase', letterSpacing: '0.1em', border: `1px solid ${C[200]}`, borderRadius: '50px', padding: '3px 10px' }}>DEMO</span>
+        <span style={{ ...M, fontSize: '10px', color: C[300], textTransform: 'uppercase', letterSpacing: '0.1em', border: `1px solid ${C[200]}`, borderRadius: '50px', padding: '3px 10px' }}>BETA</span>
       </header>
 
       {/* Main */}
@@ -211,7 +190,7 @@ export default function App() {
 
           {/* Quick picks */}
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-            {Object.keys(STOCKS).map(t => (
+            {['AAPL', 'NVDA', 'MSFT', 'TSLA', 'GOOGL', 'AMZN', 'SAP', 'ASML'].map(t => (
               <button key={t} onClick={() => { setInput(t); analyse(t) }}
                 style={{ background: 'transparent', border: `1px solid ${C[200]}`, borderRadius: '8px', padding: '5px 12px', ...M, fontSize: '11px', color: C[400], cursor: 'pointer', transition: 'all 0.15s' }}
                 onMouseEnter={e => { e.target.style.borderColor = C.black; e.target.style.color = C.black }}
@@ -247,7 +226,7 @@ export default function App() {
                     </h2>
                     <p style={{ ...M, fontSize: '14px', color: C[400] }}>{result.price}</p>
                   </div>
-                  <span style={{ ...M, fontSize: '9px', color: C[300], border: `1px solid ${C[200]}`, borderRadius: '50px', padding: '3px 10px', textTransform: 'uppercase', flexShrink: 0, marginTop: '4px' }}>DEMO</span>
+                  <span style={{ ...M, fontSize: '9px', color: C[300], border: `1px solid ${C[200]}`, borderRadius: '50px', padding: '3px 10px', textTransform: 'uppercase', flexShrink: 0, marginTop: '4px' }}>BETA</span>
                 </div>
               </div>
 
