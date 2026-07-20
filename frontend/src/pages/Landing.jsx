@@ -1,12 +1,11 @@
 import LandingNav from '../components/landing/LandingNav'
 import Hero from '../components/landing/Hero'
-import ScoreCardSection from '../components/landing/ScoreCardSection'
-import Placeholder from '../components/landing/Placeholder'
-import Testimonials from '../components/landing/Testimonials'
-import HowItWorks from '../components/landing/HowItWorks'
 import ProductDemo from '../components/landing/ProductDemo'
+import HowItWorks from '../components/landing/HowItWorks'
+import Placeholder from '../components/landing/Placeholder'
 import Differentiation from '../components/landing/Differentiation'
 import FeatureShowcase from '../components/landing/FeatureShowcase'
+import Testimonials from '../components/landing/Testimonials'
 import Pricing from '../components/landing/Pricing'
 import FAQ from '../components/landing/FAQ'
 import FinalCTA from '../components/landing/FinalCTA'
@@ -17,72 +16,61 @@ export default function Landing() {
     <div className="min-h-screen">
       <LandingNav />
 
-      {/* 1. Hero — clean fullscreen, Headline + CTA + Partikel */}
+      {/* 1. Hero — clean fullscreen, Headline + CTA */}
       <Hero />
 
-      {/* 2. "Aha"-Moment — Score Card mit Gauge animiert rein */}
-      <ScoreCardSection />
+      {/* 2. Aha-Moment — Demo mit AAPL vorgeladen, sofort interaktiv */}
+      <ProductDemo />
 
-      {/* ── PLACEHOLDER: Buy/Hold/Sell Verdict Banner ─────────────────────────
-          Research: José sagte er vertraut Gemini wegen Klartextempfehlung.
-          Zeigen: große klare Aussage "HOLD · 78/100 · Good Fit"
-          Format: Fullwidth Banner, schwarz, große Typografie
-          ──────────────────────────────────────────────────────────────────── */}
+      {/* 3. How it works — 3 Schritte, erklärt den Prozess */}
+      <HowItWorks />
+
+      {/* 4. PLACEHOLDER: Verdict Banner — Buy/Hold/Sell Erklärung
+          Jetzt sinnvoll: User hat Demo gesehen + Prozess verstanden
+          Research: José — Klartextempfehlung ist der Conversion-Trigger */}
       <Placeholder
         id="verdict-banner"
-        title="Buy / Hold / Sell — Plain Verdict Banner"
-        why="José Interview: vertraut Gemini wegen Klartextempfehlung. Research Council MVP-Requirement M1: verdict muss Richtung (Buy/Hold/Sell) zeigen, nicht nur Zahl."
+        title="Buy / Hold / Sell — Was bedeutet das für dich?"
+        why="José Interview: vertraut Gemini wegen Klartextempfehlung. Nach Demo + HowItWorks verstehen User jetzt was der Verdict bedeutet."
         height="160px"
       />
 
-      {/* 3. Social Proof — Testimonials aus echten Interviews */}
-      <Testimonials />
+      {/* 5. Differentiation — Warum nicht Yahoo/ChatGPT/Bloomberg */}
+      <Differentiation />
 
-      {/* 4. How it works — 3 Schritte */}
-      <HowItWorks />
+      {/* 6. Features — Was bekommt man konkret */}
+      <FeatureShowcase />
 
-      {/* ── PLACEHOLDER: Comparison Feature Teaser ────────────────────────────
-          Research: stärkste positive Reaktion in ALLEN User-Tests (Gunnar, Patricia, José).
-          José: "I really like the comparison part. That's how you actually make a decision."
-          Zeigen: 2 Aktien nebeneinander + Sektor-Durchschnitt als dritte Spalte
-          Format: Interaktive Demo oder Screenshot, prominent platziert
-          ──────────────────────────────────────────────────────────────────── */}
+      {/* 7. PLACEHOLDER: Comparison Feature Teaser
+          Research: stärkste Reaktion aller 3 Interviews
+          José: "That's how you actually make a decision." */}
       <Placeholder
         id="comparison-teaser"
-        title="Peer Comparison Feature — Side-by-Side Demo"
-        why="Stärkste Reaktion aller 3 Interviews + Wave 2. Zeige AAPL vs MSFT + Sektor-Average. Das ist das Killer-Feature für den Pro-Upgrade-Trigger."
-        height="300px"
+        title="Peer Comparison — AAPL vs. MSFT vs. Sector Average"
+        why="Stärkste positive Reaktion aller User-Tests. Pro-Feature Teaser: 2 Stocks + Sektor-Durchschnitt nebeneinander."
+        height="280px"
       />
 
-      {/* 5. Interaktive Demo — Ticker eingeben */}
-      <ProductDemo />
-
-      {/* ── PLACEHOLDER: Investor-Profil Erklärung ────────────────────────────
-          Research: Score ist zu deiner Strategie gewichtet (Value/Growth/Dividend/Momentum).
-          Das steht nirgends auf der LP — aber ist ein Differenziator.
-          Zeigen: 4 Investor-Typen mit je einem anderen Score-Ergebnis für dieselbe Aktie
-          Format: Vergleichs-Grid oder Tab-Auswahl
-          ──────────────────────────────────────────────────────────────────── */}
+      {/* 8. PLACEHOLDER: Investor-Profil Erklärung
+          Research: Patricia — "Das Tool muss mich kennen"
+          Score wird zu deiner Strategie gewichtet */}
       <Placeholder
         id="investor-profile"
         title="Dein Score — gewichtet nach deiner Strategie"
-        why="Differenziator: Value-Investor bekommt anderen Score als Growth-Investor für dieselbe Aktie. Patricia: 'Das Tool muss mich kennen.' Noch nie auf der LP kommuniziert."
-        height="240px"
+        why="Differenziator: Value-Investor bekommt anderen Score als Growth-Investor. Patricia: das Tool muss mich kennen."
+        height="220px"
       />
 
-      {/* 6. Differenzierung — vs. Yahoo / ChatGPT / Bloomberg */}
-      <Differentiation />
+      {/* 9. Testimonials — Social Proof (jetzt nach Features: User versteht was er sieht) */}
+      <Testimonials />
 
-      {/* 7. Features */}
-      <FeatureShowcase />
-
-      {/* 8. Pricing */}
+      {/* 10. Pricing */}
       <Pricing />
 
-      {/* 9. FAQ */}
+      {/* 11. FAQ */}
       <FAQ />
 
-      {/* 10. Final CTA */}
+      {/* 12. Final CTA */}
       <FinalCTA />
 
       <LandingFooter />
