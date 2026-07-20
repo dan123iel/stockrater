@@ -1,9 +1,115 @@
 # pondex — Current To-Dos
 
-_Last updated: 2026-07-16 · Based on: Wave 1 (n=56) + Wave 2 (n=35) + 3 Interviews + Research Council Report (22 Experten, 13 Phasen)_
+_Last updated: 2026-07-20 · Phase A + B abgeschlossen_
 
-> This document is the single source of truth for active tasks.
-> Rules: Nothing gets built that isn't listed here. Nothing gets added without survey or interview evidence.
+> Single source of truth für aktive Tasks.
+> Roadmap: `docs/specs/ROADMAP.md` · Website-Struktur: `docs/specs/WEBSITE-STRUKTUR.md`
+
+---
+
+## ✅ Phase A — Landing Page (Done: 2026-07-20)
+
+- [x] Hero: clean fullscreen + Partikel-Hintergrund ✅
+- [x] ScoreCardSection: Gauge + BUY/HOLD/SELL animiert ✅
+- [x] Testimonials: Stacking-Cards G/P/J ✅
+- [x] HowItWorks, ProductDemo, Differentiation, Features ✅
+- [x] Pricing: Free + €4.99 Pro ✅
+- [x] FAQ + FinalCTA + Footer ✅
+- [x] Meta Tags + Open Graph ✅
+- [x] GitHub Push → Live ✅
+- [x] Design-System: Grayscale-Palette + colors.js ✅
+- [x] Bungee-Stil Nav (Hamburger Overlay) ✅
+
+---
+
+## ✅ Phase B — MVP App (Done: 2026-07-20)
+
+- [x] `/app` Route im Bungee-Stil ✅
+- [x] Ticker-Input + Quick-Picks ✅
+- [x] Score 0–100 + Gauge-Animation ✅
+- [x] Buy/Hold/Sell Badge (grün/amber/rot) ✅
+- [x] Factor Breakdown mit Erklärung + Quelle ✅
+- [x] Demo-Daten: AAPL, NVDA, MSFT, TSLA, GOOGL, AMZN ✅
+- [x] Old Frontend archiviert in `_archive/` ✅
+- [x] GitHub Push ✅
+
+---
+
+## 🔴 LP Placeholders — Diese Woche
+
+### LP-P1: Buy/Hold/Sell Verdict Banner
+**Evidence:** José Interview — vertraut Gemini wegen Klartextempfehlung
+- [ ] Fullwidth Banner nach ScoreCardSection
+- [ ] Große Typografie: „HOLD · 78/100 · Good Fit"
+- [ ] Schwarz, animiert rein beim Scrollen
+
+### LP-P2: Comparison Feature Teaser
+**Evidence:** Stärkste Reaktion aller 3 Interviews
+- [ ] 2 Aktien nebeneinander + Sektor-Average
+- [ ] Mockup-Daten: AAPL vs. MSFT
+- [ ] Platzierung: nach HowItWorks
+
+### LP-P3: Investor-Profil Erklärung
+**Evidence:** Patricia — „Das Tool muss mich kennen"
+- [ ] 4 Investor-Typen → je anderer Score für gleiche Aktie
+- [ ] Kurze visuelle Darstellung
+
+---
+
+## 🟡 Phase C — Echtes Backend (Next: August 2026)
+
+- [ ] Railway Backend live testen (FastAPI läuft lokal)
+- [ ] Frontend: API-Call zu Railway statt Demo-Daten in App.jsx
+- [ ] Fehlerhandling: Ticker not found, API-Timeout
+- [ ] Sentry DSN auf Railway setzen
+- [ ] Smoke Test: AAPL → Score ~78 (wie Demo)
+
+---
+
+## ⬜ Phase D — Auth (August 2026)
+
+- [ ] Supabase Auth (Email + Google)
+- [ ] `/login` + `/signup` Seiten im Bungee-Stil
+- [ ] 5-Fragen Onboarding (Strategie, Risiko, Horizont, Portfoliogröße, WHY)
+- [ ] Score gewichtet nach User-Strategie
+- [ ] Freemium Gate: 1 Verdict/Tag zählen
+- [ ] Privacy Policy live
+
+---
+
+## ⬜ Phase E — Pro Tier + Stripe (Sept–Okt 2026)
+
+- [ ] Stripe (€4.99/Monat, €49.99/Jahr)
+- [ ] Free Tier Gate + Upgrade-Prompt
+- [ ] Comparison Feature (Pro-only)
+- [ ] Paywall Disclaimer
+
+---
+
+## ⬜ Regulatory (vor Phase D)
+
+- [ ] Jurisdiktion klären → `docs/regulatory/REGULATORY.md`
+- [ ] Privacy Policy → `frontend/public/privacy.html`
+- [ ] Terms of Service → `frontend/public/terms.html`
+- [ ] EU AI Act Assessment
+
+---
+
+## 📍 Wo alles liegt
+
+| Topic | File |
+|---|---|
+| Roadmap | `docs/specs/ROADMAP.md` |
+| Website-Struktur | `docs/specs/WEBSITE-STRUKTUR.md` |
+| Landing Page Playbook | `docs/specs/LANDING-PAGE-PLAYBOOK.md` |
+| Website Council | `docs/product/WEBSITE-COUNCIL.md` |
+| Farb-Tokens | `frontend/src/lib/colors.js` |
+| MVP App | `frontend/src/pages/App.jsx` |
+| Landing Page | `frontend/src/pages/Landing.jsx` |
+| Altes Frontend | `frontend/src/_archive/` |
+| Research Interviews | `docs/research/interviews/` |
+| Survey Analysen | `docs/research/surveys/` |
+
 
 ---
 

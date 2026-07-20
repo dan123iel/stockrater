@@ -1,147 +1,176 @@
 # pondex — Roadmap
-_Last updated: 2026-07-20 · Survey Wave 1 (n=56) + Wave 2 (n=35) + 3 depth interviews + Research Council (22 Experten) + Deep Research (107 Agents)_
+_Last updated: 2026-07-20 · Stand nach Phase A + MVP App_
 
 ---
 
 ## Gesamtüberblick
 
-```
-Phase A — Landing Page fertig        → Juli 2026      (diese Woche)
-Phase B — App-Shell mit Demo         → August 2026    (nächste Woche)
-Phase C — Auth (Login/Signup)        → August 2026    (Ende August)
-Phase D — Echtes Backend + Daten     → Sept 2026
-Phase E — Pro Tier + Stripe          → Sept–Okt 2026
-Phase F — Growth + SEO               → Q4 2026
-```
+| Phase | Was | Status | Timeline |
+|---|---|---|---|
+| **A** | Landing Page fertigstellen | ✅ Done | 2026-07-20 |
+| **B** | MVP App (/app) mit Demo-Daten | ✅ Done | 2026-07-20 |
+| **C** | Echtes Backend + Live-Daten | 🟡 Next | Aug 2026 |
+| **D** | Auth (Login / Signup / Onboarding) | ⬜ Planned | Aug 2026 |
+| **E** | Pro Tier + Stripe | ⬜ Planned | Sept–Okt 2026 |
+| **F** | Growth + SEO | ⬜ Planned | Q4 2026 |
 
 ---
 
-## Phase A — Landing Page fertigstellen
-**Ziel:** Etwas Echtes das man Menschen zeigen kann. User Journey: Landing → App.
-**Timeline:** 20.–22. Juli 2026 (2–3 Tage)
-**Status:** 🟡 In Progress
+## ✅ Phase A — Landing Page (Done: 2026-07-20)
 
-### Architektur
-```
-/ (Landing Page)
-├── Hero: "Still not sure where to invest"
-├── Testimonials (Social Proof — direkt nach Hero)
-├── How it Works (3 Schritte)
-├── ProductDemo (Ticker eingeben → Demo-Score)
-├── Differentiation (vs Yahoo/ChatGPT/Bloomberg)
-├── Features
-├── Pricing
-├── FAQ
-├── Final CTA
-└── Footer
+**Live:** https://dan123iel.github.io/stockrater/
+**Commit:** `cd2882c`, `5009f03`
 
-CTAs:
-├── "Analyse a stock — it's free" → scrollt zu #demo
-├── "Log in →" → /app  (vorerst direkt, kein Auth)
-└── "Sign up" → /app   (vorerst direkt, kein Auth)
-```
+### Was gebaut wurde
+- Hero: clean fullscreen, Headline rotiert, Partikel-Hintergrund, Scroll-Indikator
+- ScoreCardSection: Gauge (grün/gelb/rot) + Score + HOLD/BUY/SELL animiert rein
+- Testimonials: Stacking-Cards Scroll-Animation (G/P/J Initialen-Avatare)
+- HowItWorks: 3 Schritte (001/002/003)
+- ProductDemo: interaktiver Ticker-Input mit Demo-Scores
+- Differentiation: Yahoo/ChatGPT/Bloomberg vs. pondex_
+- FeatureShowcase: 4 Features mit Research-Quotes
+- Pricing: Free (€0) + Pro (€4.99) mit Toggle
+- FAQ: 6 Fragen, accordion
+- FinalCTA + Footer mit Newsletter
 
-### Offene Tasks (priorität)
-- [x] LP-1: Klick-Auslöser unter CTA ✅ 2026-07-20
-- [x] LP-2: Social Proof vor Demo ✅ 2026-07-20
-- [x] LP-5: Stats verständlicher ✅ 2026-07-20
-- [ ] LP-3: Hero Visual — Score-Card Screenshot einbauen (30 min)
-- [ ] LP-4: Testimonials — Initialen-Avatare statt Stock-Fotos (20 min)
-- [ ] LP-6: Meta Tags + Open Graph in index.html (15 min)
-- [ ] LP-7: GitHub Push + Live-URL deployen (15 min)
+### Placeholders (noch zu bauen)
+- 🔲 **Buy/Hold/Sell Verdict Banner** — José Interview: Klartextempfehlung ist der Conversion-Trigger
+- 🔲 **Comparison Feature Teaser** — stärkste Reaktion aller User-Tests (Gunnar, Patricia, José)
+- 🔲 **Investor-Profil Erklärung** — Score wird zu deiner Strategie gewichtet (Differenziator)
+
+### Design-Entscheidungen
+- Bungee-Stil (Hamburger Nav, große Typografie, Scroll-Animationen)
+- Grayscale-Palette: #000–#D6D6D6 (tokens in `frontend/src/lib/colors.js`)
+- Fonts: Interdisplay (Headlines) + Chivo Mono (Labels)
+- Farben für Score: grün ≥70, amber 45–69, rot <45
 
 ---
 
-## Phase B — App-Shell mit Demo-Daten
-**Ziel:** User die von der Landing Page kommen sehen eine funktionierende App (mit Demo-Daten).
-**Timeline:** 23.–31. Juli 2026
-**Status:** ⬜ Planned
+## ✅ Phase B — MVP App (Done: 2026-07-20)
 
-### Architektur
+**Live:** https://dan123iel.github.io/stockrater/app
+**Commit:** `efb8a63`
+
+### Was gebaut wurde
+- `/app` Route: eine saubere Seite, kein Schnickschnack
+- Ticker-Input + Quick-Picks (AAPL, NVDA, MSFT, TSLA, GOOGL, AMZN)
+- Score 0–100 + Gauge-Animation + Buy/Hold/Sell Badge (farbig)
+- Plain-Language Summary (1–2 Sätze)
+- Factor Breakdown: 5 Faktoren, je mit Erklärung + Bar + Quelle
+- Disclaimer Footer
+- Nav: Logo → / zurück, DEMO Badge
+
+### Demo-Daten (6 Stocks)
+| Ticker | Score | Verdict |
+|---|---|---|
+| AAPL | 78 | HOLD |
+| NVDA | 71 | HOLD |
+| MSFT | 84 | BUY |
+| TSLA | 42 | SELL |
+| GOOGL | 76 | BUY |
+| AMZN | 65 | HOLD |
+
+### User Journey aktuell
 ```
-/app
-├── Dashboard (Watchlist + Portfolio als Mockup)
-├── Analyse: Ticker eingeben → Demo-Score (wie ProductDemo auf LP)
-│   ├── Scorecard Tab (Score 0–100)
-│   ├── Chart Tab (mit 50/200-MA)
-│   ├── Valuation Tab
-│   └── weitere Tabs
-└── Nav: Analyse / Watchlist / Portfolio / Account
+/ (Landing) → [Analyse a stock] → /app → Ticker eingeben → Score + Verdict
 ```
+
+### Was noch fehlt für echte Nutzung
+- Echte Daten (Backend Railway + Yahoo Finance)
+- Auth (Phase D)
+
+---
+
+## 🟡 Phase C — Echtes Backend + Live-Daten (Next)
+
+**Ziel:** /app zeigt echte Scores für beliebige Ticker
+**Timeline:** August 2026
 
 ### Tasks
-- [ ] K: Score 0–100 (statt out of 5.0) — scoring.js + ScoreHero.jsx
-- [ ] L: 50/200-Tage Moving Averages im Chart
-- [ ] N: Tooltips für Fachbegriffe (ⓘ-Symbol)
-- [ ] O: "Profile" → "Account" umbenennen
-- [ ] P: Scroll-Indikator auf Analysis-Seite
-- [ ] Dashboard-Page: Watchlist + Portfolio als schöne Mockup-Seite
-- [ ] CTAs auf LP zu /app verlinken (Log in, Sign up)
-
----
-
-## Phase C — Auth (Login / Signup)
-**Ziel:** Echte User-Accounts. Retention messbar machen.
-**Timeline:** 1.–15. August 2026
-**Status:** ⬜ Planned
+- [ ] Railway Backend deployen (FastAPI läuft lokal, `backend/`)
+- [ ] `SENTRY_DSN` auf Railway setzen
+- [ ] Frontend: API-Call zu Railway statt Demo-Daten
+- [ ] yfinance Rate-Limit testen + Caching
+- [ ] Fehlerhandling: "Ticker not found", API-Timeout etc.
+- [ ] Smoke Test: AAPL → echte Score stimmt mit Demo überein
 
 ### Architektur
 ```
-/login    → Email + Passwort → /app
-/signup   → Email + Passwort → Onboarding → /app
-/onboarding → 5 Fragen (Strategie, Risiko, Horizont, WHY)
+/app Frontend → Railway API → yfinance + SEC EDGAR → Score
 ```
+
+---
+
+## ⬜ Phase D — Auth (Login / Signup / Onboarding)
+
+**Ziel:** Echte User-Accounts. Free Tier: 1 Verdict/Tag messbar.
+**Timeline:** August 2026 (nach Phase C)
 
 ### Tasks
 - [ ] Supabase Auth einrichten (Email + Google)
-- [ ] /login + /signup Pages
-- [ ] 5-Fragen Onboarding Flow
-- [ ] User-Profil in Supabase speichern
-- [ ] Watchlist + Portfolio an User-Account koppeln
+- [ ] `/login` + `/signup` Pages im Bungee-Stil
+- [ ] 5-Fragen Onboarding (Strategie, Risiko, Horizont, Portfoliogröße, WHY)
+- [ ] Score gewichtet nach User-Strategie (Value/Growth/Dividend/Momentum)
+- [ ] Freemium Gate: 1 Verdict/Tag zählen
 - [ ] Privacy Policy live (Pflicht vor Auth)
 
----
-
-## Phase D — Echtes Backend + Live-Daten
-**Ziel:** Echte Stock-Analyse mit Yahoo Finance + SEC EDGAR.
-**Timeline:** 15. August – 15. September 2026
-**Status:** ⬜ Planned
-
-### Tasks
-- [ ] Railway Backend deployen (FastAPI)
-- [ ] Yahoo Finance Live-Daten (yfinance)
-- [ ] SEC EDGAR Daten
-- [ ] Groq AI Chat mit Source Attribution
-- [ ] Error Monitoring: Sentry DSN auf Railway
-- [ ] Rate-Limiting + Caching
+### Research-Basis
+- Patricia: „Das Tool muss mich kennen"
+- Wave 2: 46% brauchen Proof first → Free Tier löst das
+- GL-Churner: Retention hängt an WHY (persönliche Ziele)
 
 ---
 
-## Phase E — Pro Tier + Stripe
+## ⬜ Phase E — Pro Tier + Stripe
+
 **Ziel:** Erste zahlende User.
 **Timeline:** September–Oktober 2026
-**Status:** ⬜ Planned
 
 ### Tasks
-- [ ] Stripe Integration (€4.99/Monat)
-- [ ] Free Tier: 1 Verdict/Tag
-- [ ] Pro Tier: Unlimited + Peer Comparison + Portfolio Tracker
+- [ ] Stripe Integration (€4.99/Monat, €49.99/Jahr)
+- [ ] Free Tier Gate: nach 1 Verdict/Tag → Upgrade-Prompt
+- [ ] Pro Features: Unlimited + Comparison + Portfolio Tracker
 - [ ] Paywall Disclaimer (regulatorisch)
 - [ ] Van Westendorp Pricing Test auswerten
 
+### Research-Basis
+- Wave 2: 69% offen für €4.99 (3 Hard-Yes + 17 Maybe)
+- Barrier ist nicht Preis, sondern Proof — deshalb Free Tier zuerst
+
 ---
 
-## Phase F — Growth + SEO
+## ⬜ Phase F — Growth + SEO
+
 **Ziel:** Organischer Traffic. 1.000 zahlende User.
 **Timeline:** Q4 2026
-**Status:** ⬜ Planned
 
 ### Tasks
 - [ ] SEO Landing Pages pro Persona (/value-investing, /passive-investor)
+- [ ] Meta Tags bereits live ✅
+- [ ] Weekly Digest Email (Supabase Edge Function)
 - [ ] Multilingual DE + ES
-- [ ] Weekly Digest Email
-- [ ] Verdict Track Record Feature
-- [ ] Customizable Dashboard
+- [ ] Verdict Track Record Feature (Phase 3 — braucht 6+ Monate Daten)
+
+---
+
+## Offene LP-Placeholders (Phase A Restarbeit)
+
+Diese 3 Sections fehlen noch auf der Landing Page:
+
+### 🔲 1. Buy/Hold/Sell Verdict Banner
+- **Format:** Fullwidth, schwarz, große Typografie: „HOLD · 78/100 · GOOD FIT"
+- **Warum:** José: vertraut Gemini wegen Klartextempfehlung. Research Council MVP M1.
+- **Platzierung:** Nach ScoreCardSection, vor Testimonials
+
+### 🔲 2. Comparison Feature Teaser
+- **Format:** 2 Aktien nebeneinander + Sektor-Average als 3. Spalte
+- **Warum:** Stärkste Reaktion aller 3 Interviews. José: „That's how you make a decision."
+- **Platzierung:** Nach HowItWorks, vor ProductDemo
+
+### 🔲 3. Investor-Profil Erklärung
+- **Format:** 4 Investor-Typen → je anderer Score für dieselbe Aktie
+- **Warum:** Differenziator. Patricia: „Das Tool muss mich kennen."
+- **Platzierung:** Nach ProductDemo, vor Differentiation
 
 ---
 
@@ -149,40 +178,25 @@ CTAs:
 
 | Entscheidung | Gewählt | Warum |
 |---|---|---|
-| Auth Timing | Phase C (nicht sofort) | Erst echte User sehen, dann Gate |
-| Demo vs. Live | Demo zuerst | Backend noch nicht produktionsreif |
-| Score-Format | 0–100 | Gunnar + Patricia Interview (2/3 eindeutig) |
-| Free Tier | 1 Verdict/Tag | Beweis vor Paywall |
-| LP-Struktur | Hero → Social Proof → Demo | Vercel/Raycast Pattern (verifiziert) |
-| Design-System | Grayscale #000–#D6D6D6 | Konsistent, premium, editorial |
+| Design-System | Bungee-Stil, Grayscale | Premium, editorial, minimalistisch |
+| Score-Format | 0–100 | Gunnar + Patricia Interview |
+| Free Tier | 1 Verdict/Tag | Beweis vor Paywall — Wave 2 |
+| Auth Timing | Phase D (nach echten Daten) | Erst Proof, dann Gate |
+| MVP Scope | Nur Ticker → Score | Patricia: „Focus MVP on one target group" |
+| Old Frontend | Archiviert in `_archive/` | Neubau im Bungee-Stil |
+| Demo-Daten | 6 Stocks hardcoded | Backend noch nicht produktionsreif |
 
 ---
 
-## User Journey (End-to-End)
+## URLs
 
-```
-Besucher landet auf /
-        ↓
-Sieht Hero + "Analyse a stock"
-        ↓
-Tippt AAPL → sieht Demo-Score (kein Login nötig)
-        ↓
-Interessiert → "Sign up" → /signup
-        ↓
-Onboarding (Investor-Profil)
-        ↓
-/app → Dashboard → eigene Analyse
-        ↓
-Nach 1 Verdict/Tag → Upgrade-Prompt → Pro €4.99/mo
-```
-
----
-
-## Nächste 3 konkrete Schritte (heute)
-
-1. **LP-3** — Hero Visual einbauen (Score-Card Screenshot oder Mockup)
-2. **LP-4** — Initialen-Avatare G / P / J statt Stock-Fotos
-3. **LP-6 + LP-7** — Meta Tags + GitHub Push → Live-URL
+| | URL |
+|---|---|
+| Landing Page (live) | https://dan123iel.github.io/stockrater/ |
+| App (live) | https://dan123iel.github.io/stockrater/app |
+| Dev Server | http://localhost:5173/stockrater/ |
+| Backend (Railway) | https://stockrater-production.up.railway.app |
+| GitHub Repo | https://github.com/dan123iel/stockrater |
 
 ---
 
@@ -190,8 +204,11 @@ Nach 1 Verdict/Tag → Upgrade-Prompt → Pro €4.99/mo
 
 | Dokument | Inhalt |
 |---|---|
-| `docs/specs/LANDING-PAGE-PLAYBOOK.md` | Design + Copy Regeln |
-| `docs/product/WEBSITE-COUNCIL.md` | Council-System für Website-Entscheidungen |
+| `docs/specs/WEBSITE-STRUKTUR.md` | Vollständige Website-Struktur + Nav + Wireframes |
+| `docs/specs/LANDING-PAGE-PLAYBOOK.md` | Design + Copy Regeln, Deep Research Findings |
+| `docs/product/WEBSITE-COUNCIL.md` | 3-Ebenen Council für Website-Entscheidungen |
 | `docs/CURRENT-TODOS.md` | Alle offenen Tasks |
-| `docs/research/interviews/` | Gunnar, Patricia, José Interviews |
-| `docs/research/surveys/` | Wave 1 + Wave 2 Analyse |
+| `frontend/src/lib/colors.js` | Design-Tokens (Farben) |
+| `frontend/src/pages/App.jsx` | MVP App-Seite |
+| `frontend/src/pages/Landing.jsx` | Landing Page |
+| `frontend/src/_archive/` | Altes App-Frontend (archiviert) |
