@@ -26,7 +26,7 @@ export default function HowItWorks() {
           <BungeeButton href="#demo">Try it now</BungeeButton>
         </div>
 
-        <div style={{ display: 'flex', gap: '24px', overflowX: 'auto' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
           {steps.map((s, i) => (
             <motion.div
               key={s.num}
@@ -34,13 +34,10 @@ export default function HowItWorks() {
                 backgroundColor: s.bg,
                 borderRadius: '40px',
                 padding: '40px',
-                width: '450px',
-                minWidth: '320px',
-                height: '500px',
+                minHeight: '420px',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
-                flexShrink: 0,
               }}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}

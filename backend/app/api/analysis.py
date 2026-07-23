@@ -111,25 +111,75 @@ def get_financials(ticker: str):
     key = f"financials_{ticker.upper()}"
     if c := cached(key, CACHE_TTL): return c
 
+    t = yf.Ticker(ticker)
     statements = []
+
     try:
-        fins = yf.Ticker(ticker).financials
-        if fins is not None:
-            for col in fins.columns[:4]:
-                def g(k):
-                    try: return float(fins.loc[k, col]) if k in fins.index else None
-                    except: return None
-                op, rev = g("Operating Income"), g("Total Revenue")
-                statements.append({
-                    "date":                 str(col)[:10],
-                    "revenue":              g("Total Revenue"),
-                    "grossProfit":          g("Gross Profit"),
-                    "operatingIncome":      op,
-                    "netIncome":            g("Net Income"),
-                    "operatingIncomeRatio": (op / rev) if op and rev else None,
-                })
+        fins = t.financials
+        bal  = t.balance_sheet
+        cf   = t.cashflow
+
+        cols = fins.columns[:4] if fins is not None else []
+        for col in cols:
+            def g(df, k):
+                try: return float(df.loc[k, col]) if df is not None and k in df.index else None
+                except: return None
+
+            op  = g(fins, "Operating Income")
+            rev = g(fins, "Total Revenue")
+
+            # Balance sheet — match column by date proximity
+            bal_col = None
+            if bal is not None:
+                for bc in bal.columns:
+                    if abs((bc - col).days) < 180:
+                        bal_col = bc
+                        break
+
+            def gb(k):
+                try: return float(bal.loc[k, bal_col]) if bal is not None and bal_col is not None and k in bal.index else None
+                except: return None
+
+            cf_col = None
+            if cf is not None:
+                for cc in cf.columns:
+                    if abs((cc - col).days) < 180:
+                        cf_col = cc
+                        break
+
+            def gc(k):
+                try: return float(cf.loc[k, cf_col]) if cf is not None and cf_col is not None and k in cf.index else None
+                except: return None
+
+            op_cf  = gc("Operating Cash Flow") or gc("Cash Flow From Operating Activities")
+            inv_cf = gc("Investing Cash Flow") or gc("Cash Flow From Investing Activities")
+            fin_cf = gc("Financing Cash Flow") or gc("Cash Flow From Financing Activities")
+            capex  = gc("Capital Expenditure")
+            free_cf = (op_cf + capex) if op_cf and capex else None
+
+            statements.append({
+                "date":                 str(col)[:10],
+                # Income Statement
+                "revenue":              g(fins, "Total Revenue"),
+                "grossProfit":          g(fins, "Gross Profit"),
+                "operatingIncome":      op,
+                "netIncome":            g(fins, "Net Income"),
+                "operatingIncomeRatio": (op / rev) if op and rev else None,
+                # Balance Sheet
+                "totalAssets":          gb("Total Assets"),
+                "totalLiabilities":     gb("Total Liabilities Net Minority Interest") or gb("Total Liabilities"),
+                "totalEquity":          gb("Stockholders Equity") or gb("Total Equity Gross Minority Interest"),
+                "debtToEquity":         None,  # calculated in ratios endpoint
+                # Cash Flow
+                "operatingCashFlow":    op_cf,
+                "investingCashFlow":    inv_cf,
+                "financingCashFlow":    fin_cf,
+                "capitalExpenditure":   capex,
+                "freeCashFlow":         free_cf,
+            })
     except Exception:
         pass
+
     return set_cache(key, statements, CACHE_TTL)
 
 

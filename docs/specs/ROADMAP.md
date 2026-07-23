@@ -1,5 +1,5 @@
 # pondex — Roadmap
-_Last updated: 2026-07-20 · Stand nach Phase A + MVP App_
+_Last updated: 2026-07-23 · Added Exit Strategy + AI Features_
 
 ---
 
@@ -12,6 +12,8 @@ _Last updated: 2026-07-20 · Stand nach Phase A + MVP App_
 | **C** | Echtes Backend + Live-Daten | 🟡 Next | Aug 2026 |
 | **D** | Auth (Login / Signup / Onboarding) | ⬜ Planned | Aug 2026 |
 | **E** | Pro Tier + Stripe | ⬜ Planned | Sept–Okt 2026 |
+| **E2** | Exit Strategy Feature | ⬜ Planned | Okt 2026 |
+| **E3** | AI Features (Copilot, Explainer) | ⬜ Planned | Okt–Nov 2026 |
 | **F** | Growth + SEO | ⬜ Planned | Q4 2026 |
 
 ---
@@ -136,6 +138,68 @@ _Last updated: 2026-07-20 · Stand nach Phase A + MVP App_
 ### Research-Basis
 - Wave 2: 69% offen für €4.99 (3 Hard-Yes + 17 Maybe)
 - Barrier ist nicht Preis, sondern Proof — deshalb Free Tier zuerst
+
+---
+
+## ⬜ Phase E2 — Exit Strategy Feature
+
+**Ziel:** User können nicht nur kaufen, sondern auch wissen *wann zu verkaufen*.
+**Timeline:** Oktober 2026 (nach Phase E)
+
+### Konzept
+Ein dedizierter „Exit Check" für eine gehaltene Position:
+- User gibt Ticker + optional Einstiegspreis + Haltedauer ein
+- pondex_ berechnet: Exit-Score (0–100) + Empfehlung: HOLD / TRIM / EXIT
+- Anzeige: Momentum-Trend, Überbewertungs-Signal, Stop-Loss-Vorschlag
+
+### Tasks
+- [ ] Exit-Score-Logik definieren (Faktoren: RSI Überkauft, P/E vs. Sektor, Trend-Umkehr, Fundamentalverschlechterung)
+- [ ] Backend: `/exit` Endpoint (FastAPI)
+- [ ] Frontend: neuer Tab „Exit Check" in `/app`
+- [ ] Demo-Daten: TSLA (EXIT), AAPL (HOLD), NVDA (TRIM)
+- [ ] Copy: erklären was ein Exit-Signal bedeutet (nicht Panikverkauf)
+- [ ] LP-Erwähnung: in FeatureShowcase aufnehmen
+
+### Research-Basis
+- Wave 1: Signal/Noise = #1 Pain — User wissen nicht WANN zu verkaufen
+- Differenziert von Bloomberg/Yahoo: die zeigen nur Buy-Side
+- Günstiger psychologischer Anker: „pondex_ schützt vor schlechten Exits"
+
+---
+
+## ⬜ Phase E3 — AI Features (Copilot + Explainer)
+
+**Ziel:** AI als Kern-Differenziator — nicht Hype, sondern konkrete Entscheidungshilfe.
+**Timeline:** Oktober–November 2026
+
+### Konzept
+Zwei AI-Module:
+
+**1. Score Explainer (Groq / llama3)**
+- Plain-Language-Erklärung warum Score X — automatisch generiert
+- Heute: 1–2 hartcodierte Sätze; AI macht es dynamisch + quellenbasiert
+- Format: „MSFT scored 84 because… [3 bullet reasons with source]"
+
+**2. Investment Copilot (Chat)**
+- User kann Fragen stellen: „Soll ich bei diesem Score nachkaufen?"
+- Context-aware: kennt Score, Faktoren, User-Profil (Phase D)
+- Kein Finanzberater-Ersatz — klarer Disclaimer, immer Quellenangabe
+- Pro-Feature (Phase E)
+
+### Tasks
+- [ ] Groq API Key einrichten + Rate-Limit-Strategie
+- [ ] Score Explainer: Backend Endpoint `/explain/{ticker}`
+- [ ] Explainer in `/app` integrieren (unter Factor Breakdown)
+- [ ] Copilot: Chat-UI Mockup (minimal, kein Bloat)
+- [ ] Copilot: Kontext-Injection (Score + Faktoren als System-Prompt)
+- [ ] Quellenangaben in AI-Output erzwingen (Wave 1: 71% WTP nur mit Quellen)
+- [ ] Disclaimer-Banner über AI-Modul
+- [ ] LP: AI-Abschnitt in FeatureShowcase + Differentiation-Section updaten
+
+### Research-Basis
+- Wave 1: 71% WTP nur mit Quellenangaben — AI muss erklären können
+- Differenziert von ChatGPT: pondex_ AI kennt echte Finanzdaten, kein Halluzinationsrisiko
+- Groq bereits in Tech-Stack (laut PRODUCT-JOURNEY.md)
 
 ---
 

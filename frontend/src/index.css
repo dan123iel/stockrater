@@ -51,11 +51,21 @@
   body { background-color: #ffffff; color: #1e1e1e; }
 }
 
-/* ── Bungee Container System ── */
+/* ── Bungee Container System — 12-col grid aligned ── */
 .bungee-container {
   padding: 0 32px;
-  max-width: 1520px;
+  max-width: 1440px;
   width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+/* Inner 12-col grid */
+.bungee-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 24px;
 }
 
 @layer utilities {

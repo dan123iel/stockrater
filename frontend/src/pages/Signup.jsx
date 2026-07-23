@@ -2,10 +2,8 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { C } from '../lib/colors'
+import { G, S, M } from '../lib/grid'
 import LandingNav from '../components/landing/LandingNav'
-
-const S = { fontFamily: 'Interdisplay, Inter, Arial, sans-serif' }
-const M = { fontFamily: 'Chivo Mono, monospace' }
 
 export default function Signup() {
   const [email, setEmail] = useState('')
@@ -31,7 +29,7 @@ export default function Signup() {
     <div style={{ minHeight: '100vh', background: C.white, display: 'flex', flexDirection: 'column' }}>
       <LandingNav />
 
-      <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '32px', paddingTop: '120px' }}>
+      <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: `calc(${G.nav.height} + 48px) 64px 80px` }}>
         <motion.div
           style={{ width: '100%', maxWidth: '400px' }}
           initial={{ opacity: 0, y: 20 }}
