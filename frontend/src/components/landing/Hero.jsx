@@ -73,7 +73,7 @@ function HeroVisual() {
           <div>
             <p style={{ ...M, fontSize: '10px', color: C[400], textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 4px' }}>AAPL · NMS · Technology</p>
             <p style={{ ...S, fontSize: '24px', fontWeight: 500, color: C.black, margin: '0 0 4px', letterSpacing: '-0.5px' }}>Apple Inc.</p>
-            <p style={{ ...M, fontSize: '14px', color: C[400], margin: 0 }}>$327.74 · <span style={{ color: '#16a34a' }}>+1.15 (0.35%)</span></p>
+            <p style={{ ...M, fontSize: '14px', color: C[400], margin: 0 }}>$213.49 · <span style={{ color: C.up }}>+1.15 (0.35%)</span> · <span style={{ color: C[300] }}>Illustrative</span></p>
           </div>
           <div style={{ textAlign: 'right' }}>
             <span style={{ ...M, fontSize: '10px', color: '#d97706', background: '#fef3c7', padding: '4px 12px', borderRadius: '50px', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'block', marginBottom: '8px' }}>HOLD</span>
@@ -109,15 +109,12 @@ function HeroVisual() {
   )
 }
 
-// Logos trust bar
 function LogosBar() {
-  const logos = [
-    'Morningstar', 'Bloomberg', 'Yahoo Finance', 'SEC EDGAR', 'Reuters', 'Groq AI'
-  ]
+  const logos = ['Yahoo Finance', 'SEC EDGAR', 'Groq AI']
   return (
     <div style={{ borderTop: `1px solid ${C[100]}`, paddingTop: '48px', marginTop: '80px' }}>
       <p style={{ ...M, fontSize: '11px', color: C[400], textTransform: 'uppercase', letterSpacing: '0.1em', textAlign: 'center', marginBottom: '32px' }}>
-        Data sourced from trusted providers
+        Data sources
       </p>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '48px', flexWrap: 'wrap' }}>
         {logos.map(name => (
@@ -238,7 +235,7 @@ export default function Hero() {
             Start free trial
           </button>
           <button
-            onClick={() => navigate('/app')}
+            onClick={() => document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth' })}
             style={{
               ...S, fontSize: '15px', fontWeight: 400,
               background: 'transparent', color: C.black,

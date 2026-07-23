@@ -21,7 +21,9 @@ export default function Signup() {
     // TODO: replace with Supabase auth
     setTimeout(() => {
       localStorage.setItem('pondex_user', JSON.stringify({ email }))
-      navigate('/app')
+      const isFirst = !localStorage.getItem('pondex_onboarded')
+      localStorage.setItem('pondex_onboarded', '1')
+      navigate(isFirst ? '/app/stock?ticker=AAPL' : '/app')
     }, 800)
   }
 
@@ -42,6 +44,12 @@ export default function Signup() {
           <p style={{ ...S, fontSize: '16px', color: C[400], marginBottom: '40px' }}>
             No credit card required.
           </p>
+
+          <div style={{ background: C[100], border: `1px solid ${C[200]}`, borderRadius: '10px', padding: '12px 16px', marginBottom: '24px' }}>
+            <p style={{ ...M, fontSize: '11px', color: C[400], margin: 0 }}>
+              Demo mode — any credentials work. Real accounts coming in Phase D.
+            </p>
+          </div>
 
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div>

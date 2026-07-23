@@ -7,7 +7,7 @@ import { G, S, M } from '../lib/grid'
 import { headline, stat, card, btn, row, divider } from '../lib/bungee'
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:8000'
-const TOP_TICKERS = ['AAPL', 'NVDA', 'MSFT', 'TSLA', 'GOOGL', 'META']
+const TOP_TICKERS = ['AAPL', 'NVDA', 'MSFT', 'TSLA', 'GOOGL', 'AMZN']
 const WATCHLIST   = ['AAPL', 'NVDA', 'MSFT', 'TSLA']
 
 export default function Home() {
@@ -30,6 +30,7 @@ export default function Home() {
 
   const portfolioValue  = WATCHLIST.reduce((s, t) => s + (quotes[t]?.price || 0), 0)
   const portfolioChange = WATCHLIST.reduce((s, t) => s + (quotes[t]?.change || 0), 0)
+  const hasLiveData = WATCHLIST.some(t => quotes[t])
 
   const events = [
     { date: 'Jul 29', ticker: 'AAPL', event: 'Earnings Call',    type: 'earnings' },
@@ -46,7 +47,7 @@ export default function Home() {
         <div style={{ padding: '56px 32px 40px', borderBottom: `1px solid ${C[100]}` }}>
           <p style={{ ...M, fontSize: '11px', color: C[400], textTransform: 'uppercase', letterSpacing: '0.12em', margin: '0 0 12px' }}>[ Home ]</p>
           <h1 style={{ ...headline.xl, margin: 0 }}>
-            Good morning{user?.email ? `, ${user.email.split('@')[0]}` : ''}.
+            {(() => { const h = new Date().getHours(); return h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening' })()}{user?.email ? `, ${user.email.split('@')[0].split('.')[0]}` : ''}.
           </h1>
         </div>
 
@@ -58,8 +59,8 @@ export default function Home() {
             {/* Portfolio strip */}
             <div style={{ padding: '32px 32px', borderBottom: `1px solid ${C[100]}`, display: 'flex', gap: '64px', alignItems: 'flex-end' }}>
               <div>
-                <p style={{ ...M, fontSize: '10px', color: C[400], textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 8px' }}>Watchlist value</p>
-                <p style={{ ...headline.xl, margin: 0, fontSize: '48px' }}>{loading ? '—' : `$${portfolioValue.toFixed(2)}`}</p>
+                <p style={{ ...M, fontSize: '10px', color: C[400], textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 8px' }}>Watchlist</p>
+                <p style={{ ...headline.xl, margin: 0, fontSize: '48px' }}>{loading ? '—' : hasLiveData ? `$${portfolioValue.toFixed(2)}` : `${WATCHLIST.length} stocks`}</p>
               </div>
               <div style={{ paddingBottom: '6px' }}>
                 <p style={{ ...M, fontSize: '10px', color: C[400], textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 8px' }}>Today</p>

@@ -7,7 +7,9 @@ import { G, S, M } from '../lib/grid'
 import { headline, btn, card } from '../lib/bungee'
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:8000'
-const TICKERS = ['AAPL', 'NVDA', 'MSFT', 'TSLA', 'GOOGL', 'AMZN', 'SAP', 'ASML', 'META', 'AMD', 'NFLX', 'INTC']
+const TICKERS = ['AAPL', 'NVDA', 'MSFT', 'TSLA', 'GOOGL', 'AMZN']
+
+const POPULAR = ['AAPL', 'MSFT', 'NVDA', 'GOOGL', 'AMZN', 'TSLA']
 
 const COLLECTIONS = [
   { name: 'Big Tech',       tickers: ['AAPL', 'MSFT', 'GOOGL', 'META', 'AMZN'] },
@@ -26,7 +28,7 @@ const EVENTS = [
 
 // ── Calendar View ─────────────────────────────────────────────────────────
 function CalendarView({ events }) {
-  const today = new Date(2026, 6, 22) // July 2026
+  const today = new Date()
   const [currentMonth, setCurrentMonth] = useState(today.getMonth())
   const [currentYear, setCurrentYear]   = useState(today.getFullYear())
 
@@ -182,7 +184,10 @@ export default function Markets() {
   const sorted  = Object.entries(quotes).sort((a, b) => Math.abs(b[1].changePercent) - Math.abs(a[1].changePercent))
   const gainers = sorted.filter(([, q]) => q.changePercent >= 0)
   const losers  = sorted.filter(([, q]) => q.changePercent < 0)
-  const display = activeTab <= 1 ? [...gainers.slice(0, 6), ...losers.slice(0, 6)] : []
+  const popularDisplay = POPULAR.map(t => quotes[t] ? [t, quotes[t]] : null).filter(Boolean)
+  const display = activeTab === 0 ? [...gainers.slice(0, 6), ...losers.slice(0, 6)]
+                : activeTab === 1 ? popularDisplay
+                : []
 
   return (
     <div style={{ minHeight: '100vh', background: C.white }}>
@@ -224,7 +229,6 @@ export default function Markets() {
 
         <AnimatePresence mode="wait">
 
-          {/* Top Movers / Popular */}
           {activeTab <= 1 && (
             <motion.div key="movers" style={{ padding: '40px 32px' }}
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>

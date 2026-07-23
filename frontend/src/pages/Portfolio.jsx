@@ -15,7 +15,7 @@ export default function Portfolio() {
   const logout = () => { localStorage.removeItem('pondex_user'); navigate('/') }
   const [quotes, setQuotes] = useState({})
   const [loading, setLoading] = useState(true)
-  const [activeTab, setActiveTab] = useState(1)
+  const [activeTab, setActiveTab] = useState(0)
   const tabs = ['Positions', 'Watchlist', 'Transactions', 'Account']
 
   useEffect(() => {
@@ -43,8 +43,8 @@ export default function Portfolio() {
             <h1 style={{ ...headline.xl, margin: 0 }}>Your investments.</h1>
             <div style={{ display: 'flex', gap: '40px', paddingBottom: '8px' }}>
               <div style={{ textAlign: 'right' }}>
-                <p style={{ ...M, fontSize: '10px', color: C[400], textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 4px' }}>Watchlist value</p>
-                <p style={{ ...headline.lg, margin: 0 }}>{loading ? '—' : `$${totalValue.toFixed(2)}`}</p>
+                <p style={{ ...M, fontSize: '10px', color: C[400], textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 4px' }}>Watchlist</p>
+                <p style={{ ...headline.lg, margin: 0 }}>{loading ? '—' : WATCHLIST.length + ' stocks'}</p>
               </div>
               <div style={{ textAlign: 'right' }}>
                 <p style={{ ...M, fontSize: '10px', color: C[400], textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 4px' }}>Today</p>
@@ -77,7 +77,7 @@ export default function Portfolio() {
             <div style={{ padding: '80px 0', textAlign: 'center' }}>
               <p style={{ ...M, fontSize: '11px', color: C[400], textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '16px' }}>[ No positions ]</p>
               <p style={{ ...headline.md, color: C[300], margin: '0 0 32px' }}>You have no open positions.</p>
-              <button onClick={() => navigate('/app/stock')} style={{ ...btn.primary }}>Analyse a stock →</button>
+              <button onClick={() => navigate('/app/stock?ticker=AAPL')} style={{ ...btn.primary }}>Analyse a stock →</button>
             </div>
           )}
 
@@ -130,7 +130,7 @@ export default function Portfolio() {
               <p style={{ ...M, fontSize: '11px', color: C[400], textTransform: 'uppercase', letterSpacing: '0.12em', margin: '0 0 24px' }}>[ Account ]</p>
               <div style={{ ...card.base, padding: '32px' }}>
                 <p style={{ ...S, fontSize: '18px', fontWeight: 500, color: C.black, margin: '0 0 4px' }}>{user?.email || '—'}</p>
-                <p style={{ ...M, fontSize: '12px', color: C[400], margin: '0 0 32px' }}>Free tier · Phase 1</p>
+                <p style={{ ...M, fontSize: '12px', color: C[400], margin: '0 0 32px' }}>Free tier</p>
                 <div style={{ height: '1px', background: C[100], margin: '0 0 24px' }} />
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   {[

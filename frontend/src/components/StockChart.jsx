@@ -3,28 +3,7 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceL
 import { C } from '../lib/colors'
 import { S, M } from '../lib/grid'
 
-// Known quarterly earnings months (approximate — would come from calendar API in prod)
-function getEarningsEvents(candles) {
-  if (!candles.length) return []
-  const events = []
-  const seen = new Set()
-  candles.forEach(c => {
-    const d = new Date(c.date)
-    const month = d.getMonth()
-    // Apple reports roughly Jan, Apr, Jul, Oct
-    const earningsMonths = [0, 3, 6, 9]
-    if (earningsMonths.includes(month)) {
-      const key = `${d.getFullYear()}-${month}`
-      if (!seen.has(key)) {
-        seen.add(key)
-        // Find first candle of that month
-        const label = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-        events.push({ date: label, type: 'E', color: '#7c3aed' })
-      }
-    }
-  })
-  return events
-}
+function getEarningsEvents(_candles) { return [] }
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 

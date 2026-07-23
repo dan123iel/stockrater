@@ -10,7 +10,6 @@ const navLinks = [
   { label: 'Markets',      to: '/app/markets',    key: 'markets' },
   { label: 'Robo Advisor', to: '/app/robo',       key: 'robo' },
   { label: 'CFD',          to: '/app/cfd',        key: 'cfd' },
-  { label: 'Stock',        to: '/app/stock',      key: 'stock' },
 ]
 
 export default function AppNav({ onLogout, userEmail }) {
@@ -29,7 +28,6 @@ export default function AppNav({ onLogout, userEmail }) {
     if (ticker) {
       navigate(`/app/stock?ticker=${ticker}`)
       setSearchVal('')
-      setSearchOpen(false)
     }
   }
 
@@ -114,7 +112,7 @@ export default function AppNav({ onLogout, userEmail }) {
             </button>
           )}
 
-          <Link to="/app/account" style={{
+          <Link to="/app/portfolio" style={{
             ...S, fontSize: '14px', fontWeight: 600,
             background: C.black, color: C.white,
             textDecoration: 'none', padding: '8px 18px',

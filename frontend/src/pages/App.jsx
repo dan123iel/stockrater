@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useState, useEffect, useMemo } from 'react'
+import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { C } from '../lib/colors'
 import { G, S, M } from '../lib/grid'
@@ -93,12 +93,17 @@ function TabOverview({ result, quote }) {
     { label: 'Sector',      value: quote?.sector || '—' },
   ]
 
-  const upcomingEvents = [
-    { date: 'Aug 26', event: 'Earnings Call', type: 'earnings' },
-    { date: 'Sep 15', event: 'Ex-Dividend Date', type: 'dividend' },
-  ]
+  const upcomingEvents = []
 
-  const similarStocks = ['MSFT', 'GOOGL', 'META', 'AMZN', 'NVDA'].filter(t => t !== result.ticker).slice(0, 4)
+  const PEER_MAP = {
+    AAPL:  ['MSFT', 'GOOGL', 'AMZN'],
+    NVDA:  ['AMD', 'INTC', 'MSFT'],
+    MSFT:  ['AAPL', 'GOOGL', 'AMZN'],
+    TSLA:  ['AMZN', 'GOOGL', 'NVDA'],
+    GOOGL: ['MSFT', 'AAPL', 'AMZN'],
+    AMZN:  ['MSFT', 'GOOGL', 'AAPL'],
+  }
+  const similarStocks = (PEER_MAP[result.ticker] || ['AAPL', 'MSFT', 'NVDA'].filter(t => t !== result.ticker)).slice(0, 4)
 
   return (
     <div style={{ padding: '0 32px 48px' }}>
@@ -167,7 +172,9 @@ function TabOverview({ result, quote }) {
         {/* Upcoming events — col 1–4 */}
         <div style={{ gridColumn: '1 / 5' }}>
           <p style={{ ...M, fontSize: '11px', color: C[400], textTransform: 'uppercase', letterSpacing: '0.12em', margin: '0 0 16px' }}>[ Upcoming events ]</p>
-          {upcomingEvents.map((ev, i) => (
+          {upcomingEvents.length === 0 ? (
+            <p style={{ ...S, fontSize: '13px', color: C[300] }}>Calendar data coming in Phase C.</p>
+          ) : upcomingEvents.map((ev, i) => (
             <div key={i} style={{ padding: '12px 0', borderBottom: `1px solid ${C[100]}` }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span style={{ ...S, fontSize: '14px', color: C.black }}>{ev.event}</span>
@@ -188,10 +195,10 @@ function TabOverview({ result, quote }) {
           <p style={{ ...M, fontSize: '11px', color: C[400], textTransform: 'uppercase', letterSpacing: '0.12em', margin: '0 0 16px' }}>[ Similar stocks ]</p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {similarStocks.map(t => (
-              <a key={t} href={`/stockrater/app/stock?ticker=${t}`} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0', borderBottom: `1px solid ${C[100]}`, textDecoration: 'none' }}>
+              <Link key={t} to={`/app/stock?ticker=${t}`} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0', borderBottom: `1px solid ${C[100]}`, textDecoration: 'none' }}>
                 <span style={{ ...M, fontSize: '13px', fontWeight: 600, color: C.black }}>{t}</span>
                 <span style={{ ...S, fontSize: '13px', color: C[400] }}>→</span>
-              </a>
+              </Link>
             ))}
           </div>
         </div>
@@ -475,7 +482,7 @@ export default function Stock() {
   useEffect(() => {
     const t = searchParams.get('ticker')
     if (t) analyse(t)
-  }, [])
+  }, [searchParams])
 
   return (
     <div style={{ minHeight: '100vh', background: C.white }}>
@@ -536,7 +543,20 @@ export default function Stock() {
             </div>
           </div>
 
-          {error && <p style={{ ...M, fontSize: '11px', color: '#dc2626', marginBottom: '16px' }}>⚠ {error}</p>}
+          {error && (
+          <div style={{ padding: '0 32px 24px' }}>
+            <p style={{ ...M, fontSize: '11px', color: C.down, marginBottom: '12px' }}>Ticker not found or not in demo set.</p>
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+              <span style={{ ...M, fontSize: '10px', color: C[400], alignSelf: 'center' }}>Try a demo ticker:</span>
+              {['AAPL','NVDA','MSFT','TSLA','GOOGL','AMZN'].map(t => (
+                <button key={t} onClick={() => { setInput(t); analyse(t) }} style={{
+                  ...M, fontSize: '11px', background: C[100], border: `1px solid ${C[200]}`,
+                  borderRadius: '6px', padding: '4px 12px', cursor: 'pointer', color: C.black,
+                }}>{t}</button>
+              ))}
+            </div>
+          </div>
+        )}
 
           {/* Tabs — only shown when result */}
           {result && (
@@ -573,79 +593,19 @@ export default function Stock() {
           )}
           {result && activeTab === 3 && (
             <motion.div key="news" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-              <div style={{ padding: '48px 32px' }}>
-                <p style={{ ...M, fontSize: '10px', color: C[400], textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '24px' }}>
-                  Company-specific news · Source: Yahoo Finance
-                </p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
-                  {[
-                    { title: `${result?.ticker} reports strong quarterly results`, time: '2h ago', source: 'Reuters' },
-                    { title: `Analysts raise price target on ${result?.ticker}`, time: '4h ago', source: 'Bloomberg' },
-                    { title: `${result?.ticker} announces new product launch`, time: '1d ago', source: 'CNBC' },
-                    { title: `${result?.ticker} CFO speaks at investor conference`, time: '2d ago', source: 'WSJ' },
-                  ].map((n, i) => (
-                    <motion.div key={i}
-                      style={{ padding: '20px 0', borderBottom: `1px solid ${C[100]}`, display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '24px', alignItems: 'center' }}
-                      initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.07 }}
-                    >
-                      <div style={{ gridColumn: '1 / 9' }}>
-                        <p style={{ ...S, fontSize: '15px', fontWeight: 500, color: C.black, margin: 0 }}>{n.title}</p>
-                      </div>
-                      <span style={{ ...M, fontSize: '12px', color: C[400], gridColumn: 'span 2' }}>{n.source}</span>
-                      <span style={{ ...M, fontSize: '12px', color: C[300], gridColumn: 'span 2', textAlign: 'right' }}>{n.time}</span>
-                    </motion.div>
-                  ))}
-                </div>
-                <p style={{ ...M, fontSize: '10px', color: C[300], marginTop: '24px' }}>Live news requires NewsAPI key · Coming in Phase 2</p>
+              <div style={{ padding: '80px 32px', textAlign: 'center' }}>
+                <p style={{ ...M, fontSize: '11px', color: C[400], textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '16px' }}>[ News ]</p>
+                <p style={{ ...S, fontSize: '22px', fontWeight: 500, color: C[300], margin: '0 0 12px' }}>News feed coming in Phase C.</p>
+                <p style={{ ...S, fontSize: '14px', color: C[400] }}>Requires NewsAPI integration · no placeholder data shown.</p>
               </div>
             </motion.div>
           )}
           {result && activeTab === 4 && (
             <motion.div key="orderbook" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-              <div style={{ padding: '48px 32px' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '24px' }}>
-                  {/* Bids */}
-                  <div style={{ gridColumn: '1 / 7' }}>
-                    <p style={{ ...M, fontSize: '10px', color: '#16a34a', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '16px' }}>Bids</p>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0', marginBottom: '8px' }}>
-                      {['Price', 'Size', 'Total'].map(h => (
-                        <span key={h} style={{ ...M, fontSize: '10px', color: C[400], textTransform: 'uppercase', letterSpacing: '0.08em', paddingBottom: '8px', borderBottom: `1px solid ${C[100]}` }}>{h}</span>
-                      ))}
-                    </div>
-                    {[0.02, 0.05, 0.08, 0.12, 0.18].map((offset, i) => {
-                      const price = quote?.price ? (parseFloat(quote.price) - offset).toFixed(2) : '—'
-                      const size = (Math.random() * 500 + 100).toFixed(0)
-                      return (
-                        <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', padding: '8px 0', borderBottom: `1px solid ${C[100]}` }}>
-                          <span style={{ ...M, fontSize: '13px', color: '#16a34a' }}>${price}</span>
-                          <span style={{ ...M, fontSize: '13px', color: C[600] }}>{size}</span>
-                          <span style={{ ...M, fontSize: '13px', color: C[400] }}>${(parseFloat(price) * parseFloat(size)).toFixed(0)}</span>
-                        </div>
-                      )
-                    })}
-                  </div>
-                  {/* Asks */}
-                  <div style={{ gridColumn: '7 / 13' }}>
-                    <p style={{ ...M, fontSize: '10px', color: '#dc2626', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '16px' }}>Asks</p>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0', marginBottom: '8px' }}>
-                      {['Price', 'Size', 'Total'].map(h => (
-                        <span key={h} style={{ ...M, fontSize: '10px', color: C[400], textTransform: 'uppercase', letterSpacing: '0.08em', paddingBottom: '8px', borderBottom: `1px solid ${C[100]}` }}>{h}</span>
-                      ))}
-                    </div>
-                    {[0.02, 0.05, 0.08, 0.12, 0.18].map((offset, i) => {
-                      const price = quote?.price ? (parseFloat(quote.price) + offset).toFixed(2) : '—'
-                      const size = (Math.random() * 500 + 100).toFixed(0)
-                      return (
-                        <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', padding: '8px 0', borderBottom: `1px solid ${C[100]}` }}>
-                          <span style={{ ...M, fontSize: '13px', color: '#dc2626' }}>${price}</span>
-                          <span style={{ ...M, fontSize: '13px', color: C[600] }}>{size}</span>
-                          <span style={{ ...M, fontSize: '13px', color: C[400] }}>${(parseFloat(price) * parseFloat(size)).toFixed(0)}</span>
-                        </div>
-                      )
-                    })}
-                  </div>
-                </div>
-                <p style={{ ...M, fontSize: '10px', color: C[300], marginTop: '24px' }}>Order book data is illustrative · Live data coming in Phase 2</p>
+              <div style={{ padding: '80px 32px', textAlign: 'center' }}>
+                <p style={{ ...M, fontSize: '11px', color: C[400], textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '16px' }}>[ Order Book ]</p>
+                <p style={{ ...S, fontSize: '22px', fontWeight: 500, color: C[300], margin: '0 0 12px' }}>Live order book coming in Phase C.</p>
+                <p style={{ ...S, fontSize: '14px', color: C[400] }}>Requires real-time market data feed.</p>
               </div>
             </motion.div>
           )}

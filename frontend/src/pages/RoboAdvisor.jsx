@@ -100,8 +100,8 @@ export default function RoboAdvisor() {
                     <p style={{ ...M, fontSize: '11px', color: C[400], margin: '0 0 20px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Risk: {p.risk}</p>
                     <p style={{ ...S, fontSize: '14px', color: C[500], margin: '0 0 16px' }}>{p.alloc}</p>
                     <div style={{ height: '1px', background: C[100], margin: '0 0 16px' }} />
-                    <p style={{ ...M, fontSize: '16px', fontWeight: 600, color: '#16a34a', margin: 0 }}>{p.est}</p>
-                    <p style={{ ...M, fontSize: '10px', color: C[300], margin: '4px 0 0' }}>estimated annual return</p>
+                    <p style={{ ...M, fontSize: '16px', fontWeight: 600, color: C.up, margin: 0 }}>{p.est}</p>
+                    <p style={{ ...M, fontSize: '10px', color: C[300], margin: '4px 0 0' }}>Historical estimate · not a guarantee</p>
                   </motion.div>
                 ))}
               </div>
@@ -112,7 +112,7 @@ export default function RoboAdvisor() {
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}
               >
                 <div>
-                  <p style={{ ...M, fontSize: '10px', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.12em', margin: '0 0 12px' }}>Coming in Phase 3</p>
+                  <p style={{ ...M, fontSize: '10px', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.12em', margin: '0 0 12px' }}>Coming Q4 2026</p>
                   <p style={{ ...headline.lg, color: C.white, margin: 0 }}>Your automated portfolio.<br />Sourced. Transparent. Yours.</p>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', minWidth: '200px' }}>
@@ -151,14 +151,19 @@ export default function RoboAdvisor() {
                       >{opt}</button>
                     ))}
                   </div>
-                  <button onClick={() => { setOnboarding(false); setStep(0) }} style={{ ...btn.link, marginTop: '32px' }}>← Back</button>
+                  <button onClick={() => { if (step === 0) { setOnboarding(false) } else { setStep(s => s - 1) } }} style={{ ...btn.link, marginTop: '32px' }}>← Back</button>
                 </motion.div>
               ) : (
                 <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
                   <p style={{ ...M, fontSize: '11px', color: '#16a34a', textTransform: 'uppercase', letterSpacing: '0.12em', margin: '0 0 16px' }}>[ Profile complete ]</p>
                   <h2 style={{ ...headline.lg, margin: '0 0 12px' }}>Your profile is ready.</h2>
                   <p style={{ ...S, fontSize: '15px', color: C[400], lineHeight: 1.6, margin: '0 0 40px' }}>
-                    Based on your answers, we'd recommend the <strong>Growth Portfolio</strong>. Portfolio building is coming in Phase 3.
+                    Based on your answers, we'd recommend the{' '}
+                    <strong>
+                      {answers[2] === 'Sell immediately' || answers[1] === '< 1 year' ? 'Conservative'
+                        : answers[2] === 'Buy more' && answers[1] === '10+ years' ? 'Growth'
+                        : 'Core'} Portfolio
+                    </strong>. Portfolio building is coming in Phase 3.
                   </p>
                   <div style={{ display: 'flex', gap: '12px' }}>
                     <button onClick={() => { setOnboarding(false); setStep(0) }} style={{ ...btn.primary }}>Back to overview</button>

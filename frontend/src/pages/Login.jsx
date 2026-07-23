@@ -42,6 +42,12 @@ export default function Login() {
             Log in to your pondex_ account.
           </p>
 
+          <div style={{ background: C[100], border: `1px solid ${C[200]}`, borderRadius: '10px', padding: '12px 16px', marginBottom: '24px' }}>
+            <p style={{ ...M, fontSize: '11px', color: C[400], margin: 0 }}>
+              Demo mode — any credentials work. Real accounts coming in Phase D.
+            </p>
+          </div>
+
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div>
               <label style={{ ...M, fontSize: '10px', color: C[400], textTransform: 'uppercase', letterSpacing: '0.1em', display: 'block', marginBottom: '8px' }}>Email</label>

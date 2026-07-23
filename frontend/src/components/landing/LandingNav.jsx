@@ -5,11 +5,11 @@ import { C } from '../../lib/colors'
 import { G, S, M } from '../../lib/grid'
 
 const navLinks = [
-  { label: 'Product',   href: '#features' },
-  { label: 'Solutions', href: '#how-it-works' },
-  { label: 'Resources', href: '#demo' },
-  { label: 'Company',   href: '#testimonials' },
-  { label: 'Pricing',   href: '#pricing' },
+  { label: 'How It Works', href: '#how-it-works' },
+  { label: 'Demo',         href: '#demo' },
+  { label: 'Features',     href: '#features' },
+  { label: 'Reviews',      href: '#testimonials' },
+  { label: 'Pricing',      href: '#pricing' },
 ]
 
 export default function LandingNav() {
@@ -58,7 +58,7 @@ export default function LandingNav() {
             ))}
           </nav>
 
-          {/* Right — Log in + Free Trial */}
+          {/* Right — Log in + Free Trial + Hamburger */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Link to="/login" style={{
               ...S, fontSize: '14px', color: C[600],
@@ -80,6 +80,17 @@ export default function LandingNav() {
             >
               Free Trial
             </Link>
+            {/* Hamburger — mobile only */}
+            <button
+              onClick={() => setOpen(true)}
+              style={{
+                display: 'none', background: 'none', border: 'none',
+                cursor: 'pointer', padding: '8px', color: C.black,
+                fontSize: '20px', lineHeight: 1,
+                ['@media (max-width: 768px)']: { display: 'flex' },
+              }}
+              aria-label="Open menu"
+            >☰</button>
           </div>
         </div>
       </header>
@@ -95,14 +106,19 @@ export default function LandingNav() {
           >
             <div style={{ display: 'flex', flexDirection: 'column', padding: '120px 32px 48px', gap: '8px' }}>
               {navLinks.map(link => (
-                <Link key={link.href} to={link.href} onClick={() => setOpen(false)} style={{
+                <a key={link.href} href={link.href} onClick={() => setOpen(false)} style={{
                   ...S, fontSize: '32px', fontWeight: 500, color: C.black,
                   textDecoration: 'none', padding: '12px 0',
                   borderBottom: `1px solid ${C[100]}`, letterSpacing: '-0.5px',
                 }}>
                   {link.label}
-                </Link>
+                </a>
               ))}
+              <button onClick={() => setOpen(false)} style={{
+                position: 'absolute', top: '24px', right: '32px',
+                background: 'none', border: 'none', cursor: 'pointer',
+                fontSize: '28px', color: C.black, lineHeight: 1,
+              }}>×</button>
             </div>
           </motion.div>
         )}

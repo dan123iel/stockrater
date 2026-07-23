@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { BungeeButton } from './BungeeButton'
 import { C } from '../../lib/colors'
@@ -10,7 +11,7 @@ const plans = {
   monthly: { free: '€0', pro: '€4.99', period: '/month', original: null },
   yearly:  { free: '€0', pro: '€49.99', period: '/year', original: '€59.88' },
 }
-const freeFeatures = ['1 full verdict per day', 'Source attribution on every number', 'Plain-language explanations', 'Price chart (1d/1m/3m/1y/max)', 'No account required']
+const freeFeatures = ['1 full verdict per day', 'Source attribution on every number', 'Plain-language explanations', 'Price chart (1d/1m/3m/1y/max)', 'No credit card required']
 const proFeatures  = ['Unlimited verdicts', 'Peer comparison (2 companies + sector avg)', 'DCF model + stress test', 'Watchlist + portfolio tracker', 'Weekly digest email', 'AI chat with source attribution']
 
 export default function Pricing() {
@@ -70,7 +71,7 @@ export default function Pricing() {
                 </li>
               ))}
             </ul>
-            <BungeeButton href="/signup">Start for free</BungeeButton>
+            <Link to="/signup" style={{ display: 'block' }}><BungeeButton>Start for free</BungeeButton></Link>
           </motion.div>
 
           {/* Pro */}
@@ -98,20 +99,13 @@ export default function Pricing() {
                 </li>
               ))}
             </ul>
-            <motion.a
-              href="/signup"
-              style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', gap: '16px', ...S, fontSize: '17.6px', fontWeight: 500, color: C.white, paddingBottom: '4px' }}
-              whileHover="hover"
+            <Link
+              to="/signup"
+              style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', gap: '16px', ...S, fontSize: '17.6px', fontWeight: 500, color: C.white, paddingBottom: '4px', textDecoration: 'none' }}
             >
               Start 7-day trial
-              <motion.span variants={{ hover: { rotate: 90 } }} transition={{ duration: 0.2 }} style={{ fontSize: '20px', lineHeight: 1 }}>+</motion.span>
-              <motion.div
-                style={{ position: 'absolute', bottom: 0, left: 0, height: '1px', background: C.white, width: '0%' }}
-                variants={{ rest: { width: '0%' }, hover: { width: '100%' } }}
-                initial="initial"
-                transition={{ duration: 0.3 }}
-              />
-            </motion.a>
+              <span style={{ fontSize: '20px', lineHeight: 1 }}>+</span>
+            </Link>
           </motion.div>
         </div>
 

@@ -8,9 +8,9 @@ import { headline, btn, card } from '../lib/bungee'
 
 const STATS = [
   { label: 'Max Leverage', value: '1:30' },
-  { label: 'Markets',      value: '500+' },
-  { label: 'Min Spread',   value: '0.1 pip' },
-  { label: 'Execution',    value: '<10ms' },
+  { label: 'Asset Classes', value: '4' },
+  { label: 'Min Spread',   value: 'TBD' },
+  { label: 'Status',       value: 'Preview' },
 ]
 
 const INSTRUMENTS = [
@@ -68,6 +68,11 @@ export default function CFD() {
             </p>
           </motion.div>
 
+          {/* Preview banner */}
+          <div style={{ background: C[100], border: `1px solid ${C[200]}`, borderRadius: '10px', padding: '12px 20px', marginBottom: '24px' }}>
+            <p style={{ ...M, fontSize: '11px', color: C[400], margin: 0 }}>[ Preview data — not live. CFD trading coming Q4 2026. ]</p>
+          </div>
+
           {/* Instruments table */}
           <p style={{ ...M, fontSize: '11px', color: C[400], textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '20px' }}>[ Available instruments ]</p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 100px 100px 100px 100px 120px', gap: '0', borderBottom: `1px solid ${C[200]}`, paddingBottom: '12px', marginBottom: '0' }}>
@@ -95,12 +100,12 @@ export default function CFD() {
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
           >
             <div>
-              <p style={{ ...M, fontSize: '10px', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.12em', margin: '0 0 12px' }}>Coming in Phase 4</p>
+              <p style={{ ...M, fontSize: '10px', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.12em', margin: '0 0 12px' }}>Coming Q4 2026</p>
               <p style={{ ...headline.lg, color: C.white, margin: 0 }}>Full CFD execution engine.<br />Real leverage. Coming soon.</p>
             </div>
-            <Link to="/signup" style={{ ...btn.primary, background: C.white, color: C.black, textDecoration: 'none', display: 'inline-block', textAlign: 'center' }}>
+            <button onClick={() => { alert('You are on the waitlist. We'll be in touch.') }} style={{ ...btn.primary, background: C.white, color: C.black, textDecoration: 'none', display: 'inline-block', textAlign: 'center', border: 'none', cursor: 'pointer' }}>
               Join waitlist →
-            </Link>
+            </button>
           </motion.div>
         </div>
       </main>
