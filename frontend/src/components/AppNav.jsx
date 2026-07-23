@@ -14,7 +14,6 @@ const navLinks = [
 ]
 
 export default function AppNav({ onLogout, userEmail }) {
-  const [searchOpen, setSearchOpen] = useState(false)
   const [searchVal, setSearchVal] = useState('')
   const navigate = useNavigate()
   const location = useLocation()
@@ -83,44 +82,24 @@ export default function AppNav({ onLogout, userEmail }) {
         {/* Right — Search + Log out + Profile */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
 
-          {/* Search */}
-          {searchOpen ? (
-            <form onSubmit={handleSearch} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <input
-                autoFocus
-                value={searchVal}
-                onChange={e => setSearchVal(e.target.value.toUpperCase())}
-                onKeyDown={e => e.key === 'Escape' && setSearchOpen(false)}
-                placeholder="AAPL, NVDA..."
-                maxLength={6}
-                style={{
-                  ...M, fontSize: '13px', width: '120px',
-                  background: C[100], border: `1px solid ${C[200]}`,
-                  borderRadius: '8px', padding: '7px 12px',
-                  color: C.black, outline: 'none',
-                }}
-              />
-              <button type="submit" style={{ ...M, fontSize: '12px', background: C.black, color: C.white, border: 'none', borderRadius: '7px', padding: '7px 14px', cursor: 'pointer' }}>
-                Go
-              </button>
-              <button type="button" onClick={() => setSearchOpen(false)} style={{ ...M, fontSize: '18px', background: 'none', border: 'none', cursor: 'pointer', color: C[400], padding: '0 4px' }}>
-                ×
-              </button>
-            </form>
-          ) : (
-            <button onClick={() => setSearchOpen(true)} style={{
-              display: 'flex', alignItems: 'center', gap: '6px',
-              ...S, fontSize: '14px', color: C[500],
-              background: C[100], border: 'none',
-              borderRadius: '8px', padding: '7px 14px', cursor: 'pointer',
-            }}>
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <circle cx="6" cy="6" r="4.5" stroke={C[400]} strokeWidth="1.5"/>
-                <path d="M9.5 9.5L12.5 12.5" stroke={C[400]} strokeWidth="1.5" strokeLinecap="round"/>
-              </svg>
-              Search
+          {/* Search — always visible */}
+          <form onSubmit={handleSearch} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <input
+              value={searchVal}
+              onChange={e => setSearchVal(e.target.value.toUpperCase())}
+              placeholder="AAPL, NVDA..."
+              maxLength={6}
+              style={{
+                ...M, fontSize: '13px', width: '120px',
+                background: C[100], border: `1px solid ${C[200]}`,
+                borderRadius: '8px', padding: '7px 12px',
+                color: C.black, outline: 'none',
+              }}
+            />
+            <button type="submit" style={{ ...M, fontSize: '12px', background: C.black, color: C.white, border: 'none', borderRadius: '7px', padding: '7px 14px', cursor: 'pointer' }}>
+              Go
             </button>
-          )}
+          </form>
 
           {onLogout && (
             <button onClick={onLogout} style={{

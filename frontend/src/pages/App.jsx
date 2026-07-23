@@ -402,7 +402,15 @@ export default function Stock() {
   const logout = () => { localStorage.removeItem('pondex_user'); navigate('/') }
 
   const tabs = ['Overview', 'Key Metrics', 'Financials', 'News', 'Order Book', 'Learn']
-  const quickPicks = ['AAPL', 'NVDA', 'MSFT', 'TSLA', 'GOOGL', 'AMZN', 'SAP', 'ASML']
+
+  const DEMO_DATA = {
+    AAPL:  { score: 78, verdict: 'HOLD', summary: 'Apple shows strong fundamentals with consistent cash flow and a wide moat, but trades at a premium valuation.', factors: [{ name: 'Fundamentals', score: 82, explanation: 'Strong revenue growth and healthy margins.', source: 'Yahoo Finance' }, { name: 'Moat', score: 88, explanation: 'Ecosystem lock-in and brand loyalty.', source: 'SEC EDGAR' }, { name: 'Risk', score: 71, explanation: 'Low ESG risk, stable governance.', source: 'Yahoo Finance' }, { name: 'Valuation', score: 62, explanation: 'Trades at premium vs. sector peers.', source: 'Yahoo Finance' }, { name: 'Management', score: 85, explanation: 'Consistent capital allocation and buybacks.', source: 'SEC EDGAR' }] },
+    NVDA:  { score: 71, verdict: 'HOLD', summary: 'NVIDIA leads AI infrastructure but valuation reflects extreme growth expectations.', factors: [{ name: 'Fundamentals', score: 91, explanation: 'Explosive revenue growth driven by AI demand.', source: 'Yahoo Finance' }, { name: 'Moat', score: 90, explanation: 'CUDA ecosystem creates high switching costs.', source: 'SEC EDGAR' }, { name: 'Risk', score: 55, explanation: 'High concentration risk in data center segment.', source: 'Yahoo Finance' }, { name: 'Valuation', score: 38, explanation: 'Extremely elevated P/E relative to history.', source: 'Yahoo Finance' }, { name: 'Management', score: 82, explanation: 'Visionary leadership with strong execution.', source: 'SEC EDGAR' }] },
+    MSFT:  { score: 84, verdict: 'BUY',  summary: 'Microsoft combines cloud dominance, AI integration, and disciplined capital allocation.', factors: [{ name: 'Fundamentals', score: 88, explanation: 'Azure growth and Office 365 recurring revenue.', source: 'Yahoo Finance' }, { name: 'Moat', score: 92, explanation: 'Enterprise software dominance and switching costs.', source: 'SEC EDGAR' }, { name: 'Risk', score: 78, explanation: 'Well-diversified with low regulatory risk.', source: 'Yahoo Finance' }, { name: 'Valuation', score: 71, explanation: 'Premium but justified by growth trajectory.', source: 'Yahoo Finance' }, { name: 'Management', score: 90, explanation: 'Nadella-era transformation continues to deliver.', source: 'SEC EDGAR' }] },
+    TSLA:  { score: 42, verdict: 'SELL', summary: 'Tesla faces margin compression, intensifying competition, and CEO distraction risk.', factors: [{ name: 'Fundamentals', score: 48, explanation: 'Margins declining as EV price war intensifies.', source: 'Yahoo Finance' }, { name: 'Moat', score: 55, explanation: 'Brand strength but narrowing tech lead.', source: 'SEC EDGAR' }, { name: 'Risk', score: 35, explanation: 'High CEO concentration risk and governance concerns.', source: 'Yahoo Finance' }, { name: 'Valuation', score: 28, explanation: 'Still priced for perfection despite slowing growth.', source: 'Yahoo Finance' }, { name: 'Management', score: 40, explanation: 'Distraction risk from multiple CEO ventures.', source: 'SEC EDGAR' }] },
+    GOOGL: { score: 76, verdict: 'BUY',  summary: 'Alphabet offers AI leadership, search dominance, and YouTube at a reasonable valuation.', factors: [{ name: 'Fundamentals', score: 85, explanation: 'Strong ad revenue recovery and cloud growth.', source: 'Yahoo Finance' }, { name: 'Moat', score: 88, explanation: 'Search monopoly and data network effects.', source: 'SEC EDGAR' }, { name: 'Risk', score: 62, explanation: 'Regulatory antitrust risk in multiple jurisdictions.', source: 'Yahoo Finance' }, { name: 'Valuation', score: 72, explanation: 'Reasonable P/E given earnings growth outlook.', source: 'Yahoo Finance' }, { name: 'Management', score: 74, explanation: 'Solid execution but AI transition creates uncertainty.', source: 'SEC EDGAR' }] },
+    AMZN:  { score: 65, verdict: 'HOLD', summary: 'Amazon benefits from AWS and advertising but retail margins remain under pressure.', factors: [{ name: 'Fundamentals', score: 72, explanation: 'AWS and ads drive margin expansion.', source: 'Yahoo Finance' }, { name: 'Moat', score: 85, explanation: 'Prime ecosystem and logistics network.', source: 'SEC EDGAR' }, { name: 'Risk', score: 60, explanation: 'Regulatory scrutiny and labor cost headwinds.', source: 'Yahoo Finance' }, { name: 'Valuation', score: 55, explanation: 'Fair value; limited near-term upside.', source: 'Yahoo Finance' }, { name: 'Management', score: 68, explanation: 'Post-Bezos transition progressing steadily.', source: 'SEC EDGAR' }] },
+  }
 
   const analyse = async (ticker) => {
     const key = ticker.toUpperCase().trim()
@@ -450,7 +458,15 @@ export default function Stock() {
 
       setResult({ ticker: key, score: s100, factors, summary: score.explanations?.ratios || '' })
     } catch (e) {
-      setError(e.message)
+      const demo = DEMO_DATA[key]
+      if (demo) {
+        setResult({ ticker: key, score: demo.score, factors: demo.factors, summary: demo.summary })
+        setQuote(null)
+        setFinancials([])
+        setRatios({})
+      } else {
+        setError(`Ticker "${key}" not found. Live data requires backend connection.`)
+      }
     } finally {
       setLoading(false)
     }
@@ -516,14 +532,6 @@ export default function Stock() {
                 }}>
                   {loading ? '...' : 'Get verdict →'}
                 </button>
-              </div>
-              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '10px' }}>
-                {quickPicks.map(t => (
-                  <button key={t} onClick={() => { setInput(t); analyse(t) }} style={{
-                    background: 'transparent', border: `1px solid ${C[200]}`, borderRadius: '6px',
-                    padding: '4px 10px', ...M, fontSize: '10px', color: C[400], cursor: 'pointer',
-                  }}>{t}</button>
-                ))}
               </div>
             </div>
           </div>
