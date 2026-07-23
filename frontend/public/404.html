@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script>
+    // GitHub Pages SPA redirect: store path in sessionStorage, redirect to base
+    const path = window.location.pathname.replace('/stockrater', '') + window.location.search
+    sessionStorage.setItem('spa_redirect', path)
+    window.location.replace('/stockrater/')
+  </script>
+</head>
+<body></body>
+</html>
