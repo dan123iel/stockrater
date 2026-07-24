@@ -1,6 +1,6 @@
 # User Stories — pondex
+_Last updated: 2026-07-24 · Based on Survey Wave 1 (n=45), Wave 2 (n=35), 3 interviews_
 
-> Derived from Survey Wave 1 (n=45, Juni 2026) and ICP interviews.
 > Format: "As a [who], I want to [what], so that [why]."
 > Each story has acceptance criteria (Given / When / Then).
 
@@ -10,184 +10,262 @@
 
 | Code | Who |
 |---|---|
-| **VA** | Value Investor (Active) — pays/has paid, EU-NW, ICP |
-| **PI** | Passive Investor — ETF-only, rarely checks |
-| **AS** | Aspirer — wants to start, no investment yet |
+| **VA** | Value/Active Investor — pays/has paid, EU, ICP (Gunnar-Typ) |
+| **PI** | Passive Investor — ETF-fokussiert, selten recherchiert (Patricia-Typ) |
+| **FP** | Finance Professional — skeptisch, will Cross-Validation (José-Typ) |
+| **AS** | Aspirer — will anfangen, noch kein Investment |
 
 ---
 
-## Phase 1 — MVP (in scope)
+## Phase B — Demo (✅ Live)
 
-### US-001 · Search and analyse a ticker
+### US-001 · Ticker analysieren und Verdict erhalten
 
 ```
-As a VA/PI
+As a VA/PI/FP
 I want to enter a ticker and see a clear verdict within 60 seconds,
 so that I don't have to scroll through multiple tools to get an assessment.
 ```
 
 **Acceptance criteria:**
-- Given: I am on the Analyse page
-- When: I type "NVDA" and press Enter
-- Then: Score, explanation and source attribution appear in < 3 seconds
+- Given: I am on the Stock page
+- When: I type "AAPL" and press Enter or click "GET VERDICT"
+- Then: Score 0–100, BUY/HOLD/SELL badge, and plain-language summary appear
+- And: Factor breakdown with 5 factors is visible below the score
 
 ---
 
-### US-002 · Plain-language explanation before the score
+### US-002 · Plain-Language Erklärung vor Score
 
 ```
-As an AS
-I want to read an explanation in plain language first (no jargon),
+As a PI/AS
+I want to read an explanation in plain language first,
 so that I understand what the score means before I trust it.
 ```
 
 **Acceptance criteria:**
-- Given: I have analysed a ticker
-- When: The results load
-- Then: The text "Strong fundamentals — healthy margins..." appears before the score number
-- And: No unexplained acronym (P/E, EBITDA, etc.) in the primary text
+- Given: Analysis is loaded
+- When: Overview tab is displayed
+- Then: Summary text appears in the verdict card before tabs
+- And: Factor breakdown explains each factor in 1 sentence with source
 
 ---
 
-### US-003 · Source attribution for every number
+### US-003 · Quellenangabe für jede Zahl
 
 ```
-As a VA (Gunnar Leu type)
-I want to see the exact data source for every metric displayed,
+As a VA/FP
+I want to see the exact data source for every metric,
 so that I can trust the verdict without taking it blindly.
 ```
 
 **Acceptance criteria:**
 - Given: Score panel is loaded
-- When: I click the ▾ icon next to a factor
-- Then: I see e.g. "P/E Ratio · 24.3x · Yahoo Finance – trailing twelve months"
-- And: Every row has a label, value and source
+- When: I look at any factor row
+- Then: Source is visible (e.g. "Yahoo Finance")
+- And: Disclaimer "Research tool only · Not financial advice" is permanently visible
 
 ---
 
-### US-004 · AI insights with source attribution
+### US-004 · Zwischen Tabs navigieren
 
 ```
-As a VA
-I want to ask the AI chat a question and get an answer
-that contains only facts from named sources,
-so that I don't use hallucinated numbers as a basis for decisions.
-```
-
-**Acceptance criteria:**
-- Given: AI Insights tab is open, Groq key is set
-- When: I ask "What is the biggest risk?"
-- Then: The answer contains no numbers without source attribution
-- And: The sources[] array shows the data points used
-
----
-
-### US-005 · Switch between 12 analysis tabs
-
-```
-As a VA/PI
-I want to switch between Scorecard, Chart, Valuation, DCF, News, Insider and AI,
-so that I can dive deep into whichever area interests me at the moment.
+As a VA/FP
+I want to switch between Overview, Key Metrics, Financials, News, Exit Check, Learn,
+so that I can dive deep into whichever area interests me.
 ```
 
 **Acceptance criteria:**
 - Given: Analysis is loaded
-- When: I click "Insider"
-- Then: The insider trades view opens without a page reload
-- And: The active tab is visually highlighted
-- And: "Financials", "Dividends", "Analysts" show "coming soon"
+- When: I click "Key Metrics"
+- Then: 4 sections (Price & Volume, Valuation, Profitability, Management) appear
+- And: All numbers have source labels
 
 ---
 
-### US-006 · Build a watchlist
+### US-005 · Peer-Vergleich sehen (Comparison)
 
 ```
-As a PI
-I want to add stocks to a watchlist,
-so that I can quickly pull them up again on my next visit.
+As a FP/VA
+I want to compare two stocks side-by-side with sector average,
+so that I can see relative value and make a better decision.
 ```
 
-**Acceptance criteria:**
-- Given: I have analysed AAPL
-- When: I navigate to Watchlist
-- Then: AAPL appears in the list
-- And: Clicking AAPL opens the analysis directly
+**Research basis:** José B.: "I really like the comparison part — that's how you make a decision."
+**Status:** Phase E (Pro feature) · **Acceptance criteria:** TBD with Phase E spec
 
 ---
 
-### US-007 · Quickly switch between markets overview and analysis
+## Phase C — Live Backend
 
-```
-As a VA/PI
-I want to click on an index or stock on the Markets page,
-so that I jump directly into the analysis without entering the ticker manually.
-```
-
-**Acceptance criteria:**
-- Given: I am on the Markets page
-- When: I click "ASML"
-- Then: The Analyse page opens with ASML pre-loaded
-
----
-
-## Phase 2 — Planned (not in Phase 1)
-
-### US-008 · Macro context alongside stock analysis
-
-```
-As a VA (Gunnar Leu type)
-I want to see geopolitical events and external market factors together with the stock analysis,
-so that I don't have to switch between Handelsblatt, YouTube and the analysis tool.
-```
-
-**Survey basis:** Q9 verbatim from Gunnar Leu — his explicit #1 request.
-**Status:** Phase 2, Macro Hub.
-
----
-
-### US-009 · Explanations in German or Spanish
-
-```
-As an AS (EU-NW / Latin America)
-I want to read the explanations in my native language,
-so that no language barrier complicates my decision.
-```
-
-**Survey basis:** 57% EU respondents, several verbatims in Spanish (Q9).
-**Status:** Phase 2, Multilingual.
-
----
-
-### US-010 · Create an account and save settings
+### US-006 · Beliebige Ticker analysieren
 
 ```
 As a VA
-I want to be able to log in,
-so that my strategy profile, watchlist and portfolio track are not lost
-when I clear the browser cache.
+I want to enter any stock ticker (not just the 6 demo stocks),
+so that I can research the stocks I actually hold or follow.
 ```
 
-**Status:** Phase 2, Login + backend persistence.
+**Acceptance criteria:**
+- Given: Railway backend is deployed
+- When: I enter "ASML" or any valid ticker
+- Then: Real score based on live Yahoo Finance + SEC EDGAR data appears
+- And: "Illustrative" label is no longer shown
 
 ---
 
-## Won't build (with rationale)
+### US-007 · Watchlist editieren
 
-| Story | Why not |
+```
+As a PI
+I want to add and remove stocks from my watchlist,
+so that I can track the stocks I care about, not a hardcoded list.
+```
+
+**Acceptance criteria:**
+- Given: I am on /app/portfolio Watchlist tab
+- When: I click "Add ticker" and enter "NVDA"
+- Then: NVDA appears in my watchlist
+- When: I click "×" on AAPL
+- Then: AAPL is removed from my watchlist
+- And: Changes persist after page reload (localStorage)
+
+---
+
+## Phase D — Auth & Personalization
+
+### US-008 · Account erstellen und Daten behalten
+
+```
+As a VA
+I want to log in with my email,
+so that my watchlist and profile are not lost when I clear the browser cache.
+```
+
+**Acceptance criteria:**
+- Given: I have created an account with Supabase auth
+- When: I clear localStorage and log back in
+- Then: My watchlist and investor profile are still there
+- And: My "Member since" date is correct
+
+---
+
+### US-009 · Investor-Profil einrichten (Onboarding)
+
+```
+As a PI
+I want to answer 3 quick questions about my investment style,
+so that scores are weighted for my strategy (not a generic default).
+```
+
+**Acceptance criteria:**
+- Given: I have just signed up (first session)
+- When: I see the onboarding banner on my first analysis
+- When: I complete 3 questions (Goal, Horizon, Risk reaction)
+- Then: My score shows "Your score (Value Investor): 62/100" vs. "Default: 78/100"
+- And: I can skip the onboarding and use default weights
+
+**Research basis:** Patricia P.: "Das Tool muss mich kennen."
+**Spec:** docs/specs/ONBOARDING-FLOW-SPEC.md
+
+---
+
+### US-010 · Account löschen (GDPR)
+
+```
+As any user
+I want to delete my account and all associated data,
+so that I can exercise my right to erasure under GDPR.
+```
+
+**Acceptance criteria:**
+- Given: I am on /app/account
+- When: I click "Delete account"
+- Then: A confirmation dialog appears ("This will permanently delete your account and all data")
+- When: I confirm
+- Then: All my data is deleted and I am redirected to /
+- And: I cannot log back in with the same credentials
+
+---
+
+## Phase E — Monetization
+
+### US-011 · Free Tier Gate erleben
+
+```
+As a free user
+I want to understand the upgrade value clearly when I hit the daily limit,
+so that I can make an informed decision about upgrading.
+```
+
+**Acceptance criteria:**
+- Given: I have run 1 analysis today (free tier limit)
+- When: I try to run a second analysis
+- Then: An upgrade modal appears (not a hard block)
+- And: Modal shows "You've used your free verdict for today" + Pro benefits
+- And: "Remind me tomorrow" closes the modal without upgrading
+- And: The limit resets at midnight
+
+---
+
+### US-012 · Pro upgraden via Stripe
+
+```
+As a free user who has hit the limit
+I want to upgrade to Pro with a clear monthly or annual price,
+so that I can get unlimited analyses.
+```
+
+**Acceptance criteria:**
+- Given: I click "Upgrade to Pro" in the modal
+- When: I complete Stripe Checkout
+- Then: I am redirected back to the app as a Pro user
+- And: The daily limit is lifted immediately
+- And: I receive a receipt email from Stripe
+
+---
+
+## Phase E2 — Exit Strategy
+
+### US-013 · Exit-Signal für eine gehaltene Position erhalten
+
+```
+As a VA who holds TSLA
+I want to see an Exit Score and HOLD/TRIM/EXIT signal,
+so that I know whether my original investment thesis still holds.
+```
+
+**Acceptance criteria:**
+- Given: I am on /app/stock?ticker=TSLA, Exit Check tab
+- When: I optionally enter my purchase price
+- Then: Exit Score 0–100 is displayed
+- And: Signal is HOLD / TRIM / EXIT (never "Sell" as imperative)
+- And: Thesis drift is shown (e.g. "Revenue Growth: was +21%, now +3%")
+- And: Disclaimer: "Research signal only · Not financial advice"
+
+**Spec:** docs/specs/EXIT-STRATEGY-SPEC.md · docs/specs/UX-STRUCTURE-SPEC.md §13
+
+---
+
+## Won't Build (mit Begründung)
+
+| Story | Warum nicht |
 |---|---|
-| "As a user I want to buy stocks directly" | Broker licence required |
-| "As a user I want to receive recommendations (Buy/Sell)" | Regulatory risk |
-| "As a user I want real-time streaming prices" | Infrastructure cost vs. benefit |
-| "As a user I want to share stocks with friends" | No survey signal, Phase 3+ |
+| Aktien direkt kaufen | Broker-Lizenz (MiFID II execution) erforderlich |
+| Kauf-/Verkaufsempfehlungen ("Du solltest kaufen") | Regulatorisches Risiko ohne Investmentberatungs-Lizenz |
+| Echtzeit-Streaming-Preise | Infrastrukturkosten nicht gerechtfertigt für Phase B/C |
+| Social Trading / Copy Trading | Kein Survey-Signal, andere Zielgruppe |
+| Gamification / Streaks | Widerspricht Kernwert: kein Engagement-Maximizing |
 
 ---
 
-## Story map (by user journey)
+## Story Map (User Journey)
 
 ```
-[Discover]           [Analyse]              [Decide]              [Return]
-      ↓                    ↓                       ↓                     ↓
-US-007 Markets       US-001 Search          US-003 Sources         US-006 Watchlist
-                     US-002 Explanation     US-004 AI Chat
-                     US-005 Tabs
+[Entdecken]        [Analysieren]        [Entscheiden]        [Zurückkehren]
+     ↓                   ↓                    ↓                    ↓
+US-006 Ticker    US-001 Verdict       US-003 Quellen       US-007 Watchlist
+US-005 Compare   US-002 Erklärung     US-013 Exit Signal   US-011 Gate
+                 US-004 Tabs          US-009 Profil
+                 US-008 Account
 ```
