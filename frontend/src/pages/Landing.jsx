@@ -8,8 +8,10 @@ import FeatureShowcase from '../components/landing/FeatureShowcase'
 import ComparisonTeaser from '../components/landing/ComparisonTeaser'
 import InvestorProfile from '../components/landing/InvestorProfile'
 import Testimonials from '../components/landing/Testimonials'
+import MidCTA from '../components/landing/MidCTA'
 import Pricing from '../components/landing/Pricing'
 import FAQ from '../components/landing/FAQ'
+import FounderNote from '../components/landing/FounderNote'
 import FinalCTA from '../components/landing/FinalCTA'
 import LandingFooter from '../components/landing/LandingFooter'
 
@@ -18,7 +20,7 @@ export default function Landing() {
     <div className="min-h-screen">
       <LandingNav />
 
-      {/* 1. Hero */}
+      {/* 1. Hero — Titel + Untertitel + CTA + Social Proof + Visual */}
       <Hero />
 
       {/* 2. Aha-Moment — Demo mit AAPL vorgeladen */}
@@ -42,16 +44,22 @@ export default function Landing() {
       {/* 8. Investor-Profil — Same stock, different score */}
       <InvestorProfile />
 
-      {/* 9. Testimonials */}
+      {/* 9. Testimonials + Stats */}
       <Testimonials />
 
-      {/* 10. Pricing */}
+      {/* 10. Zwischen-CTA — nach Social Proof, vor Pricing */}
+      <MidCTA />
+
+      {/* 11. Pricing */}
       <Pricing />
 
-      {/* 11. FAQ */}
+      {/* 12. FAQ */}
       <FAQ />
 
-      {/* 12. Final CTA */}
+      {/* 13. Gründerhinweis */}
+      <FounderNote />
+
+      {/* 14. Final CTA */}
       <FinalCTA />
 
       <LandingFooter />

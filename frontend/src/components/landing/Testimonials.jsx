@@ -8,18 +8,21 @@ const M = { fontFamily: 'Chivo Mono, monospace' }
 const quotes = [
   {
     text: "The score is much better than a raw price. Undervalued/overvalued with a number — that's what I need.",
-    name: 'Gunnar', role: 'Value Investor',
+    name: 'Gunnar L.', role: 'Value Investor · Berlin',
     initial: 'G',
+    source: 'User interview · June 2026',
   },
   {
     text: "I find it amazing. Gen-Z mindset — rate everything out of ten. That's how I think.",
-    name: 'Patricia', role: 'Passive Investor',
+    name: 'Patricia M.', role: 'Passive Investor · Hamburg',
     initial: 'P',
+    source: 'User interview · June 2026',
   },
   {
     text: "I really like the comparison part. That's how you can actually make a decision.",
-    name: 'José', role: 'Finance Professional',
+    name: 'José R.', role: 'Finance Professional · Madrid',
     initial: 'J',
+    source: 'User interview · June 2026',
   },
 ]
 
@@ -84,6 +87,7 @@ function TestimonialCard({ quote, index, total }) {
           <div>
             <p style={{ ...S, fontSize: '17.6px', fontWeight: 500, color: C.black }}>{quote.name}</p>
             <p style={{ ...S, fontSize: '15px', fontWeight: 400, color: C[400], marginTop: '4px' }}>{quote.role}</p>
+            <p style={{ ...M, fontSize: '10px', color: C[300], textTransform: 'uppercase', letterSpacing: '0.08em', marginTop: '8px' }}>{quote.source}</p>
           </div>
         </div>
       </motion.div>
@@ -98,10 +102,11 @@ export default function Testimonials() {
 
         {/* Header */}
         <div style={{ marginBottom: '64px' }}>
-          <p style={{ ...M, fontSize: '14px', color: C[400], textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '16px' }}>( TESTIMONIALS )</p>
+          <p style={{ ...M, fontSize: '14px', color: C[400], textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '16px' }}>[ Testimonials ]</p>
           <h2 style={{ ...S, fontSize: 'clamp(32px, 3.5vw, 48px)', fontWeight: 500, letterSpacing: '-0.02em', lineHeight: '1.1', color: C.black, maxWidth: '640px' }}>
             Trusted by investors who aren't afraid to question the data.
           </h2>
+          <p style={{ ...S, fontSize: '14px', color: C[300], marginTop: '12px' }}>From user research interviews · n=45 · June 2026</p>
         </div>
 
         {/* Stacking cards */}

@@ -40,7 +40,7 @@ function HeroVisual() {
         initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.8, duration: 0.5 }}
       >
-        <p style={{ ...M, fontSize: '10px', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 4px' }}>Survey · Wave 1</p>
+        <p style={{ ...M, fontSize: '10px', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 4px' }}>Investor research · n=45</p>
         <p style={{ ...S, fontSize: '28px', fontWeight: 500, color: C.white, margin: 0, letterSpacing: '-1px' }}>71%</p>
         <p style={{ ...M, fontSize: '11px', color: 'rgba(255,255,255,0.6)', margin: '4px 0 0' }}>trust only sourced data</p>
       </motion.div>
