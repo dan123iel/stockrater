@@ -1040,10 +1040,475 @@ Optionen:
 
 ---
 
+## 11. Research-Findings — Was die Nutzerstudien ergeben haben
+
+_Basis: Survey Wave 1 (n=56), Wave 2 (n=35), 3 User-Interviews (Gunnar L., Patricia P., José B.)_
+_Alle Findings sind produktentscheidungsrelevant — kein Nice-to-know._
+
+### 11.1 Die 10 gesicherten Kernbefunde
+
+**Befund 1 — Signal/Noise ist der dominante Pain (🟢 Hoch gesichert)**
+- 51% Wave 1, 40% Wave 2 nennen "zu viel widersprüchliche Information" als #1 Frustration
+- Repliziert sich durch alle 3 Interviews unabhängig voneinander
+- UX-Konsequenz: pondex_ muss eine klare Antwort geben — nicht mehr Daten, sondern weniger Lärm
+
+**Befund 2 — Quellenangabe ist kein Feature, sondern Vertrauensvoraussetzung (🟢 Hoch)**
+- 58–64% vertrauen KI-Output nur wenn Quelle + Formel sichtbar
+- "I don't trust anyone — I need to see where the number comes from." — José B.
+- UX-Konsequenz: Jede Zahl in pondex_ muss eine Quelle haben. Keine unattributierten Zahlen zeigen.
+
+**Befund 3 — Geäußertes Interesse ≠ Zahlungsbereitschaft (🟡 Mittel)**
+- 86% positiv auf Konzept, aber nur 10% sagen "Yes" zu €4.99/Monat
+- 59% sagen "Maybe" — Barrier ist fehlender Proof, nicht der Preis
+- UX-Konsequenz: Free Tier zuerst. User muss Wert erleben bevor Paywall. Upgrade-Trigger = "zweite Analyse heute"
+
+**Befund 4 — Churner verließen bestehende Tools aus genau dem Grund, den pondex_ löst (🟢 Hoch)**
+- Beide Probanden mit Zahlungshistorie ($15–50/Monat) kündigten weil Noise-Problem ungelöst blieb
+- "Ich habe gezahlt und trotzdem nicht gewusst wo ich anfangen soll." — Gunnar L.
+- UX-Konsequenz: pondex_ muss von Anfang an zeigen dass es Noise reduziert, nicht hinzufügt
+
+**Befund 5 — Peer-Vergleich ist die stärkste ungestützte Reaktion aller Interviews (🟢 Hoch)**
+- "I really like the comparison part, because that's how you can actually make a decision." — José B.
+- Alle 3 Interviewten reagierten stärker auf Vergleich als auf Score allein
+- UX-Konsequenz: Peer-Comparison ist kein nice-to-have sondern Load-Bearing-Feature für Conversion
+
+**Befund 6 — Erklärung vor Score ist die richtige Reihenfolge (🟡 Mittel)**
+- Passive Investoren wollen verstehen bevor sie urteilen
+- "Score with explanations for beginners, not just numbers." — Patricia P.
+- UX-Konsequenz: Factor Breakdown immer sichtbar, nicht hinter Tab; Tooltips für Fachbegriffe
+
+**Befund 7 — Personalisierung ist Differenziator (Patricia-Insight) (🟡 Mittel)**
+- "Das Tool muss mich kennen." — Patricia P.
+- Gleiche Aktie, anderer Score je nach Investoren-Typ — höchste Differenzierungsreaktion
+- UX-Konsequenz: Investor-Profil und Score-Gewichtung sind Phase D Pflicht, nicht Optional
+
+**Befund 8 — Fragmentation ist das strukturelle Problem, nicht Tool-Qualität (🟢 Hoch)**
+- Durchschnittlicher User nutzt 4–5 Tools (YouTube → ChatGPT → Broker → Yahoo Finance)
+- Kein Tool replaces den anderen — alle lösen nur Teil des Problems
+- UX-Konsequenz: pondex_ muss als Replacement positioniert werden, nicht als Addition
+
+**Befund 9 — "When to sell" ist ungelöstes Problem überall (Gunnar-Insight) (🟡 Mittel)**
+- Kein bestehendes Tool hat Exit-Signale
+- "Ich weiß nie wann ich verkaufen soll." — Gunnar L.
+- UX-Konsequenz: Exit Strategy (Phase E2) ist echter Differenziator, kein Feature-Bloat
+
+**Befund 10 — Cold-Audience-Validierung fehlt noch (🔴 Wichtige Lücke)**
+- Wave 1 + Wave 2 = Warm Network (Freunde, LinkedIn-Kontakte von Daniel)
+- Wave 2 war für Reddit geplant, wurde als Warm-Network durchgeführt
+- Risiko: Alle positiven Signale könnten durch Social Bias verzerrt sein
+- UX-Konsequenz: Kein Feature auf Basis von Warm-Network-Daten als "validated" betrachten
+
+### 11.2 User-Archetypes aus den Interviews (Primärquellen)
+
+**Archetype 1: Gunnar L. — "Der Churned Value Investor"**
+- Profil: Wert-/Optionshändler, NYSE-fokussiert, nutzt TradingView + IBKR, YouTube als Inspirationsquelle (Mario Lochner, Markus Koch, Ticker Symbol U)
+- Hat für Research-Tools gezahlt ($15–50/Monat), aufgehört wegen Life-Change (nicht Produkt-Failure)
+- Kernpain: "Wenn ich 2 Stunden für Research aufwenden wollte, wüsste ich nicht wo ich anfangen soll"
+- Was er von pondex_ will:
+  1. Score 0–100 (nicht 0–10 — "fühlt sich komplett willkürlich an")
+  2. Moving Averages (50/200-Tage) im Chart
+  3. Chart-Interpretation in Plain Language ("Was kann ich aus diesem Chart lesen? Diese Erklärung fehlt überall")
+  4. Peer/Sektor-Benchmarking
+  5. Support/Resistance-Linien
+  6. Reorderbares Dashboard
+- Churn-Insight: Retargeting-Emails scheiterten weil sie Features bewarben statt sein WHY (z.B. "Thailand-Traum") anzusprechen
+- Retention-Schlüssel: User an seinen persönlichen Investment-Grund erinnern, nicht an Produkt-Features
+- WTP: Hat bewiesen ($15–50/Monat) — höchster Wert aller Befragten
+
+**Archetype 2: Patricia P. — "Die Passive Noise-Reducerin"**
+- Profil: Tech-Profi, passiver Investor, investiert "alle paar Monate", nutzt YouTube → ChatGPT → Trade Republic
+- Trigger für Research: Aktuelle News (z.B. Hitzewelle → Klimaanlagen-Aktien)
+- Kernpain: "Welche Aktie passt zu MIR? Zu meinem Risiko, Budget, Dividenden-Präferenz?"
+- Was sie von pondex_ will:
+  1. Score MIT Erklärungen für Anfänger (Score allein reicht nicht)
+  2. Personalisierung: Tool kennt ihr Profil + Portfolio
+  3. Portfolio-Companion: fasst zusammen ohne manuelles Suchen
+  4. Tooltip-Glossar für Fachbegriffe (DCF, Verdict, P/E)
+  5. Scrolling statt Klicken (mobile-first Denkweise)
+- Pricing (Van Westendorp): €3–5/Monat als "Schnäppchen"-Niveau (iCloud/Netflix-Tier), unter €2.99 = Qualitätszweifel
+- Onboarding: 5-Fragen-Intake für Risiko/Strategie als Pflicht für Personalisierung
+- Würde empfehlen: "Echt ein cooles Tool, vor allem mit Erklärungen"
+
+**Archetype 3: José B. — "Der Skeptische Finance-Professional"**
+- Profil: Bankenhintergrund, Mexiko, passiver/risiko-averser Investor, ETF-schwer, long-term
+- Research-Workflow: Bank-Newsletter → ChatGPT/Gemini → Yahoo Finance → Broker
+- Trigger: Makro-Events (z.B. Ölpreise)
+- Kernpain: "It is not integrated" — braucht eine Plattform mit Finanzdaten + Ratings + Links zu Jahresberichten + Broker-Provisionen
+- Vertrauensmodell: Gemini als vertrautestes Tool weil es "klar BUY/HOLD/SELL zeigt und erklärt warum"
+- Was er von pondex_ will:
+  1. Peer/Sektor-Vergleich (stärkste Reaktion überhaupt — "That's how you make a decision")
+  2. Chart immer sichtbar mit Zeitraum-Selector (1d/3m/1y/max)
+  3. Leverage + Revenue Ratios auf einen Blick
+  4. Jährliche Berichte verlinkt
+  5. Broker-Provisionen sichtbar (sekundäres Pain, nicht MVP)
+- Verhalten: Kreuzt AI-Output immer manuell gegen Investor-Relations-Seiten — sucht unabhängige Bestätigung
+- Secondary Pain: Broker-Gebühren + mexikanische Steuern reduzieren Rendite unsichtbar
+
+### 11.3 Was User NICHT wollen (Dealbreaker)
+
+Aus allen 3 Interviews und Survey-Daten:
+
+| Dealbreaker | Quelle | UX-Konsequenz |
+|---|---|---|
+| Score ohne Erklärung | Alle 3 Interviews | Factor Breakdown immer sichtbar, nie hinter Klick verstecken |
+| AI ohne Quellenangaben | 64% Wave 1 | Jeder AI-Output: mindestens 1 Quellenangabe |
+| Setup > 2 Minuten | Patricia P. | Onboarding max. 3 Fragen, Skip-Option |
+| "Noch ein weiteres Tool" | Wave 1 allgemein | Als Replacement positionieren, nicht Addition |
+| Zahlen ohne Kontext | Gunnar + José | Immer: Zahl + Sektor-Benchmark + Trend |
+| Unklare Aktualität der Daten | Patricia P. | Immer Datum der letzten Aktualisierung zeigen |
+| Kein Personalbezug | Patricia P. | Score muss Investor-Profil kennen (Phase D) |
+
+---
+
+## 12. Revolut als UX-Referenz
+
+_Basis: Reverse-Engineering der Revolut Investment App (Juli 2026)_
+_Zweck: Was macht Revolut gut? Was sollte pondex_ anders machen?_
+
+### 12.1 Revolut's Navigationsstruktur
+
+```
+Revolut App — Investments-Bereich
+│
+├── Dashboard (Startseite Investments)
+│   ├── Portfolio-Übersicht (Gesamtwert, Performance-Chart)
+│   ├── Watchlist (gemerkte Aktien)
+│   ├── Top Movers Abschnitt
+│   └── Robo Advisor Teaser
+│
+├── Suche / Entdecken
+│   ├── Suchfeld (Ticker oder Firmenname)
+│   ├── Trendliste
+│   └── Kategorien/Themen
+│
+├── Stock Detail (nach Suche/Klick)
+│   ├── Chart (immer sichtbar, prominent, interaktiv)
+│   ├── Übersicht-Tab
+│   │   ├── "Warum kaufen/nicht kaufen" (plain language)
+│   │   ├── Dimensionen-Karten (Bewertung, Wachstum, Profitabilität)
+│   │   ├── Kennzahlen-Zusammenfassung
+│   │   ├── Events im Chart markiert
+│   │   ├── Peer-Liste (ähnliche Aktien)
+│   │   └── Datenlieferant-Attribution
+│   ├── Statistiken-Tab (alle Kennzahlen)
+│   ├── News-Tab
+│   ├── Events-Tab (Earnings, Dividenden)
+│   └── Research-Tab (Analysten-Ratings)
+│
+├── Kauf/Verkauf (Modal über Stock Detail)
+│
+├── Events-Kalender
+│
+├── Robo Advisor
+│   ├── Portfolio-Übersicht
+│   ├── Sparpläne
+│   └── Prognosen
+│
+└── Watchlist (eigene Liste)
+```
+
+### 12.2 Was Revolut besonders gut macht
+
+**1. Chart als erstes Element auf Stock Detail**
+- Chart ist das erste was der User sieht, nicht Text oder Zahlen
+- Interaktiv: Finger/Cursor bewegen zeigt Preis zu diesem Zeitpunkt
+- Zeitraum-Selector direkt unter Chart (1T / 1W / 1M / 3M / 1J / Max)
+- Events (Earnings, Dividenden) werden als Markierungen im Chart angezeigt
+- UX-Erkenntnis: Chart schafft sofortigen Kontext für alle nachfolgenden Zahlen
+
+**2. Plain-Language Erklärungen als Kern, nicht als Add-on**
+- "Warum könnte diese Aktie interessant sein" und "Risiken" in 2–3 Sätzen
+- Kein Fachjargon — für Einsteiger verständlich
+- Attribution: "Powered by Factset" sichtbar (Vertrauen durch Transparenz)
+- UX-Erkenntnis: Quelle + Plain Language = José B.'s Hauptgrund warum er Gemini vertraut
+
+**3. Dimensionen-Karten für schnellen Überblick**
+- 4–5 Karten: Bewertung | Wachstum | Profitabilität | Dividende | Momentum
+- Jede Karte: Status (Gut/Neutral/Schwach) + 1 Satz Erklärung
+- Modular — User sieht sofort welche Dimension stark/schwach ist
+- UX-Erkenntnis: Entspricht genau pondex_'s Factor Breakdown, aber visuell auf Karten statt Balken
+
+**4. Peer-Liste prominent platziert**
+- "Ähnliche Aktien" direkt auf der Übersichtsseite, keine separate Seite
+- Zeigt: Name + Preis + % Change
+- UX-Erkenntnis: José B.'s stärkste Reaktion war Peer-Vergleich — Revolut macht das richtig
+
+**5. Events in Chart und eigene Events-Sektion**
+- Earnings-Datum als Linie im Chart
+- Ex-Dividend-Date sichtbar
+- Eigener "Events"-Tab mit kommenden Terminen
+- UX-Erkenntnis: Gunnar will Context für Chart-Bewegungen — Events lösen das
+
+**6. Datenlieferant-Attribution**
+- "Kurse von Polygon.io", "Fundamentaldaten von Factset", "News von StreetAccount"
+- Jede Datenquelle sichtbar attributiert
+- UX-Erkenntnis: Direkte Umsetzung von Befund 2 (Quellenangabe als Vertrauensvoraussetzung)
+
+**7. Disclaimer integriert, nicht versteckt**
+- Disclaimer erscheint direkt unter der Empfehlung, nicht nur im Footer
+- "Diese Information stellt keine Anlageberatung dar" genau dort wo das Signal steht
+- UX-Erkenntnis: Regulatorisch korrekt UND kein Vertrauensverlust durch Sichtbarkeit
+
+### 12.3 Was Revolut hat, pondex_ (noch) nicht hat
+
+| Feature | Revolut | pondex_ | Phase |
+|---|---|---|---|
+| Chart immer als erstes Element | ✅ | ⚠️ Chart vorhanden, aber nach Scrollen | Phase C |
+| Events im Chart markiert | ✅ | ❌ Events-Overlay fehlt | Phase C |
+| Peer-Vergleich mit echten Daten | ✅ | ⚠️ Links zu Peers, kein Vergleich nebeneinander | Phase E |
+| Dimensionen-Karten | ✅ | ⚠️ Vorhanden als Balken, nicht als Karten | Phase D |
+| Watchlist editierbar | ✅ | ❌ Hardcoded | Phase C |
+| Preisalarme | ✅ | ❌ Nicht geplant | Phase E+ |
+| Onboarding → Risikoabfrage | ✅ | ⚠️ Nur für Robo Advisor | Phase D |
+| Broker-Integration | ✅ (ist Broker) | ❌ Kein Trading geplant | — |
+| Exit-Strategie / When to Sell | ❌ | 🔄 Geplant (Phase E2) | Phase E2 |
+| Thesis Tracker | ❌ | 🔄 Geplant (Phase E2) | Phase E2 |
+| Score 0–100 mit Quellenattribution | ❌ | ✅ | Kernfeature |
+
+### 12.4 Was pondex_ besser machen kann als Revolut
+
+| Bereich | Revolut | pondex_ Vorteil |
+|---|---|---|
+| Score-Transparenz | Kein expliziter Score — nur Dimensionen | 0–100 Score + BUY/HOLD/SELL + 5 Faktoren mit Quellen |
+| Exit-Signale | Nicht vorhanden | Exit Strategy mit Thesis Tracker (Phase E2) — echter Differenziator |
+| Personalisierung | Kein investor-spezifischer Score | Score wird nach Investor-Profil gewichtet (Value/Growth/Dividend) |
+| Unabhängigkeit | Revolut = Broker (Interessenkonflikt) | pondex_ = reine Research (kein Eigeninteresse an Trade-Execution) |
+| Quellen-Granularität | "Powered by Factset" (grob) | Jede einzelne Zahl mit spezifischer Quelle |
+
+### 12.5 UX-Patterns von Revolut die pondex_ übernehmen sollte
+
+1. **Chart als erstes Element** — Nicht nach Scrollen, sondern sofort sichtbar nach Score
+2. **Events als Chart-Markierungen** — Earnings und Dividenden direkt im Preischart
+3. **Dimensionen-Karten statt nur Balken** — Factor Breakdown visuell aufwerten (Phase D)
+4. **Disclaimer direkt neben dem Signal** — Nicht nur im Footer, sondern genau dort wo BUY/HOLD/SELL steht
+5. **Datenquelle pro Kennzahl sichtbar** — Nicht nur "Yahoo Finance" pauschal, sondern "P/E: 32.4x · Yahoo Finance TTM"
+
+---
+
+## 13. Exit Strategy — Vollständige UX-Spezifikation
+
+_Basis: EXIT-STRATEGY-SPEC.md + Gunnar L. Interview_
+_Größter ungenutzter Differenziator: kein Konkurrent hat das._
+
+### 13.1 Das Problem das Exit Strategy löst
+
+**"Ich weiß nie wann ich verkaufen soll."** — Gunnar L.
+
+Alle bestehenden Tools (Yahoo Finance, Seeking Alpha, Revolut, Bloomberg) lösen das Buy-Signal. Niemand löst das Sell/Exit-Signal. Das ist die ungelöste Seite jeder Investment-Entscheidung.
+
+Drei Szenarien die heute ungelöst sind:
+1. User hat TSLA für $300 gekauft, es steht bei $320 — soll er halten oder mitnehmen?
+2. User hat AAPL seit 2 Jahren — Fundamentals haben sich verschlechtert, aber er merkt es nicht
+3. User hatte eine These beim Kauf — die These ist längst gebrochen, aber er hält weiter
+
+### 13.2 Die 5 Komponenten der Exit Strategy
+
+**Komponente 1: Thesis Tracker (Phase E2 — Teil 1)**
+- Bei Hinzufügen einer Aktie zur Watchlist: optionales Formular
+  - "Why are you watching this stock?" (freier Text oder Template)
+  - Ziel-Score: "Alert me when score drops below [X]"
+  - Wichtigste Metriken die du beobachtest (z.B. Revenue Growth, Gross Margin)
+  - Geplanter Haltezeitraum (3M / 1J / 3J / Langfristig)
+- Gespeichert in localStorage (Phase D: Supabase)
+
+**Komponente 2: Score Decay Monitor (Phase E2 — Teil 1)**
+- Wöchentlicher Check: Hat sich der Score um >15 Punkte verändert?
+- Wenn ja → Notification/Badge auf der Watchlist-Zeile
+- "AAPL score fell from 78 → 61 this week"
+- Phase D: Email-Benachrichtigung möglich
+
+**Komponente 3: Thesis Condition Checker (Phase E2 — Teil 2)**
+- Prüft wöchentlich ob die gespeicherten Schlüsselmetriken >20% vom Kaufzeitpunkt abgewichen sind
+- Beispiel: "Revenue Growth war beim Kauf +15% — jetzt ist es -2%"
+- Zeigt "Thesis condition changed" Badge auf der Watchlist-Zeile
+
+**Komponente 4: Exit Review Screen (Phase E2 — Teil 2)**
+- Eigener Tab oder Section auf /app/stock?ticker=TSLA
+- Zeigt:
+  - Thesis Drift (wie hat sich die These verändert)
+  - Score Decay Treiber (welche Faktoren haben sich verschlechtert)
+  - Primäre Performance-Treiber
+  - Exit-Score 0–100
+  - Signal: HOLD / TRIM / EXIT
+- Immer mit Framing: "Your thesis conditions have changed — review recommended" ✅
+- Niemals: "You should sell" ❌
+
+**Komponente 5: Strategy-basierte Auto-Thresholds (Phase E2 — Teil 2)**
+- Value Investor: Alert bei Score < 55 (unter HOLD-Grenze)
+- Growth Investor: Alert bei Revenue Growth Deceleration > 30%
+- Dividend Investor: Alert bei Dividend-Kürzung oder Payout-Ratio > 100%
+- Momentum Trader: Alert bei technischem Trend-Bruch (z.B. unter 200-Tage-MA)
+
+### 13.3 User Flow — Exit Strategy
+
+```
+User hat TSLA in Watchlist
+    ↓
+Beim Hinzufügen zur Watchlist:
+    "Add a thesis?" [Optional — kann übersprungen werden]
+    → Gekauft bei: $240
+    → These: "EV-Marktführer, AI-Integration, Musk-Faktor"
+    → Alarm wenn Score fällt unter: 50
+    ↓
+Wöchentlich (automatisch im Hintergrund):
+    Score-Check: TSLA war 42 → jetzt 38 → Score Decay Badge erscheint
+    Thesis-Check: Revenue Growth war +21% → jetzt +3% → Thesis-Badge
+    ↓
+User öffnet Portfolio oder Watchlist:
+    TSLA zeigt orange Badge: "Score -4 this week · Thesis condition changed"
+    ↓
+User klickt auf TSLA → /app/stock?ticker=TSLA
+    ↓
+Neuer Tab "Exit Check" sichtbar (neben Overview, Key Metrics etc.)
+    ↓
+Exit Check Tab:
+    Exit Score: 28/100
+    Signal: EXIT (rot)
+
+    Thesis Drift:
+    "Revenue Growth: Was +21% when you added — now +3%"
+    "P/E: 88x vs. Sector avg 24x (was 65x when added)"
+
+    Score Decay Drivers:
+    "Valuation factor: 52 → 28 (-24 points)"
+    "Fundamentals: 48 → 41 (-7 points)"
+
+    [Review recommended · Not a sell recommendation]
+
+    Sources: Yahoo Finance · Not financial advice
+```
+
+### 13.4 Regulatorische Framing-Regeln für Exit Strategy
+
+| Erlaubt ✅ | Nicht erlaubt ❌ |
+|---|---|
+| "Exit Score: 28/100" | "Verkaufen Sie diese Aktie" |
+| "Your thesis conditions have changed" | "Wir empfehlen Ihnen zu verkaufen" |
+| "TRIM signal: score 45–55" | "Nehmen Sie Gewinne mit" |
+| "Review recommended" | "Jetzt wäre ein guter Zeitpunkt" |
+| "RSI indicates overbought conditions (78)" | "Die Aktie ist überkauft — verkaufen Sie" |
+| "Score fell 24 points since you added" | "Diese Aktie hat ihren Höhepunkt erreicht" |
+
+**Langfristige Vision (Phase 4+):**
+- Decision Quality Feedback Loop: Wenn User verkauft → 3 Monate später: "Deine Entscheidung war X% richtig/falsch" — keine Beratung, nur Lern-Feedback
+- Personal Pattern Recognition: "Du neigst dazu bei Scores unter 45 zu verkaufen, aber historisch war das suboptimal" — reine Datenbeobachtung, keine Empfehlung
+- Dies wäre ein dauerhafter Moat: kein Konkurrent hat User-spezifisches Entscheidungs-Feedback
+
+---
+
+## 14. AI Chat & Discovery — Geplante Phase 4+ Features
+
+_Basis: DISCOVERY-AI-CHAT-SPEC.md_
+
+### 14.1 Discovery (Phase 4 — nach Exit Strategy)
+
+**Problem:** Aktuell muss User bereits einen Ticker kennen. Was wenn er sucht?
+
+**"Zeige mir deutsche Dividenden-Aktien mit P/E < 20"** → heute: unmöglich in pondex_
+
+**Discovery-Konzept:**
+```
+Statt: "Analysiere AAPL"
+    ↓
+Discovery-Seite: Filter-basierte Suche
+    → Geografisch: Deutschland, EU, USA, Global
+    → Sektor: Technologie, Gesundheit, Energie...
+    → Asset-Klasse: Aktien, ETFs (Phase 4+)
+    → Fundamentale Filter: P/E < 20, Gross Margin > 40%, Score > 70
+    ↓
+    ODER: Freitext-Input (AI interpretiert)
+    "Ich suche stabile Dividenden-Aktien für langfristigen Aufbau"
+    → AI extrahiert Filter → zeigt Ergebnisse
+    ↓
+Ergebnis-Liste:
+    Ticker | Firmenname | Score | P/E | Dividende | "Analysieren →"
+```
+
+### 14.2 AI Chat mit Gedächtnis (Phase 4)
+
+**Problem:** Einmal-Anfragen vergessen was der User gesagt hat
+
+**Chat-Konzept:**
+- Persistente Konversation über Sessions hinweg
+- Gedächtnis-Modell:
+  - Gelernte Präferenzen ("User bevorzugt Value Investing")
+  - Gesprächshistorie (letzte 50 Nachrichten)
+  - Geäußerte Präferenzen ("ich investiere langfristig")
+  - Analysehistorie (welche Aktien analysiert)
+- AI-System-Prompt liest Gedächtnis bei jeder Anfrage
+- Quellenattribution in jeder Antwort: "Laut Yahoo Finance (TTM)..."
+
+**Was erlaubt ist:**
+- "Erkläre mir was P/E bedeutet"
+- "Warum hat AAPL einen Score von 78?"
+- "Was sind die größten Risiken bei TSLA laut dem Score?"
+
+**Was verboten ist (System-Prompt verhindert es):**
+- "Soll ich AAPL kaufen?" → Antwort darf keine Kaufempfehlung sein
+- "Ist jetzt ein guter Zeitpunkt?" → kein Timing-Advice
+
+---
+
+## 15. Wettbewerbskontext & Positionierung
+
+### 15.1 Competitive Map
+
+```
+TIEFE DER ANALYSE
+        ↑
+        │
+        │  Bloomberg Terminal    Seeking Alpha
+        │  (teuer, komplex)      (Paywall, viel Noise)
+        │
+        │              Morningstar
+        │              (gut, teuer)
+        │
+        │                    pondex_ (Ziel)
+        │              Simply Wall St.
+        │              (Score aber intransparent)
+        │
+        │  Revolut           Trade Republic
+        │  (Broker, Research  (Broker, wenig Research)
+        │   als Add-on)
+        │
+        │       Yahoo Finance  ChatGPT
+        │       (Daten, kein   (Insights, keine
+        │        Signal)        Quellen)
+        │
+        └────────────────────────────────────→
+              einfach               komplex
+```
+
+### 15.2 Was kein Konkurrent hat
+
+| Feature | Yahoo Finance | ChatGPT | Revolut | Simply Wall St. | Bloomberg | pondex_ |
+|---|---|---|---|---|---|---|
+| Score 0–100 | ❌ | ❌ | ❌ | ✅ (Sterne) | ❌ | ✅ |
+| Jede Zahl quellenattributiert | ❌ | ❌ | Teilweise | ❌ | Teilweise | ✅ |
+| BUY/HOLD/SELL in Plain Language | ❌ | ✅ | ❌ | ❌ | Analysten | ✅ |
+| Score nach Investor-Profil | ❌ | ❌ | ❌ | ❌ | ❌ | Phase D |
+| Exit Strategy / Thesis Tracker | ❌ | ❌ | ❌ | ❌ | ❌ | Phase E2 |
+| Bezahlbar für Retail | ✅ (kostenlos) | ✅ | ✅ | €10–30 | ❌ ($300+) | ✅ (€0/€4.99) |
+
+### 15.3 Hauptrisiko: Plattform-Integration
+
+**Szenario:** Trade Republic oder Revolut baut einen "Research Score" als Feature in ihre Broker-App.
+- Sie haben bereits alle User, alle Daten, keine Akquisitionskosten
+- pondex_ müsste dann als eigenständiges Produkt konkurrieren
+
+**Gegenargument:** Broker haben Interessenkonflikt — mehr Trades = mehr Umsatz. pondex_ hat keinen Interessenkonflikt.
+
+**Schutzwall:** Thesis Tracker + Exit Strategy + Personalisierung sind komplex zu replizieren. Revolut hat es nicht. Wenn pondex_ das zuerst baut und nutzt, entsteht ein echter Moat durch historische Nutzer-Daten.
+
+---
+
 _Stand: 2026-07-24_
-_Nächste Review: nach Phase C (Backend live) — dann echte Scores, Demo-Label entfernen_
+_Nächste Review: nach Phase C (Backend live)_
 _Verweis-Docs:_
 _· WEBSITE-SPEC-COMPLETE.md (UI + Design Details)_
 _· APP-INFORMATION-ARCHITECTURE.md (IA-Diagramm)_
 _· COUNCIL-AUDIT-2026-07-23.md (Bekannte Bugs + Findings)_
 _· ROADMAP.md (Timeline)_
+_· EXIT-STRATEGY-SPEC.md (Exit Strategy Detail-Spec)_
+_· DISCOVERY-AI-CHAT-SPEC.md (AI Chat Detail-Spec)_
+_· revolut-ui-architecture.md (Competitor Reference)_
