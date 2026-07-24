@@ -34,7 +34,7 @@ export default function Home() {
 
   const events = [
     { date: 'Jul 29', ticker: 'AAPL', event: 'Earnings Call',    type: 'earnings' },
-    { date: 'Jul 30', ticker: 'META', event: 'Earnings Call',    type: 'earnings' },
+    { date: 'Aug 1',  ticker: 'AMZN', event: 'Earnings Call',    type: 'earnings' },
     { date: 'Aug 15', ticker: 'NVDA', event: 'Ex-Dividend Date', type: 'dividend' },
   ]
 
@@ -117,7 +117,7 @@ export default function Home() {
                   <motion.div key={ticker}
                     style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 0', borderBottom: `1px solid ${C[100]}`, cursor: 'pointer' }}
                     onClick={() => navigate(`/app/stock?ticker=${ticker}`)}
-                    whileHover={{ paddingLeft: '8px', transition: 'padding 0.15s' }}
+                    whileHover={{ x: 4 }}
                     initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 + i * 0.05 }}
                   >
                     <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>

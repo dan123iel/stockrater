@@ -163,7 +163,7 @@ export default function RoboAdvisor() {
                       {answers[2] === 'Sell immediately' || answers[1] === '< 1 year' ? 'Conservative'
                         : answers[2] === 'Buy more' && answers[1] === '10+ years' ? 'Growth'
                         : 'Core'} Portfolio
-                    </strong>. Portfolio building is coming in Phase 3.
+                    </strong>. Portfolio building is coming Q4 2026.
                   </p>
                   <div style={{ display: 'flex', gap: '12px' }}>
                     <button onClick={() => { setOnboarding(false); setStep(0) }} style={{ ...btn.primary }}>Back to overview</button>
@@ -179,7 +179,7 @@ export default function RoboAdvisor() {
             <motion.div key="savings" style={{ padding: '80px 32px', textAlign: 'center' }}
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
               <p style={{ ...M, fontSize: '11px', color: C[400], textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '16px' }}>[ Savings Plans ]</p>
-              <p style={{ ...headline.md, color: C[300], margin: '0 0 12px' }}>Recurring investments coming in Phase 3.</p>
+              <p style={{ ...headline.md, color: C[300], margin: '0 0 12px' }}>Recurring investments coming Q4 2026.</p>
               <p style={{ ...S, fontSize: '14px', color: C[400] }}>Set up automatic monthly investments into your Robo portfolio.</p>
             </motion.div>
           )}
@@ -189,7 +189,7 @@ export default function RoboAdvisor() {
             <motion.div key="roundup" style={{ padding: '80px 32px', textAlign: 'center' }}
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
               <p style={{ ...M, fontSize: '11px', color: C[400], textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '16px' }}>[ Round-up ]</p>
-              <p style={{ ...headline.md, color: C[300], margin: '0 0 12px' }}>Spare change investing coming in Phase 3.</p>
+              <p style={{ ...headline.md, color: C[300], margin: '0 0 12px' }}>Spare change investing coming Q4 2026.</p>
               <p style={{ ...S, fontSize: '14px', color: C[400] }}>Round up every transaction and invest the difference automatically.</p>
             </motion.div>
           )}
@@ -199,7 +199,7 @@ export default function RoboAdvisor() {
             <motion.div key="forecasts" style={{ padding: '80px 32px', textAlign: 'center' }}
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
               <p style={{ ...M, fontSize: '11px', color: C[400], textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '16px' }}>[ Forecasts ]</p>
-              <p style={{ ...headline.md, color: C[300], margin: '0 0 12px' }}>Portfolio projections coming in Phase 3.</p>
+              <p style={{ ...headline.md, color: C[300], margin: '0 0 12px' }}>Portfolio projections coming Q4 2026.</p>
               <p style={{ ...S, fontSize: '14px', color: C[400] }}>See how your portfolio could grow over 5, 10, 20 years.</p>
             </motion.div>
           )}

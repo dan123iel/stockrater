@@ -76,9 +76,9 @@ function HeroVisual() {
             <p style={{ ...M, fontSize: '14px', color: C[400], margin: 0 }}>$213.49 · <span style={{ color: C.up }}>+1.15 (0.35%)</span> · <span style={{ color: C[300] }}>Illustrative</span></p>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <span style={{ ...M, fontSize: '10px', color: '#d97706', background: '#fef3c7', padding: '4px 12px', borderRadius: '50px', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'block', marginBottom: '8px' }}>HOLD</span>
-            <p style={{ ...S, fontSize: '48px', fontWeight: 500, color: '#d97706', margin: 0, lineHeight: 1, letterSpacing: '-2px' }}>
-              59<span style={{ fontSize: '20px', color: C[300] }}>/100</span>
+            <span style={{ ...M, fontSize: '10px', color: C.warn, background: '#fef3c7', padding: '4px 12px', borderRadius: '50px', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'block', marginBottom: '8px' }}>HOLD</span>
+            <p style={{ ...S, fontSize: '48px', fontWeight: 500, color: C.warn, margin: 0, lineHeight: 1, letterSpacing: '-2px' }}>
+              78<span style={{ fontSize: '20px', color: C[300] }}>/100</span>
             </p>
           </div>
         </div>

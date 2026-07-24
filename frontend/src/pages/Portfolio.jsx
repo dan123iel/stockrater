@@ -98,7 +98,7 @@ export default function Portfolio() {
                     style={{ display: 'grid', gridTemplateColumns: '80px 1fr 120px 160px 120px 100px', gap: '0', padding: '18px 0', borderBottom: `1px solid ${C[100]}`, alignItems: 'center', cursor: 'pointer' }}
                     initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.05 }}
                     onClick={() => navigate(`/app/stock?ticker=${ticker}`)}
-                    whileHover={{ background: C[100], paddingLeft: '8px' }}
+                    whileHover={{ background: C[100], x: 4 }}
                   >
                     <span style={{ ...M, fontSize: '13px', fontWeight: 600, color: C.black }}>{ticker}</span>
                     <span style={{ ...S, fontSize: '14px', color: C[600] }}>{q?.companyName || '—'}</span>
@@ -120,7 +120,9 @@ export default function Portfolio() {
           {activeTab === 2 && (
             <div style={{ padding: '80px 0', textAlign: 'center' }}>
               <p style={{ ...M, fontSize: '11px', color: C[400], textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '16px' }}>[ No transactions ]</p>
-              <p style={{ ...headline.md, color: C[300], margin: 0 }}>No buy/sell history yet.</p>
+              <p style={{ ...headline.md, color: C[300], margin: '0 0 16px' }}>No buy/sell history yet.</p>
+              <p style={{ ...S, fontSize: '14px', color: C[400], margin: '0 0 32px' }}>Transactions will appear here once portfolio tracking is available. Coming Q4 2026.</p>
+              <button onClick={() => navigate('/app/markets')} style={{ ...btn.link }}>Explore stocks →</button>
             </div>
           )}
 

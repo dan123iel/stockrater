@@ -97,7 +97,7 @@ function TabOverview({ result, quote }) {
 
   const PEER_MAP = {
     AAPL:  ['MSFT', 'GOOGL', 'AMZN'],
-    NVDA:  ['AMD', 'INTC', 'MSFT'],
+    NVDA:  ['MSFT', 'TSLA', 'AMZN'],
     MSFT:  ['AAPL', 'GOOGL', 'AMZN'],
     TSLA:  ['AMZN', 'GOOGL', 'NVDA'],
     GOOGL: ['MSFT', 'AAPL', 'AMZN'],
@@ -408,7 +408,7 @@ export default function Stock() {
   const user = (() => { try { return JSON.parse(localStorage.getItem('pondex_user')) } catch { return null } })()
   const logout = () => { localStorage.removeItem('pondex_user'); navigate('/') }
 
-  const tabs = ['Overview', 'Key Metrics', 'Financials', 'News', 'Order Book', 'Learn']
+  const tabs = ['Overview', 'Key Metrics', 'Financials', 'News', 'Order Book', 'Exit Check', 'Learn']
 
   const DEMO_QUOTES = {
     AAPL:  { companyName: 'Apple Inc.', price: 213.49, change: 1.15, changePercent: 0.54, marketCap: 3280000000000, beta: 1.21, sector: 'Technology', industry: 'Consumer Electronics', country: 'US', exchangeShortName: 'NASDAQ', '52wHigh': 237.23, '52wLow': 164.08, sharesOutstanding: 15204000000, description: 'Apple Inc. designs, manufactures, and markets smartphones, personal computers, tablets, wearables, and accessories worldwide. The company offers iPhone, Mac, iPad, and wearables, home and accessories product lines.' },
@@ -662,6 +662,20 @@ export default function Stock() {
             </motion.div>
           )}
           {result && activeTab === 5 && (
+            <motion.div key="exitcheck" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+              <div style={{ padding: '80px 32px', textAlign: 'center' }}>
+                <p style={{ ...M, fontSize: '11px', color: C[400], textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: '16px' }}>[ Exit Check ]</p>
+                <p style={{ ...S, fontSize: '22px', fontWeight: 500, color: C[300], margin: '0 0 12px' }}>Exit Strategy coming Q4 2026.</p>
+                <p style={{ ...S, fontSize: '14px', color: C[400], maxWidth: '480px', margin: '0 auto 32px', lineHeight: 1.6 }}>
+                  Enter your purchase price to track your thesis and receive HOLD / TRIM / EXIT signals based on score decay and fundamental changes.
+                </p>
+                <p style={{ ...M, fontSize: '10px', color: C[300], textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                  Research signal only · Not financial advice
+                </p>
+              </div>
+            </motion.div>
+          )}
+          {result && activeTab === 6 && (
             <motion.div key="learn" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
               <div style={{ padding: '48px 32px', display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '24px' }}>
                 {/* Glossary */}

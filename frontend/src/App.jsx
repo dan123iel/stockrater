@@ -2,13 +2,14 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import ScrollToTop from './components/ScrollToTop'
 import Landing from './pages/Landing'
 import Home from './pages/Home'
-import Stock from './pages/App'        // Stock detail page
+import Stock from './pages/App'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Portfolio from './pages/Portfolio'
 import Markets from './pages/Markets'
 import RoboAdvisor from './pages/RoboAdvisor'
 import CFD from './pages/CFD'
+import PageNotFound from './lib/PageNotFound'
 import DevGrid from './components/DevGrid'
 
 const DEV_GRID = false // set to true to show grid overlay
@@ -38,7 +39,7 @@ function Root() {
         <Route path="/app/robo" element={<AuthGuard><RoboAdvisor /></AuthGuard>} />
         <Route path="/app/cfd" element={<AuthGuard><CFD /></AuthGuard>} />
 
-        <Route path="*" element={<Landing />} />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </Router>
   )
