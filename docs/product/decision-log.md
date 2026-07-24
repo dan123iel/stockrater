@@ -83,4 +83,44 @@
 
 ---
 
+### D-008 · Analytics Tool: Plausible Analytics
+- **Date:** 2026-07-24
+- **Decision:** Plausible Analytics (plausible.io, €9/month)
+- **Rationale:** Cookie-frei → kein Cookie-Banner nötig in EU. EU-Server Frankfurt. GDPR-konform ohne Consent-Management. Für solo founder und EU-Produkt die einfachste und rechtlich sauberste Lösung.
+- **Alternatives considered:** Google Analytics 4 (Cookie-Banner Pflicht, Daten zu Google), PostHog (mächtiger aber komplexer, selbst-hostbar)
+- **Review:** Bei >100k pageviews/Monat → Plan upgraden (~€19/Monat). Bei Bedarf nach Session Recording → PostHog evaluieren.
+- **Spec:** `docs/specs/ANALYTICS-SPEC.md`
+
+---
+
+### D-009 · Mobile Navigation: Bottom Navigation Bar
+- **Date:** 2026-07-24
+- **Decision:** Bottom Navigation Bar mit 5 Items (Home | Markets | Search | Portfolio | Account) unter 900px Viewport-Breite
+- **Rationale:** Trade Republic, Revolut, Robinhood nutzen Bottom Nav — User kennen das Pattern. Daumen-erreichbar. Kein Hamburger-Overhead. Löst AppNav-Overflow-Problem unter 900px.
+- **Alternatives considered:** Hamburger Dropdown (weniger native), nur 3 Links sichtbar (verliert Robo/CFD)
+- **Review:** Nach Phase C Launch — testen ob 5 Items ausreichen oder Robo Advisor/CFD auf Mobile gebraucht wird
+- **Spec:** `docs/specs/MOBILE-NAV-SPEC.md`
+
+---
+
+### D-010 · Investor Profile Onboarding: 3 Fragen + Skip
+- **Date:** 2026-07-24
+- **Decision:** 3 Fragen (Ziel | Horizont | Risiko) mit explizitem Skip-Button. Kein Skip = Core Portfolio als Default.
+- **Rationale:** Patricia P. Interview: Setup >2 Minuten ist Dealbreaker. 3 Fragen = ~20 Sekunden. Skip = Respekt vor User-Zeit. Profil kann jederzeit in Account-Seite nachgeholt werden.
+- **Alternatives considered:** 5 Fragen ohne Skip (zu lang), 5 Fragen mit Skip (unnötig komplex)
+- **Review:** Nach Phase D Launch — Abbruchrate bei Frage 3 messen. Wenn >40% abbrechen: auf 2 Fragen reduzieren.
+- **Spec:** `docs/specs/ONBOARDING-FLOW-SPEC.md`
+
+---
+
+### D-011 · Score-Gewichtung: Explizit sichtbar
+- **Date:** 2026-07-24
+- **Decision:** Beide Scores werden gezeigt: "Default: 78/100 → Your score (Value Investor): 62/100"
+- **Rationale:** Transparenz ist das Kernversprechen. Versteckte Personalisierung widerspricht dem "every number cites its source" Prinzip. User soll genau verstehen warum sein Score sich unterscheidet.
+- **Alternatives considered:** Nur Tooltip (weniger transparent), Unsichtbar (widerspricht Kernversprechen)
+- **Review:** User-Interviews nach Phase D — versteht der User die Differenz oder verwirrt sie ihn?
+- **Spec:** `docs/specs/ONBOARDING-FLOW-SPEC.md` §Score-Anzeige mit Profil
+
+---
+
 _Add entries before major pivots, scope changes, or "why did we do X?" moments. This log prevents re-debating settled decisions._
