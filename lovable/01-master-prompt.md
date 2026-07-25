@@ -1,6 +1,16 @@
 # pondex_ — Lovable Master Prompt
 
-Paste this as your first message in Lovable.
+Paste this as your first message in Lovable, combined with 05-design-brief.md.
+
+---
+
+## ⚠️ HARD CONSTRAINTS — Read first, apply everywhere
+
+1. **Mobile breakpoint: 768px everywhere** — no other value in any file supersedes this
+2. **CSS variable tokens only** — never raw Tailwind color classes (text-blue-500, bg-gray-100 etc.) — use only `--color-up`, `--text-primary` etc. from globals.css
+3. **Never use Math.random()** — use the deterministic `generateCandles()` function from 04-demo-data.md for chart data
+4. **Hero headline: rotating variant** from 02-ux-structure.md ("Still not sure where to invest...") — ignore any static headline in this package
+5. **Score gauge thresholds: ≥70 = green (BUY), 50–69 = amber (HOLD), <50 = red (SELL)**
 
 ---
 
@@ -56,7 +66,7 @@ Fallback to demo data when API is unavailable (see `04-demo-data.md`).
 ### Authenticated (AuthGuard — redirect to /login if not logged in)
 6. `/app` — Home Dashboard
 7. `/app/stock` — Stock Analysis (search + verdict, `?ticker=AAPL`)
-8. `/app/portfolio` — Portfolio (4 tabs: Positions, Watchlist, Transactions, Account)
+8. `/app/portfolio` — Portfolio (3 tabs: Positions, Watchlist, Transactions) — Account info is at /app/account
 9. `/app/markets` — Markets (5 tabs: Top Movers, Popular, Collections, News, Calendar)
 10. `/app/robo` — Robo Advisor (4 tabs + onboarding flow)
 11. `/app/cfd` — CFD Preview page
@@ -69,17 +79,19 @@ Fallback to demo data when API is unavailable (see `04-demo-data.md`).
 
 ## Navigation
 
+**Mobile breakpoint: 768px — canonical value. Ignore any other value in any other document.**
+
 ### Public pages — LandingNav (fixed top bar)
 - Logo left → scrolls to top
 - Center links: How It Works · Demo · Features · Reviews · Pricing (all scroll anchors on landing page)
 - Right: Log in → /login | Free Trial → /signup
-- Mobile (<900px): hamburger → fullscreen overlay with same links
+- Mobile (<768px): hamburger → fullscreen overlay with same links
 
 ### Authenticated pages — AppNav (fixed top bar) + BottomNav (mobile)
 - Logo left → /
 - Center: Home · Portfolio · Markets · Robo Advisor · CFD
 - Right: Search input (always visible, not a toggle) + Go button → /app/stock?ticker=XXX | Log out | Profile → /app/account
-- Mobile (<900px): hide top nav, show bottom nav bar (Home | Markets | Search | Portfolio | Account)
+- Mobile (<768px): hide top nav, show bottom nav bar (Home | Markets | Search | Portfolio | Account)
 
 ---
 

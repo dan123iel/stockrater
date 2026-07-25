@@ -266,7 +266,7 @@ tr:hover td { background: #F9FAFB; }
 ### Score Gauge
 
 - SVG semicircle, 180° arc
-- Track: #E5E7EB, Fill: green/amber/red based on score (≥70/45–69/<45)
+- Track: #E5E7EB, Fill: green/amber/red based on score: **≥70 = green (BUY), 50–69 = amber (HOLD), <50 = red (SELL)**
 - Needle: line from center to arc position
 - Score number below: 48px, weight 700, tabular-nums
 - Animate needle + arc fill on mount: `transition: 1.2s ease-out`

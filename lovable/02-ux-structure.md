@@ -222,7 +222,7 @@ CTA: "Try it free →" → /signup
 
 Newsletter: [Email] [→] → Thank-you state on submit (no server call yet)
 Links: Product · Pricing · Privacy · Terms · Disclaimer
-Copyright: "© 2026 pondex_ · Research tool only — not financial advice"
+Copyright: "© 2026 pondex_ · Research tool only — not financial advice · Data: Yahoo Finance & SEC EDGAR"
 
 ---
 
@@ -263,7 +263,8 @@ PASSWORD: [min. 8 characters]
 
 Already have an account? Log in →
 
-By creating an account you agree to our Terms of Service and Privacy Policy.
+By creating an account you agree to our [Terms of Service](/terms) and [Privacy Policy](/privacy).
+Both links must be `<Link>` components pointing to /terms and /privacy — not plain text.
 ```
 
 Behavior:
@@ -399,7 +400,8 @@ Research signal only · Not financial advice
 ## 6. Portfolio — /app/portfolio
 
 **Header:** "Your investments." + "Watchlist: 4 stocks" + "Today: —"
-**Tabs:** Positions | Watchlist | Transactions | Account (default: Positions)
+**Tabs:** Positions | Watchlist | Transactions (default: Positions)
+Note: Account info lives at the standalone /app/account route — not as a Portfolio tab.
 
 **Positions:** Empty state — "No open positions." + [Analyse a stock →] → /app/stock?ticker=AAPL
 
@@ -426,7 +428,7 @@ Each row clickable → /app/stock?ticker=XXX
 **Top Movers:** Sorted by |% change|, gainers + losers mixed, 6-column grid of cards
 **Popular Stocks:** Curated by market cap: AAPL MSFT NVDA GOOGL AMZN TSLA (different from Top Movers)
 **Collections:** Cards — Big Tech · Semiconductors · EV & Energy · Streaming (clickable → filters view)
-**News:** "News coming in Phase 2. Requires NewsAPI key."
+**News:** "News coming Q4 2026. Requires NewsAPI integration."
 **Calendar:** Month calendar, today = new Date(), events as colored chips (earnings=amber #D97706, dividend=green #16A34A, holiday=gray)
 
 ---
