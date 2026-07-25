@@ -427,7 +427,7 @@ Each row clickable → /app/stock?ticker=XXX
 **Popular Stocks:** Curated by market cap: AAPL MSFT NVDA GOOGL AMZN TSLA (different from Top Movers)
 **Collections:** Cards — Big Tech · Semiconductors · EV & Energy · Streaming (clickable → filters view)
 **News:** "News coming in Phase 2. Requires NewsAPI key."
-**Calendar:** Month calendar, today = new Date(), events as colored chips (earnings=purple, dividend=green)
+**Calendar:** Month calendar, today = new Date(), events as colored chips (earnings=amber #D97706, dividend=green #16A34A, holiday=gray)
 
 ---
 

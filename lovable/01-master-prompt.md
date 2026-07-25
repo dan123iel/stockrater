@@ -20,10 +20,11 @@ Build **pondex_** — a B2C fintech research tool for retail investors.
 - **Routing:** React Router v6, basename `/stockrater` for GitHub Pages
 - **Auth:** Supabase Auth (email/password + Google OAuth)
 - **Database:** Supabase PostgreSQL
+- **Styling:** Tailwind CSS v3 + shadcn/ui — override all default colors via CSS variables in globals.css. Do NOT use Tailwind color utility classes (text-blue-500, bg-gray-100 etc.) directly — use only the custom CSS variable tokens from the design brief.
 - **Animations:** Framer Motion
 - **Charts:** Recharts
+- **Icons:** Lucide React (included in shadcn/ui)
 - **Deployment:** GitHub Pages (frontend), Railway (backend API — already exists, do not build)
-- **No Tailwind** — use inline styles or CSS modules to maintain full design control
 
 ---
 
