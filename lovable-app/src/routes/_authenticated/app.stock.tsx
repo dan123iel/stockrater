@@ -1,26 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { z } from "zod";
-import {
-  Area,
-  AreaChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-} from "recharts";
+import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid } from "recharts";
 import { supabase } from "@/integrations/supabase/client";
 import { AppShell } from "@/components/app/AppShell";
 import {
-  DEMO_CANDLES,
-  DEMO_QUOTES,
-  DEMO_SCORES,
-  DEMO_TICKERS,
-  PEER_MAP,
-  isDemoTicker,
-  verdictColor,
-  type DemoTicker,
+  DEMO_CANDLES, DEMO_FINANCIALS, DEMO_QUOTES, DEMO_RATIOS, DEMO_SCORES,
+  DEMO_TICKERS, PEER_MAP, computeExitAnalysis, fmt, isDemoTicker,
+  pct, profileScore, profileSummary, verdictColor, verdictFromScore,
+  type DemoTicker, type ExitSignal, type InvestorStyle,
 } from "@/lib/demo-data";
 import { toast } from "sonner";
 
@@ -28,112 +16,356 @@ const searchSchema = z.object({ ticker: z.string().optional() });
 
 export const Route = createFileRoute("/_authenticated/app/stock")({
   validateSearch: (s) => searchSchema.parse(s),
-  head: () => ({
-    meta: [
-      { title: "Stock Analysis — pondex_" },
-      { name: "description", content: "Get a 0–100 score, verdict, and cited factor breakdown for any stock." },
-      { property: "og:title", content: "Stock Analysis — pondex_" },
-      { property: "og:description", content: "0–100 score with sources for any stock." },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () => ({ meta: [{ title: "Stock Analysis — pondex_" }] }),
   component: StockPage,
 });
 
+// ── Gauge ──────────────────────────────────────────────────────────────────────
 function Gauge({ score }: { score: number }) {
-  const [displayed, setDisplayed] = useState(0);
+  const [d, setD] = useState(0);
   useEffect(() => {
-    const start = performance.now();
-    const dur = 1200;
-    let raf: number;
-    const step = (t: number) => {
-      const p = Math.min(1, (t - start) / dur);
-      // ease-out
-      const eased = 1 - Math.pow(1 - p, 3);
-      setDisplayed(Math.round(score * eased));
-      if (p < 1) raf = requestAnimationFrame(step);
-    };
-    raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
+    const start = performance.now(); const dur = 1200; let raf: number;
+    const step = (t: number) => { const p = Math.min(1, (t - start) / dur); setD(Math.round(score * (1 - Math.pow(1 - p, 3)))); if (p < 1) raf = requestAnimationFrame(step); };
+    raf = requestAnimationFrame(step); return () => cancelAnimationFrame(raf);
   }, [score]);
-
-  const color =
-    score >= 70 ? "var(--color-up)" : score >= 50 ? "var(--color-hold)" : "var(--color-down)";
-  const r = 80;
-  const cx = 100;
-  const cy = 100;
-  const angle = (displayed / 100) * Math.PI; // 0..π
-  const x = cx - r * Math.cos(angle);
-  const y = cy - r * Math.sin(angle);
-  const circumference = Math.PI * r;
-  const dash = (displayed / 100) * circumference;
-
+  const color = score >= 70 ? "var(--color-up)" : score >= 50 ? "var(--color-hold)" : "var(--color-down)";
+  const r = 80; const cx = 100; const cy = 100;
+  const angle = (d / 100) * Math.PI;
+  const x = cx - r * Math.cos(angle); const y = cy - r * Math.sin(angle);
+  const circumference = Math.PI * r; const dash = (d / 100) * circumference;
   return (
     <div className="flex flex-col items-center">
       <svg viewBox="0 0 200 120" className="w-full max-w-[200px]">
         <path d={`M 20 100 A ${r} ${r} 0 0 1 180 100`} stroke="var(--border-color)" strokeWidth="8" fill="none" strokeLinecap="round" />
-        <path
-          d={`M 20 100 A ${r} ${r} 0 0 1 180 100`}
-          stroke={color}
-          strokeWidth="8"
-          fill="none"
-          strokeLinecap="round"
-          strokeDasharray={`${dash} ${circumference}`}
-          style={{ transition: "stroke-dasharray 400ms ease-out" }}
-        />
+        <path d={`M 20 100 A ${r} ${r} 0 0 1 180 100`} stroke={color} strokeWidth="8" fill="none" strokeLinecap="round" strokeDasharray={`${dash} ${circumference}`} />
         <line x1={cx} y1={cy} x2={x} y2={y} stroke="var(--text-primary)" strokeWidth="2" strokeLinecap="round" />
         <circle cx={cx} cy={cy} r="4" fill="var(--text-primary)" />
       </svg>
       <p className="mt-2 text-5xl font-bold tabular" style={{ letterSpacing: "-0.02em" }}>
-        {displayed}
-        <span className="text-xl" style={{ color: "var(--text-secondary)" }}>/100</span>
+        {d}<span className="text-xl" style={{ color: "var(--text-secondary)" }}>/100</span>
       </p>
     </div>
   );
 }
 
+// ── VerdictBadge ───────────────────────────────────────────────────────────────
+function VerdictBadge({ score }: { score: number }) {
+  const vc = verdictColor(score); const v = verdictFromScore(score);
+  const cls = vc === "buy" ? "badge-buy" : vc === "hold" ? "badge-hold" : "badge-sell";
+  return <span className={cls} style={{ padding: "4px 12px", borderRadius: 999, fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}>{v}</span>;
+}
+
+function FitBadge({ score }: { score: number }) {
+  const label = score >= 80 ? "STRONG FIT" : score >= 65 ? "GOOD FIT" : score >= 50 ? "MODERATE FIT" : "WEAK FIT";
+  return <span className="badge-fit" style={{ padding: "4px 10px", borderRadius: 999, fontSize: 11, fontWeight: 600, letterSpacing: "0.08em" }}>{label}</span>;
+}
+
+// ── ExitBadge ──────────────────────────────────────────────────────────────────
+function ExitBadge({ signal }: { signal: ExitSignal }) {
+  const styles: Record<ExitSignal, { bg: string; color: string }> = {
+    HOLD: { bg: "#FEF9C3", color: "#92400E" },
+    TRIM: { bg: "#FEE2E2", color: "#B91C1C" },
+    EXIT: { bg: "#DC2626", color: "#FFFFFF" },
+  };
+  const s = styles[signal];
+  return <span style={{ background: s.bg, color: s.color, padding: "4px 14px", borderRadius: 999, fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" as const }}>{signal}</span>;
+}
+
+// ── Range selector ─────────────────────────────────────────────────────────────
 function RangeSelector({ value, onChange }: { value: string; onChange: (v: string) => void }) {
-  const opts = ["1W", "1M", "3M", "6M", "1Y"];
   return (
     <div className="inline-flex items-center gap-1 p-1 rounded-lg" style={{ background: "var(--bg-subtle)" }}>
-      {opts.map((o) => (
-        <button
-          key={o}
-          onClick={() => onChange(o)}
-          className="text-xs tabular font-medium"
-          style={{
-            padding: "4px 10px",
-            borderRadius: 6,
-            background: value === o ? "var(--bg-dark)" : "transparent",
-            color: value === o ? "var(--text-inverse)" : "var(--text-secondary)",
-          }}
-        >
-          {o}
-        </button>
+      {["1W","1M","3M","6M","1Y"].map(o => (
+        <button key={o} onClick={() => onChange(o)} className="text-xs tabular font-medium" style={{ padding: "4px 10px", borderRadius: 6, background: value === o ? "var(--bg-dark)" : "transparent", color: value === o ? "var(--text-inverse)" : "var(--text-secondary)" }}>{o}</button>
       ))}
     </div>
   );
 }
 
+// ── FinancialsTab ──────────────────────────────────────────────────────────────
+function FinancialsTab({ ticker }: { ticker: DemoTicker }) {
+  const [sub, setSub] = useState<"income" | "balance" | "cashflow">("income");
+  const data = DEMO_FINANCIALS[ticker];
+  const years = data.map(d => d.date.slice(0, 4));
+
+  const incomeRows = [
+    { l: "Total Revenue",    k: "revenue" as const,            fmt: fmt },
+    { l: "Gross Profit",     k: "grossProfit" as const,        fmt: fmt },
+    { l: "Operating Income", k: "operatingIncome" as const,    fmt: fmt },
+    { l: "Net Income",       k: "netIncome" as const,          fmt: fmt },
+    { l: "Operating Margin", k: "operatingIncomeRatio" as const, fmt: (v: number) => pct(v) },
+  ];
+  const balanceRows = [
+    { l: "Total Assets",      k: "totalAssets" as const,      fmt: fmt },
+    { l: "Total Liabilities", k: "totalLiabilities" as const, fmt: fmt },
+    { l: "Total Equity",      k: "totalEquity" as const,      fmt: fmt },
+    { l: "Debt / Equity",     k: "debtToEquity" as const,     fmt: (v: number) => v.toFixed(2) + "x" },
+  ];
+  const cashRows = [
+    { l: "Operating CF",    k: "operatingCashFlow" as const,   fmt: fmt },
+    { l: "Investing CF",    k: "investingCashFlow" as const,   fmt: fmt },
+    { l: "Financing CF",    k: "financingCashFlow" as const,   fmt: fmt },
+    { l: "Free Cash Flow",  k: "freeCashFlow" as const,        fmt: fmt },
+    { l: "CapEx",           k: "capitalExpenditure" as const,  fmt: fmt },
+  ];
+  const rows = sub === "income" ? incomeRows : sub === "balance" ? balanceRows : cashRows;
+
+  return (
+    <div className="mt-8 card-flat">
+      {/* Sub-tabs */}
+      <div className="flex gap-0 border-b mb-6" style={{ borderColor: "var(--border-color)" }}>
+        {(["income","balance","cashflow"] as const).map(s => (
+          <button key={s} onClick={() => setSub(s)} className="px-4 h-10 text-sm capitalize" style={{ color: sub === s ? "var(--text-primary)" : "var(--text-secondary)", fontWeight: sub === s ? 600 : 400, borderBottom: sub === s ? "2px solid var(--text-primary)" : "2px solid transparent" }}>
+            {s === "income" ? "Income Statement" : s === "balance" ? "Balance Sheet" : "Cash Flow"}
+          </button>
+        ))}
+        <span className="ml-auto text-xs self-center pr-2" style={{ color: "var(--text-muted)" }}>Annual · Yahoo Finance / SEC EDGAR</span>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="w-full" style={{ borderCollapse: "collapse" }}>
+          <thead>
+            <tr style={{ borderBottom: "1px solid var(--border-color)" }}>
+              <th className="text-left pb-3 text-xs font-medium uppercase tracking-wide" style={{ color: "var(--text-muted)", minWidth: 200 }}>Metric</th>
+              {years.map(y => <th key={y} className="text-right pb-3 pl-6 text-xs font-medium uppercase tracking-wide" style={{ color: "var(--text-muted)" }}>{y}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row, i) => (
+              <tr key={row.l} style={{ borderBottom: "1px solid var(--bg-subtle)", animationDelay: `${i * 50}ms` }}>
+                <td className="py-3 text-sm font-medium">{row.l}</td>
+                {data.map((d, j) => {
+                  const v = d[row.k] as number;
+                  const isNeg = v < 0;
+                  return (
+                    <td key={j} className="py-3 pl-6 text-right text-sm tabular" style={{ color: isNeg ? "var(--color-down)" : "var(--text-primary)" }}>
+                      {row.fmt(v)}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+// ── KeyMetricsTab ──────────────────────────────────────────────────────────────
+function KeyMetricsTab({ ticker }: { ticker: DemoTicker }) {
+  const r = DEMO_RATIOS[ticker];
+  const q = DEMO_QUOTES[ticker];
+  const sections = [
+    { title: "Valuation", source: "Yahoo Finance – TTM", items: [
+      { l: "P/E Ratio", v: r.peRatio.toFixed(1) + "x" }, { l: "Forward P/E", v: r.forwardPE.toFixed(1) + "x" },
+      { l: "Price / Book", v: r.priceToBook.toFixed(1) + "x" }, { l: "Price / Sales", v: r.priceToSales.toFixed(1) + "x" },
+      { l: "FCF Yield", v: pct(r.fcfYield) },
+    ]},
+    { title: "Profitability", source: "Yahoo Finance – TTM", items: [
+      { l: "Gross Margin", v: pct(r.grossMargin) }, { l: "Operating Margin", v: pct(r.operatingMargin) },
+      { l: "Net Margin", v: pct(r.netMargin) }, { l: "Revenue Growth", v: pct(r.revenueGrowth) },
+    ]},
+    { title: "Management", source: "Yahoo Finance – TTM", items: [
+      { l: "Return on Equity", v: pct(r.returnOnEquity) }, { l: "Return on Assets", v: pct(r.returnOnAssets) },
+      { l: "Debt / Equity", v: r.debtToEquity.toFixed(2) }, { l: "Current Ratio", v: r.currentRatio.toFixed(2) },
+    ]},
+    { title: "Price & Volume", source: "Yahoo Finance", items: [
+      { l: "Current Price", v: `$${q.price.toFixed(2)}` }, { l: "52W High", v: `$${q["52wHigh"].toFixed(2)}` },
+      { l: "52W Low", v: `$${q["52wLow"].toFixed(2)}` }, { l: "Beta", v: q.beta.toFixed(2) },
+      { l: "Market Cap", v: fmt(q.marketCap) },
+    ]},
+  ];
+  return (
+    <div className="mt-8 grid md:grid-cols-2 gap-6">
+      {sections.map(sec => (
+        <div key={sec.title} className="card-flat">
+          <div className="flex justify-between items-baseline border-b pb-3 mb-0" style={{ borderColor: "var(--text-primary)" }}>
+            <p className="section-label">{sec.title}</p>
+            <span className="text-xs" style={{ color: "var(--text-muted)" }}>{sec.source}</span>
+          </div>
+          {sec.items.map(item => (
+            <div key={item.l} className="flex justify-between items-baseline py-3" style={{ borderBottom: "1px solid var(--bg-subtle)" }}>
+              <span className="text-sm" style={{ color: "var(--text-secondary)" }}>{item.l}</span>
+              <span className="text-sm font-semibold tabular">{item.v}</span>
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ── ExitCheckTab ───────────────────────────────────────────────────────────────
+function ExitCheckTab({ ticker }: { ticker: DemoTicker }) {
+  const [purchasePrice, setPurchasePrice] = useState("");
+  const [analysed, setAnalysed] = useState(false);
+
+  const pp = parseFloat(purchasePrice) || undefined;
+  const analysis = useMemo(() => computeExitAnalysis(ticker, pp), [ticker, pp, analysed]);
+
+  const signalColor: Record<ExitSignal, string> = {
+    HOLD: "var(--color-hold)", TRIM: "var(--color-down)", EXIT: "var(--color-down)",
+  };
+
+  return (
+    <div className="mt-8 space-y-6">
+      <div className="card-flat">
+        <p className="section-label">Exit Check</p>
+        <p className="mt-2 text-sm" style={{ color: "var(--text-secondary)" }}>
+          Enter your purchase price to get a personalised HOLD / TRIM / EXIT signal based on score and valuation.
+        </p>
+        <div className="mt-4 flex gap-3 items-end">
+          <div>
+            <label className="section-label block mb-1">Purchase price (optional)</label>
+            <input
+              type="number"
+              placeholder="e.g. 185.00"
+              value={purchasePrice}
+              onChange={e => setPurchasePrice(e.target.value)}
+              className="input-flat w-40"
+            />
+          </div>
+          <button onClick={() => setAnalysed(true)} className="btn-dark">Check exit signal</button>
+        </div>
+      </div>
+
+      {(analysed || !purchasePrice) && (
+        <div className="grid lg:grid-cols-12 gap-6">
+          <div className="lg:col-span-4 card-flat text-center">
+            <p className="section-label">Exit signal</p>
+            <div className="mt-6 mb-4 text-6xl font-bold tabular" style={{ color: signalColor[analysis.signal] }}>
+              {analysis.exitScore}
+              <span className="text-2xl" style={{ color: "var(--text-secondary)" }}>/100</span>
+            </div>
+            <ExitBadge signal={analysis.signal} />
+            <p className="mt-4 text-sm" style={{ color: "var(--text-secondary)" }}>{analysis.framing}</p>
+            <p className="mt-4 text-xs" style={{ color: "var(--text-muted)" }}>
+              Research signal only · Not a sell recommendation · Not financial advice
+            </p>
+          </div>
+          <div className="lg:col-span-8 card-flat">
+            <p className="section-label">Signal drivers</p>
+            <div className="mt-4 space-y-4">
+              {analysis.drivers.map((d, i) => (
+                <div key={i} style={{ paddingBottom: 12, borderBottom: "1px solid var(--bg-subtle)" }}>
+                  <div className="flex justify-between items-baseline">
+                    <span className="text-sm font-semibold">{d.label}</span>
+                    <span className="text-xs" style={{ color: "var(--text-muted)" }}>Source: {d.source}</span>
+                  </div>
+                  <p className="mt-1 text-sm" style={{ color: "var(--text-secondary)" }}>{d.detail}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── ProfileScoreTab ────────────────────────────────────────────────────────────
+function ProfileScoreTab({ ticker }: { ticker: DemoTicker }) {
+  const [style, setStyle] = useState<InvestorStyle>("core");
+  const defaultScore = DEMO_SCORES[ticker].score;
+  const personalScore = profileScore(ticker, style);
+  const summary = profileSummary(ticker, style);
+  const diff = personalScore - defaultScore;
+
+  const styles: { value: InvestorStyle; label: string; desc: string }[] = [
+    { value: "value",  label: "Value Investor",  desc: "Valuation-weighted (+15%)" },
+    { value: "growth", label: "Growth Investor", desc: "Fundamentals-weighted (+15%)" },
+    { value: "core",   label: "Balanced",        desc: "Default equal weights" },
+  ];
+
+  return (
+    <div className="mt-8 space-y-6">
+      {/* Style selector */}
+      <div className="card-flat">
+        <p className="section-label">Your investor style</p>
+        <p className="mt-2 text-sm mb-4" style={{ color: "var(--text-secondary)" }}>
+          The same stock scores differently depending on your strategy. Select yours to see your personalised verdict.
+        </p>
+        <div className="flex flex-wrap gap-3">
+          {styles.map(s => (
+            <button
+              key={s.value}
+              onClick={() => setStyle(s.value)}
+              className="text-left px-4 py-3 rounded-xl border text-sm"
+              style={{
+                borderColor: style === s.value ? "var(--text-primary)" : "var(--border-color)",
+                background: style === s.value ? "var(--bg-dark)" : "var(--bg-primary)",
+                color: style === s.value ? "var(--text-inverse)" : "var(--text-primary)",
+                fontWeight: style === s.value ? 600 : 400,
+              }}
+            >
+              <div className="font-semibold">{s.label}</div>
+              <div className="text-xs mt-0.5 opacity-70">{s.desc}</div>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Score comparison */}
+      <div className="grid md:grid-cols-2 gap-6">
+        <div className="card-flat text-center">
+          <p className="section-label">Default score</p>
+          <p className="mt-4 text-6xl font-bold tabular" style={{ letterSpacing: "-0.02em" }}>{defaultScore}<span className="text-2xl" style={{ color: "var(--text-secondary)" }}>/100</span></p>
+          <div className="mt-3 flex gap-2 justify-center">
+            <VerdictBadge score={defaultScore} />
+            <FitBadge score={defaultScore} />
+          </div>
+          <p className="mt-3 text-xs" style={{ color: "var(--text-muted)" }}>Equal weights across all 5 factors</p>
+        </div>
+        <div className="card-flat text-center" style={{ border: "2px solid var(--text-primary)" }}>
+          <p className="section-label">Your score — {styles.find(s => s.value === style)?.label}</p>
+          <p className="mt-4 text-6xl font-bold tabular" style={{ letterSpacing: "-0.02em" }}>{personalScore}<span className="text-2xl" style={{ color: "var(--text-secondary)" }}>/100</span></p>
+          <div className="mt-3 flex gap-2 justify-center">
+            <VerdictBadge score={personalScore} />
+            <FitBadge score={personalScore} />
+          </div>
+          <p className="mt-2 text-sm font-semibold" style={{ color: diff > 0 ? "var(--color-up)" : diff < 0 ? "var(--color-down)" : "var(--text-secondary)" }}>
+            {diff > 0 ? `+${diff}` : diff} vs. default
+          </p>
+        </div>
+      </div>
+
+      {/* Explanation */}
+      <div className="card-flat">
+        <p className="section-label">Why the difference?</p>
+        <p className="mt-3 text-sm" style={{ color: "var(--text-secondary)" }}>{summary}</p>
+        <div className="mt-4 space-y-3">
+          {DEMO_SCORES[ticker].factors.map((f, i) => (
+            <div key={f.name} className="flex items-center gap-4">
+              <span className="text-sm w-28 shrink-0">{f.name}</span>
+              <div className="flex-1 h-[3px] rounded-full overflow-hidden" style={{ background: "var(--bg-subtle)" }}>
+                <div style={{ width: `${f.score}%`, height: "100%", borderRadius: 50, background: f.score >= 70 ? "var(--color-up)" : f.score >= 45 ? "var(--color-hold)" : "var(--color-down)", transition: `width 400ms cubic-bezier(0.16,1,0.3,1) ${i * 60}ms` }} />
+              </div>
+              <span className="text-xs tabular font-semibold w-12 text-right">{f.score}/100</span>
+            </div>
+          ))}
+        </div>
+        <p className="mt-4 text-xs" style={{ color: "var(--text-muted)" }}>Source: Yahoo Finance · SEC EDGAR · Research tool only · Not financial advice</p>
+      </div>
+    </div>
+  );
+}
+
+// ── Main ───────────────────────────────────────────────────────────────────────
 function StockPage() {
   const { ticker } = Route.useSearch();
   const [input, setInput] = useState((ticker ?? "").toUpperCase());
   const [current, setCurrent] = useState<string | null>(ticker?.toUpperCase() ?? null);
   const [error, setError] = useState<string | null>(null);
   const [range, setRange] = useState("6M");
-  const [tab, setTab] = useState<"overview" | "financials" | "learn">("overview");
+  const [tab, setTab] = useState<"overview" | "metrics" | "financials" | "exit" | "profile" | "learn">("overview");
   const [showBanner, setShowBanner] = useState(false);
   const [gateOpen, setGateOpen] = useState(false);
 
-  useEffect(() => {
-    setInput((ticker ?? "").toUpperCase());
-    setCurrent(ticker?.toUpperCase() ?? null);
-  }, [ticker]);
+  useEffect(() => { setInput((ticker ?? "").toUpperCase()); setCurrent(ticker?.toUpperCase() ?? null); }, [ticker]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const seen = window.localStorage.getItem("pondex_onboarding_banner_seen");
-    if (!seen && ticker === "AAPL") {
+    if (!window.localStorage.getItem("pondex_onboarding_banner_seen") && ticker === "AAPL") {
       setShowBanner(true);
       const t = setTimeout(() => dismissBanner(), 8000);
       return () => clearTimeout(t);
@@ -142,49 +374,28 @@ function StockPage() {
 
   const dismissBanner = () => {
     setShowBanner(false);
-    if (typeof window !== "undefined") {
-      window.localStorage.setItem("pondex_onboarding_banner_seen", "1");
-    }
+    if (typeof window !== "undefined") window.localStorage.setItem("pondex_onboarding_banner_seen", "1");
   };
 
   const runVerdict = async () => {
     const t = input.trim().toUpperCase();
     if (!t) return;
-    if (!isDemoTicker(t)) {
-      setError(t);
-      setCurrent(null);
-      return;
-    }
+    if (!isDemoTicker(t)) { setError(t); setCurrent(null); return; }
 
-    // Free tier gate: 1 verdict per day
     const today = new Date().toISOString().split("T")[0];
     try {
-      const { data: rows } = await supabase
-        .from("daily_verdicts")
-        .select("count")
-        .eq("date", today)
-        .maybeSingle();
+      const { data: rows } = await supabase.from("daily_verdicts").select("count").eq("date", today).maybeSingle();
       const count = rows?.count ?? 0;
-      if (count >= 1 && current !== t) {
-        setGateOpen(true);
-        return;
-      }
+      if (count >= 1 && current !== t) { setGateOpen(true); return; }
       const { data: userData } = await supabase.auth.getUser();
-      if (userData.user) {
-        await supabase.from("daily_verdicts").upsert(
-          { user_id: userData.user.id, date: today, count: count + 1 },
-          { onConflict: "user_id,date" },
-        );
-      }
-    } catch {
-      // ignore – demo fallback
-    }
+      if (userData.user) await supabase.from("daily_verdicts").upsert({ user_id: userData.user.id, date: today, count: count + 1 }, { onConflict: "user_id,date" });
+    } catch { /* demo fallback */ }
 
     setError(null);
     setCurrent(t);
+    setTab("overview");
   };
 
-  const emptyState = !current && !error;
   const q = current && isDemoTicker(current) ? DEMO_QUOTES[current as DemoTicker] : null;
   const s = current && isDemoTicker(current) ? DEMO_SCORES[current as DemoTicker] : null;
   const candles = current && isDemoTicker(current) ? DEMO_CANDLES[current as DemoTicker] : [];
@@ -193,144 +404,98 @@ function StockPage() {
     return candles.slice(-Math.min(candles.length, map[range] ?? 180));
   }, [candles, range]);
 
-  const changeColor = (n: number) => (n > 0 ? "var(--color-up)" : n < 0 ? "var(--color-down)" : "var(--text-secondary)");
+  const TABS = [
+    { id: "overview",   label: "Overview" },
+    { id: "metrics",    label: "Key Metrics" },
+    { id: "financials", label: "Financials" },
+    { id: "exit",       label: "Exit Check" },
+    { id: "profile",    label: "My Profile Score" },
+    { id: "learn",      label: "Learn" },
+  ] as const;
 
   return (
     <AppShell>
       {showBanner && (
-        <div
-          className="flex items-center justify-between px-6 py-3 text-sm"
-          style={{ background: "var(--bg-dark)", color: "var(--text-inverse)" }}
-        >
+        <div className="flex items-center justify-between px-6 py-3 text-sm" style={{ background: "var(--bg-dark)", color: "var(--text-inverse)" }}>
           <span>Welcome to pondex_ — this is your first verdict. Every number cites its source.</span>
-          <button onClick={dismissBanner} aria-label="Dismiss" className="text-xl leading-none" style={{ color: "var(--text-muted)" }}>×</button>
+          <button onClick={dismissBanner} className="text-xl leading-none ml-4" style={{ color: "var(--text-muted)" }}>×</button>
         </div>
       )}
 
       <div className="mx-auto max-w-[1280px] px-6 md:px-8 py-8">
-        {/* Header search */}
+        {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end gap-4 justify-between">
           <div>
-            {q && (
+            {q ? (
               <>
                 <p className="section-label">{current} · {q.exchangeShortName} · {q.sector}</p>
                 <h1 className="mt-2 text-3xl md:text-4xl font-semibold tracking-tight">{q.companyName}</h1>
                 <p className="mt-2 text-2xl tabular font-semibold">
                   ${q.price.toFixed(2)}{" "}
-                  <span className="text-base font-normal" style={{ color: changeColor(q.change) }}>
+                  <span className="text-base font-normal" style={{ color: q.change > 0 ? "var(--color-up)" : q.change < 0 ? "var(--color-down)" : "var(--text-secondary)" }}>
                     {q.change > 0 ? "+" : ""}{q.change.toFixed(2)} ({q.changePercent > 0 ? "+" : ""}{q.changePercent.toFixed(2)}%)
                   </span>
                 </p>
               </>
-            )}
-            {!q && (
-              <>
-                <p className="section-label">Stock</p>
-                <h1 className="mt-2 text-3xl md:text-4xl font-semibold tracking-tight">Get your verdict.</h1>
-              </>
+            ) : (
+              <><p className="section-label">Stock</p><h1 className="mt-2 text-3xl md:text-4xl font-semibold tracking-tight">Get your verdict.</h1></>
             )}
           </div>
           <div className="flex gap-2">
-            <input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && runVerdict()}
-              placeholder="Ticker…"
-              className="input-flat max-w-[200px] uppercase"
-            />
+            <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === "Enter" && runVerdict()} placeholder="Ticker…" className="input-flat max-w-[180px] uppercase" />
             <button onClick={runVerdict} className="btn-dark">GET VERDICT →</button>
           </div>
         </div>
+        <p className="mt-2 text-xs" style={{ color: "var(--text-muted)" }}>⚠ Research tool only · Not financial advice</p>
 
-        <p className="mt-3 text-xs" style={{ color: "var(--text-muted)" }}>
-          ⚠ Research tool only · Not financial advice
-        </p>
-
-        {emptyState && (
+        {/* Empty / Error states */}
+        {!current && !error && (
           <div className="mt-16 text-center" style={{ color: "var(--text-muted)" }}>
             <p>Enter a ticker to see its verdict.</p>
             <div className="mt-4 flex flex-wrap gap-2 justify-center">
-              {DEMO_TICKERS.map((t) => (
-                <button
-                  key={t}
-                  onClick={() => { setInput(t); setCurrent(t); setError(null); }}
-                  className="text-xs font-semibold tracking-wider px-3 py-1.5 rounded-full border"
-                  style={{ borderColor: "var(--border-color)" }}
-                >
-                  {t}
-                </button>
+              {DEMO_TICKERS.map(t => (
+                <button key={t} onClick={() => { setInput(t); setCurrent(t); setError(null); }} className="text-xs font-semibold tracking-wider px-3 py-1.5 rounded-full border" style={{ borderColor: "var(--border-color)" }}>{t}</button>
               ))}
             </div>
           </div>
         )}
-
         {error && (
           <div className="mt-10 card-flat text-center">
             <p className="text-sm">Ticker not found or not in demo set.</p>
             <div className="mt-4 flex flex-wrap gap-2 justify-center">
-              {DEMO_TICKERS.map((t) => (
-                <button
-                  key={t}
-                  onClick={() => { setInput(t); setCurrent(t); setError(null); }}
-                  className="text-xs font-semibold tracking-wider px-3 py-1.5 rounded-full border"
-                  style={{ borderColor: "var(--border-color)" }}
-                >
-                  {t}
-                </button>
+              {DEMO_TICKERS.map(t => (
+                <button key={t} onClick={() => { setInput(t); setCurrent(t); setError(null); }} className="text-xs font-semibold tracking-wider px-3 py-1.5 rounded-full border" style={{ borderColor: "var(--border-color)" }}>{t}</button>
               ))}
             </div>
           </div>
         )}
 
-        {q && s && current && (
+        {/* Results */}
+        {q && s && current && isDemoTicker(current) && (
           <>
             {/* Tabs */}
-            <div className="mt-8 flex gap-0 border-b overflow-x-auto" style={{ borderColor: "var(--border-color)" }}>
-              {(["overview", "financials", "learn"] as const).map((t) => (
-                <button
-                  key={t}
-                  onClick={() => setTab(t)}
-                  className="px-4 h-11 text-sm capitalize whitespace-nowrap"
-                  style={{
-                    color: tab === t ? "var(--text-primary)" : "var(--text-secondary)",
-                    fontWeight: tab === t ? 600 : 400,
-                    borderBottom: tab === t ? "2px solid var(--text-primary)" : "2px solid transparent",
-                  }}
-                >
-                  {t}
-                </button>
+            <div className="mt-8 flex gap-0 border-b overflow-x-auto scrollbar-hide" style={{ borderColor: "var(--border-color)" }}>
+              {TABS.map(t => (
+                <button key={t.id} onClick={() => setTab(t.id)} className="px-4 h-11 text-sm whitespace-nowrap" style={{ color: tab === t.id ? "var(--text-primary)" : "var(--text-secondary)", fontWeight: tab === t.id ? 600 : 400, borderBottom: tab === t.id ? "2px solid var(--text-primary)" : "2px solid transparent" }}>{t.label}</button>
               ))}
             </div>
 
+            {/* Overview */}
             {tab === "overview" && (
               <div className="mt-8 space-y-8">
-                {/* Chart */}
                 <div className="card-flat">
                   <div className="flex items-center justify-between">
-                    <div>
-                      <p className="section-label">Price chart</p>
-                      <p className="mt-1 text-xs" style={{ color: "var(--text-muted)" }}>
-                        Illustrative · Live chart requires backend
-                      </p>
-                    </div>
+                    <div><p className="section-label">Price chart</p><p className="mt-1 text-xs" style={{ color: "var(--text-muted)" }}>Illustrative · Live chart requires backend</p></div>
                     <RangeSelector value={range} onChange={setRange} />
                   </div>
                   <div className="mt-4" style={{ height: 260 }}>
                     <ResponsiveContainer width="100%" height="100%">
                       <AreaChart data={rangedCandles} margin={{ top: 8, right: 8, bottom: 8, left: 8 }}>
-                        <defs>
-                          <linearGradient id="pfill" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="rgba(10,10,10,0.08)" />
-                            <stop offset="100%" stopColor="rgba(10,10,10,0)" />
-                          </linearGradient>
-                        </defs>
+                        <defs><linearGradient id="pfill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="rgba(10,10,10,0.08)" /><stop offset="100%" stopColor="rgba(10,10,10,0)" /></linearGradient></defs>
                         <CartesianGrid stroke="#F3F4F6" vertical={false} />
                         <XAxis dataKey="date" tick={{ fontSize: 11, fill: "#9CA3AF" }} axisLine={false} tickLine={false} minTickGap={40} />
-                        <YAxis tick={{ fontSize: 11, fill: "#9CA3AF" }} axisLine={false} tickLine={false} orientation="right" domain={["auto", "auto"]} />
-                        <Tooltip
-                          contentStyle={{ background: "#fff", border: "1px solid #E5E7EB", borderRadius: 8, fontSize: 13, fontWeight: 600 }}
-                          formatter={(v: number) => [`$${v.toFixed(2)}`, "Close"]}
-                        />
+                        <YAxis tick={{ fontSize: 11, fill: "#9CA3AF" }} axisLine={false} tickLine={false} orientation="right" domain={["auto","auto"]} />
+                        <Tooltip contentStyle={{ background: "#fff", border: "1px solid #E5E7EB", borderRadius: 8, fontSize: 13, fontWeight: 600 }} formatter={(v: number) => [`$${v.toFixed(2)}`, "Close"]} />
                         <Area type="monotone" dataKey="close" stroke="#0A0A0A" strokeWidth={1.5} fill="url(#pfill)" dot={false} />
                       </AreaChart>
                     </ResponsiveContainer>
@@ -340,28 +505,14 @@ function StockPage() {
                 <div className="grid lg:grid-cols-12 gap-6">
                   <div className="lg:col-span-4 card-flat">
                     <p className="section-label">Verdict</p>
-                    <div className="mt-4">
-                      <Gauge score={s.score} />
-                    </div>
+                    <div className="mt-4"><Gauge score={s.score} /></div>
                     <div className="mt-4 flex items-center gap-2 justify-center">
-                      <span
-                        className={
-                          verdictColor(s.score) === "buy" ? "badge-buy" : verdictColor(s.score) === "hold" ? "badge-hold" : "badge-sell"
-                        }
-                        style={{ padding: "4px 10px", borderRadius: 999, fontSize: 11, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase" }}
-                      >
-                        {s.verdict}
-                      </span>
-                      <span className="badge-fit" style={{ padding: "4px 10px", borderRadius: 999, fontSize: 11, fontWeight: 600, letterSpacing: "0.08em" }}>
-                        {s.score >= 80 ? "STRONG FIT" : s.score >= 65 ? "GOOD FIT" : s.score >= 50 ? "MODERATE FIT" : "WEAK FIT"}
-                      </span>
+                      <VerdictBadge score={s.score} />
+                      <FitBadge score={s.score} />
                     </div>
                     <p className="mt-4 text-sm" style={{ color: "var(--text-secondary)" }}>{s.summary}</p>
-                    <p className="mt-4 text-[11px]" style={{ color: "var(--text-muted)" }}>
-                      ⚠ Research tool only · Not financial advice
-                    </p>
+                    <p className="mt-3 text-xs" style={{ color: "var(--text-muted)" }}>⚠ Research tool only · Not financial advice</p>
                   </div>
-
                   <div className="lg:col-span-8 card-flat">
                     <p className="section-label">Factor breakdown</p>
                     <div className="mt-6 space-y-5">
@@ -373,116 +524,54 @@ function StockPage() {
                           </div>
                           <p className="mt-1 text-sm" style={{ color: "var(--text-secondary)" }}>{f.explanation}</p>
                           <div className="mt-2 h-[3px] rounded-full overflow-hidden" style={{ background: "var(--bg-subtle)" }}>
-                            <div
-                              style={{
-                                width: `${f.score}%`,
-                                height: "100%",
-                                borderRadius: 50,
-                                background: f.score >= 70 ? "var(--color-up)" : f.score >= 45 ? "var(--color-hold)" : "var(--color-down)",
-                                transition: "width 400ms cubic-bezier(0.16,1,0.3,1)",
-                                transitionDelay: `${i * 70}ms`,
-                              }}
-                            />
+                            <div style={{ width: `${f.score}%`, height: "100%", borderRadius: 50, background: f.score >= 70 ? "var(--color-up)" : f.score >= 45 ? "var(--color-hold)" : "var(--color-down)", transition: `width 400ms cubic-bezier(0.16,1,0.3,1) ${i * 70}ms` }} />
                           </div>
-                          <p className="mt-1 text-[11px]" style={{ color: "var(--text-muted)" }}>Source: {f.source}</p>
+                          <p className="mt-1 text-xs" style={{ color: "var(--text-muted)" }}>Source: {f.source}</p>
                         </div>
                       ))}
                     </div>
                   </div>
                 </div>
 
-                {/* Key metrics strip */}
                 <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
-                  {[
-                    { l: "Market Cap", v: `$${(q.marketCap / 1e12).toFixed(2)}T` },
-                    { l: "Price", v: `$${q.price.toFixed(2)}` },
-                    { l: "52W High", v: `$${q["52wHigh"].toFixed(2)}` },
-                    { l: "52W Low", v: `$${q["52wLow"].toFixed(2)}` },
-                    { l: "Beta", v: q.beta.toFixed(2) },
-                    { l: "Sector", v: q.sector },
-                  ].map((m) => (
-                    <div key={m.l} className="card-flat">
-                      <p className="section-label">{m.l}</p>
-                      <p className="mt-2 text-lg font-semibold tabular">{m.v}</p>
-                    </div>
+                  {[{ l: "Market Cap", v: fmt(q.marketCap) },{ l: "Price", v: `$${q.price.toFixed(2)}` },{ l: "52W High", v: `$${q["52wHigh"].toFixed(2)}` },{ l: "52W Low", v: `$${q["52wLow"].toFixed(2)}` },{ l: "Beta", v: q.beta.toFixed(2) },{ l: "Sector", v: q.sector }].map(m => (
+                    <div key={m.l} className="card-flat"><p className="section-label">{m.l}</p><p className="mt-2 text-lg font-semibold tabular">{m.v}</p></div>
                   ))}
                 </div>
 
-                {/* Similar stocks */}
                 <div>
                   <p className="section-label">Similar stocks</p>
                   <div className="mt-4 flex flex-wrap gap-2">
-                    {(PEER_MAP[current as DemoTicker] ?? []).map((t) => (
-                      <Link
-                        key={t}
-                        to="/app/stock"
-                        search={{ ticker: t } as never}
-                        className="text-xs font-semibold tracking-wider px-3 py-1.5 rounded-full border hover:border-[var(--text-primary)]"
-                        style={{ borderColor: "var(--border-color)" }}
-                      >
-                        {t}
-                      </Link>
+                    {(PEER_MAP[current as DemoTicker] ?? []).map(t => (
+                      <Link key={t} to="/app/stock" search={{ ticker: t } as never} className="text-xs font-semibold tracking-wider px-3 py-1.5 rounded-full border hover:border-[var(--text-primary)]" style={{ borderColor: "var(--border-color)" }}>{t}</Link>
                     ))}
                   </div>
                 </div>
               </div>
             )}
 
-            {tab === "financials" && (
-              <div className="mt-8 card-flat text-center py-16">
-                <p className="section-label">Financials</p>
-                <p className="mt-3 text-sm" style={{ color: "var(--text-secondary)" }}>
-                  Financial statements coming Q4 2026.
-                </p>
-              </div>
-            )}
+            {tab === "metrics" && <KeyMetricsTab ticker={current as DemoTicker} />}
+            {tab === "financials" && <FinancialsTab ticker={current as DemoTicker} />}
+            {tab === "exit" && <ExitCheckTab ticker={current as DemoTicker} />}
+            {tab === "profile" && <ProfileScoreTab ticker={current as DemoTicker} />}
 
             {tab === "learn" && (
               <div className="mt-8 grid md:grid-cols-3 gap-6">
-                <div className="card-flat">
-                  <p className="section-label">About {current}</p>
-                  <p className="mt-3 text-sm" style={{ color: "var(--text-secondary)" }}>{q.description}</p>
-                  <div className="mt-4 space-y-1 text-xs" style={{ color: "var(--text-muted)" }}>
-                    <p>Sector: {q.sector}</p>
-                    <p>Industry: {q.industry}</p>
-                    <p>Country: {q.country}</p>
-                  </div>
-                </div>
-                <div className="card-flat">
-                  <p className="section-label">Glossary</p>
-                  <dl className="mt-3 space-y-3 text-sm">
-                    <div><dt className="font-semibold">P/E</dt><dd style={{ color: "var(--text-secondary)" }}>Price-to-earnings ratio.</dd></div>
-                    <div><dt className="font-semibold">Moat</dt><dd style={{ color: "var(--text-secondary)" }}>Sustainable competitive advantage.</dd></div>
-                    <div><dt className="font-semibold">FCF Yield</dt><dd style={{ color: "var(--text-secondary)" }}>Free cash flow ÷ market cap.</dd></div>
-                    <div><dt className="font-semibold">Beta</dt><dd style={{ color: "var(--text-secondary)" }}>Volatility vs. the market.</dd></div>
-                  </dl>
-                </div>
-                <div className="card-flat">
-                  <p className="section-label">Data sources</p>
-                  <ul className="mt-3 text-sm space-y-2" style={{ color: "var(--text-secondary)" }}>
-                    <li>Yahoo Finance — price, ratios, financials</li>
-                    <li>SEC EDGAR — official filings: 10-K, 10-Q</li>
-                    <li>Groq AI — plain-language summaries via Llama 3.3</li>
-                  </ul>
-                  <p className="mt-4 text-xs" style={{ color: "var(--text-muted)" }}>
-                    pondex_ is a research tool. All investment decisions are yours.
-                  </p>
-                </div>
+                <div className="card-flat"><p className="section-label">About {current}</p><p className="mt-3 text-sm" style={{ color: "var(--text-secondary)" }}>{q.description}</p><div className="mt-4 space-y-1 text-xs" style={{ color: "var(--text-muted)" }}><p>Sector: {q.sector}</p><p>Industry: {q.industry}</p><p>Country: {q.country}</p></div></div>
+                <div className="card-flat"><p className="section-label">Glossary</p><dl className="mt-3 space-y-3 text-sm"><div><dt className="font-semibold">P/E</dt><dd style={{ color: "var(--text-secondary)" }}>Price-to-earnings ratio.</dd></div><div><dt className="font-semibold">Moat</dt><dd style={{ color: "var(--text-secondary)" }}>Sustainable competitive advantage.</dd></div><div><dt className="font-semibold">FCF Yield</dt><dd style={{ color: "var(--text-secondary)" }}>Free cash flow ÷ market cap.</dd></div><div><dt className="font-semibold">Beta</dt><dd style={{ color: "var(--text-secondary)" }}>Volatility vs. the market.</dd></div></dl></div>
+                <div className="card-flat"><p className="section-label">Data sources</p><ul className="mt-3 text-sm space-y-2" style={{ color: "var(--text-secondary)" }}><li>Yahoo Finance — price, ratios, financials</li><li>SEC EDGAR — official filings: 10-K, 10-Q</li><li>Groq AI — plain-language summaries via Llama 3.3</li></ul><p className="mt-4 text-xs" style={{ color: "var(--text-muted)" }}>pondex_ is a research tool. All investment decisions are yours.</p></div>
               </div>
             )}
           </>
         )}
 
+        {/* Free tier gate modal */}
         {gateOpen && (
           <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center" style={{ background: "rgba(0,0,0,0.4)" }} onClick={() => setGateOpen(false)}>
-            <div className="w-full md:max-w-md" style={{ background: "var(--bg-primary)", borderRadius: 16, padding: 24 }} onClick={(e) => e.stopPropagation()}>
+            <div className="w-full md:max-w-md" style={{ background: "var(--bg-primary)", borderRadius: 16, padding: 24 }} onClick={e => e.stopPropagation()}>
               <p className="text-lg font-semibold">You've used your free verdict for today.</p>
               <p className="mt-2 text-sm" style={{ color: "var(--text-secondary)" }}>Upgrade to Pro for unlimited verdicts, peer comparison, and AI chat.</p>
-              <ul className="mt-4 space-y-2 text-sm">
-                <li>• Unlimited verdicts per day</li>
-                <li>• Peer comparison (2 stocks + sector average)</li>
-                <li>• AI chat with source attribution</li>
-              </ul>
+              <ul className="mt-4 space-y-2 text-sm"><li>• Unlimited verdicts per day</li><li>• Peer comparison (2 stocks + sector average)</li><li>• AI chat with source attribution</li></ul>
               <div className="mt-6 flex flex-col md:flex-row gap-3">
                 <button onClick={() => { setGateOpen(false); toast("Pro checkout coming soon."); }} className="btn-dark flex-1">Upgrade to Pro — €4.99/month</button>
                 <button onClick={() => setGateOpen(false)} className="btn-outline flex-1">Remind me tomorrow</button>
