@@ -45,7 +45,7 @@ function BrowserScoreCard() {
         </div>
       </div>
       {/* Card content */}
-      <div style={{ background: "#fff", border: "1.5px solid #E5E7EB", borderTop: "none", borderRadius: "0 0 16px 16px", padding: "24px", boxShadow: "0 8px 40px rgba(0,194,168,0.12)" }}>
+      <div style={{ background: "#fff", border: "1.5px solid #E5E7EB", borderTop: "none", borderRadius: "0 0 16px 16px", padding: "24px", boxShadow: "0 8px 40px rgba(91,91,214,0.12)" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
           <div>
             <p style={{ fontSize: 9, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: "#9CA3AF", marginBottom: 5 }}>pondex_ verdict</p>
@@ -87,7 +87,7 @@ function ScoreCard() {
       initial={{ opacity: 0, y: 24, scale: 0.97 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ delay: 0.3, duration: 0.6, ease: [0.16, 1, 0.3, 1] as const }}
-      style={{ background: "#fff", borderRadius: 24, padding: "28px 26px", border: "1.5px solid #E5E7EB", boxShadow: "0 4px 32px rgba(0,194,168,0.16)", width: 300, flexShrink: 0 }}
+      style={{ background: "#fff", borderRadius: 24, padding: "28px 26px", border: "1.5px solid #E5E7EB", boxShadow: "0 4px 32px rgba(91,91,214,0.16)", width: 300, flexShrink: 0 }}
     >
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
         <div>
@@ -142,7 +142,7 @@ export function LandingPage() {
       <LandingNav />
 
       {/* 1 — HERO — two-column */}
-      <section style={{ minHeight: "100vh", display: "flex", alignItems: "center", padding: "100px 48px 60px", background: "linear-gradient(135deg,#fff 0%,#F0FEFA 100%)" }}>
+      <section style={{ minHeight: "100vh", display: "flex", alignItems: "center", padding: "120px 48px 80px", paddingTop: "calc(64px + 56px)", background: "linear-gradient(135deg,#fff 0%,#F5F3FF 100%)" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", width: "100%", display: "grid", gridTemplateColumns: "1fr 380px", gap: 72, alignItems: "center" }}>
 
           {/* Left — text */}
@@ -158,18 +158,18 @@ export function LandingPage() {
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] as const }}
               style={{ fontSize: "clamp(36px,5vw,68px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.04, marginBottom: 20 }}>
               Too much data.<br />
-              <span style={{ color: "#00C2A8" }}>No clear answer.</span><br />
-              pondex_ changes that.
+              <span style={{ color: "#5B5BD6" }}>No clear answer.</span><br />
+              pondex_ ends that.
             </motion.h1>
 
             <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.5 }}
               style={{ fontSize: 18, color: "#6B7280", lineHeight: 1.65, maxWidth: 460, marginBottom: 36 }}>
-              A 0–100 score for any stock. Five factors. Every number linked to its source.
+              One verdict. Every number sourced.
             </motion.p>
 
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25, duration: 0.5 }}
               style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-              <Link to="/signup" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#00C2A8", color: "#fff", padding: "15px 32px", borderRadius: 12, fontWeight: 700, fontSize: 16, textDecoration: "none", boxShadow: "0 4px 20px rgba(0,194,168,0.25)" }}>
+              <Link to="/signup" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#5B5BD6", color: "#fff", padding: "15px 32px", borderRadius: 12, fontWeight: 700, fontSize: 16, textDecoration: "none", boxShadow: "0 4px 20px rgba(91,91,214,0.25)" }}>
                 Analyse a stock — it's free <ArrowRight size={16} />
               </Link>
               <a href="#how-it-works" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#fff", color: "#0A0A0A", padding: "15px 28px", borderRadius: 12, fontWeight: 600, fontSize: 15, textDecoration: "none", border: "1.5px solid #E5E7EB" }}>
@@ -184,12 +184,12 @@ export function LandingPage() {
       </section>
 
       {/* 2 — SOURCE TRUST BAR */}
-      <section style={{ background: "#F0FEFA", padding: "40px 40px", borderTop: "1px solid #B2F0E8", borderBottom: "1px solid #B2F0E8" }}>
+      <section style={{ background: "#F5F3FF", padding: "40px 40px", borderTop: "1px solid #DDD6FE", borderBottom: "1px solid #DDD6FE" }}>
         <div style={{ maxWidth: 700, margin: "0 auto", textAlign: "center" }}>
-          <p style={{ fontSize: 12, fontWeight: 600, color: "#00C2A8", textTransform: "uppercase" as const, letterSpacing: "0.12em", marginBottom: 12 }}>Data from sources you can verify</p>
+          <p style={{ fontSize: 12, fontWeight: 600, color: "#5B5BD6", textTransform: "uppercase" as const, letterSpacing: "0.12em", marginBottom: 12 }}>Data from sources you can verify</p>
           <div style={{ display: "flex", justifyContent: "center", gap: 32, flexWrap: "wrap" }}>
             {["Yahoo Finance", "SEC EDGAR", "Groq AI (Llama 3.3)"].map(s => (
-              <span key={s} style={{ fontSize: 14, fontWeight: 600, color: "#007A6E" }}>{s}</span>
+              <span key={s} style={{ fontSize: 14, fontWeight: 600, color: "#3730A3" }}>{s}</span>
             ))}
           </div>
         </div>
@@ -200,11 +200,9 @@ export function LandingPage() {
         <motion.div variants={stagger} whileInView="visible" viewport={vp}>
                     <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(32px,4.5vw,58px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.1, marginBottom: 24 }}>
             Most investors feel uncertain.<br />Even after researching.<br />
-            <span style={{ color: "#00C2A8" }}>pondex_ gives you one clear answer.</span>
+            <span style={{ color: "#5B5BD6" }}>pondex_ gives you one clear answer.</span>
           </motion.h2>
-          <motion.p variants={fadeUp} style={{ fontSize: 17, color: "#6B7280", marginBottom: 72, maxWidth: 500, margin: "0 auto 56px" }}>
-            Not because the data is missing — but because nothing gives you one clear, sourced verdict.
-          </motion.p>
+<div style={{ marginBottom: 56 }} />
           <motion.div variants={stagger} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 16 }}>
             {[
               { icon: "📊", title: "Too many sources", desc: "YouTube, Reddit, newsletters — 5 opinions, no clear answer." },
@@ -223,29 +221,33 @@ export function LandingPage() {
       </section>
 
       {/* 4 — THE SOLUTION */}
-      <section style={{ background: "#F0FEFA", padding: "104px 40px" }}>
+      <section style={{ background: "#F5F3FF", padding: "104px 40px" }}>
         <div style={{ maxWidth: 960, margin: "0 auto", textAlign: "center" }}>
           <motion.div variants={stagger} whileInView="visible" viewport={vp}>
                         <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(30px,4.5vw,52px)", fontWeight: 800, letterSpacing: "-0.04em", marginBottom: 16 }}>One answer. Every number sourced.</motion.h2>
             <motion.p variants={fadeUp} style={{ fontSize: 17, color: "#6B7280", marginBottom: 64, maxWidth: 520, margin: "0 auto 52px" }}>
               pondex_ scores any stock across 5 factors — and shows you exactly where each number comes from.
             </motion.p>
-            <motion.div variants={stagger} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: 0, border: "1.5px solid #B2F0E8", borderRadius: 20, overflow: "hidden", background: "#fff" }}>
+            <motion.div variants={stagger} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: 16 }}>
               {[
                 { Icon: FileSearch, title: "Source on every number", desc: "Yahoo Finance · SEC EDGAR · Groq AI" },
                 { Icon: TrendingUp, title: "BUY / HOLD / SELL", desc: "One clear verdict. No noise." },
                 { Icon: User, title: "Your investor profile", desc: "Value, Growth, or Balanced — your score." },
                 { Icon: Bell, title: "Exit signals", desc: "Know when your thesis has changed." },
-              ].map(({ Icon, title, desc }, i) => (
-                <motion.div key={title} variants={fadeUp}
-                  style={{ padding: "40px 28px", borderRight: i < 3 ? "1.5px solid #B2F0E8" : "none", textAlign: "left" as const }}>
-                  <div style={{ width: 40, height: 40, borderRadius: 10, background: "#F0FEFA", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14 }}>
-                    <Icon size={18} color="#00C2A8" />
+              ].map(({ Icon, title, desc }, i) => {
+                const bgs = ["#F5F3FF","#EEF2FF","#EFF6FF","#F0F9FF"]
+                const colors = ["#5B5BD6","#4F46E5","#3B82F6","#6366F1"]
+                return (
+                <motion.div key={title} variants={fadeUp} whileHover={{ y: -4 }}
+                  style={{ padding: "36px 28px", background: bgs[i], borderRadius: 16, textAlign: "left" as const }}>
+                  <div style={{ width: 44, height: 44, borderRadius: 12, background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16, boxShadow: "0 1px 4px rgba(0,0,0,0.08)" }}>
+                    <Icon size={20} color={colors[i]} />
                   </div>
-                  <p style={{ fontSize: 14, fontWeight: 700, marginBottom: 6 }}>{title}</p>
+                  <p style={{ fontSize: 15, fontWeight: 700, marginBottom: 6 }}>{title}</p>
                   <p style={{ fontSize: 13, color: "#9CA3AF", lineHeight: 1.5 }}>{desc}</p>
                 </motion.div>
-              ))}
+                )
+              })}
             </motion.div>
           </motion.div>
         </div>
@@ -269,10 +271,10 @@ export function LandingPage() {
                 {/* Screen content - ticker input */}
                 <rect x="30" y="60" width="260" height="44" rx="10" fill="#F3F4F6"/>
                 <text x="60" y="88" fontFamily="Inter,sans-serif" fontSize="14" fontWeight="600" fill="#374151">AAPL</text>
-                <rect x="240" y="68" width="40" height="28" rx="8" fill="#00C2A8"/>
+                <rect x="240" y="68" width="40" height="28" rx="8" fill="#5B5BD6"/>
                 <text x="253" y="88" fontFamily="Inter,sans-serif" fontSize="10" fontWeight="700" fill="white">GO</text>
                 {/* Score display */}
-                <rect x="30" y="120" width="260" height="130" rx="16" fill="#F8FFFE" stroke="#B2F0E8" strokeWidth="1.5"/>
+                <rect x="30" y="120" width="260" height="130" rx="16" fill="#F8FFFE" stroke="#DDD6FE" strokeWidth="1.5"/>
                 <text x="50" y="150" fontFamily="Inter,sans-serif" fontSize="10" fontWeight="600" fill="#9CA3AF" letterSpacing="2">VERDICT</text>
                 <text x="190" y="175" fontFamily="Inter,sans-serif" fontSize="48" fontWeight="800" fill="#D97706">78</text>
                 <rect x="50" y="158" width="52" height="20" rx="10" fill="#FEF9C3"/>
@@ -299,20 +301,20 @@ export function LandingPage() {
                 <p style={{ fontSize: 13, color: "#6B7280", marginBottom: 2 }}>Enter ticker</p>
                 <p style={{ fontSize: 18, fontWeight: 800, letterSpacing: "-0.5px" }}>In seconds</p>
                 <svg width="40" height="30" viewBox="0 0 40 30" style={{ display: "block", marginTop: 4 }}>
-                  <path d="M 35 5 Q 40 15 30 25" stroke="#00C2A8" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
-                  <path d="M 28 22 L 30 25 L 33 22" stroke="#00C2A8" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M 35 5 Q 40 15 30 25" stroke="#5B5BD6" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+                  <path d="M 28 22 L 30 25 L 33 22" stroke="#5B5BD6" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </div>
               <div style={{ position: "absolute", top: "35%", right: "-8%", textAlign: "right" as const }}>
                 <p style={{ fontSize: 13, color: "#6B7280", marginBottom: 2 }}>Get your verdict</p>
                 <p style={{ fontSize: 18, fontWeight: 800, letterSpacing: "-0.5px" }}>With sources</p>
                 <svg width="40" height="30" viewBox="0 0 40 30" style={{ display: "block", marginLeft: "auto", marginTop: 4 }}>
-                  <path d="M 5 5 Q 0 15 10 25" stroke="#00C2A8" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
-                  <path d="M 12 22 L 10 25 L 7 22" stroke="#00C2A8" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M 5 5 Q 0 15 10 25" stroke="#5B5BD6" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+                  <path d="M 12 22 L 10 25 L 7 22" stroke="#5B5BD6" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </div>
               <div style={{ position: "absolute", bottom: "8%", left: "-5%", textAlign: "left" as const }}>
-                <span style={{ background: "#00C2A8", color: "#fff", fontSize: 12, fontWeight: 700, padding: "4px 12px", borderRadius: 999 }}>Done.</span>
+                <span style={{ background: "#5B5BD6", color: "#fff", fontSize: 12, fontWeight: 700, padding: "4px 12px", borderRadius: 999 }}>Done.</span>
                 <p style={{ fontSize: 18, fontWeight: 800, letterSpacing: "-0.5px", marginTop: 6 }}>BUY · HOLD · SELL</p>
               </div>
             </motion.div>
@@ -321,7 +323,7 @@ export function LandingPage() {
       </section>
 
       {/* 6 — PEER COMPARISON TEASER */}
-      <section style={{ background: "#F0FDF4", padding: "80px 40px", borderTop: "1px solid #DCFCE7", borderBottom: "1px solid #DCFCE7" }}>
+      <section style={{ background: "#F5F3FF", padding: "80px 40px", borderTop: "1px solid #DDD6FE", borderBottom: "1px solid #DDD6FE" }}>
         <div style={{ maxWidth: 800, margin: "0 auto", textAlign: "center" }}>
           <motion.div variants={stagger} whileInView="visible" viewport={vp}>
             <motion.p variants={fadeUp} style={{ fontSize: 15, fontStyle: "italic", color: "#374151", marginBottom: 8, maxWidth: 520, margin: "0 auto 8px" }}>
@@ -342,7 +344,7 @@ export function LandingPage() {
               ))}
             </motion.div>
             <motion.div variants={fadeUp}>
-              <Link to="/signup" style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#00C2A8", color: "#fff", padding: "11px 22px", borderRadius: 8, fontWeight: 700, fontSize: 13, textDecoration: "none" }}>
+              <Link to="/signup" style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#5B5BD6", color: "#fff", padding: "11px 22px", borderRadius: 8, fontWeight: 700, fontSize: 13, textDecoration: "none" }}>
                 Unlock peer comparison <ArrowRight size={14} />
               </Link>
             </motion.div>
@@ -364,7 +366,7 @@ export function LandingPage() {
               ].map(t => (
                 <motion.div key={t.name} variants={fadeUp} whileHover={{ y: -4 }}
                   style={{ background: "#FAFAFA", border: "1.5px solid #F3F4F6", borderRadius: 16, padding: "40px 40px" }}>
-                  <p style={{ fontSize: 28, marginBottom: 12, color: "#00C2A8" }}>"</p>
+                  <p style={{ fontSize: 28, marginBottom: 12, color: "#5B5BD6" }}>"</p>
                   <p style={{ fontSize: 15, lineHeight: 1.65, color: "#374151", marginBottom: 24 }}>{t.q}</p>
                   <div style={{ borderTop: "1px solid #E5E7EB", paddingTop: 14 }}>
                     <p style={{ fontSize: 13, fontWeight: 700 }}>{t.name}</p>
@@ -378,7 +380,7 @@ export function LandingPage() {
       </section>
 
       {/* 8 — STATS with CountUp */}
-      <section style={{ background: "#00C2A8", padding: "88px 40px" }}>
+      <section style={{ background: "#5B5BD6", padding: "88px 40px" }}>
         <motion.div variants={stagger} whileInView="visible" viewport={vp}
           style={{ maxWidth: 900, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 0 }}>
           {[
@@ -418,7 +420,7 @@ export function LandingPage() {
                   Start for free
                 </Link>
               </div>
-              <div style={{ background: "#00C2A8", borderRadius: 20, padding: "40px 32px", textAlign: "left" as const }}>
+              <div style={{ background: "#5B5BD6", borderRadius: 20, padding: "40px 32px", textAlign: "left" as const }}>
                 <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.45)", marginBottom: 12 }}>Pro</p>
                 <p style={{ fontSize: 40, fontWeight: 800, letterSpacing: "-2px", color: "#fff", marginBottom: 4, fontVariantNumeric: "tabular-nums" as const }}>€4.99</p>
                 <p style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", marginBottom: 20 }}>per month</p>
@@ -428,7 +430,7 @@ export function LandingPage() {
                     <span style={{ fontSize: 13, color: "rgba(255,255,255,0.85)" }}>{f}</span>
                   </div>
                 ))}
-                <Link to="/signup" style={{ display: "block", marginTop: 24, background: "#fff", color: "#00C2A8", textAlign: "center" as const, padding: "13px", borderRadius: 10, fontWeight: 700, fontSize: 14, textDecoration: "none" }}>
+                <Link to="/signup" style={{ display: "block", marginTop: 24, background: "#fff", color: "#5B5BD6", textAlign: "center" as const, padding: "13px", borderRadius: 10, fontWeight: 700, fontSize: 14, textDecoration: "none" }}>
                   Start 7-day trial
                 </Link>
               </div>
@@ -466,7 +468,7 @@ export function LandingPage() {
             </motion.h2>
             <motion.p variants={fadeUp} style={{ fontSize: 17, color: "rgba(255,255,255,0.4)", marginBottom: 36 }}>Your first verdict is free.</motion.p>
             <motion.div variants={fadeUp}>
-              <Link to="/signup" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#00C2A8", color: "#fff", padding: "16px 36px", borderRadius: 12, fontWeight: 700, fontSize: 16, textDecoration: "none", boxShadow: "0 4px 24px rgba(0,194,168,0.40)" }}>
+              <Link to="/signup" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#5B5BD6", color: "#fff", padding: "16px 36px", borderRadius: 12, fontWeight: 700, fontSize: 16, textDecoration: "none", boxShadow: "0 4px 24px rgba(91,91,214,0.40)" }}>
                 Analyse a stock — it's free <ArrowRight size={16} />
               </Link>
             </motion.div>

@@ -59,7 +59,7 @@ export function LandingNav() {
             <Link
               to="/signup"
               className="text-sm font-bold px-4 py-2 rounded-lg block whitespace-nowrap"
-              style={{ background: "#00C2A8", color: "#fff", textDecoration: "none" }}
+              style={{ background: "#5B5BD6", color: "#fff", textDecoration: "none" }}
             >
               Check our prices
             </Link>
