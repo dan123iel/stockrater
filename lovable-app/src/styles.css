@@ -28,7 +28,13 @@
   --text-muted: #9ca3af;
   --text-inverse: #ffffff;
 
-  /* Functional finance */
+  /* Accent — Violet */
+  --accent: #7c3aed;
+  --accent-light: #f8f5ff;
+  --accent-dark: #4c1d95;
+  --accent-green-light: #f0fdf4;
+
+
   --color-up: #16a34a;
   --color-down: #dc2626;
   --color-hold: #d97706;
