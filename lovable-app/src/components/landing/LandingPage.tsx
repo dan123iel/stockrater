@@ -138,33 +138,54 @@ function PricingSection() {
           Start free. Upgrade when you're ready.
         </p>
 
-        {/* Billing toggle */}
-        <div style={{ display: "inline-flex", alignItems: "center", gap: 12, background: "#F5F3FF", borderRadius: 999, padding: "6px 8px 6px 16px" }}>
-          <span style={{ fontSize: 13, fontWeight: 600, color: yearly ? "#9CA3AF" : "#0A0A0A" }}>Monthly</span>
+        {/* Pill slider — Monthly / Yearly */}
+        <div style={{ display: "inline-flex", background: "#F3F4F6", borderRadius: 999, padding: 4, position: "relative" as const }}>
+          {/* Sliding background */}
+          <div style={{
+            position: "absolute" as const,
+            top: 4, bottom: 4,
+            left: yearly ? "50%" : 4,
+            width: "calc(50% - 4px)",
+            background: "#5B5BD6",
+            borderRadius: 999,
+            transition: "left 0.25s cubic-bezier(0.16,1,0.3,1)",
+            boxShadow: "0 1px 4px rgba(91,91,214,0.25)",
+          }} />
           <button
-            onClick={() => setYearly(v => !v)}
+            onClick={() => { if (!yearly) setYearly(false); }}
             style={{
-              width: 44, height: 24, borderRadius: 999, border: "none", cursor: "pointer",
-              background: yearly ? "#5B5BD6" : "#D1D5DB",
-              position: "relative", transition: "background 0.2s",
+              position: "relative" as const, zIndex: 1,
+              padding: "9px 24px", borderRadius: 999, border: "none",
+              background: "transparent", cursor: "pointer",
+              fontSize: 14, fontWeight: 600,
+              color: yearly ? "#9CA3AF" : "#fff",
+              transition: "color 0.2s",
             }}
           >
-            <span style={{
-              position: "absolute", top: 3, left: yearly ? 23 : 3,
-              width: 18, height: 18, borderRadius: "50%", background: "#fff",
-              transition: "left 0.2s", boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
-            }} />
+            Monthly
           </button>
-          <span style={{ fontSize: 13, fontWeight: 600, color: yearly ? "#0A0A0A" : "#9CA3AF" }}>
+          <button
+            onClick={() => setYearly(true)}
+            style={{
+              position: "relative" as const, zIndex: 1,
+              padding: "9px 24px", borderRadius: 999, border: "none",
+              background: "transparent", cursor: "pointer",
+              fontSize: 14, fontWeight: 600,
+              color: yearly ? "#fff" : "#9CA3AF",
+              transition: "color 0.2s",
+              display: "flex", alignItems: "center", gap: 8,
+            }}
+          >
             Yearly
-          </span>
-          {/* Savings badge */}
-          <span style={{
-            background: "#5B5BD6", color: "#fff", fontSize: 11, fontWeight: 700,
-            padding: "3px 10px", borderRadius: 999, letterSpacing: "0.04em",
-          }}>
-            Save {savings}%
-          </span>
+            <span style={{
+              background: yearly ? "rgba(255,255,255,0.2)" : "#5B5BD6",
+              color: "#fff", fontSize: 10, fontWeight: 700,
+              padding: "2px 8px", borderRadius: 999,
+              transition: "background 0.2s",
+            }}>
+              −40%
+            </span>
+          </button>
         </div>
       </motion.div>
 
@@ -173,12 +194,10 @@ function PricingSection() {
 
         {/* Free */}
         <div style={{ background: "#fff", border: "1.5px solid #E5E7EB", borderRadius: 24, padding: "40px 36px" }}>
-          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" as const, color: "#9CA3AF", marginBottom: 16 }}>Free</p>
-          <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 6 }}>
-            <span style={{ fontSize: 48, fontWeight: 800, letterSpacing: "-3px", fontVariantNumeric: "tabular-nums" as const }}>€0</span>
-            <span style={{ fontSize: 15, color: "#9CA3AF" }}>/month</span>
+          <div style={{ marginBottom: 28 }}>
+            <p style={{ fontSize: 20, fontWeight: 700, color: "#0A0A0A", marginBottom: 6 }}>Always free to start.</p>
+            <p style={{ fontSize: 13, color: "#9CA3AF" }}>No credit card required.</p>
           </div>
-          <p style={{ fontSize: 13, color: "#9CA3AF", marginBottom: 28 }}>No credit card. No commitment.</p>
           <div style={{ height: 1, background: "#F3F4F6", marginBottom: 24 }} />
           {[
             "1 full verdict per day",
@@ -262,12 +281,7 @@ function PricingSection() {
         </div>
       </motion.div>
 
-      {/* Social proof under pricing */}
-      <motion.div variants={fadeUp} style={{ textAlign: "center", marginTop: 32 }}>
-        <p style={{ fontSize: 13, color: "#9CA3AF" }}>
-          Join investors who research smarter · From user research, n=45, June 2026
-        </p>
-      </motion.div>
+
     </motion.div>
   );
 }
