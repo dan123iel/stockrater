@@ -142,17 +142,6 @@ function ScoreCard() {
 
 // ── Pricing Section ───────────────────────────────────────────────────────────
 function PricingSection() {
-  const [yearly, setYearly] = useState(false);
-
-  const plans = {
-    starter: { monthly: 0, yearly: 0 },
-    pro:     { monthly: 4.99, yearly: 2.99 },
-    max:     { monthly: 9.99, yearly: 5.99 },
-  };
-
-  const yearlyTotal = (plans.pro.yearly * 12).toFixed(2);
-  const maxYearlyTotal = (plans.max.yearly * 12).toFixed(2);
-
   return (
     <motion.div variants={stagger} whileInView="visible" viewport={vp}>
       {/* Header */}
@@ -161,30 +150,12 @@ function PricingSection() {
         <h2 style={{ fontSize: "clamp(28px,4vw,46px)", fontWeight: 800, letterSpacing: "-0.04em", marginBottom: 12 }}>
           Simple pricing.
         </h2>
-        <p style={{ fontSize: 17, color: "#6B7280", marginBottom: 28 }}>
+        <p style={{ fontSize: 17, color: "#6B7280" }}>
           Start free. Upgrade when you're ready.
         </p>
-
-        {/* Pill slider */}
-        <div style={{ display: "inline-flex", background: "#F3F4F6", borderRadius: 999, padding: 4, position: "relative" as const }}>
-          <div style={{
-            position: "absolute" as const, top: 4, bottom: 4,
-            left: yearly ? "50%" : 4, width: "calc(50% - 4px)",
-            background: "#5B5BD6", borderRadius: 999,
-            transition: "left 0.25s cubic-bezier(0.16,1,0.3,1)",
-            boxShadow: "0 1px 4px rgba(91,91,214,0.25)",
-          }} />
-          <button onClick={() => setYearly(false)} style={{ position: "relative" as const, zIndex: 1, padding: "9px 24px", borderRadius: 999, border: "none", background: "transparent", cursor: "pointer", fontSize: 14, fontWeight: 600, color: yearly ? "#9CA3AF" : "#fff", transition: "color 0.2s" }}>
-            Monthly
-          </button>
-          <button onClick={() => setYearly(true)} style={{ position: "relative" as const, zIndex: 1, padding: "9px 24px", borderRadius: 999, border: "none", background: "transparent", cursor: "pointer", fontSize: 14, fontWeight: 600, color: yearly ? "#fff" : "#9CA3AF", transition: "color 0.2s", display: "flex", alignItems: "center", gap: 8 }}>
-            Yearly
-            <span style={{ background: yearly ? "rgba(255,255,255,0.2)" : "#5B5BD6", color: "#fff", fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 999, transition: "background 0.2s" }}>−40%</span>
-          </button>
-        </div>
       </motion.div>
 
-      {/* 3-column cards */}
+      {/* 3-column cards — no toggle, 3 clear options */}
       <motion.div variants={fadeUp} style={{ display: "grid", gridTemplateColumns: "1fr 1.1fr 1fr", gap: 16, alignItems: "start" }}>
 
         {/* Starter */}
@@ -204,19 +175,17 @@ function PricingSection() {
           </Link>
         </div>
 
-        {/* Pro — MOST POPULAR — center, slightly larger */}
+        {/* Pro — MOST POPULAR */}
         <div style={{ background: "#5B5BD6", borderRadius: 20, padding: "32px 28px", position: "relative" as const, marginTop: -12, marginBottom: -12 }}>
           <div style={{ position: "absolute" as const, top: -14, left: "50%", transform: "translateX(-50%)", background: "#0A0A0A", color: "#fff", fontSize: 10, fontWeight: 700, padding: "4px 14px", borderRadius: 999, letterSpacing: "0.08em", whiteSpace: "nowrap" as const }}>
             MOST POPULAR
           </div>
           <p style={{ fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.5)", marginBottom: 20 }}>Pro</p>
-          <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 4 }}>
-            <span style={{ fontSize: 40, fontWeight: 800, letterSpacing: "-2px", color: "#fff", fontVariantNumeric: "tabular-nums" as const }}>
-              €{yearly ? plans.pro.yearly : plans.pro.monthly}
-            </span>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 2 }}>
+            <span style={{ fontSize: 40, fontWeight: 800, letterSpacing: "-2px", color: "#fff", fontVariantNumeric: "tabular-nums" as const }}>€4.99</span>
             <span style={{ fontSize: 14, color: "rgba(255,255,255,0.5)" }}>/month</span>
           </div>
-          {yearly && <p style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", marginBottom: 4 }}>€{yearlyTotal} billed yearly</p>}
+          <p style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", marginBottom: 6 }}>or €35.88/year — save 40%</p>
           <p style={{ fontSize: 12, marginBottom: 24 }}>
             <span style={{ background: "#FF4D6D", color: "#fff", fontSize: 11, fontWeight: 700, padding: "2px 8px", borderRadius: 4, marginRight: 6 }}>7 days free</span>
             <span style={{ color: "rgba(255,255,255,0.4)" }}>Cancel anytime.</span>
@@ -234,28 +203,26 @@ function PricingSection() {
           <p style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", textAlign: "center" as const, marginTop: 8 }}>No card needed</p>
         </div>
 
-        {/* Pro Max — Power users */}
+        {/* Pro Lifetime */}
         <div style={{ background: "#0A0A0A", border: "1.5px solid #1F1F1F", borderRadius: 20, padding: "32px 28px" }}>
-          <p style={{ fontSize: 13, fontWeight: 600, color: "#6B7280", marginBottom: 20 }}>Pro Max</p>
-          <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 4 }}>
-            <span style={{ fontSize: 40, fontWeight: 800, letterSpacing: "-2px", color: "#fff", fontVariantNumeric: "tabular-nums" as const }}>
-              €{yearly ? plans.max.yearly : plans.max.monthly}
-            </span>
-            <span style={{ fontSize: 14, color: "#6B7280" }}>/month</span>
+          <p style={{ fontSize: 13, fontWeight: 600, color: "#6B7280", marginBottom: 20 }}>Pro Lifetime</p>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 2 }}>
+            <span style={{ fontSize: 40, fontWeight: 800, letterSpacing: "-2px", color: "#fff", fontVariantNumeric: "tabular-nums" as const }}>€149</span>
           </div>
-          {yearly && <p style={{ fontSize: 12, color: "#6B7280", marginBottom: 4 }}>€{maxYearlyTotal} billed yearly</p>}
-          <p style={{ fontSize: 12, color: "#6B7280", marginBottom: 24 }}>For serious investors.</p>
+          <p style={{ fontSize: 12, color: "#6B7280", marginBottom: 4 }}>One-time payment. Forever.</p>
+          <p style={{ fontSize: 12, color: "#4B5563", marginBottom: 24 }}>Equivalent to ~2.5 years of Pro.</p>
           <div style={{ height: 1, background: "#1F1F1F", marginBottom: 20 }} />
-          <p style={{ fontSize: 11, color: "#5B5BD6", fontWeight: 600, marginBottom: 12, textTransform: "uppercase" as const, letterSpacing: "0.08em" }}>Everything in Pro, plus:</p>
-          {["Multi-portfolio tracking", "AI chat with sources", "DCF model + stress test", "Priority support", "Early access features"].map(f => (
+          <p style={{ fontSize: 11, color: "#5B5BD6", fontWeight: 600, marginBottom: 12, textTransform: "uppercase" as const, letterSpacing: "0.08em" }}>Everything in Pro, forever:</p>
+          {["Unlimited verdicts — always", "All Pro features, no renewal", "Future base features included", "Priority support", "Early access features"].map(f => (
             <div key={f} style={{ display: "flex", gap: 8, marginBottom: 10, alignItems: "center" }}>
               <CheckCircle size={13} color="#5B5BD6" />
               <span style={{ fontSize: 13, color: "#9CA3AF" }}>{f}</span>
             </div>
           ))}
           <Link to="/signup" style={{ display: "block", marginTop: 24, background: "#5B5BD6", color: "#fff", textAlign: "center" as const, padding: "12px", borderRadius: 10, fontWeight: 700, fontSize: 14, textDecoration: "none" }}>
-            Start Pro Max →
+            Unlock forever →
           </Link>
+          <p style={{ fontSize: 11, color: "#4B5563", textAlign: "center" as const, marginTop: 8 }}>Limited early-access price</p>
         </div>
 
       </motion.div>
