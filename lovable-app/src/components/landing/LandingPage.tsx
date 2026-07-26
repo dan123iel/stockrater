@@ -130,16 +130,16 @@ export function LandingPage() {
         <motion.div variants={stagger} initial="visible" whileInView="visible" viewport={vp}>
           <motion.p variants={fadeUp} style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: "#9CA3AF", marginBottom: 20 }}>The actual problem</motion.p>
           <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(26px,4.5vw,52px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.1, marginBottom: 24 }}>
-            You already have Yahoo Finance.<br />ChatGPT. Your broker.<br />
+            You already have tools.<br />Apps. Videos. Newsletters.<br />
             <span style={{ color: "#00C2A8" }}>You still don't have an answer.</span>
           </motion.h2>
           <motion.p variants={fadeUp} style={{ fontSize: 17, color: "#6B7280", marginBottom: 72, maxWidth: 500, margin: "0 auto 56px" }}>
-            Because none of them cite their sources. None of them know your strategy.
+            None of them give you one clear answer. None of them know your strategy.
           </motion.p>
           <motion.div variants={stagger} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 16 }}>
             {[
-              { icon: "📊", title: "Too many tabs", desc: "5 tools open, 5 different opinions. Still no clear answer." },
-              { icon: "🤖", title: "AI that hallucinates", desc: "ChatGPT gives you numbers it invented. No sources." },
+              { icon: "📊", title: "Too many sources", desc: "YouTube, Reddit, newsletters — 5 opinions, no clear answer." },
+              { icon: "🤖", title: "No source, no trust", desc: "AI tools give you numbers. But where do they come from?" },
               { icon: "❓", title: "Data without context", desc: "P/E of 28x. Is that good? For which strategy?" },
             ].map(b => (
               <motion.div key={b.title} variants={fadeUp} whileHover={{ y: -4 }}
