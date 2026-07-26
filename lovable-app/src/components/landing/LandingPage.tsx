@@ -109,9 +109,7 @@ export function LandingPage() {
             See how it works
           </a>
         </motion.div>
-        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} style={{ fontSize: 12, color: "#9CA3AF", marginBottom: 48 }}>
-          No account required · No credit card · Free forever
-        </motion.p>
+<div style={{ marginBottom: 48 }} />
         <ScoreCard />
       </section>
 
@@ -291,7 +289,7 @@ export function LandingPage() {
           <motion.div variants={stagger} initial="visible" whileInView="visible" viewport={vp}>
             <motion.p variants={fadeUp} style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: "#9CA3AF", marginBottom: 20 }}>Pricing</motion.p>
             <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(24px,4vw,42px)", fontWeight: 800, letterSpacing: "-0.04em", marginBottom: 12 }}>Try it free. Upgrade when you need more.</motion.h2>
-            <motion.p variants={fadeUp} style={{ fontSize: 16, color: "#6B7280", marginBottom: 48 }}>No credit card. No setup. Your first verdict, on us.</motion.p>
+            <motion.p variants={fadeUp} style={{ fontSize: 16, color: "#6B7280", marginBottom: 48 }}>One verdict a day free. Unlimited with Pro.</motion.p>
             <motion.div variants={fadeUp} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
               <div style={{ background: "#fff", border: "1.5px solid #E5E7EB", borderRadius: 20, padding: "40px 32px", textAlign: "left" as const }}>
                 <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" as const, color: "#9CA3AF", marginBottom: 12 }}>Free</p>
@@ -352,7 +350,7 @@ export function LandingPage() {
             <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(30px,5vw,58px)", fontWeight: 800, letterSpacing: "-0.04em", color: "#fff", lineHeight: 1.06, marginBottom: 20 }}>
               One ticker.<br />One verdict.
             </motion.h2>
-            <motion.p variants={fadeUp} style={{ fontSize: 17, color: "rgba(255,255,255,0.4)", marginBottom: 36 }}>Free to start. No account required.</motion.p>
+            <motion.p variants={fadeUp} style={{ fontSize: 17, color: "rgba(255,255,255,0.4)", marginBottom: 36 }}>Your first verdict is free.</motion.p>
             <motion.div variants={fadeUp}>
               <Link to="/signup" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#00C2A8", color: "#fff", padding: "16px 36px", borderRadius: 12, fontWeight: 700, fontSize: 16, textDecoration: "none", boxShadow: "0 4px 24px rgba(124,58,237,0.4)" }}>
                 Analyse a stock — it's free <ArrowRight size={16} />
