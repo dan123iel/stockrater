@@ -119,6 +119,159 @@ function ScoreCard() {
   );
 }
 
+// ── Pricing Section ───────────────────────────────────────────────────────────
+function PricingSection() {
+  const [yearly, setYearly] = useState(false);
+  const monthlyPrice = 4.99;
+  const yearlyMonthly = 2.99;
+  const yearlyTotal = (yearlyMonthly * 12).toFixed(2);
+  const savings = Math.round((1 - yearlyMonthly / monthlyPrice) * 100);
+
+  return (
+    <motion.div variants={stagger} whileInView="visible" viewport={vp}>
+      {/* Header */}
+      <motion.div variants={fadeUp} style={{ textAlign: "center", marginBottom: 48 }}>
+        <h2 style={{ fontSize: "clamp(28px,4vw,46px)", fontWeight: 800, letterSpacing: "-0.04em", marginBottom: 12 }}>
+          Simple pricing.
+        </h2>
+        <p style={{ fontSize: 17, color: "#6B7280", marginBottom: 28 }}>
+          Start free. Upgrade when you're ready.
+        </p>
+
+        {/* Billing toggle */}
+        <div style={{ display: "inline-flex", alignItems: "center", gap: 12, background: "#F5F3FF", borderRadius: 999, padding: "6px 8px 6px 16px" }}>
+          <span style={{ fontSize: 13, fontWeight: 600, color: yearly ? "#9CA3AF" : "#0A0A0A" }}>Monthly</span>
+          <button
+            onClick={() => setYearly(v => !v)}
+            style={{
+              width: 44, height: 24, borderRadius: 999, border: "none", cursor: "pointer",
+              background: yearly ? "#5B5BD6" : "#D1D5DB",
+              position: "relative", transition: "background 0.2s",
+            }}
+          >
+            <span style={{
+              position: "absolute", top: 3, left: yearly ? 23 : 3,
+              width: 18, height: 18, borderRadius: "50%", background: "#fff",
+              transition: "left 0.2s", boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
+            }} />
+          </button>
+          <span style={{ fontSize: 13, fontWeight: 600, color: yearly ? "#0A0A0A" : "#9CA3AF" }}>
+            Yearly
+          </span>
+          {/* Savings badge */}
+          <span style={{
+            background: "#5B5BD6", color: "#fff", fontSize: 11, fontWeight: 700,
+            padding: "3px 10px", borderRadius: 999, letterSpacing: "0.04em",
+          }}>
+            Save {savings}%
+          </span>
+        </div>
+      </motion.div>
+
+      {/* Cards */}
+      <motion.div variants={fadeUp} style={{ display: "grid", gridTemplateColumns: "1fr 1.15fr", gap: 20, alignItems: "start" }}>
+
+        {/* Free */}
+        <div style={{ background: "#fff", border: "1.5px solid #E5E7EB", borderRadius: 24, padding: "40px 36px" }}>
+          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" as const, color: "#9CA3AF", marginBottom: 16 }}>Free</p>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 6 }}>
+            <span style={{ fontSize: 48, fontWeight: 800, letterSpacing: "-3px", fontVariantNumeric: "tabular-nums" as const }}>€0</span>
+            <span style={{ fontSize: 15, color: "#9CA3AF" }}>/month</span>
+          </div>
+          <p style={{ fontSize: 13, color: "#9CA3AF", marginBottom: 28 }}>No credit card. No commitment.</p>
+          <div style={{ height: 1, background: "#F3F4F6", marginBottom: 24 }} />
+          {[
+            "1 full verdict per day",
+            "All 5 factor scores",
+            "Source on every number",
+            "Price chart + Financials",
+          ].map(f => (
+            <div key={f} style={{ display: "flex", gap: 10, marginBottom: 12, alignItems: "center" }}>
+              <CheckCircle size={15} color="#16A34A" />
+              <span style={{ fontSize: 14, color: "#374151" }}>{f}</span>
+            </div>
+          ))}
+          <Link to="/signup" style={{
+            display: "block", marginTop: 32, background: "#0A0A0A", color: "#fff",
+            textAlign: "center" as const, padding: "14px", borderRadius: 12,
+            fontWeight: 700, fontSize: 15, textDecoration: "none",
+          }}>
+            Start free →
+          </Link>
+        </div>
+
+        {/* Pro */}
+        <div style={{ background: "#5B5BD6", borderRadius: 24, padding: "40px 36px", position: "relative" as const, overflow: "hidden" }}>
+          {/* Most popular badge */}
+          <div style={{
+            position: "absolute" as const, top: 20, right: 20,
+            background: "rgba(255,255,255,0.15)", borderRadius: 999,
+            padding: "4px 12px", fontSize: 11, fontWeight: 700, color: "#fff", letterSpacing: "0.06em",
+          }}>
+            MOST POPULAR
+          </div>
+
+          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.5)", marginBottom: 16 }}>Pro</p>
+
+          {/* Price display with toggle */}
+          <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 4 }}>
+            <span style={{ fontSize: 48, fontWeight: 800, letterSpacing: "-3px", color: "#fff", fontVariantNumeric: "tabular-nums" as const }}>
+              €{yearly ? yearlyMonthly : monthlyPrice}
+            </span>
+            <span style={{ fontSize: 15, color: "rgba(255,255,255,0.5)" }}>/month</span>
+          </div>
+          {yearly ? (
+            <p style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", marginBottom: 4 }}>
+              €{yearlyTotal} billed once a year
+            </p>
+          ) : (
+            <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", marginBottom: 4 }}>
+              or €{yearlyTotal}/year — save {savings}%
+            </p>
+          )}
+          <p style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", marginBottom: 28 }}>
+            First 7 days free. Cancel anytime.
+          </p>
+
+          <div style={{ height: 1, background: "rgba(255,255,255,0.15)", marginBottom: 24 }} />
+
+          {[
+            "Peer comparison — see how your stock ranks",
+            "Exit Strategy signals",
+            "My Profile Score (Value / Growth / Balanced)",
+            "Unlimited verdicts",
+            "Weekly digest email",
+          ].map(f => (
+            <div key={f} style={{ display: "flex", gap: 10, marginBottom: 12, alignItems: "flex-start" }}>
+              <CheckCircle size={15} color="rgba(255,255,255,0.7)" style={{ flexShrink: 0, marginTop: 1 }} />
+              <span style={{ fontSize: 14, color: "rgba(255,255,255,0.9)" }}>{f}</span>
+            </div>
+          ))}
+
+          <Link to="/signup" style={{
+            display: "block", marginTop: 32, background: "#fff", color: "#5B5BD6",
+            textAlign: "center" as const, padding: "14px", borderRadius: 12,
+            fontWeight: 800, fontSize: 15, textDecoration: "none",
+            boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
+          }}>
+            Try Pro free for 7 days →
+          </Link>
+          <p style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", textAlign: "center" as const, marginTop: 10 }}>
+            No card needed to start
+          </p>
+        </div>
+      </motion.div>
+
+      {/* Social proof under pricing */}
+      <motion.div variants={fadeUp} style={{ textAlign: "center", marginTop: 32 }}>
+        <p style={{ fontSize: 13, color: "#9CA3AF" }}>
+          Join investors who research smarter · From user research, n=45, June 2026
+        </p>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 // ── FAQ item ──────────────────────────────────────────────────────────────────
 function FaqItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
@@ -196,11 +349,11 @@ export function LandingPage() {
       </section>
 
       {/* 3 — THE PROBLEM */}
-      <section id="problem" style={{ padding: "120px 40px", maxWidth: 1100, margin: "0 auto", textAlign: "center" }}>
+      <section id="problem" style={{ padding: "120px 40px", maxWidth: 1100, margin: "0 auto", textAlign: "left" as const }}>
         <motion.div variants={stagger} whileInView="visible" viewport={vp}>
                     <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(32px,4.5vw,58px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.1, marginBottom: 24 }}>
-            Most investors feel uncertain.<br />Even after researching.<br />
-            <span style={{ color: "#5B5BD6" }}>pondex_ gives you one clear answer.</span>
+            Still uncertain.<br />
+            <span style={{ color: "#5B5BD6" }}>pondex_ ends that.</span>
           </motion.h2>
 <div style={{ marginBottom: 56 }} />
           <motion.div variants={stagger} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 16 }}>
@@ -402,40 +555,8 @@ export function LandingPage() {
 
       {/* 9 — PRICING */}
       <section id="pricing" style={{ padding: "104px 40px" }}>
-        <div style={{ maxWidth: 680, margin: "0 auto", textAlign: "center" }}>
-          <motion.div variants={stagger} whileInView="visible" viewport={vp}>
-                        <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(28px,4vw,46px)", fontWeight: 800, letterSpacing: "-0.04em", marginBottom: 12 }}>Try it free. Upgrade when you need more.</motion.h2>
-            <motion.p variants={fadeUp} style={{ fontSize: 16, color: "#6B7280", marginBottom: 48 }}>One verdict a day free. Unlimited with Pro.</motion.p>
-            <motion.div variants={fadeUp} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-              <div style={{ background: "#fff", border: "1.5px solid #E5E7EB", borderRadius: 20, padding: "40px 32px", textAlign: "left" as const }}>
-                <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" as const, color: "#9CA3AF", marginBottom: 12 }}>Free</p>
-                <p style={{ fontSize: 40, fontWeight: 800, letterSpacing: "-2px", marginBottom: 24, fontVariantNumeric: "tabular-nums" as const }}>€0</p>
-                {["1 full verdict/day", "All 5 factor scores", "Source on every number", "Price chart + Financials"].map(f => (
-                  <div key={f} style={{ display: "flex", gap: 8, marginBottom: 10, alignItems: "center" }}>
-                    <CheckCircle size={14} color="#16A34A" />
-                    <span style={{ fontSize: 13, color: "#374151" }}>{f}</span>
-                  </div>
-                ))}
-                <Link to="/signup" style={{ display: "block", marginTop: 24, background: "#0A0A0A", color: "#fff", textAlign: "center" as const, padding: "13px", borderRadius: 10, fontWeight: 700, fontSize: 14, textDecoration: "none" }}>
-                  Start for free
-                </Link>
-              </div>
-              <div style={{ background: "#5B5BD6", borderRadius: 20, padding: "40px 32px", textAlign: "left" as const }}>
-                <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.45)", marginBottom: 12 }}>Pro</p>
-                <p style={{ fontSize: 40, fontWeight: 800, letterSpacing: "-2px", color: "#fff", marginBottom: 4, fontVariantNumeric: "tabular-nums" as const }}>€4.99</p>
-                <p style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", marginBottom: 20 }}>per month</p>
-                {["Peer comparison — see how your stock ranks", "Exit Strategy signals", "My Profile Score (Value / Growth)", "Unlimited verdicts"].map(f => (
-                  <div key={f} style={{ display: "flex", gap: 8, marginBottom: 10, alignItems: "flex-start" }}>
-                    <CheckCircle size={14} color="#A7F3D0" style={{ flexShrink: 0, marginTop: 1 }} />
-                    <span style={{ fontSize: 13, color: "rgba(255,255,255,0.85)" }}>{f}</span>
-                  </div>
-                ))}
-                <Link to="/signup" style={{ display: "block", marginTop: 24, background: "#fff", color: "#5B5BD6", textAlign: "center" as const, padding: "13px", borderRadius: 10, fontWeight: 700, fontSize: 14, textDecoration: "none" }}>
-                  Start 7-day trial
-                </Link>
-              </div>
-            </motion.div>
-          </motion.div>
+        <div style={{ maxWidth: 860, margin: "0 auto" }}>
+          <PricingSection />
         </div>
       </section>
 
