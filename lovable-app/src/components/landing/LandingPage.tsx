@@ -1,37 +1,56 @@
-import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { LandingNav } from "@/components/landing/LandingNav";
-import { DEMO_SCORES, DEMO_QUOTES } from "@/lib/demo-data";
+import { DEMO_SCORES } from "@/lib/demo-data";
 
-// ── Score Card ────────────────────────────────────────────────────────────────
+// ── Generic Score Card — no company name, no ticker ──────────────────────────
 function ScoreCard() {
-  const s = DEMO_SCORES.AAPL;
-  const q = DEMO_QUOTES.AAPL;
+  const factors = DEMO_SCORES.AAPL.factors;
   return (
-    <div style={{ background: "#fff", borderRadius: 20, padding: "24px 22px", boxShadow: "0 12px 48px rgba(0,0,0,0.10)", width: "100%", maxWidth: 320 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
+    <div style={{
+      background: "#fff",
+      borderRadius: 20,
+      padding: "28px 26px",
+      boxShadow: "0 16px 56px rgba(0,0,0,0.11)",
+      width: 300,
+      flexShrink: 0,
+    }}>
+      {/* Verdict header */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
         <div>
-          <p style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#9CA3AF", marginBottom: 2 }}>AAPL · NASDAQ</p>
-          <p style={{ fontSize: 16, fontWeight: 700, color: "#0A0A0A" }}>Apple Inc.</p>
-          <p style={{ fontSize: 12, color: "#6B7280", marginTop: 2 }}>${q.price.toFixed(2)} <span style={{ color: "#16A34A" }}>+{q.changePercent.toFixed(2)}%</span></p>
+          <p style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "#9CA3AF", marginBottom: 6 }}>pondex_ verdict</p>
+          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+            <span style={{ background: "#FEF9C3", color: "#92400E", fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", padding: "3px 10px", borderRadius: 999, textTransform: "uppercase" }}>HOLD</span>
+            <span style={{ fontSize: 11, color: "#9CA3AF" }}>GOOD FIT</span>
+          </div>
         </div>
         <div style={{ textAlign: "right" }}>
-          <div style={{ background: "#FEF9C3", color: "#92400E", fontSize: 9, fontWeight: 700, letterSpacing: "0.1em", padding: "3px 9px", borderRadius: 999, textTransform: "uppercase", marginBottom: 4 }}>HOLD</div>
-          <p style={{ fontSize: 32, fontWeight: 800, color: "#D97706", letterSpacing: "-2px", lineHeight: 1 }}>78<span style={{ fontSize: 14, color: "#9CA3AF", fontWeight: 400 }}>/100</span></p>
+          <p style={{ fontSize: 44, fontWeight: 800, color: "#D97706", letterSpacing: "-3px", lineHeight: 1 }}>78</p>
+          <p style={{ fontSize: 13, color: "#9CA3AF", marginTop: 2 }}>/100</p>
         </div>
       </div>
-      {s.factors.map((f, i) => (
-        <div key={f.name} style={{ marginBottom: 8 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
-            <span style={{ fontSize: 11, color: "#374151" }}>{f.name}</span>
-            <span style={{ fontSize: 11, fontWeight: 600, color: f.score >= 70 ? "#16A34A" : f.score >= 45 ? "#D97706" : "#DC2626" }}>{f.score}</span>
+
+      {/* Factor bars */}
+      {factors.map((f, i) => (
+        <div key={f.name} style={{ marginBottom: 10 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+            <span style={{ fontSize: 12, color: "#374151", fontWeight: 500 }}>{f.name}</span>
+            <span style={{ fontSize: 12, fontWeight: 700, color: f.score >= 70 ? "#16A34A" : f.score >= 45 ? "#D97706" : "#DC2626" }}>{f.score}</span>
           </div>
-          <div style={{ height: 3, background: "#F3F4F6", borderRadius: 50 }}>
-            <div style={{ height: "100%", width: `${f.score}%`, background: f.score >= 70 ? "#16A34A" : f.score >= 45 ? "#D97706" : "#DC2626", borderRadius: 50, transition: `width 700ms cubic-bezier(0.16,1,0.3,1) ${i*80}ms` }} />
+          <div style={{ height: 4, background: "#F3F4F6", borderRadius: 50 }}>
+            <div style={{
+              height: "100%",
+              width: `${f.score}%`,
+              background: f.score >= 70 ? "#16A34A" : f.score >= 45 ? "#D97706" : "#DC2626",
+              borderRadius: 50,
+              transition: `width 700ms cubic-bezier(0.16,1,0.3,1) ${i * 80}ms`,
+            }} />
           </div>
         </div>
       ))}
-      <p style={{ fontSize: 9, color: "#9CA3AF", textAlign: "center", marginTop: 10, textTransform: "uppercase", letterSpacing: "0.06em" }}>Yahoo Finance · SEC EDGAR · Not financial advice</p>
+
+      <p style={{ fontSize: 9, color: "#D1D5DB", textAlign: "center", marginTop: 14, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+        Yahoo Finance · SEC EDGAR · Not financial advice
+      </p>
     </div>
   );
 }
@@ -39,55 +58,64 @@ function ScoreCard() {
 // ── CTA Button ────────────────────────────────────────────────────────────────
 function CTAButton({ children, to = "/signup" }: { children: string; to?: string }) {
   return (
-    <Link to={to} style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#0A0A0A", color: "#fff", padding: "15px 28px", borderRadius: 10, fontWeight: 700, fontSize: 15, textDecoration: "none", letterSpacing: "-0.2px" }}>
-      {children}
-      <span style={{ fontSize: 18, lineHeight: 1 }}>→</span>
+    <Link to={to} style={{
+      display: "inline-flex", alignItems: "center", gap: 8,
+      background: "#0A0A0A", color: "#fff",
+      padding: "15px 30px", borderRadius: 10,
+      fontWeight: 700, fontSize: 15, textDecoration: "none",
+    }}>
+      {children} <span>→</span>
     </Link>
   );
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 export function LandingPage() {
-  const [phrase, setPhrase] = useState(0);
-  const phrases = ["where to invest.", "which stock to pick.", "if the price is right.", "which source to trust."];
-  useEffect(() => {
-    const t = setInterval(() => setPhrase(v => (v + 1) % phrases.length), 2800);
-    return () => clearInterval(t);
-  }, []);
-
   return (
     <div style={{ fontFamily: "Inter, -apple-system, sans-serif", color: "#0A0A0A", background: "#fff" }}>
       <LandingNav />
 
-      {/* 1 ── HERO ──────────────────────────────────────────────────────────── */}
-      <section style={{ padding: "88px 32px 80px", maxWidth: 1200, margin: "0 auto" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 64, alignItems: "center" }}>
-          <div style={{ maxWidth: 580 }}>
-            <h1 style={{ fontSize: "clamp(38px, 5.5vw, 68px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.06, marginBottom: 20 }}>
-              Still not sure{" "}
-              <br />
-              <span key={phrase} style={{ color: "#9CA3AF", display: "inline-block", animation: "fadein 0.35s ease-out" }}>
-                {phrases[phrase]}
-              </span>
-              <style>{`@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}`}</style>
-              <br />
-              pondex_ gives you<br />one verdict.
-            </h1>
-            <p style={{ fontSize: 18, color: "#6B7280", lineHeight: 1.65, marginBottom: 36, maxWidth: 440 }}>
-              A 0–100 score for any stock. Every number cites its source. Clear. Fast. Free.
-            </p>
-            <CTAButton>Start for free</CTAButton>
-            <p style={{ marginTop: 14, fontSize: 12, color: "#9CA3AF" }}>No credit card required · 1 verdict/day free</p>
-          </div>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <ScoreCard />
-          </div>
+      {/* 1 ── HERO — full viewport height ──────────────────────────────────── */}
+      <section style={{
+        minHeight: "calc(100vh - 64px)",
+        display: "flex",
+        alignItems: "center",
+        padding: "0 64px",
+        maxWidth: 1280,
+        margin: "0 auto",
+        gap: 80,
+      }}>
+        {/* Left */}
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <h1 style={{
+            fontSize: "clamp(44px, 6vw, 80px)",
+            fontWeight: 800,
+            letterSpacing: "-0.04em",
+            lineHeight: 1.04,
+            marginBottom: 24,
+          }}>
+            Still not sure<br />
+            <span style={{ color: "#9CA3AF" }}>where to invest?</span><br />
+            pondex_ gives you<br />one verdict.
+          </h1>
+          <p style={{ fontSize: 18, color: "#6B7280", lineHeight: 1.65, marginBottom: 36, maxWidth: 460 }}>
+            A 0–100 score for any stock. Every number cites its source. Clear. Fast. Free.
+          </p>
+          <CTAButton>Start for free</CTAButton>
+          <p style={{ marginTop: 12, fontSize: 12, color: "#9CA3AF" }}>
+            No credit card required · 1 verdict/day free
+          </p>
+        </div>
+
+        {/* Right — score card, vertically centered */}
+        <div style={{ flexShrink: 0, display: "flex", alignItems: "center" }}>
+          <ScoreCard />
         </div>
       </section>
 
       {/* 2 ── TRUST NUMBERS ──────────────────────────────────────────────────── */}
-      <section style={{ background: "#F5F5F5", padding: "48px 32px" }}>
-        <div style={{ maxWidth: 900, margin: "0 auto", display: "flex", justifyContent: "space-around", flexWrap: "wrap", gap: 32 }}>
+      <section style={{ background: "#F5F5F5", padding: "48px 64px" }}>
+        <div style={{ maxWidth: 1000, margin: "0 auto", display: "flex", justifyContent: "space-around", flexWrap: "wrap", gap: 32 }}>
           {[
             ["45", "Investors interviewed"],
             ["71%", "Only trust sourced data"],
@@ -103,15 +131,15 @@ export function LandingPage() {
       </section>
 
       {/* 3 ── ONE BIG PROMISE ────────────────────────────────────────────────── */}
-      <section style={{ padding: "96px 32px", maxWidth: 860, margin: "0 auto", textAlign: "center" }}>
+      <section style={{ padding: "96px 64px", maxWidth: 1000, margin: "0 auto", textAlign: "center" }}>
         <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "#9CA3AF", marginBottom: 20 }}>Why pondex_</p>
-        <h2 style={{ fontSize: "clamp(28px, 4vw, 52px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.1, marginBottom: 24 }}>
+        <h2 style={{ fontSize: "clamp(28px,4vw,52px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.1, marginBottom: 24 }}>
           The signal is missing.<br />Not more data.
         </h2>
-        <p style={{ fontSize: 18, color: "#6B7280", lineHeight: 1.7, maxWidth: 560, margin: "0 auto 48px" }}>
+        <p style={{ fontSize: 18, color: "#6B7280", lineHeight: 1.7, maxWidth: 540, margin: "0 auto 56px" }}>
           You already have Yahoo Finance. You already have ChatGPT. What you don't have is one clear answer — with every number linked to its source.
         </p>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 2, border: "1.5px solid #E5E7EB", borderRadius: 16, overflow: "hidden" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 0, border: "1.5px solid #E5E7EB", borderRadius: 16, overflow: "hidden" }}>
           {[
             { icon: "◎", title: "Source on every number", desc: "Yahoo Finance · SEC EDGAR · Groq AI" },
             { icon: "◈", title: "BUY / HOLD / SELL", desc: "One clear verdict. No noise." },
@@ -128,13 +156,13 @@ export function LandingPage() {
       </section>
 
       {/* 4 ── HOW IT WORKS ──────────────────────────────────────────────────── */}
-      <section style={{ background: "#F5F5F5", padding: "80px 32px" }}>
-        <div style={{ maxWidth: 860, margin: "0 auto" }}>
+      <section style={{ background: "#F5F5F5", padding: "80px 64px" }}>
+        <div style={{ maxWidth: 900, margin: "0 auto" }}>
           <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "#9CA3AF", marginBottom: 20, textAlign: "center" }}>How it works</p>
-          <h2 style={{ fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 800, letterSpacing: "-0.04em", textAlign: "center", marginBottom: 56 }}>
+          <h2 style={{ fontSize: "clamp(28px,4vw,48px)", fontWeight: 800, letterSpacing: "-0.04em", textAlign: "center", marginBottom: 56 }}>
             Three steps. 60 seconds.
           </h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 40 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 48 }}>
             {[
               { n: "01", t: "Enter a ticker.", d: "Any stock. Takes 2 seconds." },
               { n: "02", t: "We analyse it.", d: "5 factors. Every number cited." },
@@ -152,12 +180,10 @@ export function LandingPage() {
       </section>
 
       {/* 5 ── TESTIMONIALS ──────────────────────────────────────────────────── */}
-      <section style={{ padding: "80px 32px" }}>
-        <div style={{ maxWidth: 1000, margin: "0 auto" }}>
+      <section style={{ padding: "80px 64px" }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "#9CA3AF", marginBottom: 20, textAlign: "center" }}>User research · n=45 · June 2026</p>
-          <h2 style={{ fontSize: "clamp(24px, 3.5vw, 44px)", fontWeight: 800, letterSpacing: "-0.03em", textAlign: "center", marginBottom: 48 }}>
-            What investors say.
-          </h2>
+          <h2 style={{ fontSize: "clamp(24px,3.5vw,44px)", fontWeight: 800, letterSpacing: "-0.03em", textAlign: "center", marginBottom: 48 }}>What investors say.</h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }}>
             {[
               { q: "The score is much better than a raw price. Undervalued/overvalued with a number — that's what I need.", name: "Gunnar L.", role: "Value Investor · Berlin" },
@@ -177,11 +203,11 @@ export function LandingPage() {
       </section>
 
       {/* 6 ── PRICING ───────────────────────────────────────────────────────── */}
-      <section style={{ background: "#F5F5F5", padding: "80px 32px" }}>
+      <section style={{ background: "#F5F5F5", padding: "80px 64px" }}>
         <div style={{ maxWidth: 680, margin: "0 auto", textAlign: "center" }}>
           <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "#9CA3AF", marginBottom: 20 }}>Pricing</p>
-          <h2 style={{ fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 800, letterSpacing: "-0.04em", marginBottom: 16 }}>Free until you need more.</h2>
-          <p style={{ fontSize: 16, color: "#6B7280", marginBottom: 48 }}>No credit card. No setup. Upgrade only if you want unlimited access.</p>
+          <h2 style={{ fontSize: "clamp(28px,4vw,48px)", fontWeight: 800, letterSpacing: "-0.04em", marginBottom: 12 }}>Free until you need more.</h2>
+          <p style={{ fontSize: 16, color: "#6B7280", marginBottom: 48 }}>No credit card. No setup.</p>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
             <div style={{ background: "#fff", border: "1.5px solid #E5E7EB", borderRadius: 16, padding: "32px 24px", textAlign: "left" }}>
               <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#9CA3AF", marginBottom: 12 }}>Free</p>
@@ -209,9 +235,9 @@ export function LandingPage() {
       </section>
 
       {/* 7 ── FINAL CTA ─────────────────────────────────────────────────────── */}
-      <section style={{ padding: "96px 32px", textAlign: "center" }}>
+      <section style={{ padding: "96px 64px", textAlign: "center" }}>
         <div style={{ maxWidth: 600, margin: "0 auto" }}>
-          <h2 style={{ fontSize: "clamp(32px, 5vw, 60px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.08, marginBottom: 20 }}>
+          <h2 style={{ fontSize: "clamp(32px,5vw,60px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.08, marginBottom: 20 }}>
             Stop guessing.<br />Start verifying.
           </h2>
           <p style={{ fontSize: 17, color: "#6B7280", marginBottom: 36 }}>Your first verdict takes 60 seconds. Free.</p>
@@ -222,63 +248,38 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* 8 ── FOOTER (Zasta-style) ───────────────────────────────────────────── */}
-      <footer style={{ background: "#F5F5F5", padding: "64px 32px 40px" }}>
+      {/* 8 ── FOOTER ────────────────────────────────────────────────────────── */}
+      <footer style={{ background: "#F5F5F5", padding: "64px 64px 40px" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          {/* Top: logo + columns */}
           <div style={{ display: "grid", gridTemplateColumns: "220px 1fr 1fr 1fr", gap: 48, marginBottom: 48 }}>
-            {/* Logo + copyright */}
             <div>
               <p style={{ fontSize: 18, fontWeight: 800, letterSpacing: "-0.5px", marginBottom: 12 }}>pondex_</p>
-              <p style={{ fontSize: 12, color: "#9CA3AF", lineHeight: 1.6 }}>
-                Copyright © 2026 pondex_.<br />All rights reserved.
-              </p>
+              <p style={{ fontSize: 12, color: "#9CA3AF", lineHeight: 1.6 }}>Copyright © 2026 pondex_.<br />All rights reserved.</p>
             </div>
-            {/* Company */}
             <div>
               <p style={{ fontSize: 13, fontWeight: 700, marginBottom: 16 }}>Company</p>
-              {["About", "Privacy", "Terms", "Imprint"].map(l => (
-                <p key={l} style={{ marginBottom: 10 }}>
-                  <a href={l === "Privacy" ? "/privacy" : l === "Terms" ? "/terms" : "#"} style={{ fontSize: 14, color: "#374151", textDecoration: "none" }}>{l}</a>
-                </p>
+              {[["About", "#"], ["Privacy", "/privacy"], ["Terms", "/terms"], ["Imprint", "#"]].map(([l, h]) => (
+                <p key={l} style={{ marginBottom: 10 }}><a href={h} style={{ fontSize: 14, color: "#374151", textDecoration: "none" }}>{l}</a></p>
               ))}
             </div>
-            {/* Product */}
             <div>
               <p style={{ fontSize: 13, fontWeight: 700, marginBottom: 16 }}>Product</p>
               {["Stock Analysis", "Exit Strategy", "My Profile Score", "Pricing"].map(l => (
-                <p key={l} style={{ marginBottom: 10 }}>
-                  <a href="#" style={{ fontSize: 14, color: "#374151", textDecoration: "none" }}>{l}</a>
-                </p>
+                <p key={l} style={{ marginBottom: 10 }}><a href="#" style={{ fontSize: 14, color: "#374151", textDecoration: "none" }}>{l}</a></p>
               ))}
             </div>
-            {/* Help */}
             <div>
               <p style={{ fontSize: 13, fontWeight: 700, marginBottom: 16 }}>Help</p>
               {["FAQ", "Data Sources", "Contact"].map(l => (
-                <p key={l} style={{ marginBottom: 10 }}>
-                  <a href="#" style={{ fontSize: 14, color: "#374151", textDecoration: "none" }}>{l}</a>
-                </p>
+                <p key={l} style={{ marginBottom: 10 }}><a href="#" style={{ fontSize: 14, color: "#374151", textDecoration: "none" }}>{l}</a></p>
               ))}
               <p style={{ marginTop: 16, fontSize: 13, color: "#9CA3AF" }}>hello@pondex.app</p>
             </div>
           </div>
-
-          {/* Divider */}
-          <div style={{ height: 1, background: "#E5E7EB", marginBottom: 32 }} />
-
-          {/* Bottom: social icons */}
-          <div style={{ display: "flex", gap: 12 }}>
-            {[
-              { label: "X", path: "M 4 4 L 20 20 M 20 4 L 4 20" },
-              { label: "in", path: "M 4 8 L 4 20 M 4 5 A 1 1 0 0 1 5 4 A 1 1 0 0 1 6 5 A 1 1 0 0 1 5 6 A 1 1 0 0 1 4 5 M 10 20 L 10 13 Q 10 8 16 8 Q 20 8 20 13 L 20 20" },
-              { label: "ig", path: "M 7 2 L 17 2 Q 22 2 22 7 L 22 17 Q 22 22 17 22 L 7 22 Q 2 22 2 17 L 2 7 Q 2 2 7 2 M 12 8 A 4 4 0 1 0 12.001 8" },
-            ].map(s => (
-              <a key={s.label} href="#" style={{ width: 40, height: 40, borderRadius: "50%", background: "#fff", border: "1.5px solid #E5E7EB", display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none" }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#374151" strokeWidth="2" strokeLinecap="round">
-                  <path d={s.path} />
-                </svg>
-              </a>
+          <div style={{ height: 1, background: "#E5E7EB", marginBottom: 28 }} />
+          <div style={{ display: "flex", gap: 10 }}>
+            {["f", "x", "in", "ig"].map(s => (
+              <a key={s} href="#" style={{ width: 40, height: 40, borderRadius: "50%", background: "#fff", border: "1.5px solid #E5E7EB", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: "#374151", textDecoration: "none" }}>{s}</a>
             ))}
           </div>
         </div>
