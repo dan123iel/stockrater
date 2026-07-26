@@ -78,7 +78,7 @@ export function LandingPage() {
       <LandingNav />
 
       {/* 1 — HERO */}
-      <section style={{ minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "80px 24px 48px", textAlign: "center", background: "linear-gradient(180deg,#fff 0%,#F8F5FF 100%)" }}>
+      <section style={{ minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "80px 24px 48px", textAlign: "center", background: "linear-gradient(180deg,#fff 0%,#F0FEFA 100%)" }}>
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center", marginBottom: 32 }}>
           {["Value Investor", "Passive Investor", "Finance Professional"].map(p => (
             <span key={p} style={{ background: "#fff", border: "1.5px solid #E5E7EB", borderRadius: 999, padding: "4px 14px", fontSize: 12, fontWeight: 600, color: "#6B7280" }}>{p}</span>
@@ -88,10 +88,10 @@ export function LandingPage() {
         <motion.h1
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] as const }}
-          style={{ fontSize: "clamp(40px,7vw,84px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.05, maxWidth: 820, marginBottom: 20 }}
+          style={{ fontSize: "clamp(32px,5vw,60px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.05, maxWidth: 820, marginBottom: 20 }}
         >
           Too much data.<br />
-          <span style={{ color: "#7C3AED" }}>No clear answer.</span><br />
+          <span style={{ color: "#00C2A8" }}>No clear answer.</span><br />
           pondex_ changes that.
         </motion.h1>
 
@@ -102,7 +102,7 @@ export function LandingPage() {
 
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25, duration: 0.5 }}
           style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center", marginBottom: 12 }}>
-          <Link to="/signup" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#7C3AED", color: "#fff", padding: "15px 32px", borderRadius: 12, fontWeight: 700, fontSize: 16, textDecoration: "none", boxShadow: "0 4px 20px rgba(124,58,237,0.25)" }}>
+          <Link to="/signup" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#00C2A8", color: "#fff", padding: "15px 32px", borderRadius: 12, fontWeight: 700, fontSize: 16, textDecoration: "none", boxShadow: "0 4px 20px rgba(124,58,237,0.25)" }}>
             Analyse a stock — it's free <ArrowRight size={16} />
           </Link>
           <a href="#how-it-works" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#fff", color: "#0A0A0A", padding: "15px 28px", borderRadius: 12, fontWeight: 600, fontSize: 15, textDecoration: "none", border: "1.5px solid #E5E7EB" }}>
@@ -116,12 +116,12 @@ export function LandingPage() {
       </section>
 
       {/* 2 — SOURCE TRUST BAR */}
-      <section style={{ background: "#F8F5FF", padding: "28px 24px", borderTop: "1px solid #EDE9FE", borderBottom: "1px solid #EDE9FE" }}>
+      <section style={{ background: "#F0FEFA", padding: "28px 24px", borderTop: "1px solid #B2F0E8", borderBottom: "1px solid #B2F0E8" }}>
         <div style={{ maxWidth: 700, margin: "0 auto", textAlign: "center" }}>
-          <p style={{ fontSize: 12, fontWeight: 600, color: "#7C3AED", textTransform: "uppercase" as const, letterSpacing: "0.12em", marginBottom: 12 }}>Data from sources you can verify</p>
+          <p style={{ fontSize: 12, fontWeight: 600, color: "#00C2A8", textTransform: "uppercase" as const, letterSpacing: "0.12em", marginBottom: 12 }}>Data from sources you can verify</p>
           <div style={{ display: "flex", justifyContent: "center", gap: 32, flexWrap: "wrap" }}>
             {["Yahoo Finance", "SEC EDGAR", "Groq AI (Llama 3.3)"].map(s => (
-              <span key={s} style={{ fontSize: 14, fontWeight: 600, color: "#4C1D95" }}>{s}</span>
+              <span key={s} style={{ fontSize: 14, fontWeight: 600, color: "#007A6E" }}>{s}</span>
             ))}
           </div>
         </div>
@@ -133,7 +133,7 @@ export function LandingPage() {
           <motion.p variants={fadeUp} style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: "#9CA3AF", marginBottom: 20 }}>The actual problem</motion.p>
           <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(26px,4.5vw,52px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.1, marginBottom: 24 }}>
             You already have Yahoo Finance.<br />ChatGPT. Your broker.<br />
-            <span style={{ color: "#7C3AED" }}>You still don't have an answer.</span>
+            <span style={{ color: "#00C2A8" }}>You still don't have an answer.</span>
           </motion.h2>
           <motion.p variants={fadeUp} style={{ fontSize: 17, color: "#6B7280", marginBottom: 56, maxWidth: 500, margin: "0 auto 56px" }}>
             Because none of them cite their sources. None of them know your strategy.
@@ -156,15 +156,15 @@ export function LandingPage() {
       </section>
 
       {/* 4 — THE SOLUTION */}
-      <section style={{ background: "#F8F5FF", padding: "80px 24px" }}>
+      <section style={{ background: "#F0FEFA", padding: "80px 24px" }}>
         <div style={{ maxWidth: 960, margin: "0 auto", textAlign: "center" }}>
           <motion.div variants={stagger} initial="visible" whileInView="visible" viewport={vp}>
-            <motion.p variants={fadeUp} style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: "#7C3AED", marginBottom: 20 }}>The solution</motion.p>
+            <motion.p variants={fadeUp} style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: "#00C2A8", marginBottom: 20 }}>The solution</motion.p>
             <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(24px,4vw,46px)", fontWeight: 800, letterSpacing: "-0.04em", marginBottom: 16 }}>One answer. Every number sourced.</motion.h2>
             <motion.p variants={fadeUp} style={{ fontSize: 17, color: "#6B7280", marginBottom: 52, maxWidth: 480, margin: "0 auto 52px" }}>
               pondex_ scores any stock across 5 factors — and shows you exactly where each number comes from.
             </motion.p>
-            <motion.div variants={stagger} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: 0, border: "1.5px solid #EDE9FE", borderRadius: 20, overflow: "hidden", background: "#fff" }}>
+            <motion.div variants={stagger} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: 0, border: "1.5px solid #B2F0E8", borderRadius: 20, overflow: "hidden", background: "#fff" }}>
               {[
                 { Icon: FileSearch, title: "Source on every number", desc: "Yahoo Finance · SEC EDGAR · Groq AI" },
                 { Icon: TrendingUp, title: "BUY / HOLD / SELL", desc: "One clear verdict. No noise." },
@@ -172,9 +172,9 @@ export function LandingPage() {
                 { Icon: Bell, title: "Exit signals", desc: "Know when your thesis has changed." },
               ].map(({ Icon, title, desc }, i) => (
                 <motion.div key={title} variants={fadeUp}
-                  style={{ padding: "32px 24px", borderRight: i < 3 ? "1.5px solid #EDE9FE" : "none", textAlign: "left" as const }}>
-                  <div style={{ width: 40, height: 40, borderRadius: 10, background: "#F8F5FF", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14 }}>
-                    <Icon size={18} color="#7C3AED" />
+                  style={{ padding: "32px 24px", borderRight: i < 3 ? "1.5px solid #B2F0E8" : "none", textAlign: "left" as const }}>
+                  <div style={{ width: 40, height: 40, borderRadius: 10, background: "#F0FEFA", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14 }}>
+                    <Icon size={18} color="#00C2A8" />
                   </div>
                   <p style={{ fontSize: 14, fontWeight: 700, marginBottom: 6 }}>{title}</p>
                   <p style={{ fontSize: 13, color: "#9CA3AF", lineHeight: 1.5 }}>{desc}</p>
@@ -198,8 +198,8 @@ export function LandingPage() {
                 { n: "03", t: "BUY · HOLD · SELL.", d: "For your strategy. Value, Growth, or Balanced — you choose." },
               ].map(s => (
                 <motion.div key={s.n} variants={fadeUp}>
-                  <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.15em", color: "#7C3AED", marginBottom: 14 }}>{s.n}</p>
-                  <div style={{ width: 40, height: 3, background: "#7C3AED", borderRadius: 2, marginBottom: 20 }} />
+                  <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.15em", color: "#00C2A8", marginBottom: 14 }}>{s.n}</p>
+                  <div style={{ width: 40, height: 3, background: "#00C2A8", borderRadius: 2, marginBottom: 20 }} />
                   <p style={{ fontSize: 17, fontWeight: 700, marginBottom: 8 }}>{s.t}</p>
                   <p style={{ fontSize: 14, color: "#6B7280", lineHeight: 1.6 }}>{s.d}</p>
                 </motion.div>
@@ -231,7 +231,7 @@ export function LandingPage() {
               ))}
             </motion.div>
             <motion.div variants={fadeUp}>
-              <Link to="/signup" style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#7C3AED", color: "#fff", padding: "11px 22px", borderRadius: 8, fontWeight: 700, fontSize: 13, textDecoration: "none" }}>
+              <Link to="/signup" style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#00C2A8", color: "#fff", padding: "11px 22px", borderRadius: 8, fontWeight: 700, fontSize: 13, textDecoration: "none" }}>
                 Unlock peer comparison <ArrowRight size={14} />
               </Link>
             </motion.div>
@@ -253,7 +253,7 @@ export function LandingPage() {
               ].map(t => (
                 <motion.div key={t.name} variants={fadeUp} whileHover={{ y: -4 }}
                   style={{ background: "#FAFAFA", border: "1.5px solid #F3F4F6", borderRadius: 16, padding: "28px 24px" }}>
-                  <p style={{ fontSize: 28, marginBottom: 12, color: "#7C3AED" }}>"</p>
+                  <p style={{ fontSize: 28, marginBottom: 12, color: "#00C2A8" }}>"</p>
                   <p style={{ fontSize: 15, lineHeight: 1.65, color: "#374151", marginBottom: 24 }}>{t.q}</p>
                   <div style={{ borderTop: "1px solid #E5E7EB", paddingTop: 14 }}>
                     <p style={{ fontSize: 13, fontWeight: 700 }}>{t.name}</p>
@@ -267,7 +267,7 @@ export function LandingPage() {
       </section>
 
       {/* 8 — STATS on violet */}
-      <section style={{ background: "#7C3AED", padding: "72px 24px" }}>
+      <section style={{ background: "#00C2A8", padding: "72px 24px" }}>
         <motion.div variants={stagger} initial="visible" whileInView="visible" viewport={vp}
           style={{ maxWidth: 900, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 0 }}>
           {[
@@ -306,7 +306,7 @@ export function LandingPage() {
                   Start for free
                 </Link>
               </div>
-              <div style={{ background: "#7C3AED", borderRadius: 20, padding: "32px 24px", textAlign: "left" as const }}>
+              <div style={{ background: "#00C2A8", borderRadius: 20, padding: "32px 24px", textAlign: "left" as const }}>
                 <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.45)", marginBottom: 12 }}>Pro</p>
                 <p style={{ fontSize: 40, fontWeight: 800, letterSpacing: "-2px", color: "#fff", marginBottom: 4, fontVariantNumeric: "tabular-nums" as const }}>€4.99</p>
                 <p style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", marginBottom: 20 }}>per month</p>
@@ -316,7 +316,7 @@ export function LandingPage() {
                     <span style={{ fontSize: 13, color: "rgba(255,255,255,0.85)" }}>{f}</span>
                   </div>
                 ))}
-                <Link to="/signup" style={{ display: "block", marginTop: 24, background: "#fff", color: "#7C3AED", textAlign: "center" as const, padding: "13px", borderRadius: 10, fontWeight: 700, fontSize: 14, textDecoration: "none" }}>
+                <Link to="/signup" style={{ display: "block", marginTop: 24, background: "#fff", color: "#00C2A8", textAlign: "center" as const, padding: "13px", borderRadius: 10, fontWeight: 700, fontSize: 14, textDecoration: "none" }}>
                   Start 7-day trial
                 </Link>
               </div>
@@ -354,7 +354,7 @@ export function LandingPage() {
             </motion.h2>
             <motion.p variants={fadeUp} style={{ fontSize: 17, color: "rgba(255,255,255,0.4)", marginBottom: 36 }}>Free to start. No account required.</motion.p>
             <motion.div variants={fadeUp}>
-              <Link to="/signup" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#7C3AED", color: "#fff", padding: "16px 36px", borderRadius: 12, fontWeight: 700, fontSize: 16, textDecoration: "none", boxShadow: "0 4px 24px rgba(124,58,237,0.4)" }}>
+              <Link to="/signup" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#00C2A8", color: "#fff", padding: "16px 36px", borderRadius: 12, fontWeight: 700, fontSize: 16, textDecoration: "none", boxShadow: "0 4px 24px rgba(124,58,237,0.4)" }}>
                 Analyse a stock — it's free <ArrowRight size={16} />
               </Link>
             </motion.div>
