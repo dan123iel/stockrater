@@ -217,7 +217,10 @@ function PricingSection() {
             <span style={{ fontSize: 14, color: "rgba(255,255,255,0.5)" }}>/month</span>
           </div>
           {yearly && <p style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", marginBottom: 4 }}>€{yearlyTotal} billed yearly</p>}
-          <p style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", marginBottom: 24 }}>First 7 days free. Cancel anytime.</p>
+          <p style={{ fontSize: 12, marginBottom: 24 }}>
+            <span style={{ background: "#FF4D6D", color: "#fff", fontSize: 11, fontWeight: 700, padding: "2px 8px", borderRadius: 4, marginRight: 6 }}>7 days free</span>
+            <span style={{ color: "rgba(255,255,255,0.4)" }}>Cancel anytime.</span>
+          </p>
           <div style={{ height: 1, background: "rgba(255,255,255,0.15)", marginBottom: 20 }} />
           {["Unlimited verdicts", "Peer comparison", "Exit Strategy signals", "My Profile Score", "Weekly digest"].map(f => (
             <div key={f} style={{ display: "flex", gap: 8, marginBottom: 10, alignItems: "center" }}>
@@ -340,7 +343,7 @@ export function LandingPage() {
       <section id="problem" style={{ padding: "120px 40px", maxWidth: 1100, margin: "0 auto", textAlign: "left" as const }}>
         <motion.div variants={stagger} whileInView="visible" viewport={vp}>
           <motion.div variants={fadeUp}>
-            <EyebrowTag color="#EDE9FE" textColor="#4C1D95">The problem</EyebrowTag>
+            <EyebrowTag color="#FFF1F3" textColor="#E02247">The problem</EyebrowTag>
           </motion.div>
           <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(32px,4.5vw,58px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.1, marginBottom: 24 }}>
             Still uncertain.<br />
@@ -555,7 +558,7 @@ export function LandingPage() {
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <motion.div variants={stagger} whileInView="visible" viewport={vp}>
             
-            <motion.div variants={fadeUp} style={{ textAlign: "center" as const }}><EyebrowTag color="#F0FDF4" textColor="#14532D">From 45 user interviews · June 2026</EyebrowTag></motion.div>
+            <motion.div variants={fadeUp} style={{ textAlign: "center" as const }}><EyebrowTag color="#F0FEFA" textColor="#007A6E">From 45 user interviews · June 2026</EyebrowTag></motion.div>
           <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(26px,3.5vw,42px)", fontWeight: 800, letterSpacing: "-0.03em", textAlign: "center" as const, marginBottom: 48 }}>What investors actually say.</motion.h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 28 }}>
               {[

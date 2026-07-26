@@ -30,6 +30,9 @@
 
   /* Accent — Violet */
   --accent: #5B5BD6;
+  --accent-2: #FF4D6D;
+  --accent-2-light: #FFF1F3;
+  --accent-2-dark: #E02247;
   --accent-light: #F5F3FF;
   --accent-dark: #3730A3;
   --accent-green-light: #f0fdf4;
