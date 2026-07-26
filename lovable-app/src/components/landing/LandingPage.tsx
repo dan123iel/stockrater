@@ -187,11 +187,11 @@ function PricingSection() {
       {/* 3-column cards */}
       <motion.div variants={fadeUp} style={{ display: "grid", gridTemplateColumns: "1fr 1.1fr 1fr", gap: 16, alignItems: "start" }}>
 
-        {/* Starter — Free */}
+        {/* Starter */}
         <div style={{ background: "#fff", border: "1.5px solid #E5E7EB", borderRadius: 20, padding: "32px 28px" }}>
           <p style={{ fontSize: 13, fontWeight: 600, color: "#9CA3AF", marginBottom: 20 }}>Starter</p>
-          <p style={{ fontSize: 28, fontWeight: 800, letterSpacing: "-1px", marginBottom: 4 }}>Free</p>
-          <p style={{ fontSize: 13, color: "#9CA3AF", marginBottom: 24 }}>Always. No card needed.</p>
+          <p style={{ fontSize: 17, color: "#6B7280", marginBottom: 4 }}>Always free to start.</p>
+          <p style={{ fontSize: 13, color: "#D1D5DB", marginBottom: 24 }}>No card needed.</p>
           <div style={{ height: 1, background: "#F3F4F6", marginBottom: 20 }} />
           {["1 verdict per day", "5 factor scores", "Source on every number", "Price chart"].map(f => (
             <div key={f} style={{ display: "flex", gap: 8, marginBottom: 10, alignItems: "center" }}>
