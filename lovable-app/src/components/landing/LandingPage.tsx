@@ -96,7 +96,7 @@ export function LandingPage() {
         </motion.h1>
 
         <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.5 }}
-          style={{ fontSize: 18, color: "#6B7280", lineHeight: 1.65, maxWidth: 480, marginBottom: 36 }}>
+          style={{ fontSize: 18, color: "#6B7280", lineHeight: 1.65, maxWidth: 520, marginBottom: 36 }}>
           A 0–100 score for any stock. Five factors.<br />Every number linked to its source. Free to start.
         </motion.p>
 
@@ -116,7 +116,7 @@ export function LandingPage() {
       </section>
 
       {/* 2 — SOURCE TRUST BAR */}
-      <section style={{ background: "#F0FEFA", padding: "28px 24px", borderTop: "1px solid #B2F0E8", borderBottom: "1px solid #B2F0E8" }}>
+      <section style={{ background: "#F0FEFA", padding: "40px 40px", borderTop: "1px solid #B2F0E8", borderBottom: "1px solid #B2F0E8" }}>
         <div style={{ maxWidth: 700, margin: "0 auto", textAlign: "center" }}>
           <p style={{ fontSize: 12, fontWeight: 600, color: "#00C2A8", textTransform: "uppercase" as const, letterSpacing: "0.12em", marginBottom: 12 }}>Data from sources you can verify</p>
           <div style={{ display: "flex", justifyContent: "center", gap: 32, flexWrap: "wrap" }}>
@@ -128,14 +128,14 @@ export function LandingPage() {
       </section>
 
       {/* 3 — THE PROBLEM */}
-      <section id="problem" style={{ padding: "96px 24px", maxWidth: 1000, margin: "0 auto", textAlign: "center" }}>
+      <section id="problem" style={{ padding: "120px 40px", maxWidth: 1100, margin: "0 auto", textAlign: "center" }}>
         <motion.div variants={stagger} initial="visible" whileInView="visible" viewport={vp}>
           <motion.p variants={fadeUp} style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: "#9CA3AF", marginBottom: 20 }}>The actual problem</motion.p>
           <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(26px,4.5vw,52px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.1, marginBottom: 24 }}>
             You already have Yahoo Finance.<br />ChatGPT. Your broker.<br />
             <span style={{ color: "#00C2A8" }}>You still don't have an answer.</span>
           </motion.h2>
-          <motion.p variants={fadeUp} style={{ fontSize: 17, color: "#6B7280", marginBottom: 56, maxWidth: 500, margin: "0 auto 56px" }}>
+          <motion.p variants={fadeUp} style={{ fontSize: 17, color: "#6B7280", marginBottom: 72, maxWidth: 500, margin: "0 auto 56px" }}>
             Because none of them cite their sources. None of them know your strategy.
           </motion.p>
           <motion.div variants={stagger} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 16 }}>
@@ -145,7 +145,7 @@ export function LandingPage() {
               { icon: "❓", title: "Data without context", desc: "P/E of 28x. Is that good? For which strategy?" },
             ].map(b => (
               <motion.div key={b.title} variants={fadeUp} whileHover={{ y: -4 }}
-                style={{ background: "#FAFAFA", border: "1.5px solid #F3F4F6", borderRadius: 16, padding: "28px 24px", textAlign: "left" as const }}>
+                style={{ background: "#FAFAFA", border: "1.5px solid #F3F4F6", borderRadius: 16, padding: "40px 40px", textAlign: "left" as const }}>
                 <p style={{ fontSize: 28, marginBottom: 12 }}>{b.icon}</p>
                 <p style={{ fontSize: 15, fontWeight: 700, marginBottom: 6 }}>{b.title}</p>
                 <p style={{ fontSize: 14, color: "#6B7280", lineHeight: 1.6 }}>{b.desc}</p>
@@ -156,12 +156,12 @@ export function LandingPage() {
       </section>
 
       {/* 4 — THE SOLUTION */}
-      <section style={{ background: "#F0FEFA", padding: "80px 24px" }}>
+      <section style={{ background: "#F0FEFA", padding: "104px 40px" }}>
         <div style={{ maxWidth: 960, margin: "0 auto", textAlign: "center" }}>
           <motion.div variants={stagger} initial="visible" whileInView="visible" viewport={vp}>
             <motion.p variants={fadeUp} style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: "#00C2A8", marginBottom: 20 }}>The solution</motion.p>
             <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(24px,4vw,46px)", fontWeight: 800, letterSpacing: "-0.04em", marginBottom: 16 }}>One answer. Every number sourced.</motion.h2>
-            <motion.p variants={fadeUp} style={{ fontSize: 17, color: "#6B7280", marginBottom: 52, maxWidth: 480, margin: "0 auto 52px" }}>
+            <motion.p variants={fadeUp} style={{ fontSize: 17, color: "#6B7280", marginBottom: 64, maxWidth: 520, margin: "0 auto 52px" }}>
               pondex_ scores any stock across 5 factors — and shows you exactly where each number comes from.
             </motion.p>
             <motion.div variants={stagger} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: 0, border: "1.5px solid #B2F0E8", borderRadius: 20, overflow: "hidden", background: "#fff" }}>
@@ -172,7 +172,7 @@ export function LandingPage() {
                 { Icon: Bell, title: "Exit signals", desc: "Know when your thesis has changed." },
               ].map(({ Icon, title, desc }, i) => (
                 <motion.div key={title} variants={fadeUp}
-                  style={{ padding: "32px 24px", borderRight: i < 3 ? "1.5px solid #B2F0E8" : "none", textAlign: "left" as const }}>
+                  style={{ padding: "40px 28px", borderRight: i < 3 ? "1.5px solid #B2F0E8" : "none", textAlign: "left" as const }}>
                   <div style={{ width: 40, height: 40, borderRadius: 10, background: "#F0FEFA", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14 }}>
                     <Icon size={18} color="#00C2A8" />
                   </div>
@@ -186,12 +186,12 @@ export function LandingPage() {
       </section>
 
       {/* 5 — HOW IT WORKS */}
-      <section id="how-it-works" style={{ padding: "80px 24px" }}>
-        <div style={{ maxWidth: 880, margin: "0 auto" }}>
+      <section id="how-it-works" style={{ padding: "104px 40px" }}>
+        <div style={{ maxWidth: 960, margin: "0 auto" }}>
           <motion.div variants={stagger} initial="visible" whileInView="visible" viewport={vp}>
             <motion.p variants={fadeUp} style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: "#9CA3AF", marginBottom: 20, textAlign: "center" as const }}>How it works</motion.p>
             <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(24px,4vw,42px)", fontWeight: 800, letterSpacing: "-0.04em", textAlign: "center" as const, marginBottom: 56 }}>Three steps. That's it.</motion.h2>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 48 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 64 }}>
               {[
                 { n: "01", t: "Enter any stock ticker.", d: "AAPL, NVDA, MSFT — or any stock you want to research." },
                 { n: "02", t: "Get scored across 5 factors.", d: "Fundamentals, Moat, Risk, Valuation, Management. Every number cited." },
@@ -210,14 +210,14 @@ export function LandingPage() {
       </section>
 
       {/* 6 — PEER COMPARISON TEASER */}
-      <section style={{ background: "#F0FDF4", padding: "64px 24px", borderTop: "1px solid #DCFCE7", borderBottom: "1px solid #DCFCE7" }}>
-        <div style={{ maxWidth: 720, margin: "0 auto", textAlign: "center" }}>
+      <section style={{ background: "#F0FDF4", padding: "80px 40px", borderTop: "1px solid #DCFCE7", borderBottom: "1px solid #DCFCE7" }}>
+        <div style={{ maxWidth: 800, margin: "0 auto", textAlign: "center" }}>
           <motion.div variants={stagger} initial="visible" whileInView="visible" viewport={vp}>
-            <motion.p variants={fadeUp} style={{ fontSize: 15, fontStyle: "italic", color: "#374151", marginBottom: 8, maxWidth: 480, margin: "0 auto 8px" }}>
+            <motion.p variants={fadeUp} style={{ fontSize: 15, fontStyle: "italic", color: "#374151", marginBottom: 8, maxWidth: 520, margin: "0 auto 8px" }}>
               "I really like the comparison part. That's how you can actually make a decision."
             </motion.p>
             <motion.p variants={fadeUp} style={{ fontSize: 12, color: "#9CA3AF", marginBottom: 36 }}>— José R., Finance Professional · User interview, June 2026</motion.p>
-            <motion.div variants={fadeUp} style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, maxWidth: 480, margin: "0 auto 28px" }}>
+            <motion.div variants={fadeUp} style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, maxWidth: 520, margin: "0 auto 28px" }}>
               {[
                 { ticker: "AAPL", score: 78, verdict: "HOLD", color: "#D97706" },
                 { ticker: "MSFT", score: 84, verdict: "BUY", color: "#16A34A" },
@@ -240,19 +240,19 @@ export function LandingPage() {
       </section>
 
       {/* 7 — TESTIMONIALS */}
-      <section id="testimonials" style={{ padding: "80px 24px" }}>
+      <section id="testimonials" style={{ padding: "104px 40px" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <motion.div variants={stagger} initial="visible" whileInView="visible" viewport={vp}>
             <motion.p variants={fadeUp} style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: "#9CA3AF", marginBottom: 20, textAlign: "center" as const }}>From 45 one-on-one investor interviews · June 2026</motion.p>
             <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(22px,3.5vw,38px)", fontWeight: 800, letterSpacing: "-0.03em", textAlign: "center" as const, marginBottom: 48 }}>What investors actually say.</motion.h2>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 20 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 28 }}>
               {[
                 { q: "I need to see where the number comes from. I don't trust anyone who can't show their sources.", name: "José R.", role: "Finance Professional · Madrid" },
                 { q: "I never know when to sell. No tool has solved that — until now.", name: "Gunnar L.", role: "Value Investor · Berlin" },
                 { q: "It tells me which stock fits ME. My risk, my budget. That's what was missing.", name: "Patricia M.", role: "Passive Investor · Hamburg" },
               ].map(t => (
                 <motion.div key={t.name} variants={fadeUp} whileHover={{ y: -4 }}
-                  style={{ background: "#FAFAFA", border: "1.5px solid #F3F4F6", borderRadius: 16, padding: "28px 24px" }}>
+                  style={{ background: "#FAFAFA", border: "1.5px solid #F3F4F6", borderRadius: 16, padding: "40px 40px" }}>
                   <p style={{ fontSize: 28, marginBottom: 12, color: "#00C2A8" }}>"</p>
                   <p style={{ fontSize: 15, lineHeight: 1.65, color: "#374151", marginBottom: 24 }}>{t.q}</p>
                   <div style={{ borderTop: "1px solid #E5E7EB", paddingTop: 14 }}>
@@ -267,7 +267,7 @@ export function LandingPage() {
       </section>
 
       {/* 8 — STATS on violet */}
-      <section style={{ background: "#00C2A8", padding: "72px 24px" }}>
+      <section style={{ background: "#00C2A8", padding: "88px 40px" }}>
         <motion.div variants={stagger} initial="visible" whileInView="visible" viewport={vp}
           style={{ maxWidth: 900, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 0 }}>
           {[
@@ -286,14 +286,14 @@ export function LandingPage() {
       </section>
 
       {/* 9 — PRICING */}
-      <section id="pricing" style={{ padding: "80px 24px" }}>
+      <section id="pricing" style={{ padding: "104px 40px" }}>
         <div style={{ maxWidth: 680, margin: "0 auto", textAlign: "center" }}>
           <motion.div variants={stagger} initial="visible" whileInView="visible" viewport={vp}>
             <motion.p variants={fadeUp} style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: "#9CA3AF", marginBottom: 20 }}>Pricing</motion.p>
             <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(24px,4vw,42px)", fontWeight: 800, letterSpacing: "-0.04em", marginBottom: 12 }}>Try it free. Upgrade when you need more.</motion.h2>
             <motion.p variants={fadeUp} style={{ fontSize: 16, color: "#6B7280", marginBottom: 48 }}>No credit card. No setup. Your first verdict, on us.</motion.p>
             <motion.div variants={fadeUp} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-              <div style={{ background: "#fff", border: "1.5px solid #E5E7EB", borderRadius: 20, padding: "32px 24px", textAlign: "left" as const }}>
+              <div style={{ background: "#fff", border: "1.5px solid #E5E7EB", borderRadius: 20, padding: "40px 32px", textAlign: "left" as const }}>
                 <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" as const, color: "#9CA3AF", marginBottom: 12 }}>Free</p>
                 <p style={{ fontSize: 40, fontWeight: 800, letterSpacing: "-2px", marginBottom: 24, fontVariantNumeric: "tabular-nums" as const }}>€0</p>
                 {["1 full verdict/day", "All 5 factor scores", "Source on every number", "Price chart + Financials"].map(f => (
@@ -306,7 +306,7 @@ export function LandingPage() {
                   Start for free
                 </Link>
               </div>
-              <div style={{ background: "#00C2A8", borderRadius: 20, padding: "32px 24px", textAlign: "left" as const }}>
+              <div style={{ background: "#00C2A8", borderRadius: 20, padding: "40px 32px", textAlign: "left" as const }}>
                 <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.45)", marginBottom: 12 }}>Pro</p>
                 <p style={{ fontSize: 40, fontWeight: 800, letterSpacing: "-2px", color: "#fff", marginBottom: 4, fontVariantNumeric: "tabular-nums" as const }}>€4.99</p>
                 <p style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", marginBottom: 20 }}>per month</p>
@@ -326,8 +326,8 @@ export function LandingPage() {
       </section>
 
       {/* 10 — FAQ */}
-      <section style={{ background: "#FAFAFA", padding: "64px 24px", borderTop: "1px solid #F3F4F6" }}>
-        <div style={{ maxWidth: 640, margin: "0 auto" }}>
+      <section style={{ background: "#FAFAFA", padding: "80px 40px", borderTop: "1px solid #F3F4F6" }}>
+        <div style={{ maxWidth: 700, margin: "0 auto" }}>
           <motion.div variants={stagger} initial="visible" whileInView="visible" viewport={vp}>
             <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(20px,3.5vw,34px)", fontWeight: 800, letterSpacing: "-0.03em", marginBottom: 28 }}>Common questions.</motion.h2>
             {[
@@ -346,7 +346,7 @@ export function LandingPage() {
       </section>
 
       {/* 11 — FINAL CTA */}
-      <section style={{ background: "#0A0A0A", padding: "96px 24px", textAlign: "center" }}>
+      <section style={{ background: "#0A0A0A", padding: "120px 40px", textAlign: "center" }}>
         <div style={{ maxWidth: 600, margin: "0 auto" }}>
           <motion.div variants={stagger} initial="visible" whileInView="visible" viewport={vp}>
             <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(30px,5vw,58px)", fontWeight: 800, letterSpacing: "-0.04em", color: "#fff", lineHeight: 1.06, marginBottom: 20 }}>
