@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "@tanstack/react-router";
 import { LandingNav } from "@/components/landing/LandingNav";
 import { DEMO_SCORES } from "@/lib/demo-data";
 import { FileSearch, TrendingUp, User, Bell, CheckCircle, ArrowRight, ChevronDown } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
 
 // ── Animation variants ────────────────────────────────────────────────────────
 const fadeUp = {
@@ -11,10 +11,75 @@ const fadeUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.48, ease: [0.16, 1, 0.3, 1] as const } },
 };
 const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.09 } } };
-// Use amount: 0 so trigger fires immediately when ANY part enters viewport
 const vp = { once: true, amount: 0.15 };
 
-// ── Score Card ────────────────────────────────────────────────────────────────
+// ── CountUp — animated number on scroll ──────────────────────────────────────
+function CountUp({ to, suffix = "", prefix = "" }: { to: number; suffix?: string; prefix?: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const motionVal = useMotionValue(0);
+  const spring = useSpring(motionVal, { duration: 1600, bounce: 0 });
+  const inView = useInView(ref, { once: true, amount: 0.5 });
+  useEffect(() => { if (inView) motionVal.set(to); }, [inView, motionVal, to]);
+  useEffect(() => spring.on("change", (v) => {
+    if (ref.current) ref.current.textContent = prefix + Math.round(v) + suffix;
+  }), [spring, suffix, prefix]);
+  return <span ref={ref}>{prefix}0{suffix}</span>;
+}
+
+// ── Browser-frame Score Card ──────────────────────────────────────────────────
+function BrowserScoreCard() {
+  const factors = DEMO_SCORES.AAPL.factors;
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 0.4, duration: 0.7, ease: [0.16, 1, 0.3, 1] as const }}
+      style={{ flexShrink: 0, width: 340 }}
+    >
+      {/* Browser chrome */}
+      <div style={{ background: "#F3F4F6", borderRadius: "16px 16px 0 0", padding: "10px 14px 0", border: "1.5px solid #E5E7EB", borderBottom: "none" }}>
+        <div style={{ display: "flex", gap: 6, marginBottom: 8 }}>
+          {["#FF5F57","#FEBC2E","#28C840"].map(c => <div key={c} style={{ width: 10, height: 10, borderRadius: "50%", background: c }} />)}
+        </div>
+        <div style={{ background: "#fff", borderRadius: "6px 6px 0 0", padding: "5px 10px", fontSize: 11, fontWeight: 600, color: "#9CA3AF", fontFamily: "monospace", border: "1px solid #E5E7EB", borderBottom: "none" }}>
+          pondex.app/stock?ticker=AAPL
+        </div>
+      </div>
+      {/* Card content */}
+      <div style={{ background: "#fff", border: "1.5px solid #E5E7EB", borderTop: "none", borderRadius: "0 0 16px 16px", padding: "24px", boxShadow: "0 8px 40px rgba(0,194,168,0.12)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
+          <div>
+            <p style={{ fontSize: 9, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: "#9CA3AF", marginBottom: 5 }}>pondex_ verdict</p>
+            <span style={{ background: "#FEF9C3", color: "#92400E", fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", padding: "3px 10px", borderRadius: 999, textTransform: "uppercase" as const }}>HOLD</span>
+          </div>
+          <div style={{ textAlign: "right" as const }}>
+            <p style={{ fontSize: 44, fontWeight: 800, color: "#D97706", letterSpacing: "-3px", lineHeight: 1, fontVariantNumeric: "tabular-nums" as const }}>78</p>
+            <p style={{ fontSize: 11, color: "#9CA3AF" }}>/100</p>
+          </div>
+        </div>
+        {factors.map((f, i) => (
+          <div key={f.name} style={{ marginBottom: 9 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
+              <span style={{ fontSize: 11, color: "#374151", fontWeight: 500 }}>{f.name}</span>
+              <span style={{ fontSize: 11, fontWeight: 700, color: f.score >= 70 ? "#16A34A" : f.score >= 45 ? "#D97706" : "#DC2626" }}>{f.score}</span>
+            </div>
+            <div style={{ height: 3, background: "#F3F4F6", borderRadius: 50 }}>
+              <motion.div
+                initial={{ width: 0 }} animate={{ width: `${f.score}%` }}
+                transition={{ delay: 0.6 + i * 0.08, duration: 0.7, ease: [0.16, 1, 0.3, 1] as const }}
+                style={{ height: "100%", background: f.score >= 70 ? "#16A34A" : f.score >= 45 ? "#D97706" : "#DC2626", borderRadius: 50 }}
+              />
+            </div>
+          </div>
+        ))}
+        <p style={{ fontSize: 8, color: "#D1D5DB", textAlign: "center" as const, marginTop: 12, textTransform: "uppercase" as const, letterSpacing: "0.08em" }}>
+          Yahoo Finance · SEC EDGAR · Not financial advice
+        </p>
+      </div>
+    </motion.div>
+  );
+}
+
+// ── ScoreCard (kept for fallback) ─────────────────────────────────────────────
 function ScoreCard() {
   const factors = DEMO_SCORES.AAPL.factors;
   return (
@@ -42,8 +107,7 @@ function ScoreCard() {
           </div>
           <div style={{ height: 4, background: "#F3F4F6", borderRadius: 50 }}>
             <motion.div
-              initial={{ width: 0 }}
-              animate={{ width: `${f.score}%` }}
+              initial={{ width: 0 }} animate={{ width: `${f.score}%` }}
               transition={{ delay: 0.5 + i * 0.08, duration: 0.7, ease: [0.16, 1, 0.3, 1] as const }}
               style={{ height: "100%", background: f.score >= 70 ? "#16A34A" : f.score >= 45 ? "#D97706" : "#DC2626", borderRadius: 50 }}
             />
@@ -77,40 +141,46 @@ export function LandingPage() {
     <div style={{ fontFamily: "Inter, -apple-system, sans-serif", color: "#0A0A0A", background: "#fff", overflowX: "hidden" }}>
       <LandingNav />
 
-      {/* 1 — HERO */}
-      <section style={{ minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "80px 24px 48px", textAlign: "center", background: "linear-gradient(180deg,#fff 0%,#F0FEFA 100%)" }}>
-        <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center", marginBottom: 32 }}>
-          {["Value Investor", "Passive Investor", "Finance Professional"].map(p => (
-            <span key={p} style={{ background: "#fff", border: "1.5px solid #E5E7EB", borderRadius: 999, padding: "4px 14px", fontSize: 12, fontWeight: 600, color: "#6B7280" }}>{p}</span>
-          ))}
-        </motion.div>
+      {/* 1 — HERO — two-column */}
+      <section style={{ minHeight: "100vh", display: "flex", alignItems: "center", padding: "100px 48px 60px", background: "linear-gradient(135deg,#fff 0%,#F0FEFA 100%)" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto", width: "100%", display: "grid", gridTemplateColumns: "1fr 380px", gap: 72, alignItems: "center" }}>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] as const }}
-          style={{ fontSize: "clamp(32px,5vw,60px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.05, maxWidth: 820, marginBottom: 20 }}
-        >
-          Too much data.<br />
-          <span style={{ color: "#00C2A8" }}>No clear answer.</span><br />
-          pondex_ changes that.
-        </motion.h1>
+          {/* Left — text */}
+          <div>
+            <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}
+              style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 28 }}>
+              {["Value Investor", "Passive Investor", "Finance Professional"].map(p => (
+                <span key={p} style={{ background: "#fff", border: "1.5px solid #E5E7EB", borderRadius: 999, padding: "4px 14px", fontSize: 12, fontWeight: 600, color: "#6B7280" }}>{p}</span>
+              ))}
+            </motion.div>
 
-        <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.5 }}
-          style={{ fontSize: 18, color: "#6B7280", lineHeight: 1.65, maxWidth: 520, marginBottom: 36 }}>
-          A 0–100 score for any stock. Five factors.<br />Every number linked to its source. Free to start.
-        </motion.p>
+            <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] as const }}
+              style={{ fontSize: "clamp(36px,5vw,68px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.04, marginBottom: 20 }}>
+              Too much data.<br />
+              <span style={{ color: "#00C2A8" }}>No clear answer.</span><br />
+              pondex_ changes that.
+            </motion.h1>
 
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25, duration: 0.5 }}
-          style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center", marginBottom: 12 }}>
-          <Link to="/signup" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#00C2A8", color: "#fff", padding: "15px 32px", borderRadius: 12, fontWeight: 700, fontSize: 16, textDecoration: "none", boxShadow: "0 4px 20px rgba(0,194,168,0.22)" }}>
-            Analyse a stock — it's free <ArrowRight size={16} />
-          </Link>
-          <a href="#how-it-works" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#fff", color: "#0A0A0A", padding: "15px 28px", borderRadius: 12, fontWeight: 600, fontSize: 15, textDecoration: "none", border: "1.5px solid #E5E7EB" }}>
-            See how it works
-          </a>
-        </motion.div>
-<div style={{ marginBottom: 48 }} />
-        <ScoreCard />
+            <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.5 }}
+              style={{ fontSize: 18, color: "#6B7280", lineHeight: 1.65, maxWidth: 460, marginBottom: 36 }}>
+              A 0–100 score for any stock. Five factors. Every number linked to its source.
+            </motion.p>
+
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25, duration: 0.5 }}
+              style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              <Link to="/signup" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#00C2A8", color: "#fff", padding: "15px 32px", borderRadius: 12, fontWeight: 700, fontSize: 16, textDecoration: "none", boxShadow: "0 4px 20px rgba(0,194,168,0.25)" }}>
+                Analyse a stock — it's free <ArrowRight size={16} />
+              </Link>
+              <a href="#how-it-works" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#fff", color: "#0A0A0A", padding: "15px 28px", borderRadius: 12, fontWeight: 600, fontSize: 15, textDecoration: "none", border: "1.5px solid #E5E7EB" }}>
+                See how it works
+              </a>
+            </motion.div>
+          </div>
+
+          {/* Right — browser-framed score card */}
+          <BrowserScoreCard />
+        </div>
       </section>
 
       {/* 2 — SOURCE TRUST BAR */}
@@ -307,20 +377,22 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* 8 — STATS on violet */}
+      {/* 8 — STATS with CountUp */}
       <section style={{ background: "#00C2A8", padding: "88px 40px" }}>
         <motion.div variants={stagger} whileInView="visible" viewport={vp}
           style={{ maxWidth: 900, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 0 }}>
           {[
-            ["71%", "Only act on data they can verify"],
-            ["45", "Investors interviewed"],
-            ["5", "Factors per score"],
-            ["€0", "To start"],
-          ].map(([n, l], i) => (
-            <motion.div key={l} variants={fadeUp}
+            { display: <CountUp to={71} suffix="%" />, label: "Only act on data they can verify" },
+            { display: <CountUp to={45} />, label: "investors told us what was missing" },
+            { display: <CountUp to={5} />, label: "Factors per score" },
+            { display: <span>€0</span>, label: "To start" },
+          ].map(({ display, label }, i) => (
+            <motion.div key={label} variants={fadeUp}
               style={{ textAlign: "center" as const, padding: "0 16px", borderRight: i < 3 ? "1px solid rgba(255,255,255,0.15)" : "none" }}>
-              <p style={{ fontSize: "clamp(30px,4vw,50px)", fontWeight: 800, color: "#fff", letterSpacing: "-0.03em", lineHeight: 1, fontVariantNumeric: "tabular-nums" as const }}>{n}</p>
-              <p style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", marginTop: 8, lineHeight: 1.4 }}>{l}</p>
+              <p style={{ fontSize: "clamp(30px,4vw,50px)", fontWeight: 800, color: "#fff", letterSpacing: "-0.03em", lineHeight: 1, fontVariantNumeric: "tabular-nums" as const }}>
+                {display}
+              </p>
+              <p style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", marginTop: 8, lineHeight: 1.4 }}>{label}</p>
             </motion.div>
           ))}
         </motion.div>
