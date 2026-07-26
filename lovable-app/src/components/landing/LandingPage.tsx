@@ -8,11 +8,11 @@ import { motion } from "framer-motion";
 // ── Animation variants ────────────────────────────────────────────────────────
 const fadeUp = {
   hidden: { opacity: 1, y: 0 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as const } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.48, ease: [0.16, 1, 0.3, 1] as const } },
 };
 const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.09 } } };
 // Use amount: 0 so trigger fires immediately when ANY part enters viewport
-const vp = { once: true, amount: 0 };
+const vp = { once: true, amount: 0.15 };
 
 // ── Score Card ────────────────────────────────────────────────────────────────
 function ScoreCard() {
@@ -22,7 +22,7 @@ function ScoreCard() {
       initial={{ opacity: 0, y: 24, scale: 0.97 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ delay: 0.3, duration: 0.6, ease: [0.16, 1, 0.3, 1] as const }}
-      style={{ background: "#fff", borderRadius: 24, padding: "28px 26px", border: "1.5px solid #E5E7EB", boxShadow: "0 4px 32px rgba(124,58,237,0.10)", width: 300, flexShrink: 0 }}
+      style={{ background: "#fff", borderRadius: 24, padding: "28px 26px", border: "1.5px solid #E5E7EB", boxShadow: "0 4px 32px rgba(0,194,168,0.16)", width: 300, flexShrink: 0 }}
     >
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
         <div>
@@ -102,7 +102,7 @@ export function LandingPage() {
 
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25, duration: 0.5 }}
           style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center", marginBottom: 12 }}>
-          <Link to="/signup" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#00C2A8", color: "#fff", padding: "15px 32px", borderRadius: 12, fontWeight: 700, fontSize: 16, textDecoration: "none", boxShadow: "0 4px 20px rgba(124,58,237,0.25)" }}>
+          <Link to="/signup" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#00C2A8", color: "#fff", padding: "15px 32px", borderRadius: 12, fontWeight: 700, fontSize: 16, textDecoration: "none", boxShadow: "0 4px 20px rgba(0,194,168,0.22)" }}>
             Analyse a stock — it's free <ArrowRight size={16} />
           </Link>
           <a href="#how-it-works" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#fff", color: "#0A0A0A", padding: "15px 28px", borderRadius: 12, fontWeight: 600, fontSize: 15, textDecoration: "none", border: "1.5px solid #E5E7EB" }}>
@@ -127,14 +127,13 @@ export function LandingPage() {
 
       {/* 3 — THE PROBLEM */}
       <section id="problem" style={{ padding: "120px 40px", maxWidth: 1100, margin: "0 auto", textAlign: "center" }}>
-        <motion.div variants={stagger} initial="visible" whileInView="visible" viewport={vp}>
-          <motion.p variants={fadeUp} style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: "#9CA3AF", marginBottom: 20 }}>The actual problem</motion.p>
-          <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(26px,4.5vw,52px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.1, marginBottom: 24 }}>
-            You already have tools.<br />Apps. Videos. Newsletters.<br />
-            <span style={{ color: "#00C2A8" }}>You still don't have an answer.</span>
+        <motion.div variants={stagger} whileInView="visible" viewport={vp}>
+                    <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(32px,4.5vw,58px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.1, marginBottom: 24 }}>
+            Most investors feel uncertain.<br />Even after researching.<br />
+            <span style={{ color: "#00C2A8" }}>pondex_ gives you one clear answer.</span>
           </motion.h2>
           <motion.p variants={fadeUp} style={{ fontSize: 17, color: "#6B7280", marginBottom: 72, maxWidth: 500, margin: "0 auto 56px" }}>
-            None of them give you one clear answer. None of them know your strategy.
+            Not because the data is missing — but because nothing gives you one clear, sourced verdict.
           </motion.p>
           <motion.div variants={stagger} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 16 }}>
             {[
@@ -156,9 +155,8 @@ export function LandingPage() {
       {/* 4 — THE SOLUTION */}
       <section style={{ background: "#F0FEFA", padding: "104px 40px" }}>
         <div style={{ maxWidth: 960, margin: "0 auto", textAlign: "center" }}>
-          <motion.div variants={stagger} initial="visible" whileInView="visible" viewport={vp}>
-            <motion.p variants={fadeUp} style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: "#00C2A8", marginBottom: 20 }}>The solution</motion.p>
-            <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(24px,4vw,46px)", fontWeight: 800, letterSpacing: "-0.04em", marginBottom: 16 }}>One answer. Every number sourced.</motion.h2>
+          <motion.div variants={stagger} whileInView="visible" viewport={vp}>
+                        <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(30px,4.5vw,52px)", fontWeight: 800, letterSpacing: "-0.04em", marginBottom: 16 }}>One answer. Every number sourced.</motion.h2>
             <motion.p variants={fadeUp} style={{ fontSize: 17, color: "#6B7280", marginBottom: 64, maxWidth: 520, margin: "0 auto 52px" }}>
               pondex_ scores any stock across 5 factors — and shows you exactly where each number comes from.
             </motion.p>
@@ -184,25 +182,70 @@ export function LandingPage() {
       </section>
 
       {/* 5 — HOW IT WORKS */}
-      <section id="how-it-works" style={{ padding: "104px 40px" }}>
-        <div style={{ maxWidth: 960, margin: "0 auto" }}>
-          <motion.div variants={stagger} initial="visible" whileInView="visible" viewport={vp}>
-            <motion.p variants={fadeUp} style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: "#9CA3AF", marginBottom: 20, textAlign: "center" as const }}>How it works</motion.p>
-            <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(24px,4vw,42px)", fontWeight: 800, letterSpacing: "-0.04em", textAlign: "center" as const, marginBottom: 56 }}>Three steps. That's it.</motion.h2>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 64 }}>
-              {[
-                { n: "01", t: "Enter any stock ticker.", d: "AAPL, NVDA, MSFT — or any stock you want to research." },
-                { n: "02", t: "Get scored across 5 factors.", d: "Fundamentals, Moat, Risk, Valuation, Management. Every number cited." },
-                { n: "03", t: "BUY · HOLD · SELL.", d: "For your strategy. Value, Growth, or Balanced — you choose." },
-              ].map(s => (
-                <motion.div key={s.n} variants={fadeUp}>
-                  <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.15em", color: "#00C2A8", marginBottom: 14 }}>{s.n}</p>
-                  <div style={{ width: 40, height: 3, background: "#00C2A8", borderRadius: 2, marginBottom: 20 }} />
-                  <p style={{ fontSize: 17, fontWeight: 700, marginBottom: 8 }}>{s.t}</p>
-                  <p style={{ fontSize: 14, color: "#6B7280", lineHeight: 1.6 }}>{s.d}</p>
-                </motion.div>
-              ))}
-            </div>
+      <section id="how-it-works" style={{ padding: "104px 40px", background: "#F9FAFB" }}>
+        <div style={{ maxWidth: 1000, margin: "0 auto", textAlign: "center" as const }}>
+          <motion.div variants={stagger} whileInView="visible" viewport={vp}>
+            <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(30px,4.5vw,52px)", fontWeight: 800, letterSpacing: "-0.04em", marginBottom: 16 }}>One verdict. In three steps.</motion.h2>
+            <motion.p variants={fadeUp} style={{ fontSize: 18, color: "#6B7280", marginBottom: 72, maxWidth: 460, margin: "0 auto 72px" }}>No finance degree required.</motion.p>
+
+            {/* Lemonade-style: big illustration center + labels floating */}
+            <motion.div variants={fadeUp} style={{ position: "relative", maxWidth: 520, margin: "0 auto" }}>
+              {/* Phone illustration SVG */}
+              <svg viewBox="0 0 320 560" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: "100%", maxWidth: 280, display: "block", margin: "0 auto" }}>
+                {/* Phone outline */}
+                <rect x="10" y="10" width="300" height="540" rx="36" ry="36" stroke="#D1D5DB" strokeWidth="2" fill="white"/>
+                {/* Notch */}
+                <rect x="110" y="18" width="100" height="16" rx="8" fill="#E5E7EB"/>
+                {/* Screen content - ticker input */}
+                <rect x="30" y="60" width="260" height="44" rx="10" fill="#F3F4F6"/>
+                <text x="60" y="88" fontFamily="Inter,sans-serif" fontSize="14" fontWeight="600" fill="#374151">AAPL</text>
+                <rect x="240" y="68" width="40" height="28" rx="8" fill="#00C2A8"/>
+                <text x="253" y="88" fontFamily="Inter,sans-serif" fontSize="10" fontWeight="700" fill="white">GO</text>
+                {/* Score display */}
+                <rect x="30" y="120" width="260" height="130" rx="16" fill="#F8FFFE" stroke="#B2F0E8" strokeWidth="1.5"/>
+                <text x="50" y="150" fontFamily="Inter,sans-serif" fontSize="10" fontWeight="600" fill="#9CA3AF" letterSpacing="2">VERDICT</text>
+                <text x="190" y="175" fontFamily="Inter,sans-serif" fontSize="48" fontWeight="800" fill="#D97706">78</text>
+                <rect x="50" y="158" width="52" height="20" rx="10" fill="#FEF9C3"/>
+                <text x="60" y="172" fontFamily="Inter,sans-serif" fontSize="9" fontWeight="700" fill="#92400E">HOLD</text>
+                {/* Factor bars */}
+                <text x="50" y="177" fontFamily="Inter,sans-serif" fontSize="8" fill="#9CA3AF">Fundamentals</text>
+                <rect x="50" y="180" width="130" height="3" rx="2" fill="#F3F4F6"/>
+                <rect x="50" y="180" width="107" height="3" rx="2" fill="#16A34A"/>
+                <text x="50" y="197" fontFamily="Inter,sans-serif" fontSize="8" fill="#9CA3AF">Moat</text>
+                <rect x="50" y="200" width="130" height="3" rx="2" fill="#F3F4F6"/>
+                <rect x="50" y="200" width="114" height="3" rx="2" fill="#16A34A"/>
+                <text x="50" y="217" fontFamily="Inter,sans-serif" fontSize="8" fill="#9CA3AF">Valuation</text>
+                <rect x="50" y="220" width="130" height="3" rx="2" fill="#F3F4F6"/>
+                <rect x="50" y="220" width="81" height="3" rx="2" fill="#D97706"/>
+                {/* Source line */}
+                <text x="50" y="260" fontFamily="Inter,sans-serif" fontSize="7" fill="#D1D5DB">Yahoo Finance · SEC EDGAR</text>
+                {/* Bottom nav dots */}
+                <circle cx="145" cy="530" r="16" fill="#F3F4F6"/>
+                <rect x="120" y="543" width="80" height="4" rx="2" fill="#E5E7EB"/>
+              </svg>
+
+              {/* Floating labels - Lemonade style */}
+              <div style={{ position: "absolute", top: "8%", left: "-5%", textAlign: "left" as const }}>
+                <p style={{ fontSize: 13, color: "#6B7280", marginBottom: 2 }}>Enter ticker</p>
+                <p style={{ fontSize: 18, fontWeight: 800, letterSpacing: "-0.5px" }}>In seconds</p>
+                <svg width="40" height="30" viewBox="0 0 40 30" style={{ display: "block", marginTop: 4 }}>
+                  <path d="M 35 5 Q 40 15 30 25" stroke="#00C2A8" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+                  <path d="M 28 22 L 30 25 L 33 22" stroke="#00C2A8" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+              <div style={{ position: "absolute", top: "35%", right: "-8%", textAlign: "right" as const }}>
+                <p style={{ fontSize: 13, color: "#6B7280", marginBottom: 2 }}>Get your verdict</p>
+                <p style={{ fontSize: 18, fontWeight: 800, letterSpacing: "-0.5px" }}>With sources</p>
+                <svg width="40" height="30" viewBox="0 0 40 30" style={{ display: "block", marginLeft: "auto", marginTop: 4 }}>
+                  <path d="M 5 5 Q 0 15 10 25" stroke="#00C2A8" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+                  <path d="M 12 22 L 10 25 L 7 22" stroke="#00C2A8" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+              <div style={{ position: "absolute", bottom: "8%", left: "-5%", textAlign: "left" as const }}>
+                <span style={{ background: "#00C2A8", color: "#fff", fontSize: 12, fontWeight: 700, padding: "4px 12px", borderRadius: 999 }}>Done.</span>
+                <p style={{ fontSize: 18, fontWeight: 800, letterSpacing: "-0.5px", marginTop: 6 }}>BUY · HOLD · SELL</p>
+              </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>
@@ -210,7 +253,7 @@ export function LandingPage() {
       {/* 6 — PEER COMPARISON TEASER */}
       <section style={{ background: "#F0FDF4", padding: "80px 40px", borderTop: "1px solid #DCFCE7", borderBottom: "1px solid #DCFCE7" }}>
         <div style={{ maxWidth: 800, margin: "0 auto", textAlign: "center" }}>
-          <motion.div variants={stagger} initial="visible" whileInView="visible" viewport={vp}>
+          <motion.div variants={stagger} whileInView="visible" viewport={vp}>
             <motion.p variants={fadeUp} style={{ fontSize: 15, fontStyle: "italic", color: "#374151", marginBottom: 8, maxWidth: 520, margin: "0 auto 8px" }}>
               "I really like the comparison part. That's how you can actually make a decision."
             </motion.p>
@@ -221,7 +264,7 @@ export function LandingPage() {
                 { ticker: "MSFT", score: 84, verdict: "BUY", color: "#16A34A" },
                 { ticker: "Tech avg", score: 71, verdict: "—", color: "#9CA3AF" },
               ].map(s => (
-                <div key={s.ticker} style={{ background: "#fff", border: "1.5px solid #D1FAE5", borderRadius: 12, padding: "18px 14px", textAlign: "center" as const }}>
+                <div key={s.ticker} style={{ background: "#fff", border: "1.5px solid #D1FAE5", borderRadius: 12, padding: "18px 14px", paddingTop: 15, textAlign: "center" as const, borderTop: `3px solid ${s.color}` }}>
                   <p style={{ fontSize: 10, fontWeight: 700, color: "#9CA3AF", marginBottom: 6, textTransform: "uppercase" as const, letterSpacing: "0.1em" }}>{s.ticker}</p>
                   <p style={{ fontSize: 30, fontWeight: 800, color: s.color, letterSpacing: "-2px", fontVariantNumeric: "tabular-nums" as const }}>{s.score}</p>
                   <p style={{ fontSize: 11, fontWeight: 700, color: s.color, marginTop: 4 }}>{s.verdict}</p>
@@ -240,9 +283,9 @@ export function LandingPage() {
       {/* 7 — TESTIMONIALS */}
       <section id="testimonials" style={{ padding: "104px 40px" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <motion.div variants={stagger} initial="visible" whileInView="visible" viewport={vp}>
-            <motion.p variants={fadeUp} style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: "#9CA3AF", marginBottom: 20, textAlign: "center" as const }}>From 45 one-on-one investor interviews · June 2026</motion.p>
-            <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(22px,3.5vw,38px)", fontWeight: 800, letterSpacing: "-0.03em", textAlign: "center" as const, marginBottom: 48 }}>What investors actually say.</motion.h2>
+          <motion.div variants={stagger} whileInView="visible" viewport={vp}>
+            
+            <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(26px,3.5vw,42px)", fontWeight: 800, letterSpacing: "-0.03em", textAlign: "center" as const, marginBottom: 48 }}>What investors actually say.</motion.h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 28 }}>
               {[
                 { q: "I need to see where the number comes from. I don't trust anyone who can't show their sources.", name: "José R.", role: "Finance Professional · Madrid" },
@@ -266,7 +309,7 @@ export function LandingPage() {
 
       {/* 8 — STATS on violet */}
       <section style={{ background: "#00C2A8", padding: "88px 40px" }}>
-        <motion.div variants={stagger} initial="visible" whileInView="visible" viewport={vp}
+        <motion.div variants={stagger} whileInView="visible" viewport={vp}
           style={{ maxWidth: 900, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 0 }}>
           {[
             ["71%", "Only act on data they can verify"],
@@ -286,9 +329,8 @@ export function LandingPage() {
       {/* 9 — PRICING */}
       <section id="pricing" style={{ padding: "104px 40px" }}>
         <div style={{ maxWidth: 680, margin: "0 auto", textAlign: "center" }}>
-          <motion.div variants={stagger} initial="visible" whileInView="visible" viewport={vp}>
-            <motion.p variants={fadeUp} style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: "#9CA3AF", marginBottom: 20 }}>Pricing</motion.p>
-            <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(24px,4vw,42px)", fontWeight: 800, letterSpacing: "-0.04em", marginBottom: 12 }}>Try it free. Upgrade when you need more.</motion.h2>
+          <motion.div variants={stagger} whileInView="visible" viewport={vp}>
+                        <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(28px,4vw,46px)", fontWeight: 800, letterSpacing: "-0.04em", marginBottom: 12 }}>Try it free. Upgrade when you need more.</motion.h2>
             <motion.p variants={fadeUp} style={{ fontSize: 16, color: "#6B7280", marginBottom: 48 }}>One verdict a day free. Unlimited with Pro.</motion.p>
             <motion.div variants={fadeUp} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
               <div style={{ background: "#fff", border: "1.5px solid #E5E7EB", borderRadius: 20, padding: "40px 32px", textAlign: "left" as const }}>
@@ -326,8 +368,8 @@ export function LandingPage() {
       {/* 10 — FAQ */}
       <section style={{ background: "#FAFAFA", padding: "80px 40px", borderTop: "1px solid #F3F4F6" }}>
         <div style={{ maxWidth: 700, margin: "0 auto" }}>
-          <motion.div variants={stagger} initial="visible" whileInView="visible" viewport={vp}>
-            <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(20px,3.5vw,34px)", fontWeight: 800, letterSpacing: "-0.03em", marginBottom: 28 }}>Common questions.</motion.h2>
+          <motion.div variants={stagger} whileInView="visible" viewport={vp}>
+            <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(24px,3.5vw,38px)", fontWeight: 800, letterSpacing: "-0.03em", marginBottom: 28 }}>Common questions.</motion.h2>
             {[
               ["Is pondex_ financial advice?", "No. pondex_ is a research tool. Every score is a data-driven signal, not a recommendation. All investment decisions are yours."],
               ["What data sources do you use?", "Yahoo Finance, SEC EDGAR, and Groq AI (Llama 3.3) for plain-language explanations. Every single number links to its source."],
@@ -346,13 +388,13 @@ export function LandingPage() {
       {/* 11 — FINAL CTA */}
       <section style={{ background: "#0A0A0A", padding: "120px 40px", textAlign: "center" }}>
         <div style={{ maxWidth: 600, margin: "0 auto" }}>
-          <motion.div variants={stagger} initial="visible" whileInView="visible" viewport={vp}>
+          <motion.div variants={stagger} whileInView="visible" viewport={vp}>
             <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(30px,5vw,58px)", fontWeight: 800, letterSpacing: "-0.04em", color: "#fff", lineHeight: 1.06, marginBottom: 20 }}>
               One ticker.<br />One verdict.
             </motion.h2>
             <motion.p variants={fadeUp} style={{ fontSize: 17, color: "rgba(255,255,255,0.4)", marginBottom: 36 }}>Your first verdict is free.</motion.p>
             <motion.div variants={fadeUp}>
-              <Link to="/signup" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#00C2A8", color: "#fff", padding: "16px 36px", borderRadius: 12, fontWeight: 700, fontSize: 16, textDecoration: "none", boxShadow: "0 4px 24px rgba(124,58,237,0.4)" }}>
+              <Link to="/signup" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#00C2A8", color: "#fff", padding: "16px 36px", borderRadius: 12, fontWeight: 700, fontSize: 16, textDecoration: "none", boxShadow: "0 4px 24px rgba(0,194,168,0.40)" }}>
                 Analyse a stock — it's free <ArrowRight size={16} />
               </Link>
             </motion.div>
