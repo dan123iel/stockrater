@@ -13,6 +13,27 @@ const fadeUp = {
 const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.09 } } };
 const vp = { once: true, amount: 0.15 };
 
+
+// ── Eyebrow Tag — Jasper-style highlighted label ─────────────────────────────
+function EyebrowTag({ children, color = "#FEFCE8", textColor = "#713F12" }: { children: string; color?: string; textColor?: string }) {
+  return (
+    <span style={{
+      display: "inline-block",
+      background: color,
+      color: textColor,
+      fontFamily: "'Chivo Mono', 'Courier New', monospace",
+      fontSize: 12,
+      fontWeight: 500,
+      letterSpacing: "0.04em",
+      padding: "3px 10px",
+      borderRadius: 4,
+      marginBottom: 20,
+    }}>
+      {children}
+    </span>
+  );
+}
+
 // ── CountUp — animated number on scroll ──────────────────────────────────────
 function CountUp({ to, suffix = "", prefix = "" }: { to: number; suffix?: string; prefix?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
@@ -136,6 +157,7 @@ function PricingSection() {
     <motion.div variants={stagger} whileInView="visible" viewport={vp}>
       {/* Header */}
       <motion.div variants={fadeUp} style={{ textAlign: "center", marginBottom: 48 }}>
+        <EyebrowTag color="#EDE9FE" textColor="#4C1D95">Pricing</EyebrowTag>
         <h2 style={{ fontSize: "clamp(28px,4vw,46px)", fontWeight: 800, letterSpacing: "-0.04em", marginBottom: 12 }}>
           Simple pricing.
         </h2>
@@ -317,7 +339,10 @@ export function LandingPage() {
       {/* 3 — THE PROBLEM */}
       <section id="problem" style={{ padding: "120px 40px", maxWidth: 1100, margin: "0 auto", textAlign: "left" as const }}>
         <motion.div variants={stagger} whileInView="visible" viewport={vp}>
-                    <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(32px,4.5vw,58px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.1, marginBottom: 24 }}>
+          <motion.div variants={fadeUp}>
+            <EyebrowTag color="#EDE9FE" textColor="#4C1D95">The problem</EyebrowTag>
+          </motion.div>
+          <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(32px,4.5vw,58px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.1, marginBottom: 24 }}>
             Still uncertain.<br />
             <span style={{ color: "#5B5BD6" }}>pondex_ ends that.</span>
           </motion.h2>
@@ -339,36 +364,90 @@ export function LandingPage() {
         </motion.div>
       </section>
 
-      {/* 4 — THE SOLUTION */}
-      <section style={{ background: "#F5F3FF", padding: "104px 40px" }}>
-        <div style={{ maxWidth: 960, margin: "0 auto", textAlign: "center" }}>
-          <motion.div variants={stagger} whileInView="visible" viewport={vp}>
-                        <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(30px,4.5vw,52px)", fontWeight: 800, letterSpacing: "-0.04em", marginBottom: 16 }}>One answer. Every number sourced.</motion.h2>
-            <motion.p variants={fadeUp} style={{ fontSize: 17, color: "#6B7280", marginBottom: 64, maxWidth: 520, margin: "0 auto 52px" }}>
+      {/* 4 — THE SOLUTION — Sticky scroll (Bold-style) */}
+      <section style={{ background: "#fff", padding: "120px 40px" }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80, alignItems: "start" }}>
+
+          {/* LEFT — sticky */}
+          <div style={{ position: "sticky", top: 120 }}>
+            <EyebrowTag color="#EDE9FE" textColor="#4C1D95">How it works</EyebrowTag>
+            <h2 style={{ fontSize: "clamp(32px,4vw,52px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.08, marginBottom: 20 }}>
+              One answer.<br />
+              <span style={{ color: "#5B5BD6" }}>Every number<br />sourced.</span>
+            </h2>
+            <p style={{ fontSize: 17, color: "#6B7280", lineHeight: 1.65, maxWidth: 380, marginBottom: 40 }}>
               pondex_ scores any stock across 5 factors — and shows you exactly where each number comes from.
-            </motion.p>
-            <motion.div variants={stagger} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: 16 }}>
-              {[
-                { Icon: FileSearch, title: "Source on every number", desc: "Yahoo Finance · SEC EDGAR · Groq AI" },
-                { Icon: TrendingUp, title: "BUY / HOLD / SELL", desc: "One clear verdict. No noise." },
-                { Icon: User, title: "Your investor profile", desc: "Value, Growth, or Balanced — your score." },
-                { Icon: Bell, title: "Exit signals", desc: "Know when your thesis has changed." },
-              ].map(({ Icon, title, desc }, i) => {
-                const bgs = ["#F5F3FF","#EEF2FF","#EFF6FF","#F0F9FF"]
-                const colors = ["#5B5BD6","#4F46E5","#3B82F6","#6366F1"]
-                return (
-                <motion.div key={title} variants={fadeUp} whileHover={{ y: -4 }}
-                  style={{ padding: "36px 28px", background: bgs[i], borderRadius: 16, textAlign: "left" as const }}>
-                  <div style={{ width: 44, height: 44, borderRadius: 12, background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16, boxShadow: "0 1px 4px rgba(0,0,0,0.08)" }}>
-                    <Icon size={20} color={colors[i]} />
+            </p>
+            <Link to="/signup" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#5B5BD6", color: "#fff", padding: "13px 24px", borderRadius: 10, fontWeight: 700, fontSize: 15, textDecoration: "none" }}>
+              See it in action <ArrowRight size={15} />
+            </Link>
+          </div>
+
+          {/* RIGHT — scrolling features */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+            {[
+              {
+                Icon: FileSearch,
+                color: "#5B5BD6",
+                stat: "100%",
+                statLabel: "of numbers linked to a source",
+                title: "Source on every number",
+                desc: "Yahoo Finance, SEC EDGAR, Groq AI — every single data point links back to where it came from. José R.: \"I need to see where the number comes from.\"",
+              },
+              {
+                Icon: TrendingUp,
+                color: "#4F46E5",
+                stat: "1",
+                statLabel: "clear verdict per analysis",
+                title: "BUY · HOLD · SELL",
+                desc: "Not five opinions. Not a wall of data. One clear signal — scored across 5 factors, weighted to your strategy.",
+              },
+              {
+                Icon: User,
+                color: "#3B82F6",
+                stat: "3",
+                statLabel: "investor profiles",
+                title: "Your investor profile",
+                desc: "Value investor, Growth investor, or Balanced. The same stock scores differently depending on who you are. That's the point.",
+              },
+              {
+                Icon: Bell,
+                color: "#6366F1",
+                stat: "0",
+                statLabel: "tools solve this today",
+                title: "Exit signals",
+                desc: "Know when your thesis has changed — before the damage is done. Gunnar L.: \"I never know when to sell.\" Now you will.",
+              },
+            ].map(({ Icon, color, stat, statLabel, title, desc }, i) => (
+              <motion.div
+                key={title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.5, delay: i * 0.05 }}
+                style={{
+                  padding: "48px 0",
+                  borderBottom: i < 3 ? "1px solid #F3F4F6" : "none",
+                }}
+              >
+                {/* Big stat */}
+                <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginBottom: 16 }}>
+                  <span style={{ fontSize: 56, fontWeight: 800, letterSpacing: "-3px", color, fontVariantNumeric: "tabular-nums" as const, lineHeight: 1 }}>{stat}</span>
+                  <span style={{ fontSize: 14, color: "#9CA3AF", maxWidth: 120, lineHeight: 1.3 }}>{statLabel}</span>
+                </div>
+
+                {/* Icon + title */}
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+                  <div style={{ width: 36, height: 36, borderRadius: 10, background: `${color}15`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <Icon size={18} color={color} />
                   </div>
-                  <p style={{ fontSize: 15, fontWeight: 700, marginBottom: 6 }}>{title}</p>
-                  <p style={{ fontSize: 13, color: "#9CA3AF", lineHeight: 1.5 }}>{desc}</p>
-                </motion.div>
-                )
-              })}
-            </motion.div>
-          </motion.div>
+                  <p style={{ fontSize: 16, fontWeight: 700, color: "#0A0A0A" }}>{title}</p>
+                </div>
+
+                <p style={{ fontSize: 14, color: "#6B7280", lineHeight: 1.7, maxWidth: 420 }}>{desc}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -476,7 +555,8 @@ export function LandingPage() {
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <motion.div variants={stagger} whileInView="visible" viewport={vp}>
             
-            <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(26px,3.5vw,42px)", fontWeight: 800, letterSpacing: "-0.03em", textAlign: "center" as const, marginBottom: 48 }}>What investors actually say.</motion.h2>
+            <motion.div variants={fadeUp} style={{ textAlign: "center" as const }}><EyebrowTag color="#F0FDF4" textColor="#14532D">From 45 user interviews · June 2026</EyebrowTag></motion.div>
+          <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(26px,3.5vw,42px)", fontWeight: 800, letterSpacing: "-0.03em", textAlign: "center" as const, marginBottom: 48 }}>What investors actually say.</motion.h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 28 }}>
               {[
                 { q: "I need to see where the number comes from. I don't trust anyone who can't show their sources.", name: "José R.", role: "Finance Professional · Madrid" },
