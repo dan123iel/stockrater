@@ -122,10 +122,15 @@ function ScoreCard() {
 // ── Pricing Section ───────────────────────────────────────────────────────────
 function PricingSection() {
   const [yearly, setYearly] = useState(false);
-  const monthlyPrice = 4.99;
-  const yearlyMonthly = 2.99;
-  const yearlyTotal = (yearlyMonthly * 12).toFixed(2);
-  const savings = Math.round((1 - yearlyMonthly / monthlyPrice) * 100);
+
+  const plans = {
+    starter: { monthly: 0, yearly: 0 },
+    pro:     { monthly: 4.99, yearly: 2.99 },
+    max:     { monthly: 9.99, yearly: 5.99 },
+  };
+
+  const yearlyTotal = (plans.pro.yearly * 12).toFixed(2);
+  const maxYearlyTotal = (plans.max.yearly * 12).toFixed(2);
 
   return (
     <motion.div variants={stagger} whileInView="visible" viewport={vp}>
@@ -138,150 +143,97 @@ function PricingSection() {
           Start free. Upgrade when you're ready.
         </p>
 
-        {/* Pill slider — Monthly / Yearly */}
+        {/* Pill slider */}
         <div style={{ display: "inline-flex", background: "#F3F4F6", borderRadius: 999, padding: 4, position: "relative" as const }}>
-          {/* Sliding background */}
           <div style={{
-            position: "absolute" as const,
-            top: 4, bottom: 4,
-            left: yearly ? "50%" : 4,
-            width: "calc(50% - 4px)",
-            background: "#5B5BD6",
-            borderRadius: 999,
+            position: "absolute" as const, top: 4, bottom: 4,
+            left: yearly ? "50%" : 4, width: "calc(50% - 4px)",
+            background: "#5B5BD6", borderRadius: 999,
             transition: "left 0.25s cubic-bezier(0.16,1,0.3,1)",
             boxShadow: "0 1px 4px rgba(91,91,214,0.25)",
           }} />
-          <button
-            onClick={() => { if (!yearly) setYearly(false); }}
-            style={{
-              position: "relative" as const, zIndex: 1,
-              padding: "9px 24px", borderRadius: 999, border: "none",
-              background: "transparent", cursor: "pointer",
-              fontSize: 14, fontWeight: 600,
-              color: yearly ? "#9CA3AF" : "#fff",
-              transition: "color 0.2s",
-            }}
-          >
+          <button onClick={() => setYearly(false)} style={{ position: "relative" as const, zIndex: 1, padding: "9px 24px", borderRadius: 999, border: "none", background: "transparent", cursor: "pointer", fontSize: 14, fontWeight: 600, color: yearly ? "#9CA3AF" : "#fff", transition: "color 0.2s" }}>
             Monthly
           </button>
-          <button
-            onClick={() => setYearly(true)}
-            style={{
-              position: "relative" as const, zIndex: 1,
-              padding: "9px 24px", borderRadius: 999, border: "none",
-              background: "transparent", cursor: "pointer",
-              fontSize: 14, fontWeight: 600,
-              color: yearly ? "#fff" : "#9CA3AF",
-              transition: "color 0.2s",
-              display: "flex", alignItems: "center", gap: 8,
-            }}
-          >
+          <button onClick={() => setYearly(true)} style={{ position: "relative" as const, zIndex: 1, padding: "9px 24px", borderRadius: 999, border: "none", background: "transparent", cursor: "pointer", fontSize: 14, fontWeight: 600, color: yearly ? "#fff" : "#9CA3AF", transition: "color 0.2s", display: "flex", alignItems: "center", gap: 8 }}>
             Yearly
-            <span style={{
-              background: yearly ? "rgba(255,255,255,0.2)" : "#5B5BD6",
-              color: "#fff", fontSize: 10, fontWeight: 700,
-              padding: "2px 8px", borderRadius: 999,
-              transition: "background 0.2s",
-            }}>
-              −40%
-            </span>
+            <span style={{ background: yearly ? "rgba(255,255,255,0.2)" : "#5B5BD6", color: "#fff", fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 999, transition: "background 0.2s" }}>−40%</span>
           </button>
         </div>
       </motion.div>
 
-      {/* Cards */}
-      <motion.div variants={fadeUp} style={{ display: "grid", gridTemplateColumns: "1fr 1.15fr", gap: 20, alignItems: "start" }}>
+      {/* 3-column cards */}
+      <motion.div variants={fadeUp} style={{ display: "grid", gridTemplateColumns: "1fr 1.1fr 1fr", gap: 16, alignItems: "start" }}>
 
-        {/* Free */}
-        <div style={{ background: "#fff", border: "1.5px solid #E5E7EB", borderRadius: 24, padding: "40px 36px" }}>
-          <div style={{ marginBottom: 28 }}>
-            <p style={{ fontSize: 20, fontWeight: 700, color: "#0A0A0A", marginBottom: 6 }}>Always free to start.</p>
-            <p style={{ fontSize: 13, color: "#9CA3AF" }}>No credit card required.</p>
-          </div>
-          <div style={{ height: 1, background: "#F3F4F6", marginBottom: 24 }} />
-          {[
-            "1 full verdict per day",
-            "All 5 factor scores",
-            "Source on every number",
-            "Price chart + Financials",
-          ].map(f => (
-            <div key={f} style={{ display: "flex", gap: 10, marginBottom: 12, alignItems: "center" }}>
-              <CheckCircle size={15} color="#16A34A" />
-              <span style={{ fontSize: 14, color: "#374151" }}>{f}</span>
+        {/* Starter — Free */}
+        <div style={{ background: "#fff", border: "1.5px solid #E5E7EB", borderRadius: 20, padding: "32px 28px" }}>
+          <p style={{ fontSize: 13, fontWeight: 600, color: "#9CA3AF", marginBottom: 20 }}>Starter</p>
+          <p style={{ fontSize: 28, fontWeight: 800, letterSpacing: "-1px", marginBottom: 4 }}>Free</p>
+          <p style={{ fontSize: 13, color: "#9CA3AF", marginBottom: 24 }}>Always. No card needed.</p>
+          <div style={{ height: 1, background: "#F3F4F6", marginBottom: 20 }} />
+          {["1 verdict per day", "5 factor scores", "Source on every number", "Price chart"].map(f => (
+            <div key={f} style={{ display: "flex", gap: 8, marginBottom: 10, alignItems: "center" }}>
+              <CheckCircle size={13} color="#9CA3AF" />
+              <span style={{ fontSize: 13, color: "#6B7280" }}>{f}</span>
             </div>
           ))}
-          <Link to="/signup" style={{
-            display: "block", marginTop: 32, background: "#0A0A0A", color: "#fff",
-            textAlign: "center" as const, padding: "14px", borderRadius: 12,
-            fontWeight: 700, fontSize: 15, textDecoration: "none",
-          }}>
-            Start free →
+          <Link to="/signup" style={{ display: "block", marginTop: 24, background: "#F3F4F6", color: "#374151", textAlign: "center" as const, padding: "12px", borderRadius: 10, fontWeight: 600, fontSize: 14, textDecoration: "none" }}>
+            Start free
           </Link>
         </div>
 
-        {/* Pro */}
-        <div style={{ background: "#5B5BD6", borderRadius: 24, padding: "40px 36px", position: "relative" as const, overflow: "hidden" }}>
-          {/* Most popular badge */}
-          <div style={{
-            position: "absolute" as const, top: 20, right: 20,
-            background: "rgba(255,255,255,0.15)", borderRadius: 999,
-            padding: "4px 12px", fontSize: 11, fontWeight: 700, color: "#fff", letterSpacing: "0.06em",
-          }}>
+        {/* Pro — MOST POPULAR — center, slightly larger */}
+        <div style={{ background: "#5B5BD6", borderRadius: 20, padding: "32px 28px", position: "relative" as const, marginTop: -12, marginBottom: -12 }}>
+          <div style={{ position: "absolute" as const, top: -14, left: "50%", transform: "translateX(-50%)", background: "#0A0A0A", color: "#fff", fontSize: 10, fontWeight: 700, padding: "4px 14px", borderRadius: 999, letterSpacing: "0.08em", whiteSpace: "nowrap" as const }}>
             MOST POPULAR
           </div>
-
-          <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" as const, color: "rgba(255,255,255,0.5)", marginBottom: 16 }}>Pro</p>
-
-          {/* Price display with toggle */}
+          <p style={{ fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.5)", marginBottom: 20 }}>Pro</p>
           <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 4 }}>
-            <span style={{ fontSize: 48, fontWeight: 800, letterSpacing: "-3px", color: "#fff", fontVariantNumeric: "tabular-nums" as const }}>
-              €{yearly ? yearlyMonthly : monthlyPrice}
+            <span style={{ fontSize: 40, fontWeight: 800, letterSpacing: "-2px", color: "#fff", fontVariantNumeric: "tabular-nums" as const }}>
+              €{yearly ? plans.pro.yearly : plans.pro.monthly}
             </span>
-            <span style={{ fontSize: 15, color: "rgba(255,255,255,0.5)" }}>/month</span>
+            <span style={{ fontSize: 14, color: "rgba(255,255,255,0.5)" }}>/month</span>
           </div>
-          {yearly ? (
-            <p style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", marginBottom: 4 }}>
-              €{yearlyTotal} billed once a year
-            </p>
-          ) : (
-            <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", marginBottom: 4 }}>
-              or €{yearlyTotal}/year — save {savings}%
-            </p>
-          )}
-          <p style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", marginBottom: 28 }}>
-            First 7 days free. Cancel anytime.
-          </p>
-
-          <div style={{ height: 1, background: "rgba(255,255,255,0.15)", marginBottom: 24 }} />
-
-          {[
-            "Peer comparison — see how your stock ranks",
-            "Exit Strategy signals",
-            "My Profile Score (Value / Growth / Balanced)",
-            "Unlimited verdicts",
-            "Weekly digest email",
-          ].map(f => (
-            <div key={f} style={{ display: "flex", gap: 10, marginBottom: 12, alignItems: "flex-start" }}>
-              <CheckCircle size={15} color="rgba(255,255,255,0.7)" style={{ flexShrink: 0, marginTop: 1 }} />
-              <span style={{ fontSize: 14, color: "rgba(255,255,255,0.9)" }}>{f}</span>
+          {yearly && <p style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", marginBottom: 4 }}>€{yearlyTotal} billed yearly</p>}
+          <p style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", marginBottom: 24 }}>First 7 days free. Cancel anytime.</p>
+          <div style={{ height: 1, background: "rgba(255,255,255,0.15)", marginBottom: 20 }} />
+          {["Unlimited verdicts", "Peer comparison", "Exit Strategy signals", "My Profile Score", "Weekly digest"].map(f => (
+            <div key={f} style={{ display: "flex", gap: 8, marginBottom: 10, alignItems: "center" }}>
+              <CheckCircle size={13} color="rgba(255,255,255,0.7)" />
+              <span style={{ fontSize: 13, color: "rgba(255,255,255,0.9)" }}>{f}</span>
             </div>
           ))}
-
-          <Link to="/signup" style={{
-            display: "block", marginTop: 32, background: "#fff", color: "#5B5BD6",
-            textAlign: "center" as const, padding: "14px", borderRadius: 12,
-            fontWeight: 800, fontSize: 15, textDecoration: "none",
-            boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
-          }}>
-            Try Pro free for 7 days →
+          <Link to="/signup" style={{ display: "block", marginTop: 24, background: "#fff", color: "#5B5BD6", textAlign: "center" as const, padding: "14px", borderRadius: 10, fontWeight: 800, fontSize: 15, textDecoration: "none", boxShadow: "0 4px 16px rgba(0,0,0,0.12)" }}>
+            Try free for 7 days →
           </Link>
-          <p style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", textAlign: "center" as const, marginTop: 10 }}>
-            No card needed to start
-          </p>
+          <p style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", textAlign: "center" as const, marginTop: 8 }}>No card needed</p>
         </div>
+
+        {/* Pro Max — Power users */}
+        <div style={{ background: "#0A0A0A", border: "1.5px solid #1F1F1F", borderRadius: 20, padding: "32px 28px" }}>
+          <p style={{ fontSize: 13, fontWeight: 600, color: "#6B7280", marginBottom: 20 }}>Pro Max</p>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 4 }}>
+            <span style={{ fontSize: 40, fontWeight: 800, letterSpacing: "-2px", color: "#fff", fontVariantNumeric: "tabular-nums" as const }}>
+              €{yearly ? plans.max.yearly : plans.max.monthly}
+            </span>
+            <span style={{ fontSize: 14, color: "#6B7280" }}>/month</span>
+          </div>
+          {yearly && <p style={{ fontSize: 12, color: "#6B7280", marginBottom: 4 }}>€{maxYearlyTotal} billed yearly</p>}
+          <p style={{ fontSize: 12, color: "#6B7280", marginBottom: 24 }}>For serious investors.</p>
+          <div style={{ height: 1, background: "#1F1F1F", marginBottom: 20 }} />
+          <p style={{ fontSize: 11, color: "#5B5BD6", fontWeight: 600, marginBottom: 12, textTransform: "uppercase" as const, letterSpacing: "0.08em" }}>Everything in Pro, plus:</p>
+          {["Multi-portfolio tracking", "AI chat with sources", "DCF model + stress test", "Priority support", "Early access features"].map(f => (
+            <div key={f} style={{ display: "flex", gap: 8, marginBottom: 10, alignItems: "center" }}>
+              <CheckCircle size={13} color="#5B5BD6" />
+              <span style={{ fontSize: 13, color: "#9CA3AF" }}>{f}</span>
+            </div>
+          ))}
+          <Link to="/signup" style={{ display: "block", marginTop: 24, background: "#5B5BD6", color: "#fff", textAlign: "center" as const, padding: "12px", borderRadius: 10, fontWeight: 700, fontSize: 14, textDecoration: "none" }}>
+            Start Pro Max →
+          </Link>
+        </div>
+
       </motion.div>
-
-
     </motion.div>
   );
 }
