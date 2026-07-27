@@ -86,30 +86,30 @@
   --input: #dde5ed;
   --ring: #4338ca;
 
-  /* pondex_ brand — updated palette */
-  --brand: #4338ca;           /* AI Signals from (primary indigo) */
+  /* pondex_ brand — aligned with feature palette */
+  --brand: #4338CA;           /* = AI Signals from */
   --brand-foreground: #ffffff;
   --brand-soft: #eef2ff;
-  --urgency: #fb7185;         /* Insider Data to (rose) */
-  --data: #14b8a6;            /* Research from (teal) */
+  --urgency: #F43F5E;         /* = Insider Data to */
+  --data: #0F9D94;            /* = Research from */
   --ink: #1d1d1d;
   --ink-mid: #4d585f;
   --surface: #edf1f4;
   --border-soft: #dde5ed;
 
-  /* Feature gradients */
-  --research-from: #14b8a6;
-  --research-to:   #2dd4bf;
-  --value-from:    #8b5cf6;
-  --value-to:      #ec4899;
-  --portfolio-from:#2563eb;
-  --portfolio-to:  #06b6d4;
-  --ai-from:       #4338ca;
-  --ai-to:         #8b5cf6;
-  --risk-from:     #059669;
-  --risk-to:       #84cc16;
-  --insider-from:  #f97316;
-  --insider-to:    #fb7185;
+  /* Feature gradients — canonical palette (do not change) */
+  --research-from: #0F9D94;
+  --research-to:   #2DD4BF;
+  --value-from:    #7C3AED;
+  --value-to:      #E879F9;
+  --portfolio-from:#1D4ED8;
+  --portfolio-to:  #0EA5E9;
+  --ai-from:       #4338CA;
+  --ai-to:         #7C3AED;
+  --risk-from:     #047857;
+  --risk-to:       #65A30D;
+  --insider-from:  #EA580C;
+  --insider-to:    #F43F5E;
 }
 
 .dark {
