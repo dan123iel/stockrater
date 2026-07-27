@@ -44,7 +44,7 @@ export function Footer() {
     <footer className="relative overflow-hidden pb-20 pt-4">
 
       {/* Floating white card — wider + more padding like FintechX */}
-      <div className="relative mx-auto max-w-5xl px-6">
+      <div className="relative mx-auto max-w-6xl px-6">
         <div className="rounded-3xl bg-white/95 shadow-[0_32px_80px_rgba(0,0,0,0.14)] backdrop-blur-sm px-12 py-10">
 
           {/* Main grid */}
