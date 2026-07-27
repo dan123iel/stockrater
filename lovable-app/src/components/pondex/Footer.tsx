@@ -1,4 +1,4 @@
-import { Instagram, Linkedin, Facebook, Twitter, Mail } from "lucide-react";
+import { Instagram, Linkedin, Facebook, Mail } from "lucide-react";
 import { Wordmark } from "./Wordmark";
 
 const cols = [
@@ -36,7 +36,7 @@ const socials = [
   { icon: <Instagram className="size-5" />, href: "#" },
   { icon: <Linkedin className="size-5" />, href: "#" },
   { icon: <Facebook className="size-5" />, href: "#" },
-  { icon: <Twitter className="size-5" />, href: "#" },
+  { icon: <span className="text-sm font-bold leading-none">𝕏</span>, href: "#" },
 ];
 
 export function Footer() {
@@ -45,29 +45,28 @@ export function Footer() {
 
       {/* Floating white card — wider + more padding like FintechX */}
       <div className="relative mx-auto max-w-5xl px-6">
-        <div className="rounded-3xl bg-white/95 shadow-[0_32px_80px_rgba(0,0,0,0.14)] backdrop-blur-sm px-16 py-14">
+        <div className="rounded-3xl bg-white/95 shadow-[0_32px_80px_rgba(0,0,0,0.14)] backdrop-blur-sm px-12 py-10">
 
           {/* Main grid */}
-          <div className="grid gap-12 md:grid-cols-4">
+          <div className="grid gap-8 md:grid-cols-4">
 
             {/* Brand — wider */}
             <div className="md:col-span-1">
-              {/* Logo block like FintechX — icon + wordmark */}
-              <div className="flex items-center gap-3 mb-5">
-                <div className="size-10 rounded-xl bg-ink flex items-center justify-center shrink-0">
-                  <span className="text-white font-bold text-sm font-mono">p_</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="size-9 rounded-xl bg-ink flex items-center justify-center shrink-0">
+                    <span className="text-white font-bold text-xs font-mono">p_</span>
+                  </div>
+                  <span className="text-lg font-bold text-ink tracking-tight">pondex_</span>
                 </div>
-                <span className="text-xl font-bold text-ink tracking-tight">pondex_</span>
-              </div>
-              <p className="text-sm text-ink-mid leading-relaxed max-w-[200px]">
-                A modern platform for smarter stock research and financial insights.
-              </p>
-              <a
-                href="mailto:support@pondex.app"
-                className="mt-6 inline-flex items-center gap-2 rounded-xl bg-ink px-5 py-3 text-sm font-semibold text-white hover:bg-ink/85 transition-colors"
-              >
-                <Mail className="size-4" /> support@pondex.app
-              </a>
+                <p className="text-sm text-ink-mid leading-relaxed">
+                  A modern platform for smarter stock research and financial insights.
+                </p>
+                <a
+                  href="mailto:support@pondex.app"
+                  className="mt-5 inline-flex items-center gap-2 rounded-xl bg-ink px-4 py-2.5 text-sm font-semibold text-white hover:bg-ink/85 transition-colors"
+                >
+                  <Mail className="size-4" /> support@pondex.app
+                </a>
             </div>
 
             {/* Link columns */}
@@ -88,7 +87,7 @@ export function Footer() {
           </div>
 
           {/* Bottom bar */}
-          <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border-soft pt-8 md:flex-row">
+          <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-border-soft pt-6 md:flex-row">
             <p className="text-sm text-ink-mid">
               © 2026 pondex_. Not financial advice. Research tool only.
             </p>
