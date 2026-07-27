@@ -7,10 +7,10 @@ export function FinalCTA() {
       <div className="relative mx-auto max-w-3xl px-6">
         <Reveal>
           <h2 className="text-4xl font-bold tracking-tight text-ink md:text-5xl">
-            Ready to invest smarter?
+            Ready to take your investing to the next level?
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-lg text-ink-mid">
-            Join investors using AI insights and real-time data to track portfolios and make better financial decisions.
+            Leverage AI-driven insights and real-time data to track performance and make better decisions.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <a
