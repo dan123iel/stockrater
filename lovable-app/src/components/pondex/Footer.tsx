@@ -41,17 +41,7 @@ const socials = [
 
 export function Footer() {
   return (
-    <footer
-      className="relative overflow-hidden pb-16 pt-0"
-      style={{
-        backgroundImage: "url('/stockrater/hero-landscape.png')",
-        backgroundSize: "cover",
-        backgroundPosition: "center top",
-        backgroundRepeat: "no-repeat",
-      }}
-    >
-      {/* Same overlay as FinalCTA for seamless join */}
-      <div className="absolute inset-0 bg-white/30 backdrop-blur-[1px]" aria-hidden />
+    <footer className="relative overflow-hidden pb-16 pt-0">
 
       {/* Footer card — white floating panel */}
       <div className="relative mx-auto max-w-5xl px-6 pb-16 pt-32">

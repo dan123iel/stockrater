@@ -51,8 +51,18 @@ function Landing() {
       <Testimonials />
       <Pricing />
       <FAQ />
-      <FinalCTA />
-      <Footer />
+      {/* Shared landscape background for FinalCTA + Footer */}
+      <div
+        style={{
+          backgroundImage: "url('/stockrater/hero-landscape.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center 30%",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        <FinalCTA />
+        <Footer />
+      </div>
     </main>
   );
 }

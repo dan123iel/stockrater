@@ -3,18 +3,7 @@ import { Reveal } from "./Reveal";
 
 export function FinalCTA() {
   return (
-    <section
-      className="relative overflow-hidden py-28 text-center"
-      style={{
-        backgroundImage: "url('/stockrater/hero-landscape.png')",
-        backgroundSize: "cover",
-        backgroundPosition: "center top",
-        backgroundRepeat: "no-repeat",
-      }}
-    >
-      {/* Light overlay so text stays readable */}
-      <div className="absolute inset-0 bg-white/30 backdrop-blur-[1px]" aria-hidden />
-
+    <section className="relative py-32 text-center">
       <div className="relative mx-auto max-w-3xl px-6">
         <Reveal>
           <h2 className="text-4xl font-bold tracking-tight text-ink md:text-5xl">
@@ -32,7 +21,7 @@ export function FinalCTA() {
             </a>
             <a
               href="#top"
-              className="inline-flex items-center gap-2 rounded-pill border border-ink/20 bg-white/60 px-5 py-3 text-sm font-semibold text-ink hover:bg-white/80 backdrop-blur-sm"
+              className="inline-flex items-center gap-2 rounded-pill border border-ink/20 bg-white/70 px-5 py-3 text-sm font-semibold text-ink hover:bg-white/90 backdrop-blur-sm"
             >
               Try the live demo
             </a>
