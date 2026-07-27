@@ -2,23 +2,20 @@ const sources = ["Yahoo Finance", "SEC EDGAR", "Groq AI", "Alpha Vantage", "Finn
 
 export function TrustBar() {
   return (
-    <section className="bg-ink py-8 text-white/80">
+    <section className="bg-white py-10 border-y border-border-soft">
       <div className="mx-auto max-w-6xl px-6">
-        <div className="mb-4 text-center text-xs font-medium uppercase tracking-[0.2em] text-white/50">
-          Data from sources you can verify
-        </div>
-        <div className="relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
-          <div className="marquee flex w-max gap-3">
-            {[...sources, ...sources, ...sources].map((s, i) => (
-              <span
-                key={i}
-                className="inline-flex items-center gap-2 whitespace-nowrap rounded-pill border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium"
-              >
-                <span className="size-1.5 rounded-full bg-data" />
-                {s}
-              </span>
-            ))}
-          </div>
+        <p className="text-center text-xs font-medium text-ink-mid tracking-widest uppercase mb-8">
+          Trusted by investors · Data from sources you can verify
+        </p>
+        <div className="flex items-center justify-center gap-10 flex-wrap">
+          {sources.map((s) => (
+            <span
+              key={s}
+              className="text-base font-semibold text-ink/30 tracking-tight hover:text-ink/50 transition-colors"
+            >
+              {s}
+            </span>
+          ))}
         </div>
       </div>
     </section>
