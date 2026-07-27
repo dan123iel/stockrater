@@ -52,12 +52,9 @@ export function Footer() {
 
             {/* Brand — wider */}
             <div className="md:col-span-1">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="size-9 rounded-xl bg-ink flex items-center justify-center shrink-0">
-                    <span className="text-white font-bold text-xs font-mono">p_</span>
-                  </div>
-                  <span className="text-lg font-bold text-ink tracking-tight">pondex_</span>
-                </div>
+                <div className="mb-5">
+                <img src="/stockrater/pondex-logo.png" alt="pondex_" style={{ height: "28px", width: "auto" }} />
+              </div>
                 <p className="text-sm text-ink-mid leading-relaxed">
                   A modern platform for smarter stock research and financial insights.
                 </p>
