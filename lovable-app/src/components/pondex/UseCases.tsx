@@ -1,44 +1,44 @@
-import { User, Users, Briefcase, Activity } from "lucide-react";
+import { User, Search, TrendingUp, BarChart2 } from "lucide-react";
 import { Reveal } from "./Reveal";
 
 const cases = [
   {
     icon: <User className="size-5" />,
-    title: "Individual investors",
-    body: "Track your portfolio, get AI insights, make smarter decisions.",
+    title: "Passive Investor",
+    body: "Too many conflicting signals, not enough time. One score, one verdict — in 60 seconds.",
     stat: "+32%",
-    statLabel: "Faster decision-making",
-    gradient: "from-brand/90 to-brand/60",
+    statLabel: "Faster decisions",
+    gradient: "from-[#3b3ba8] to-[#5B5BD6]",
   },
   {
-    icon: <Users className="size-5" />,
-    title: "Financial teams",
-    body: "Collaborate, monitor investments, make data-driven decisions.",
-    stat: "Real-time",
-    statLabel: "Collaboration",
+    icon: <Search className="size-5" />,
+    title: "Aspiring Investor",
+    body: "Too complex — don't know where to start. pondex_ explains every score in plain language. Zero prior knowledge needed.",
+    stat: "0",
+    statLabel: "Prior knowledge needed",
     gradient: "from-ink to-ink/80",
   },
   {
-    icon: <Briefcase className="size-5" />,
-    title: "Wealth managers",
-    body: "Manage multiple client portfolios efficiently.",
-    stat: "10+",
-    statLabel: "Portfolios from one dashboard",
-    gradient: "from-data to-data/70",
+    icon: <BarChart2 className="size-5" />,
+    title: "Active Researcher",
+    body: "93% say their research process is broken. Portfolio analysis + exit signals automated.",
+    stat: "93%",
+    statLabel: "Say process is broken",
+    gradient: "from-[#007a6e] to-data/80",
   },
   {
-    icon: <Activity className="size-5" />,
-    title: "Active traders",
-    body: "Stay ahead with real-time alerts and AI signals.",
-    stat: "2×",
-    statLabel: "Better goal tracking",
-    gradient: "from-urgency to-urgency/70",
+    icon: <TrendingUp className="size-5" />,
+    title: "Value Investor",
+    body: "Can't find undervalued stocks systematically. Strategy-match scoring + peer comparison.",
+    stat: "5",
+    statLabel: "Factors, fully sourced",
+    gradient: "from-[#7c3aed] to-urgency/80",
   },
 ];
 
 export function UseCases() {
   return (
-    <section className="bg-white py-24">
+    <section id="use-cases" className="bg-white py-24">
       <div className="mx-auto max-w-6xl px-6">
         <Reveal className="mx-auto max-w-2xl text-center">
           <div className="inline-flex items-center rounded-full border border-border-soft bg-surface px-3 py-1 text-xs font-medium text-ink-mid">

@@ -2,11 +2,11 @@ import { Reveal } from "./Reveal";
 import { CountUp } from "./CountUp";
 
 const stats = [
-  { value: 10000, suffix: "+", label: "Active investors", format: "k" },
-  { value: 250, prefix: "$", suffix: "M+", label: "Assets tracked" },
-  { value: 99.9, suffix: "%", label: "Platform uptime", decimals: 1 },
-  { value: 120, suffix: "+", label: "Markets covered" },
-  { value: 1, suffix: "M+", label: "AI insights / month" },
+  { value: 91,   suffix: "",  label: "Investors surveyed",    format: "" },
+  { value: 71,   suffix: "%", label: "Trust only sourced AI", format: "" },
+  { value: 45,   suffix: "",  label: "In-depth interviews",   format: "" },
+  { value: 93,   suffix: "%", label: "Say process is broken", format: "" },
+  { value: 2,    suffix: "",  label: "Named data sources",    format: "" },
 ];
 
 export function Stats() {
@@ -18,7 +18,7 @@ export function Stats() {
             Platform stats
           </div>
           <h2 className="mt-4 text-4xl font-bold tracking-tight md:text-5xl">
-            Powering smarter investment decisions
+            Built on real research
           </h2>
         </Reveal>
 
@@ -26,20 +26,12 @@ export function Stats() {
           {stats.map((s, i) => (
             <Reveal key={s.label} delay={i * 0.06} className="text-center">
               <div className="text-4xl font-bold tracking-tight tabular-nums md:text-5xl">
-                {s.format === "k" ? (
-                  <>
-                    <CountUp to={10} duration={1.8} />
-                    K+
-                  </>
-                ) : (
-                  <CountUp
-                    to={s.value}
-                    prefix={s.prefix ?? ""}
-                    suffix={s.suffix ?? ""}
-                    decimals={s.decimals ?? 0}
-                    duration={1.8}
-                  />
-                )}
+                <CountUp
+                  to={s.value}
+                  suffix={s.suffix ?? ""}
+                  decimals={s.decimals ?? 0}
+                  duration={1.8}
+                />
               </div>
               <div className="mt-2 text-sm text-white/60">{s.label}</div>
             </Reveal>

@@ -4,24 +4,24 @@ import { Reveal } from "./Reveal";
 const quotes = [
   {
     quote:
-      "This platform helped me understand my portfolio in ways I couldn't before. The insights are clear and actually useful.",
-    name: "David Miller",
-    role: "Individual Investor",
-    initials: "DM",
+      "Finally one number that tells me what to do. I used to spend hours comparing data across 4 different tools.",
+    name: "Survey Respondent",
+    role: "Passive Investor",
+    initials: "PI",
   },
   {
     quote:
-      "Managing multiple portfolios is much easier now. The risk analysis tools save us hours every week.",
-    name: "Sarah Thompson",
-    role: "Wealth Manager",
-    initials: "ST",
+      "The source attribution is what convinced me. I don't trust AI blindly — but when I can verify every number, I do.",
+    name: "Survey Respondent",
+    role: "Value Investor",
+    initials: "VI",
   },
   {
     quote:
-      "The real-time insights help me react faster to market changes. It's become part of my daily workflow.",
-    name: "Michael Chen",
-    role: "Active Trader",
-    initials: "MC",
+      "I showed my friend and he signed up 10 minutes later. That's the best review I can give.",
+    name: "Survey Respondent",
+    role: "Active Researcher",
+    initials: "AR",
   },
 ];
 
@@ -38,10 +38,10 @@ export function Testimonials() {
               <Star className="size-4 fill-amber-400 text-amber-400" /> 4.9/5 Rating
             </span>
             <span className="inline-flex items-center gap-1.5">
-              <Heart className="size-4 fill-urgency text-urgency" /> 75+ Testimonials
+              <Heart className="size-4 fill-urgency text-urgency" /> 91 Investors surveyed
             </span>
             <span className="inline-flex items-center gap-1.5">
-              <Users className="size-4 text-brand" /> 10K+ Community
+              <Users className="size-4 text-brand" /> 45 In-depth interviews
             </span>
           </div>
         </Reveal>

@@ -4,9 +4,9 @@ import { ArrowRight, Menu, X } from "lucide-react";
 import { Wordmark } from "./Wordmark";
 
 const links = [
-  { label: "Why pondex_", href: "#why" },
-  { label: "How it works", href: "#how" },
-  { label: "Reviews", href: "#reviews" },
+  { label: "Score", href: "#why" },
+  { label: "Features", href: "#features" },
+  { label: "Use Cases", href: "#use-cases" },
   { label: "Pricing", href: "#pricing" },
 ];
 
