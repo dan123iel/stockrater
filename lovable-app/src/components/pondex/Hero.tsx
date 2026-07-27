@@ -8,10 +8,14 @@ export function Hero() {
       id="top"
       className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28"
       style={{
-        background:
-          "linear-gradient(180deg, #ffffff 0%, #f5f3ff 60%, #ffffff 100%)",
+        backgroundImage: "url('/stockrater/hero-mountains.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center top",
+        backgroundRepeat: "no-repeat",
       }}
     >
+      {/* Subtle white overlay so text stays readable */}
+      <div className="absolute inset-0 bg-white/55" aria-hidden />
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-40"
