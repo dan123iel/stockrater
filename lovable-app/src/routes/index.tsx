@@ -1,14 +1,58 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { LandingPage } from "@/components/landing/LandingPage";
+import { Nav } from "@/components/pondex/Nav";
+import { Hero } from "@/components/pondex/Hero";
+import { TrustBar } from "@/components/pondex/TrustBar";
+import { BeforeAfter } from "@/components/pondex/BeforeAfter";
+import { Features } from "@/components/pondex/Features";
+import { DashboardPreview } from "@/components/pondex/DashboardPreview";
+import { HowItWorks } from "@/components/pondex/HowItWorks";
+import { Security } from "@/components/pondex/Security";
+import { UseCases } from "@/components/pondex/UseCases";
+import { Stats } from "@/components/pondex/Stats";
+import { Testimonials } from "@/components/pondex/Testimonials";
+import { Pricing } from "@/components/pondex/Pricing";
+import { FAQ } from "@/components/pondex/FAQ";
+import { FinalCTA } from "@/components/pondex/FinalCTA";
+import { Footer } from "@/components/pondex/Footer";
+
+const title = "pondex_ — A 0–100 score for any stock";
+const description =
+  "Too much data. No clear answer. pondex_ ends that. A 0–100 score for any stock. Five factors. Every number sourced.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "pondex_ — One clear verdict for any stock" },
-      { name: "description", content: "A 0–100 score for any stock. Every number cites its source. No noise — just a clear verdict in under 60 seconds." },
-      { property: "og:title", content: "pondex_ — One clear verdict for any stock" },
-      { property: "og:description", content: "A 0–100 score for any stock. Every number cites its source." },
+      { title },
+      { name: "description", content: description },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: title },
+      { name: "twitter:description", content: description },
     ],
   }),
-  component: LandingPage,
+  component: Landing,
 });
+
+function Landing() {
+  return (
+    <main className="min-h-screen bg-background text-foreground">
+      <Nav />
+      <Hero />
+      <TrustBar />
+      <BeforeAfter />
+      <Features />
+      <DashboardPreview />
+      <HowItWorks />
+      <Security />
+      <UseCases />
+      <Stats />
+      <Testimonials />
+      <Pricing />
+      <FAQ />
+      <FinalCTA />
+      <Footer />
+    </main>
+  );
+}

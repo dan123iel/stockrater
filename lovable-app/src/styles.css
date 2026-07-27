@@ -4,84 +4,18 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/*
- * pondex_ design tokens.
- * All colors, spacing, and typography reference these variables.
- * Never use raw Tailwind color utilities — use semantic tokens.
- */
-
-:root {
-  /* Backgrounds */
-  --bg-primary: #ffffff;
-  --bg-secondary: #fafafa;
-  --bg-subtle: #f3f4f6;
-  --bg-dark: #0a0a0a;
-  --bg-dark-elev: #1a1a1a;
-
-  /* Borders */
-  --border-color: #e5e7eb;
-  --border-strong: #d1d5db;
-
-  /* Text */
-  --text-primary: #0a0a0a;
-  --text-secondary: #6b7280;
-  --text-muted: #9ca3af;
-  --text-inverse: #ffffff;
-
-  /* Accent — Violet */
-  --accent: #5B5BD6;
-  --accent-2: #FF4D6D;
-  --accent-2-light: #FFF1F3;
-  --accent-2-dark: #E02247;
-  --accent-light: #F5F3FF;
-  --accent-dark: #3730A3;
-  --accent-green-light: #f0fdf4;
-
-
-  --color-up: #16a34a;
-  --color-down: #dc2626;
-  --color-hold: #d97706;
-
-  /* Verdict badges */
-  --badge-buy-bg: #dcfce7;
-  --badge-buy-text: #15803d;
-  --badge-hold-bg: #fef9c3;
-  --badge-hold-text: #92400e;
-  --badge-sell-bg: #fee2e2;
-  --badge-sell-text: #b91c1c;
-
-  /* shadcn compat — mapped to our palette */
-  --background: var(--bg-primary);
-  --foreground: var(--text-primary);
-  --card: var(--bg-primary);
-  --card-foreground: var(--text-primary);
-  --popover: var(--bg-primary);
-  --popover-foreground: var(--text-primary);
-  --primary: var(--text-primary);
-  --primary-foreground: var(--text-inverse);
-  --secondary: var(--bg-subtle);
-  --secondary-foreground: var(--text-primary);
-  --muted: var(--bg-subtle);
-  --muted-foreground: var(--text-secondary);
-  --accent: var(--bg-subtle);
-  --accent-foreground: var(--text-primary);
-  --destructive: var(--color-down);
-  --destructive-foreground: var(--text-inverse);
-  --border: var(--border-color);
-  --input: var(--bg-subtle);
-  --ring: var(--text-primary);
-  --radius: 0.5rem;
-  --sidebar: var(--bg-primary);
-  --sidebar-foreground: var(--text-primary);
-  --sidebar-primary: var(--text-primary);
-  --sidebar-primary-foreground: var(--text-inverse);
-  --sidebar-accent: var(--bg-subtle);
-  --sidebar-accent-foreground: var(--text-primary);
-  --sidebar-border: var(--border-color);
-  --sidebar-ring: var(--text-primary);
-}
-
 @theme inline {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-pill: 9999px;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -101,159 +35,95 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-ring-offset-background: var(--background);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
 
-  /* pondex_ semantic tokens exposed as Tailwind utilities */
-  --color-bg-primary: var(--bg-primary);
-  --color-bg-secondary: var(--bg-secondary);
-  --color-bg-subtle: var(--bg-subtle);
-  --color-bg-dark: var(--bg-dark);
-  --color-bg-dark-elev: var(--bg-dark-elev);
-  --color-text-primary: var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
-  --color-text-muted: var(--text-muted);
-  --color-text-inverse: var(--text-inverse);
-  --color-up: var(--color-up);
-  --color-down: var(--color-down);
-  --color-hold-amber: var(--color-hold);
-  --color-badge-buy-bg: var(--badge-buy-bg);
-  --color-badge-buy-text: var(--badge-buy-text);
-  --color-badge-hold-bg: var(--badge-hold-bg);
-  --color-badge-hold-text: var(--badge-hold-text);
-  --color-badge-sell-bg: var(--badge-sell-bg);
-  --color-badge-sell-text: var(--badge-sell-text);
-  --color-border-strong: var(--border-strong);
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-brand-soft: var(--brand-soft);
+  --color-urgency: var(--urgency);
+  --color-data: var(--data);
+  --color-ink: var(--ink);
+  --color-ink-mid: var(--ink-mid);
+  --color-surface: var(--surface);
+  --color-border-soft: var(--border-soft);
+}
 
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
+:root {
+  --radius: 0.75rem;
 
-  --font-sans:
-    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --background: #ffffff;
+  --foreground: #1d1d1d;
+  --card: #ffffff;
+  --card-foreground: #1d1d1d;
+  --popover: #ffffff;
+  --popover-foreground: #1d1d1d;
+  --primary: #1d1d1d;
+  --primary-foreground: #ffffff;
+  --secondary: #edf1f4;
+  --secondary-foreground: #1d1d1d;
+  --muted: #edf1f4;
+  --muted-foreground: #4d585f;
+  --accent: #edf1f4;
+  --accent-foreground: #1d1d1d;
+  --destructive: #ff4d6d;
+  --destructive-foreground: #ffffff;
+  --border: #dde5ed;
+  --input: #dde5ed;
+  --ring: #5b5bd6;
+
+  /* pondex_ brand */
+  --brand: #5b5bd6;
+  --brand-foreground: #ffffff;
+  --brand-soft: #f5f3ff;
+  --urgency: #ff4d6d;
+  --data: #00c2a8;
+  --ink: #1d1d1d;
+  --ink-mid: #4d585f;
+  --surface: #edf1f4;
+  --border-soft: #dde5ed;
+}
+
+.dark {
+  --background: #0f1012;
+  --foreground: #f5f6f7;
+  --card: #16171a;
+  --card-foreground: #f5f6f7;
+  --popover: #16171a;
+  --popover-foreground: #f5f6f7;
+  --primary: #ffffff;
+  --primary-foreground: #1d1d1d;
+  --secondary: #1f2124;
+  --secondary-foreground: #f5f6f7;
+  --muted: #1f2124;
+  --muted-foreground: #9ba3ad;
+  --accent: #1f2124;
+  --accent-foreground: #f5f6f7;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.15);
 }
 
 @layer base {
   * {
-    border-color: var(--border-color);
+    border-color: var(--color-border);
   }
-  html,
+  html {
+    scroll-behavior: smooth;
+  }
   body {
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
-      sans-serif;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
-  .tabular {
-    font-variant-numeric: tabular-nums;
-    font-feature-settings: "tnum";
-  }
-}
-
-@utility section-label {
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-secondary);
-}
-
-@utility badge-buy {
-  background: var(--badge-buy-bg);
-  color: var(--badge-buy-text);
-}
-@utility badge-hold {
-  background: var(--badge-hold-bg);
-  color: var(--badge-hold-text);
-}
-@utility badge-sell {
-  background: var(--badge-sell-bg);
-  color: var(--badge-sell-text);
-}
-@utility badge-fit {
-  background: var(--bg-subtle);
-  color: var(--text-secondary);
-}
-
-@utility btn-dark {
-  background: var(--bg-dark);
-  color: var(--text-inverse);
-  border-radius: 8px;
-  padding: 12px 24px;
-  font-size: 14px;
-  font-weight: 600;
-  transition: background 150ms ease;
-  &:hover {
-    background: #1f1f1f;
-  }
-}
-@utility btn-light {
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  border-radius: 8px;
-  padding: 12px 24px;
-  font-size: 14px;
-  font-weight: 600;
-  transition: background 150ms ease;
-  &:hover {
-    background: var(--bg-subtle);
-  }
-}
-@utility btn-outline-dark {
-  background: transparent;
-  color: var(--text-inverse);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 8px;
-  padding: 12px 24px;
-  font-size: 14px;
-  font-weight: 500;
-  &:hover {
-    background: rgba(255, 255, 255, 0.05);
-  }
-}
-@utility btn-outline {
-  background: transparent;
-  color: var(--text-primary);
-  border: 1.5px solid var(--border-color);
-  border-radius: 8px;
-  padding: 12px 24px;
-  font-size: 14px;
-  font-weight: 500;
-  &:hover {
-    border-color: var(--text-primary);
-    background: #f9fafb;
+  h1, h2, h3, h4 {
+    letter-spacing: -0.02em;
   }
 }
 
-@utility card-flat {
-  background: var(--bg-primary);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  padding: 24px;
+@utility marquee {
+  animation: marquee 30s linear infinite;
 }
-
-@utility input-flat {
-  background: var(--bg-subtle);
-  border: 1.5px solid transparent;
-  border-radius: 8px;
-  padding: 10px 16px;
-  font-size: 15px;
-  color: var(--text-primary);
-  outline: none;
-  width: 100%;
-  &:focus {
-    border-color: var(--text-primary);
-    background: var(--bg-primary);
-  }
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
