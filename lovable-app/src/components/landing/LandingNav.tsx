@@ -8,64 +8,150 @@ export function LandingNav() {
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 20);
-      setShowCTA(window.scrollY > 400); // CTA appears after scrolling past hero
+      setShowCTA(window.scrollY > 400);
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
-    <nav
-      className="fixed top-0 left-0 right-0 z-50 h-16 flex items-center transition-all duration-300"
-      style={{
-        background: scrolled ? "rgba(255,255,255,0.97)" : "rgba(255,255,255,0)",
-        backdropFilter: scrolled ? "blur(12px)" : "none",
-        borderBottom: scrolled ? "1px solid #F3F4F6" : "none",
-      }}
+    <div
+      className="fixed top-0 left-0 right-0 z-50 flex justify-center"
+      style={{ padding: scrolled ? "8px 24px" : "16px 24px", transition: "padding 0.3s ease" }}
     >
-      <div className="mx-auto flex w-full max-w-[1280px] items-center justify-between px-6 md:px-8">
+      {/* Floating pill container */}
+      <nav
+        style={{
+          width: "100%",
+          maxWidth: 900,
+          background: "rgba(255,255,255,0.97)",
+          backdropFilter: "blur(16px)",
+          borderRadius: 999,
+          padding: "8px 8px 8px 20px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          boxShadow: scrolled
+            ? "0 4px 24px rgba(0,0,0,0.10), 0 0 0 1px rgba(0,0,0,0.05)"
+            : "0 2px 12px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04)",
+          transition: "box-shadow 0.3s ease",
+        }}
+      >
         {/* Logo */}
-        <Link to="/" className="text-lg font-bold" style={{ color: "#0A0A0A", letterSpacing: "-0.5px" }}>
-          pondex_
+        <Link
+          to="/"
+          style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none", flexShrink: 0 }}
+        >
+          {/* Logo icon */}
+          <div style={{
+            width: 32, height: 32, borderRadius: 8,
+            background: "#0A0A0A",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            flexShrink: 0,
+          }}>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M3 8h10M8 3v10" stroke="#fff" strokeWidth="2" strokeLinecap="round"/>
+              <path d="M5 5l6 6M11 5l-6 6" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+            </svg>
+          </div>
+          <span style={{ fontSize: 15, fontWeight: 700, color: "#0A0A0A", letterSpacing: "-0.3px" }}>
+            pondex_
+          </span>
         </Link>
 
-        {/* Nav links */}
-        <div className="hidden md:flex items-center gap-6 text-sm font-medium" style={{ color: "#6B7280" }}>
-          <a href="#problem" className="hover:text-gray-900 transition-colors">Why pondex_</a>
-          <a href="#how-it-works" className="hover:text-gray-900 transition-colors">How it works</a>
-          <a href="#testimonials" className="hover:text-gray-900 transition-colors">Reviews</a>
-          <a href="#pricing" className="hover:text-gray-900 transition-colors">Pricing</a>
+        {/* Nav links — center */}
+        <div className="hidden md:flex items-center gap-1">
+          {[
+            { label: "Why pondex_", href: "#problem" },
+            { label: "How it works", href: "#how-it-works" },
+            { label: "Reviews", href: "#testimonials" },
+            { label: "Pricing", href: "#pricing" },
+          ].map(link => (
+            <a
+              key={link.label}
+              href={link.href}
+              style={{
+                fontSize: 14,
+                fontWeight: 500,
+                color: "#6B7280",
+                textDecoration: "none",
+                padding: "6px 14px",
+                borderRadius: 999,
+                transition: "color 0.15s, background 0.15s",
+              }}
+              onMouseEnter={e => {
+                (e.target as HTMLElement).style.color = "#0A0A0A";
+                (e.target as HTMLElement).style.background = "#F3F4F6";
+              }}
+              onMouseLeave={e => {
+                (e.target as HTMLElement).style.color = "#6B7280";
+                (e.target as HTMLElement).style.background = "transparent";
+              }}
+            >
+              {link.label}
+            </a>
+          ))}
         </div>
 
-        {/* Right side: My Account + scroll-triggered CTA */}
-        <div className="flex items-center gap-3">
+        {/* Right side */}
+        <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
           <Link
             to="/login"
-            className="text-sm font-medium hidden sm:inline transition-colors hover:text-gray-900"
-            style={{ color: "#6B7280" }}
+            className="hidden sm:block"
+            style={{
+              fontSize: 14, fontWeight: 500, color: "#6B7280",
+              textDecoration: "none", padding: "6px 14px",
+              borderRadius: 999, transition: "color 0.15s",
+            }}
+            onMouseEnter={e => (e.target as HTMLElement).style.color = "#0A0A0A"}
+            onMouseLeave={e => (e.target as HTMLElement).style.color = "#6B7280"}
           >
             My Account
           </Link>
 
-          {/* CTA slides down from nav after scroll */}
+          {/* CTA — slides in after scroll */}
           <div
             style={{
               overflow: "hidden",
-              maxHeight: showCTA ? "44px" : "0px",
+              maxWidth: showCTA ? "200px" : "0px",
               opacity: showCTA ? 1 : 0,
-              transition: "max-height 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease",
+              transition: "max-width 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease",
+              marginRight: showCTA ? 0 : -4,
             }}
           >
             <Link
               to="/signup"
-              className="text-sm font-bold px-4 py-2 rounded-lg block whitespace-nowrap"
-              style={{ background: "#5B5BD6", color: "#fff", textDecoration: "none" }}
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 6,
+                background: "#0A0A0A", color: "#fff",
+                fontSize: 14, fontWeight: 600,
+                padding: "8px 18px",
+                borderRadius: 999,
+                textDecoration: "none",
+                whiteSpace: "nowrap",
+              }}
             >
-              Check our prices
+              Try it free
+              <span style={{ fontSize: 14 }}>→</span>
             </Link>
           </div>
+
+          {/* Always visible small CTA on mobile */}
+          <Link
+            to="/signup"
+            className="block md:hidden"
+            style={{
+              display: "inline-flex", alignItems: "center",
+              background: "#0A0A0A", color: "#fff",
+              fontSize: 13, fontWeight: 600,
+              padding: "7px 14px", borderRadius: 999,
+              textDecoration: "none",
+            }}
+          >
+            Free →
+          </Link>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </div>
   );
 }
