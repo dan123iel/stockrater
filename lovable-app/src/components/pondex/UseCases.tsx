@@ -8,7 +8,8 @@ const cases = [
     body: "Too many conflicting signals, not enough time. One score, one verdict — in 60 seconds.",
     stat: "+32%",
     statLabel: "Faster decisions",
-    gradient: "from-[#3b3ba8] to-[#5B5BD6]",
+    from: "var(--portfolio-from)",
+    to:   "var(--portfolio-to)",
   },
   {
     icon: <Search className="size-5" />,
@@ -16,7 +17,8 @@ const cases = [
     body: "Too complex — don't know where to start. pondex_ explains every score in plain language. Zero prior knowledge needed.",
     stat: "0",
     statLabel: "Prior knowledge needed",
-    gradient: "from-ink to-ink/80",
+    from: "var(--ai-from)",
+    to:   "var(--ai-to)",
   },
   {
     icon: <BarChart2 className="size-5" />,
@@ -24,7 +26,8 @@ const cases = [
     body: "93% say their research process is broken. Portfolio analysis + exit signals automated.",
     stat: "93%",
     statLabel: "Say process is broken",
-    gradient: "from-[#007a6e] to-data/80",
+    from: "var(--research-from)",
+    to:   "var(--research-to)",
   },
   {
     icon: <TrendingUp className="size-5" />,
@@ -32,7 +35,8 @@ const cases = [
     body: "Can't find undervalued stocks systematically. Strategy-match scoring + peer comparison.",
     stat: "5",
     statLabel: "Factors, fully sourced",
-    gradient: "from-[#7c3aed] to-urgency/80",
+    from: "var(--value-from)",
+    to:   "var(--value-to)",
   },
 ];
 
@@ -52,7 +56,10 @@ export function UseCases() {
         <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {cases.map((c, i) => (
             <Reveal key={c.title} delay={i * 0.06}>
-              <div className={`group relative flex h-full flex-col overflow-hidden rounded-3xl bg-gradient-to-br ${c.gradient} p-6 text-white transition-transform hover:-translate-y-1`}>
+              <div
+                className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 p-6 text-white transition-transform hover:-translate-y-1"
+                style={{ background: `linear-gradient(135deg, ${c.from}, ${c.to})` }}
+              >
                 <div
                   aria-hidden
                   className="pointer-events-none absolute inset-0 opacity-30"

@@ -36,6 +36,7 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
+  /* pondex_ semantic tokens */
   --color-brand: var(--brand);
   --color-brand-foreground: var(--brand-foreground);
   --color-brand-soft: var(--brand-soft);
@@ -45,11 +46,26 @@
   --color-ink-mid: var(--ink-mid);
   --color-surface: var(--surface);
   --color-border-soft: var(--border-soft);
+
+  /* pondex_ feature gradient tokens */
+  --color-research-from: var(--research-from);
+  --color-research-to: var(--research-to);
+  --color-value-from: var(--value-from);
+  --color-value-to: var(--value-to);
+  --color-portfolio-from: var(--portfolio-from);
+  --color-portfolio-to: var(--portfolio-to);
+  --color-ai-from: var(--ai-from);
+  --color-ai-to: var(--ai-to);
+  --color-risk-from: var(--risk-from);
+  --color-risk-to: var(--risk-to);
+  --color-insider-from: var(--insider-from);
+  --color-insider-to: var(--insider-to);
 }
 
 :root {
   --radius: 0.75rem;
 
+  /* Base */
   --background: #ffffff;
   --foreground: #1d1d1d;
   --card: #ffffff;
@@ -64,22 +80,36 @@
   --muted-foreground: #4d585f;
   --accent: #edf1f4;
   --accent-foreground: #1d1d1d;
-  --destructive: #ff4d6d;
+  --destructive: #fb7185;
   --destructive-foreground: #ffffff;
   --border: #dde5ed;
   --input: #dde5ed;
-  --ring: #5b5bd6;
+  --ring: #4338ca;
 
-  /* pondex_ brand */
-  --brand: #5b5bd6;
+  /* pondex_ brand — updated palette */
+  --brand: #4338ca;           /* AI Signals from (primary indigo) */
   --brand-foreground: #ffffff;
-  --brand-soft: #f5f3ff;
-  --urgency: #ff4d6d;
-  --data: #00c2a8;
+  --brand-soft: #eef2ff;
+  --urgency: #fb7185;         /* Insider Data to (rose) */
+  --data: #14b8a6;            /* Research from (teal) */
   --ink: #1d1d1d;
   --ink-mid: #4d585f;
   --surface: #edf1f4;
   --border-soft: #dde5ed;
+
+  /* Feature gradients */
+  --research-from: #14b8a6;
+  --research-to:   #2dd4bf;
+  --value-from:    #8b5cf6;
+  --value-to:      #ec4899;
+  --portfolio-from:#2563eb;
+  --portfolio-to:  #06b6d4;
+  --ai-from:       #4338ca;
+  --ai-to:         #8b5cf6;
+  --risk-from:     #059669;
+  --risk-to:       #84cc16;
+  --insider-from:  #f97316;
+  --insider-to:    #fb7185;
 }
 
 .dark {
@@ -97,27 +127,21 @@
   --muted-foreground: #9ba3ad;
   --accent: #1f2124;
   --accent-foreground: #f5f6f7;
-  --border: rgba(255, 255, 255, 0.1);
-  --input: rgba(255, 255, 255, 0.15);
+  --border: rgba(255,255,255,0.1);
+  --input: rgba(255,255,255,0.15);
 }
 
 @layer base {
-  * {
-    border-color: var(--color-border);
-  }
-  html {
-    scroll-behavior: smooth;
-  }
+  * { border-color: var(--color-border); }
+  html { scroll-behavior: smooth; }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    font-feature-settings: "cv02","cv03","cv04","cv11";
   }
-  h1, h2, h3, h4 {
-    letter-spacing: -0.02em;
-  }
+  h1, h2, h3, h4 { letter-spacing: -0.02em; }
 }
 
 @utility marquee {
@@ -125,5 +149,5 @@
 }
 @keyframes marquee {
   from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  to   { transform: translateX(-50%); }
 }
