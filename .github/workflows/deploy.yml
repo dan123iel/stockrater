@@ -38,7 +38,12 @@ jobs:
 
       - name: Build static site
         working-directory: lovable-app
-        run: npx vite build --config vite.static.config.ts
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          npx vite build --config vite.static.config.ts
+          cp dist-static/index.html dist-static/404.html
 
       - uses: actions/configure-pages@v4
 
