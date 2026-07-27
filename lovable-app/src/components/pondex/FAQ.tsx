@@ -31,7 +31,7 @@ const items = [
 
 export function FAQ() {
   return (
-    <section className="bg-surface/40 py-24">
+    <section className="bg-white py-24">
       <div className="mx-auto max-w-3xl px-6">
         <Reveal className="text-center">
           <h2 className="text-4xl font-bold tracking-tight text-ink md:text-5xl">

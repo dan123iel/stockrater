@@ -140,6 +140,12 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     font-feature-settings: "cv02","cv03","cv04","cv11";
+    /* Prevent white flash on over-scroll — match footer landscape bottom color */
+    overscroll-behavior: none;
+  }
+  /* Bottom over-scroll area matches landscape image bottom tone */
+  html {
+    background-color: #c9b8a8;
   }
   h1, h2, h3, h4 { letter-spacing: -0.02em; }
 }
