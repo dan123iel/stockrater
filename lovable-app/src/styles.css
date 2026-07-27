@@ -143,9 +143,9 @@
     /* Prevent white flash on over-scroll — match footer landscape bottom color */
     overscroll-behavior: none;
   }
-  /* Bottom over-scroll area matches landscape image bottom tone */
+  /* Over-scroll areas match white page background */
   html {
-    background-color: #c9b8a8;
+    background-color: #ffffff;
   }
   h1, h2, h3, h4 { letter-spacing: -0.02em; }
 }

@@ -16,6 +16,8 @@ export function Hero() {
     >
       {/* Subtle white overlay so text stays readable */}
       <div className="absolute inset-0 bg-white/55" aria-hidden />
+      {/* Fade to white at top */}
+      <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-white to-transparent" aria-hidden />
       {/* Fade to white at bottom */}
       <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-white to-transparent" aria-hidden />
       <div
