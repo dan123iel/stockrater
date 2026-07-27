@@ -39,11 +39,15 @@ export function Nav() {
           <Wordmark className="text-[15px]" />
         </a>
         <ul className="ml-2 hidden items-center gap-1 md:flex">
-          {links.map((l) => (
+          {links.map((l, i) => (
             <li key={l.href}>
               <a
                 href={l.href}
-                className="rounded-full px-3 py-1.5 text-sm font-medium text-ink-mid transition-colors hover:bg-surface hover:text-ink"
+                className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors hover:bg-surface hover:text-ink ${
+                  i === 0
+                    ? "bg-surface text-ink font-semibold"
+                    : "text-ink-mid"
+                }`}
               >
                 {l.label}
               </a>
