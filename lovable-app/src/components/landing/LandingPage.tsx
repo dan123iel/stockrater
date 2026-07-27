@@ -140,6 +140,215 @@ function ScoreCard() {
   );
 }
 
+// ── Before / After Section ────────────────────────────────────────────────────
+function BeforeAfterSection() {
+  const [isAfter, setIsAfter] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting && e.intersectionRatio > 0.5) setIsAfter(true);
+          else if (!e.isIntersecting) setIsAfter(false);
+        });
+      },
+      { threshold: [0, 0.5] }
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  const before = {
+    bg: "#F8F8F8",
+    textColor: "#0A0A0A",
+    subColor: "#6B7280",
+    iconColor: "#FF4D6D",
+    cardBg: "#FFF1F3",
+    label: "Before pondex_",
+    headline: "The challenge of investing today.",
+    items: [
+      "Financial data spread across 5+ platforms",
+      "No clear BUY, HOLD or SELL direction",
+      "AI tools give numbers without sources",
+      "No idea when your thesis has changed",
+    ],
+    stats: [
+      { value: "71%", desc: "Don't trust unsourced AI data" },
+      { value: "5+", desc: "Tools open to make one decision" },
+    ],
+  };
+
+  const after = {
+    bg: "#0A0A0A",
+    textColor: "#FFFFFF",
+    subColor: "rgba(255,255,255,0.5)",
+    iconColor: "#00C2A8",
+    cardBg: "#1A1A2E",
+    label: "After pondex_",
+    headline: "One verdict. Every number sourced.",
+    items: [
+      "One score — all 5 factors in one place",
+      "BUY · HOLD · SELL — clear, every time",
+      "Every number linked to Yahoo Finance or SEC EDGAR",
+      "Exit signal when your thesis changes",
+    ],
+    stats: [
+      { value: "78/100", desc: "Clear verdict in seconds" },
+      { value: "100%", desc: "Numbers with a source" },
+    ],
+  };
+
+  const d = isAfter ? after : before;
+
+  return (
+    <section id="problem" ref={sectionRef} style={{ padding: "100px 40px" }}>
+      <div style={{ maxWidth: 900, margin: "0 auto" }}>
+
+        {/* Headline */}
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+          <h2 style={{ fontSize: "clamp(28px,4vw,50px)", fontWeight: 800, letterSpacing: "-0.04em", textAlign: "center", marginBottom: 56 }}>
+            Still uncertain?<br />
+            <span style={{ color: "#5B5BD6" }}>pondex_ ends that.</span>
+          </h2>
+        </motion.div>
+
+        {/* Toggle labels */}
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 0, marginBottom: -20, position: "relative", zIndex: 2 }}>
+          <div style={{
+            background: "#fff",
+            border: "1.5px solid #E5E7EB",
+            borderRadius: 10,
+            padding: "8px 20px",
+            fontSize: 13,
+            fontWeight: 600,
+            color: isAfter ? "#9CA3AF" : "#0A0A0A",
+            transition: "color 0.4s",
+            marginRight: -1,
+          }}>
+            Before pondex_
+          </div>
+
+          {/* Center dial */}
+          <motion.div
+            animate={{ backgroundColor: isAfter ? "#00C2A8" : "#E5E7EB" }}
+            transition={{ duration: 0.4 }}
+            style={{
+              width: 48, height: 48, borderRadius: "50%",
+              border: "3px solid #fff",
+              boxShadow: "0 2px 12px rgba(0,0,0,0.15)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              position: "relative", zIndex: 3, cursor: "pointer",
+              flexShrink: 0,
+            }}
+            onClick={() => setIsAfter(v => !v)}
+          >
+            <motion.div
+              animate={{ rotate: isAfter ? 180 : 0 }}
+              transition={{ duration: 0.4 }}
+              style={{ fontSize: 18, lineHeight: 1, color: isAfter ? "#fff" : "#9CA3AF" }}
+            >
+              ⇄
+            </motion.div>
+          </motion.div>
+
+          <div style={{
+            background: "#fff",
+            border: "1.5px solid #E5E7EB",
+            borderRadius: 10,
+            padding: "8px 20px",
+            fontSize: 13,
+            fontWeight: 600,
+            color: isAfter ? "#0A0A0A" : "#9CA3AF",
+            transition: "color 0.4s",
+            marginLeft: -1,
+          }}>
+            After pondex_
+          </div>
+        </div>
+
+        {/* Main card */}
+        <motion.div
+          animate={{ backgroundColor: d.bg }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          style={{ borderRadius: 24, padding: "48px 40px", border: "1.5px solid #E5E7EB" }}
+        >
+          <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 32, alignItems: "start" }}>
+
+            {/* Left */}
+            <div>
+              <motion.h3
+                animate={{ color: d.textColor }}
+                transition={{ duration: 0.4 }}
+                style={{ fontSize: "clamp(20px,2.5vw,28px)", fontWeight: 700, marginBottom: 28, lineHeight: 1.25 }}
+              >
+                {d.headline}
+              </motion.h3>
+              {d.items.map((item, i) => (
+                <motion.div
+                  key={i}
+                  animate={{ opacity: 1 }}
+                  initial={{ opacity: 0 }}
+                  transition={{ delay: i * 0.06 }}
+                  style={{ display: "flex", gap: 10, marginBottom: 14, alignItems: "flex-start" }}
+                >
+                  <motion.span
+                    animate={{ color: d.iconColor }}
+                    transition={{ duration: 0.4 }}
+                    style={{ fontSize: 15, fontWeight: 700, flexShrink: 0, marginTop: 1 }}
+                  >
+                    {isAfter ? "✓" : "✗"}
+                  </motion.span>
+                  <motion.span
+                    animate={{ color: d.subColor }}
+                    transition={{ duration: 0.4 }}
+                    style={{ fontSize: 15, lineHeight: 1.5 }}
+                  >
+                    {item}
+                  </motion.span>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Right — stat cards */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 12, minWidth: 200 }}>
+              {d.stats.map((s, i) => (
+                <motion.div
+                  key={i}
+                  animate={{ backgroundColor: d.cardBg }}
+                  transition={{ duration: 0.4 }}
+                  style={{ borderRadius: 14, padding: "20px 20px" }}
+                >
+                  <motion.p
+                    animate={{ color: d.iconColor }}
+                    transition={{ duration: 0.4 }}
+                    style={{ fontSize: 28, fontWeight: 800, letterSpacing: "-1px", marginBottom: 4 }}
+                  >
+                    {s.value}
+                  </motion.p>
+                  <motion.p
+                    animate={{ color: d.subColor }}
+                    transition={{ duration: 0.4 }}
+                    style={{ fontSize: 13, lineHeight: 1.4 }}
+                  >
+                    {s.desc}
+                  </motion.p>
+                </motion.div>
+              ))}
+            </div>
+
+          </div>
+        </motion.div>
+
+        {/* Click hint */}
+        <p style={{ textAlign: "center", fontSize: 12, color: "#9CA3AF", marginTop: 16 }}>
+          Scroll down or click the dial to switch →
+        </p>
+      </div>
+    </section>
+  );
+}
+
 // ── Pricing Section ───────────────────────────────────────────────────────────
 function PricingSection() {
   return (
@@ -306,33 +515,8 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* 3 — THE PROBLEM */}
-      <section id="problem" style={{ padding: "120px 40px", maxWidth: 1100, margin: "0 auto", textAlign: "left" as const }}>
-        <motion.div variants={stagger} whileInView="visible" viewport={vp}>
-          <motion.div variants={fadeUp}>
-            <EyebrowTag color="#FFF1F3" textColor="#E02247">The problem</EyebrowTag>
-          </motion.div>
-          <motion.h2 variants={fadeUp} style={{ fontSize: "clamp(32px,4.5vw,58px)", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1.1, marginBottom: 24 }}>
-            Still uncertain.<br />
-            <span style={{ color: "#5B5BD6" }}>pondex_ ends that.</span>
-          </motion.h2>
-<div style={{ marginBottom: 56 }} />
-          <motion.div variants={stagger} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 16 }}>
-            {[
-              { icon: "📊", title: "Too many sources", desc: "YouTube, Reddit, newsletters — 5 opinions, no clear answer." },
-              { icon: "🤖", title: "No source, no trust", desc: "AI tools give you numbers. But where do they come from?" },
-              { icon: "❓", title: "Data without context", desc: "P/E of 28x. Is that good? For which strategy?" },
-            ].map(b => (
-              <motion.div key={b.title} variants={fadeUp} whileHover={{ y: -4 }}
-                style={{ background: "#FAFAFA", border: "1.5px solid #F3F4F6", borderRadius: 16, padding: "40px 40px", textAlign: "left" as const }}>
-                <p style={{ fontSize: 28, marginBottom: 12 }}>{b.icon}</p>
-                <p style={{ fontSize: 15, fontWeight: 700, marginBottom: 6 }}>{b.title}</p>
-                <p style={{ fontSize: 14, color: "#6B7280", lineHeight: 1.6 }}>{b.desc}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </motion.div>
-      </section>
+      {/* 3 — BEFORE / AFTER — scroll-triggered toggle */}
+      <BeforeAfterSection />
 
       {/* 4 — THE SOLUTION — Sticky scroll (Bold-style) */}
       <section style={{ background: "#fff", padding: "120px 40px" }}>
