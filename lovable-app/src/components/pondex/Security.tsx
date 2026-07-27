@@ -2,10 +2,10 @@ import { Lock, Server, EyeOff, BadgeCheck, ArrowRight } from "lucide-react";
 import { Reveal } from "./Reveal";
 
 const items = [
-  { icon: <Lock className="size-5" />, title: "End-to-end encryption", body: "Every data point in transit and at rest is encrypted." },
-  { icon: <Server className="size-5" />, title: "Secure data infrastructure", body: "Isolated, monitored, and audited environments." },
-  { icon: <EyeOff className="size-5" />, title: "Privacy-first approach", body: "We never sell your data. Ever." },
-  { icon: <BadgeCheck className="size-5" />, title: "Compliance standards", body: "Aligned with SOC 2 & GDPR practices." },
+  { icon: <Lock className="size-5" />, title: "End-to-end encryption", body: "Every data point in transit and at rest is encrypted.", from: "var(--research-from)", to: "var(--research-to)" },
+  { icon: <Server className="size-5" />, title: "Secure data infrastructure", body: "Isolated, monitored, and audited environments.", from: "var(--portfolio-from)", to: "var(--portfolio-to)" },
+  { icon: <EyeOff className="size-5" />, title: "Privacy-first approach", body: "We never sell your data. Ever.", from: "var(--ai-from)", to: "var(--ai-to)" },
+  { icon: <BadgeCheck className="size-5" />, title: "Compliance standards", body: "Aligned with SOC 2 & GDPR practices.", from: "var(--risk-from)", to: "var(--risk-to)" },
 ];
 
 export function Security() {
@@ -25,7 +25,10 @@ export function Security() {
           {items.map((it, i) => (
             <Reveal key={it.title} delay={i * 0.06}>
               <div className="h-full rounded-3xl border border-border-soft bg-white p-6">
-                <div className="inline-grid size-11 place-items-center rounded-xl bg-data/10 text-data">
+                <div
+                  className="inline-grid size-11 place-items-center rounded-xl text-white"
+                  style={{ background: `linear-gradient(135deg, ${it.from}, ${it.to})` }}
+                >
                   {it.icon}
                 </div>
                 <h3 className="mt-4 text-base font-semibold text-ink">{it.title}</h3>

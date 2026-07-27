@@ -4,10 +4,10 @@ import { ArrowRight, Menu, X } from "lucide-react";
 import { Wordmark } from "./Wordmark";
 
 const links = [
-  { label: "Score", href: "#why" },
-  { label: "Features", href: "#features" },
+  { label: "Products",  href: "#features" },
+  { label: "Features",  href: "#features" },
   { label: "Use Cases", href: "#use-cases" },
-  { label: "Pricing", href: "#pricing" },
+  { label: "Pricing",   href: "#pricing" },
 ];
 
 export function Nav() {

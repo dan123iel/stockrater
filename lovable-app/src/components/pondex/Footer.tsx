@@ -2,7 +2,7 @@ import { Twitter, Linkedin, Instagram, Mail } from "lucide-react";
 import { Wordmark } from "./Wordmark";
 
 const cols = [
-  { title: "Quick links", links: ["Features", "How It Works", "Use Cases", "Integrations"] },
+  { title: "Quick links", links: ["Features", "Use Cases", "Pricing", "Score"] },
   { title: "Pages", links: ["About", "Blog", "Pricing", "Contact"] },
   { title: "Support", links: ["FAQs", "Privacy Policy", "Changelog"] },
 ];

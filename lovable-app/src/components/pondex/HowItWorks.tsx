@@ -7,18 +7,21 @@ const steps = [
     icon: <Link2 className="size-5" />,
     title: "Connect your accounts",
     body: "Securely link your bank, trading, and investment accounts.",
+    from: "var(--portfolio-from)", to: "var(--portfolio-to)",
   },
   {
     n: "02",
     icon: <Brain className="size-5" />,
     title: "Get AI analysis",
     body: "Our system analyzes market data, your portfolio, and risk factors.",
+    from: "var(--ai-from)", to: "var(--ai-to)",
   },
   {
     n: "03",
     icon: <CheckCircle2 className="size-5" />,
     title: "Make confident decisions",
     body: "Receive clear buy / hold / sell recommendations.",
+    from: "var(--research-from)", to: "var(--research-to)",
   },
 ];
 
@@ -54,7 +57,10 @@ export function HowItWorks() {
               <Reveal key={s.n} delay={i * 0.08}>
                 <div className="group flex gap-5 rounded-3xl border border-border-soft bg-white p-6 transition-shadow hover:shadow-[0_20px_50px_-25px_rgba(29,29,29,0.2)]">
                   <div className="shrink-0">
-                    <div className="grid size-14 place-items-center rounded-2xl bg-brand-soft font-mono text-lg font-bold text-brand">
+                    <div
+                    className="grid size-14 place-items-center rounded-2xl font-mono text-lg font-bold text-white"
+                    style={{ background: `linear-gradient(135deg, ${s.from}, ${s.to})` }}
+                  >
                       {s.n}
                     </div>
                   </div>
