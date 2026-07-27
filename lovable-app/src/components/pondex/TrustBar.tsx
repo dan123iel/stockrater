@@ -2,7 +2,7 @@ const sources = ["Yahoo Finance", "SEC EDGAR", "Groq AI", "Alpha Vantage", "Finn
 
 export function TrustBar() {
   return (
-    <section className="bg-white py-10 border-y border-border-soft">
+    <section className="bg-white py-10">
       <div className="mx-auto max-w-6xl px-6">
         <p className="text-center text-xs font-medium text-ink-mid tracking-widest uppercase mb-8">
           Trusted by investors · Data from sources you can verify
