@@ -4,7 +4,7 @@ import { Nav } from "@/components/pondex/Nav";
 import { FinalCTA } from "@/components/pondex/FinalCTA";
 import { Footer } from "@/components/pondex/Footer";
 
-export const Route = createFileRoute("/404")({
+export const Route = createFileRoute("/_public/404")({
   head: () => ({
     meta: [{ title: "404 — Page not found — pondex_" }],
   }),

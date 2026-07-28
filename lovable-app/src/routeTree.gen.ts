@@ -11,10 +11,20 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as PublicRouteRouteImport } from './routes/_public/route'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as SignupRouteImport } from './routes/signup'
-import { Route as TermsRouteImport } from './routes/terms'
+import { Route as Public404RouteImport } from './routes/_public/404'
+import { Route as PublicAboutRouteImport } from './routes/_public/about'
+import { Route as PublicBlogRouteImport } from './routes/_public/blog'
+import { Route as PublicContactRouteImport } from './routes/_public/contact'
+import { Route as PublicDemoRouteImport } from './routes/_public/demo'
+import { Route as PublicFaqRouteImport } from './routes/_public/faq'
+import { Route as PublicFeaturesRouteImport } from './routes/_public/features'
+import { Route as PublicImprintRouteImport } from './routes/_public/imprint'
+import { Route as PublicPrivacyRouteImport } from './routes/_public/privacy'
+import { Route as PublicTermsRouteImport } from './routes/_public/terms'
+import { Route as PublicWaitlistRouteImport } from './routes/_public/waitlist'
 import { Route as AuthenticatedAppIndexRouteImport } from './routes/_authenticated/app.index'
 import { Route as AuthenticatedAppAccountRouteImport } from './routes/_authenticated/app.account'
 import { Route as AuthenticatedAppCfdRouteImport } from './routes/_authenticated/app.cfd'
@@ -32,14 +42,13 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PublicRouteRoute = PublicRouteRouteImport.update({
+  id: '/_public',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PrivacyRoute = PrivacyRouteImport.update({
-  id: '/privacy',
-  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SignupRoute = SignupRouteImport.update({
@@ -47,10 +56,60 @@ const SignupRoute = SignupRouteImport.update({
   path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TermsRoute = TermsRouteImport.update({
+const Public404Route = Public404RouteImport.update({
+  id: '/404',
+  path: '/404',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
+const PublicAboutRoute = PublicAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
+const PublicBlogRoute = PublicBlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
+const PublicContactRoute = PublicContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
+const PublicDemoRoute = PublicDemoRouteImport.update({
+  id: '/demo',
+  path: '/demo',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
+const PublicFaqRoute = PublicFaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
+const PublicFeaturesRoute = PublicFeaturesRouteImport.update({
+  id: '/features',
+  path: '/features',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
+const PublicImprintRoute = PublicImprintRouteImport.update({
+  id: '/imprint',
+  path: '/imprint',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
+const PublicPrivacyRoute = PublicPrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
+const PublicTermsRoute = PublicTermsRouteImport.update({
   id: '/terms',
   path: '/terms',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => PublicRouteRoute,
+} as any)
+const PublicWaitlistRoute = PublicWaitlistRouteImport.update({
+  id: '/waitlist',
+  path: '/waitlist',
+  getParentRoute: () => PublicRouteRoute,
 } as any)
 const AuthenticatedAppIndexRoute = AuthenticatedAppIndexRouteImport.update({
   id: '/app/',
@@ -92,9 +151,18 @@ const AuthenticatedAppStockRoute = AuthenticatedAppStockRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/privacy': typeof PrivacyRoute
   '/signup': typeof SignupRoute
-  '/terms': typeof TermsRoute
+  '/404': typeof Public404Route
+  '/about': typeof PublicAboutRoute
+  '/blog': typeof PublicBlogRoute
+  '/contact': typeof PublicContactRoute
+  '/demo': typeof PublicDemoRoute
+  '/faq': typeof PublicFaqRoute
+  '/features': typeof PublicFeaturesRoute
+  '/imprint': typeof PublicImprintRoute
+  '/privacy': typeof PublicPrivacyRoute
+  '/terms': typeof PublicTermsRoute
+  '/waitlist': typeof PublicWaitlistRoute
   '/app/account': typeof AuthenticatedAppAccountRoute
   '/app/cfd': typeof AuthenticatedAppCfdRoute
   '/app/markets': typeof AuthenticatedAppMarketsRoute
@@ -106,9 +174,18 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/privacy': typeof PrivacyRoute
   '/signup': typeof SignupRoute
-  '/terms': typeof TermsRoute
+  '/404': typeof Public404Route
+  '/about': typeof PublicAboutRoute
+  '/blog': typeof PublicBlogRoute
+  '/contact': typeof PublicContactRoute
+  '/demo': typeof PublicDemoRoute
+  '/faq': typeof PublicFaqRoute
+  '/features': typeof PublicFeaturesRoute
+  '/imprint': typeof PublicImprintRoute
+  '/privacy': typeof PublicPrivacyRoute
+  '/terms': typeof PublicTermsRoute
+  '/waitlist': typeof PublicWaitlistRoute
   '/app/account': typeof AuthenticatedAppAccountRoute
   '/app/cfd': typeof AuthenticatedAppCfdRoute
   '/app/markets': typeof AuthenticatedAppMarketsRoute
@@ -121,10 +198,20 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/_public': typeof PublicRouteRouteWithChildren
   '/login': typeof LoginRoute
-  '/privacy': typeof PrivacyRoute
   '/signup': typeof SignupRoute
-  '/terms': typeof TermsRoute
+  '/_public/404': typeof Public404Route
+  '/_public/about': typeof PublicAboutRoute
+  '/_public/blog': typeof PublicBlogRoute
+  '/_public/contact': typeof PublicContactRoute
+  '/_public/demo': typeof PublicDemoRoute
+  '/_public/faq': typeof PublicFaqRoute
+  '/_public/features': typeof PublicFeaturesRoute
+  '/_public/imprint': typeof PublicImprintRoute
+  '/_public/privacy': typeof PublicPrivacyRoute
+  '/_public/terms': typeof PublicTermsRoute
+  '/_public/waitlist': typeof PublicWaitlistRoute
   '/_authenticated/app/account': typeof AuthenticatedAppAccountRoute
   '/_authenticated/app/cfd': typeof AuthenticatedAppCfdRoute
   '/_authenticated/app/markets': typeof AuthenticatedAppMarketsRoute
@@ -138,9 +225,18 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/login'
-    | '/privacy'
     | '/signup'
+    | '/404'
+    | '/about'
+    | '/blog'
+    | '/contact'
+    | '/demo'
+    | '/faq'
+    | '/features'
+    | '/imprint'
+    | '/privacy'
     | '/terms'
+    | '/waitlist'
     | '/app/account'
     | '/app/cfd'
     | '/app/markets'
@@ -152,9 +248,18 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/login'
-    | '/privacy'
     | '/signup'
+    | '/404'
+    | '/about'
+    | '/blog'
+    | '/contact'
+    | '/demo'
+    | '/faq'
+    | '/features'
+    | '/imprint'
+    | '/privacy'
     | '/terms'
+    | '/waitlist'
     | '/app/account'
     | '/app/cfd'
     | '/app/markets'
@@ -166,10 +271,20 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/_public'
     | '/login'
-    | '/privacy'
     | '/signup'
-    | '/terms'
+    | '/_public/404'
+    | '/_public/about'
+    | '/_public/blog'
+    | '/_public/contact'
+    | '/_public/demo'
+    | '/_public/faq'
+    | '/_public/features'
+    | '/_public/imprint'
+    | '/_public/privacy'
+    | '/_public/terms'
+    | '/_public/waitlist'
     | '/_authenticated/app/account'
     | '/_authenticated/app/cfd'
     | '/_authenticated/app/markets'
@@ -182,10 +297,9 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  PublicRouteRoute: typeof PublicRouteRouteWithChildren
   LoginRoute: typeof LoginRoute
-  PrivacyRoute: typeof PrivacyRoute
   SignupRoute: typeof SignupRoute
-  TermsRoute: typeof TermsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -204,18 +318,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_public': {
+      id: '/_public'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof PublicRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/privacy': {
-      id: '/privacy'
-      path: '/privacy'
-      fullPath: '/privacy'
-      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/signup': {
@@ -225,12 +339,82 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/terms': {
-      id: '/terms'
+    '/_public/404': {
+      id: '/_public/404'
+      path: '/404'
+      fullPath: '/404'
+      preLoaderRoute: typeof Public404RouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
+    '/_public/about': {
+      id: '/_public/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof PublicAboutRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
+    '/_public/blog': {
+      id: '/_public/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof PublicBlogRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
+    '/_public/contact': {
+      id: '/_public/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof PublicContactRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
+    '/_public/demo': {
+      id: '/_public/demo'
+      path: '/demo'
+      fullPath: '/demo'
+      preLoaderRoute: typeof PublicDemoRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
+    '/_public/faq': {
+      id: '/_public/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof PublicFaqRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
+    '/_public/features': {
+      id: '/_public/features'
+      path: '/features'
+      fullPath: '/features'
+      preLoaderRoute: typeof PublicFeaturesRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
+    '/_public/imprint': {
+      id: '/_public/imprint'
+      path: '/imprint'
+      fullPath: '/imprint'
+      preLoaderRoute: typeof PublicImprintRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
+    '/_public/privacy': {
+      id: '/_public/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PublicPrivacyRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
+    '/_public/terms': {
+      id: '/_public/terms'
       path: '/terms'
       fullPath: '/terms'
-      preLoaderRoute: typeof TermsRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof PublicTermsRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
+    '/_public/waitlist': {
+      id: '/_public/waitlist'
+      path: '/waitlist'
+      fullPath: '/waitlist'
+      preLoaderRoute: typeof PublicWaitlistRouteImport
+      parentRoute: typeof PublicRouteRoute
     }
     '/_authenticated/app/': {
       id: '/_authenticated/app/'
@@ -307,13 +491,44 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface PublicRouteRouteChildren {
+  Public404Route: typeof Public404Route
+  PublicAboutRoute: typeof PublicAboutRoute
+  PublicBlogRoute: typeof PublicBlogRoute
+  PublicContactRoute: typeof PublicContactRoute
+  PublicDemoRoute: typeof PublicDemoRoute
+  PublicFaqRoute: typeof PublicFaqRoute
+  PublicFeaturesRoute: typeof PublicFeaturesRoute
+  PublicImprintRoute: typeof PublicImprintRoute
+  PublicPrivacyRoute: typeof PublicPrivacyRoute
+  PublicTermsRoute: typeof PublicTermsRoute
+  PublicWaitlistRoute: typeof PublicWaitlistRoute
+}
+
+const PublicRouteRouteChildren: PublicRouteRouteChildren = {
+  Public404Route: Public404Route,
+  PublicAboutRoute: PublicAboutRoute,
+  PublicBlogRoute: PublicBlogRoute,
+  PublicContactRoute: PublicContactRoute,
+  PublicDemoRoute: PublicDemoRoute,
+  PublicFaqRoute: PublicFaqRoute,
+  PublicFeaturesRoute: PublicFeaturesRoute,
+  PublicImprintRoute: PublicImprintRoute,
+  PublicPrivacyRoute: PublicPrivacyRoute,
+  PublicTermsRoute: PublicTermsRoute,
+  PublicWaitlistRoute: PublicWaitlistRoute,
+}
+
+const PublicRouteRouteWithChildren = PublicRouteRoute._addFileChildren(
+  PublicRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  PublicRouteRoute: PublicRouteRouteWithChildren,
   LoginRoute: LoginRoute,
-  PrivacyRoute: PrivacyRoute,
   SignupRoute: SignupRoute,
-  TermsRoute: TermsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
