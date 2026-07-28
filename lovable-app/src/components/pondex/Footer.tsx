@@ -1,5 +1,5 @@
 import { Instagram, Linkedin, Facebook, Mail } from "lucide-react";
-import { Wordmark } from "./Wordmark";
+import { Link } from "@tanstack/react-router";
 
 const cols = [
   {
@@ -55,7 +55,7 @@ export function Footer() {
             {/* Brand — wider */}
             <div className="md:col-span-1">
                 <div className="mb-5">
-                <img src="/stockrater/pondex-logo.png" alt="pondex_" style={{ height: "28px", width: "auto" }} />
+                <Link to="/"><img src="/stockrater/pondex-logo.png" alt="pondex_" style={{ height: "28px", width: "auto" }} /></Link>
               </div>
                 <p className="text-sm text-ink-mid leading-relaxed">
                   A modern platform for smarter stock research and financial insights.
@@ -75,9 +75,9 @@ export function Footer() {
                 <ul className="space-y-4">
                   {c.links.map((l) => (
                     <li key={l.label}>
-                      <a href={l.href} className="text-sm text-ink-mid hover:text-ink transition-colors">
+                      <Link to={l.href as any} className="text-sm text-ink-mid hover:text-ink transition-colors">
                         {l.label}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
