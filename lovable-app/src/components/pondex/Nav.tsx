@@ -1,19 +1,21 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Menu, X } from "lucide-react";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Wordmark } from "./Wordmark";
 
 const links = [
-  { label: "Products",  href: "#features" },
-  { label: "Features",  href: "#features" },
-  { label: "Use Cases", href: "#use-cases" },
-  { label: "Pricing",   href: "#pricing" },
+  { label: "Products",  to: "/",  hash: "#features" },
+  { label: "Features",  to: "/",  hash: "#features" },
+  { label: "Use Cases", to: "/",  hash: "#use-cases" },
+  { label: "Pricing",   to: "/",  hash: "#pricing" },
 ];
 
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [showCta, setShowCta] = useState(false);
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const onScroll = () => {
@@ -25,6 +27,21 @@ export function Nav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const handleNavLink = (to: string, hash: string) => {
+    if (window.location.pathname.replace(/\/$/, "").endsWith("/stockrater") ||
+        window.location.pathname === "/" ||
+        window.location.pathname === "/stockrater/") {
+      // Already on landing page — just scroll
+      document.querySelector(hash)?.scrollIntoView({ behavior: "smooth" });
+    } else {
+      // Navigate to landing page then scroll
+      navigate({ to }).then(() => {
+        setTimeout(() => document.querySelector(hash)?.scrollIntoView({ behavior: "smooth" }), 100);
+      });
+    }
+    setOpen(false);
+  };
+
   return (
     <div className="fixed inset-x-0 top-4 z-50 flex justify-center px-4">
       <motion.nav
@@ -35,45 +52,49 @@ export function Nav() {
           scrolled ? "shadow-[0_8px_32px_-12px_rgba(29,29,29,0.15)]" : "shadow-[0_2px_12px_rgba(29,29,29,0.06)]"
         }`}
       >
-        <a href="#top" className="pl-3 pr-2">
+        {/* Logo → back to landing */}
+        <Link to="/" className="pl-3 pr-2">
           <Wordmark className="text-[15px]" />
-        </a>
+        </Link>
+
         <ul className="ml-2 hidden items-center gap-1 md:flex">
           {links.map((l, i) => (
-            <li key={l.href}>
-              <a
-                href={l.href}
+            <li key={l.label}>
+              <button
+                onClick={() => handleNavLink(l.to, l.hash)}
                 className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors hover:bg-surface hover:text-ink ${
-                  i === 0
-                    ? "bg-surface text-ink font-semibold"
-                    : "text-ink-mid"
+                  i === 0 ? "bg-surface text-ink font-semibold" : "text-ink-mid"
                 }`}
               >
                 {l.label}
-              </a>
+              </button>
             </li>
           ))}
         </ul>
+
         <div className="ml-auto flex items-center gap-1">
-          <a
-            href="#account"
+          <Link
+            to="/login"
             className="hidden rounded-full px-3 py-1.5 text-sm font-medium text-ink-mid transition-colors hover:text-ink sm:inline-block"
           >
             My Account
-          </a>
+          </Link>
           <AnimatePresence>
             {showCta && (
-              <motion.a
+              <motion.div
                 key="cta"
-                href="#pricing"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.2 }}
-                className="hidden items-center gap-1.5 rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-ink/90 md:inline-flex"
               >
-                Try it free <ArrowRight className="size-3.5" />
-              </motion.a>
+                <Link
+                  to="/login"
+                  className="hidden items-center gap-1.5 rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-ink/90 md:inline-flex"
+                >
+                  Try it free <ArrowRight className="size-3.5" />
+                </Link>
+              </motion.div>
             )}
           </AnimatePresence>
           <button
@@ -85,6 +106,8 @@ export function Nav() {
           </button>
         </div>
       </motion.nav>
+
+      {/* Mobile menu */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -95,24 +118,23 @@ export function Nav() {
           >
             <ul className="flex flex-col">
               {links.map((l) => (
-                <li key={l.href}>
-                  <a
-                    href={l.href}
-                    onClick={() => setOpen(false)}
-                    className="block rounded-xl px-3 py-2.5 text-sm font-medium text-ink hover:bg-surface"
+                <li key={l.label}>
+                  <button
+                    onClick={() => handleNavLink(l.to, l.hash)}
+                    className="block w-full rounded-xl px-3 py-2.5 text-left text-sm font-medium text-ink hover:bg-surface"
                   >
                     {l.label}
-                  </a>
+                  </button>
                 </li>
               ))}
               <li className="mt-2">
-                <a
-                  href="#pricing"
+                <Link
+                  to="/login"
                   onClick={() => setOpen(false)}
                   className="flex items-center justify-center gap-1.5 rounded-full bg-ink px-4 py-2.5 text-sm font-semibold text-white"
                 >
                   Try it free <ArrowRight className="size-3.5" />
-                </a>
+                </Link>
               </li>
             </ul>
           </motion.div>
