@@ -1,5 +1,6 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { Nav } from "@/components/pondex/Nav";
+import { BlurMask } from "@/components/pondex/BlurMask";
 import { FinalCTA } from "@/components/pondex/FinalCTA";
 import { Footer } from "@/components/pondex/Footer";
 
@@ -11,9 +12,8 @@ function PublicLayout() {
   return (
     <div className="min-h-screen bg-white">
       <Nav />
-      {/* Page content renders here */}
+      <BlurMask />
       <Outlet />
-      {/* FinalCTA + Footer always at the bottom */}
       <div
         style={{
           backgroundImage: "url('/stockrater/hero-landscape.png')",

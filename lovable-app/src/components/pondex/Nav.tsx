@@ -48,8 +48,10 @@ export function Nav() {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className={`flex w-full max-w-4xl items-center gap-2 rounded-pill border border-border-soft/70 bg-white/85 px-2 py-2 backdrop-blur-xl transition-shadow ${
-          scrolled ? "shadow-[0_8px_32px_-12px_rgba(29,29,29,0.15)]" : "shadow-[0_2px_12px_rgba(29,29,29,0.06)]"
+        className={`flex w-full max-w-4xl items-center gap-2 rounded-pill border border-border-soft/70 px-2 py-2 backdrop-blur-2xl transition-all duration-300 ${
+          scrolled
+            ? "bg-white/90 shadow-[0_8px_32px_-12px_rgba(29,29,29,0.18)]"
+            : "bg-white/70 shadow-[0_2px_12px_rgba(29,29,29,0.06)]"
         }`}
       >
         {/* Logo → back to landing */}

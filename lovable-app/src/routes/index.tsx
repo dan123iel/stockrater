@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Nav } from "@/components/pondex/Nav";
+import { BlurMask } from "@/components/pondex/BlurMask";
 import { Hero } from "@/components/pondex/Hero";
 import { TrustBar } from "@/components/pondex/TrustBar";
 import { BeforeAfter } from "@/components/pondex/BeforeAfter";
@@ -39,6 +40,7 @@ function Landing() {
   return (
     <main className="min-h-screen bg-background text-foreground">
       <Nav />
+      <BlurMask />
       <Hero />
       <TrustBar />
       <BeforeAfter />
