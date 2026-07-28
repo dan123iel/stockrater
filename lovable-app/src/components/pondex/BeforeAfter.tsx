@@ -36,7 +36,7 @@ export function BeforeAfter() {
   const dark = mode === "after";
 
   return (
-    <section id="why" className="bg-white py-24">
+    <section id="why" className="bg-white py-32">
       <div className="mx-auto max-w-5xl px-6">
         <Reveal className="text-center">
           <h2 className="mx-auto max-w-2xl text-4xl font-bold tracking-tight text-ink md:text-5xl">

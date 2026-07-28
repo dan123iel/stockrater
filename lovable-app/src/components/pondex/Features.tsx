@@ -44,7 +44,7 @@ function Icon({ children, gradient }: { children: React.ReactNode; gradient?: st
 
 export function Features() {
   return (
-    <section id="features" className="bg-surface/50 py-24">
+    <section id="features" className="bg-surface/50 py-32">
       <div className="mx-auto max-w-6xl px-6">
         <Reveal className="mx-auto max-w-2xl text-center">
           <div className="inline-flex items-center rounded-full border border-border-soft bg-white px-3 py-1 text-xs font-medium text-ink-mid">

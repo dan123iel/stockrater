@@ -34,7 +34,7 @@ function Callout({
 
 export function DashboardPreview() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white via-brand-soft/60 to-white py-24">
+    <section className="relative overflow-hidden bg-gradient-to-b from-white via-brand-soft/60 to-white py-32">
       <div className="mx-auto max-w-6xl px-6">
         <Reveal className="mx-auto max-w-2xl text-center">
           <div className="inline-flex items-center rounded-full border border-border-soft bg-white px-3 py-1 text-xs font-medium text-ink-mid">

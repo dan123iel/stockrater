@@ -11,7 +11,7 @@ const stats = [
 
 export function Stats() {
   return (
-    <section className="bg-ink py-24 text-white">
+    <section className="bg-ink py-32 text-white">
       <div className="mx-auto max-w-6xl px-6">
         <Reveal className="mx-auto max-w-2xl text-center">
           <div className="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-medium text-white/70">

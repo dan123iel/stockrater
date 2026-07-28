@@ -10,7 +10,7 @@ const items = [
 
 export function Security() {
   return (
-    <section className="bg-surface/60 py-24">
+    <section className="bg-surface/60 py-32">
       <div className="mx-auto max-w-6xl px-6">
         <Reveal className="mx-auto max-w-2xl text-center">
           <div className="inline-flex items-center rounded-full border border-border-soft bg-white px-3 py-1 text-xs font-medium text-ink-mid">

@@ -63,7 +63,7 @@ export function FAQ() {
   const [open, setOpen] = useState<number>(0);
 
   return (
-    <section className="bg-white py-24">
+    <section className="bg-white py-32">
       <div className="mx-auto max-w-6xl px-6">
         <div className="grid gap-16 lg:grid-cols-[360px_1fr] lg:items-start">
 
