@@ -43,7 +43,18 @@ jobs:
           VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
         run: |
           npx vite build --config vite.static.config.ts
-          cp dist-static/index.html dist-static/404.html
+          # GitHub Pages SPA routing: 404.html redirects back to index with path stored in sessionStorage
+          cat > dist-static/404.html << 'EOHTML'
+          <!doctype html><html><head><meta charset="UTF-8"/>
+          <script>
+            var path = window.location.pathname;
+            var base = '/stockrater';
+            var route = path.startsWith(base) ? path.slice(base.length) || '/' : path;
+            sessionStorage.setItem('spa-redirect', route);
+            window.location.replace(base + '/');
+          </script>
+          </head><body></body></html>
+          EOHTML
 
       - uses: actions/configure-pages@v4
 
