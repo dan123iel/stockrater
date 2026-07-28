@@ -18,8 +18,8 @@ export function Hero() {
       <div className="absolute inset-0 bg-white/55" aria-hidden />
       {/* Fade top */}
       <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-white to-transparent" aria-hidden />
-      {/* Fade bottom */}
-      <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-white via-white/70 to-transparent" aria-hidden />
+      {/* Fade bottom — very soft, tall */}
+      <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-t from-white via-white/90 via-white/60 to-transparent" aria-hidden />
 
       {/* Content — centered like FintechX */}
       <div className="relative mx-auto max-w-4xl px-6 pt-36 pb-8 text-center">
