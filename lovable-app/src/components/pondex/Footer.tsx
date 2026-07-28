@@ -5,29 +5,31 @@ const cols = [
   {
     title: "Company",
     links: [
-      { label: "About", href: "#" },
-      { label: "Blog", href: "#" },
-      { label: "Careers", href: "#" },
-      { label: "Contact", href: "mailto:support@pondex.app" },
+      { label: "About", href: "/about" },
+      { label: "Blog", href: "/blog" },
+      { label: "Careers", href: "/about" },
+      { label: "Contact", href: "/contact" },
     ],
   },
   {
     title: "Features",
     links: [
-      { label: "Stock Score", href: "#features" },
-      { label: "Portfolio Analysis", href: "#features" },
-      { label: "AI Signals", href: "#features" },
-      { label: "Risk Analysis", href: "#features" },
-      { label: "Insider Data", href: "#features" },
+      { label: "Stock Score", href: "/features" },
+      { label: "Portfolio Analysis", href: "/features" },
+      { label: "AI Signals", href: "/features" },
+      { label: "Risk Analysis", href: "/features" },
+      { label: "Insider Data", href: "/features" },
     ],
   },
   {
     title: "Support",
     links: [
-      { label: "FAQs", href: "#" },
-      { label: "Contact", href: "mailto:support@pondex.app" },
-      { label: "Changelog", href: "#" },
+      { label: "FAQs", href: "/faq" },
+      { label: "Contact", href: "/contact" },
+      { label: "Waitlist", href: "/waitlist" },
+      { label: "Request a Demo", href: "/demo" },
       { label: "Privacy Policy", href: "/privacy" },
+      { label: "Imprint", href: "/imprint" },
     ],
   },
 ];
