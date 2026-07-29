@@ -4,7 +4,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "sonner";
 import { Nav } from "@/components/pondex/Nav";
-import { BlurMask } from "@/components/pondex/BlurMask";
 import { ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/login")({
@@ -54,20 +53,10 @@ function LoginPage() {
   };
 
   return (
-    <div
-      className="relative min-h-screen"
-      style={{
-        backgroundImage: "url('/stockrater/hero-mountains.png')",
-        backgroundSize: "cover",
-        backgroundPosition: "center top",
-      }}
-    >
-      <div className="absolute inset-0 bg-white/60 pointer-events-none" />
-      <div className="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-white to-transparent pointer-events-none" />
+    <div className="min-h-screen bg-gray-50">
       <Nav />
-      <BlurMask />
 
-      <div className="relative z-10 flex min-h-screen items-center justify-center px-6 py-24">
+      <div className="flex min-h-screen items-center justify-center px-6 py-24">
         <div className="w-full max-w-md">
           {/* Card */}
           <div className="rounded-3xl border border-border-soft bg-white/90 backdrop-blur-xl shadow-[0_24px_64px_rgba(0,0,0,0.1)] px-10 py-10">
