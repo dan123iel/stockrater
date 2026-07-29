@@ -609,9 +609,9 @@ function StockPage() {
               <><p className="section-label">Stock</p><h1 className="mt-2 text-3xl md:text-4xl font-semibold tracking-tight">Get your verdict.</h1></>
             )}
           </div>
-          <div className="flex gap-2">
-            <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === "Enter" && runVerdict()} placeholder="Ticker…" className="input-flat max-w-[180px] uppercase" />
-            <button onClick={runVerdict} className="btn-dark">GET VERDICT →</button>
+          <div className="flex gap-2" style={{ position: "relative", zIndex: 10 }}>
+            <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === "Enter" && runVerdict()} placeholder="Ticker…" className="input-flat max-w-[180px] uppercase" style={{ pointerEvents: "auto" }} />
+            <button onClick={runVerdict} className="btn-dark" style={{ pointerEvents: "auto" }}>GET VERDICT →</button>
           </div>
         </div>
         <p className="mt-2 text-xs" style={{ color: "var(--text-muted)" }}>⚠ Research tool only · Not financial advice</p>

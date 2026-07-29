@@ -208,8 +208,8 @@ export function AppShell({ children }: { children: ReactNode }) {
       <div className="md:ml-[72px]" style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
 
         {/* Scroll progress */}
-        <div style={{ height: 2, background: "transparent", position: "fixed", top: 0, left: SIDEBAR_W, right: 0, zIndex: 60 }}>
-          <div style={{ height: "100%", width: `${scrollPct}%`, background: ACCENT, transition: "width 0.1s linear", borderRadius: 1 }} />
+        <div style={{ height: 2, background: "transparent", position: "fixed", top: 0, left: SIDEBAR_W, right: 0, zIndex: 60, pointerEvents: "none" }}>
+          <div style={{ height: "100%", width: `${scrollPct}%`, background: ACCENT, transition: "width 0.1s linear", borderRadius: 1, pointerEvents: "none" }} />
         </div>
 
         {/* Page header — inline (no sticky topbar, like the screenshots) */}
