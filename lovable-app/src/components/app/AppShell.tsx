@@ -52,12 +52,11 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: "#f4f6f9", fontFamily: "Inter, sans-serif" }}>
 
-      {/* Sidebar */}
+      {/* Sidebar — dark */}
       <aside style={{
         width: collapsed ? 72 : 220,
         minHeight: "100vh",
-        background: "#fff",
-        borderRight: "1px solid #e8eaed",
+        background: "#0f1117",
         display: "flex",
         flexDirection: "column",
         transition: "width 0.2s ease",
@@ -67,13 +66,13 @@ export function AppShell({ children }: { children: ReactNode }) {
         zIndex: 50,
       }}>
         {/* Logo */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: collapsed ? "center" : "space-between", padding: collapsed ? "20px 0" : "20px 16px", borderBottom: "1px solid #f0f0f0" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: collapsed ? "center" : "space-between", padding: collapsed ? "20px 8px" : "20px 16px", borderBottom: "1px solid #1e2130" }}>
           {!collapsed && (
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <div style={{ width: 32, height: 32, background: "#6366f1", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <span style={{ color: "#fff", fontSize: 16, fontWeight: 700 }}>p</span>
               </div>
-              <span style={{ fontWeight: 700, fontSize: 16, letterSpacing: "-0.3px" }}>pondex_</span>
+              <span style={{ fontWeight: 700, fontSize: 16, letterSpacing: "-0.3px", color: "#fff" }}>pondex_</span>
             </div>
           )}
           {collapsed && (
@@ -83,7 +82,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           )}
           <button
             onClick={() => setCollapsed(!collapsed)}
-            style={{ background: "#f4f6f9", border: "none", borderRadius: 6, padding: 4, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "#888" }}
+            style={{ background: "#1e2130", border: "none", borderRadius: 6, padding: 4, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "#666" }}
           >
             {collapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
           </button>
@@ -104,8 +103,8 @@ export function AppShell({ children }: { children: ReactNode }) {
                   padding: collapsed ? "10px 0" : "10px 12px",
                   justifyContent: collapsed ? "center" : "flex-start",
                   borderRadius: 10,
-                  background: active ? "#eff0fe" : "transparent",
-                  color: active ? "#6366f1" : "#555",
+                  background: active ? "#6366f1" : "transparent",
+                  color: active ? "#fff" : "#8b8fa8",
                   fontWeight: active ? 600 : 400,
                   fontSize: 14,
                   textDecoration: "none",
@@ -122,14 +121,14 @@ export function AppShell({ children }: { children: ReactNode }) {
 
         {/* Upgrade banner */}
         {!collapsed && (
-          <div style={{ margin: "12px", background: "#faf5ff", borderRadius: 14, padding: "16px 14px", textAlign: "center" }}>
+          <div style={{ margin: "12px", background: "#1a1d2e", borderRadius: 14, padding: "16px 14px", textAlign: "center" }}>
             <div style={{ fontSize: 28, marginBottom: 8 }}>⭐</div>
-            <p style={{ fontSize: 12, color: "#555", marginBottom: 12, lineHeight: 1.4 }}>
-              Upgrade to <strong>PRO</strong> to get access to all features!
+            <p style={{ fontSize: 12, color: "#8b8fa8", marginBottom: 12, lineHeight: 1.5 }}>
+              Upgrade to <strong style={{ color: "#fff" }}>PRO</strong> to get access to all features!
             </p>
             <button style={{
-              background: "#1a1a1a", color: "#fff", border: "none", borderRadius: 20,
-              padding: "8px 20px", fontSize: 12, fontWeight: 600, cursor: "pointer", width: "100%",
+              background: "#fff", color: "#0f1117", border: "none", borderRadius: 20,
+              padding: "8px 20px", fontSize: 12, fontWeight: 700, cursor: "pointer", width: "100%",
             }}>
               Get Pro Now
             </button>
