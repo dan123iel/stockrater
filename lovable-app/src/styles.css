@@ -162,6 +162,16 @@
   border-radius: 8px;
 }
 
+/* Mobile bottom nav — only visible on small screens */
+#mobile-bottom-nav {
+  display: flex;
+}
+@media (min-width: 768px) {
+  #mobile-bottom-nav {
+    display: none !important;
+  }
+}
+
 @utility marquee {
   animation: marquee 30s linear infinite;
 }

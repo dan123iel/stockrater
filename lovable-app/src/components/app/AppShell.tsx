@@ -280,11 +280,11 @@ export function AppShell({ children }: { children: ReactNode }) {
         </main>
       </div>
 
-      {/* Mobile bottom nav */}
+      {/* Mobile bottom nav — hidden on desktop */}
       <nav
         role="navigation"
         aria-label="Mobile navigation"
-        className="md:hidden"
+        id="mobile-bottom-nav"
         style={{
           position: "fixed", bottom: 0, left: 0, right: 0,
           height: 68,
