@@ -95,20 +95,7 @@ export const Route = createFileRoute("/_authenticated/app/stock")({
 
 // ── Gauge ──────────────────────────────────────────────────────────────────────
 function Gauge({ score }: { score: number }) {
-  const [d, setD] = useState(0);
-  useEffect(() => {
-    setD(0);
-    const dur = 1200;
-    const start = Date.now();
-    const interval = setInterval(() => {
-      const elapsed = Date.now() - start;
-      const p = Math.min(1, elapsed / dur);
-      const eased = 1 - Math.pow(1 - p, 3);
-      setD(Math.round(score * eased));
-      if (p >= 1) clearInterval(interval);
-    }, 16);
-    return () => clearInterval(interval);
-  }, [score]);
+  const [d, setD] = useState(score); // show final value immediately, no animation
   const color = score >= 70 ? "#22c55e" : score >= 50 ? "#f59e0b" : "#ef4444";
   const r = 80; const cx = 100; const cy = 100;
   const angle = (d / 100) * Math.PI;
