@@ -62,8 +62,8 @@ function LoginPage() {
         backgroundPosition: "center top",
       }}
     >
-      <div className="absolute inset-0 bg-white/60" />
-      <div className="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-white to-transparent" />
+      <div className="absolute inset-0 bg-white/60 pointer-events-none" />
+      <div className="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-white to-transparent pointer-events-none" />
       <Nav />
       <BlurMask />
 
