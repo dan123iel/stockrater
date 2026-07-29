@@ -269,8 +269,90 @@ function KeyMetricsTab({ ticker }: { ticker: DemoTicker }) {
 }
 
 // ── ExitCheckTab ───────────────────────────────────────────────────────────────
-function ExitCheckTab({ ticker }: { ticker: DemoTicker }) {
-  const [purchasePrice, setPurchasePrice] = useState("");
+// ── CompareTab ─────────────────────────────────────────────────────────────────
+function CompareTab({ ticker }: { ticker: DemoTicker }) {
+  const [vsTickerInput, setVsTickerInput] = useState<DemoTicker>("MSFT");
+
+  const a = ticker;
+  const b = vsTickerInput;
+  const qA = DEMO_QUOTES[a]; const sA = DEMO_SCORES[a]; const rA = DEMO_RATIOS[a];
+  const qB = DEMO_QUOTES[b]; const sB = DEMO_SCORES[b]; const rB = DEMO_RATIOS[b];
+
+  const ROWS = [
+    { label: "pondex Score",    aVal: `${sA.score}/100`,                    bVal: `${sB.score}/100`,                    aWins: sA.score > sB.score },
+    { label: "Price",           aVal: `$${qA.price.toFixed(2)}`,            bVal: `$${qB.price.toFixed(2)}`,            aWins: false },
+    { label: "P/E Ratio",       aVal: `${rA.peRatio.toFixed(1)}x`,          bVal: `${rB.peRatio.toFixed(1)}x`,          aWins: rA.peRatio < rB.peRatio },
+    { label: "FCF Yield",       aVal: pct(rA.fcfYield),                     bVal: pct(rB.fcfYield),                     aWins: rA.fcfYield > rB.fcfYield },
+    { label: "Gross Margin",    aVal: pct(rA.grossMargin),                  bVal: pct(rB.grossMargin),                  aWins: rA.grossMargin > rB.grossMargin },
+    { label: "Net Margin",      aVal: pct(rA.netMargin),                    bVal: pct(rB.netMargin),                    aWins: rA.netMargin > rB.netMargin },
+    { label: "Revenue Growth",  aVal: pct(rA.revenueGrowth),               bVal: pct(rB.revenueGrowth),               aWins: rA.revenueGrowth > rB.revenueGrowth },
+    { label: "Return on Equity",aVal: pct(rA.returnOnEquity),              bVal: pct(rB.returnOnEquity),              aWins: rA.returnOnEquity > rB.returnOnEquity },
+    { label: "Debt / Equity",   aVal: `${rA.debtToEquity.toFixed(2)}x`,     bVal: `${rB.debtToEquity.toFixed(2)}x`,     aWins: rA.debtToEquity < rB.debtToEquity },
+    { label: "Beta",            aVal: qA.beta.toFixed(2),                   bVal: qB.beta.toFixed(2),                   aWins: qA.beta < qB.beta },
+  ];
+
+  const aWins = ROWS.filter(r => r.aWins).length;
+  const bWins = ROWS.filter(r => !r.aWins).length;
+
+  return (
+    <div className="mt-8 space-y-6">
+      {/* Vs picker */}
+      <div className="card-flat" style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+        <span className="text-sm font-semibold">Compare {a} vs.</span>
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+          {DEMO_TICKERS.filter(t => t !== a).map(t => (
+            <button key={t} onClick={() => setVsTickerInput(t)}
+              style={{ padding: "5px 14px", borderRadius: 20, border: "none", fontSize: 12, fontWeight: 600, cursor: "pointer", background: b === t ? "#1a1a1a" : "#f4f6f9", color: b === t ? "#fff" : "#555", transition: "all 0.15s" }}
+            >{t}</button>
+          ))}
+        </div>
+        <span className="text-xs ml-auto" style={{ color: "var(--text-muted)" }}>⚠ Research tool only · Not financial advice</span>
+      </div>
+
+      {/* Score summary */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", gap: 12, alignItems: "stretch" }}>
+        {[{ t: a, q: qA, s: sA, wins: aWins, color: "#6366f1" }, { t: b, q: qB, s: sB, wins: bWins, color: "#22c55e" }].map((item, i) => (
+          <div key={i} className="card-flat" style={{ textAlign: "center", border: `2px solid ${item.color}22` }}>
+            <p style={{ fontSize: 22, fontWeight: 800, color: item.color }}>{item.t}</p>
+            <p style={{ fontSize: 12, color: "#888", marginBottom: 8 }}>{item.q.companyName}</p>
+            <p style={{ fontSize: 40, fontWeight: 800, color: "#1a1a1a", letterSpacing: "-1px" }}>{item.s.score}<span style={{ fontSize: 16, color: "#aaa" }}>/100</span></p>
+            <span style={{ fontSize: 11, fontWeight: 700, padding: "3px 12px", borderRadius: 20, background: item.s.verdict === "BUY" ? "#dcfce7" : item.s.verdict === "SELL" ? "#fee2e2" : "#fef9c3", color: item.s.verdict === "BUY" ? "#15803d" : item.s.verdict === "SELL" ? "#b91c1c" : "#a16207" }}>{item.s.verdict}</span>
+            <p style={{ fontSize: 12, color: item.color, fontWeight: 700, marginTop: 8 }}>{item.wins} metrics better</p>
+          </div>
+        ))}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#f4f6f9", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: "#888" }}>vs</div>
+        </div>
+      </div>
+
+      {/* Comparison table */}
+      <div className="card-flat" style={{ padding: 0, overflow: "hidden" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr 1fr", padding: "12px 20px", background: "#f8f9fa", borderBottom: "1px solid #f0f0f0" }}>
+          <span style={{ fontSize: 11, fontWeight: 700, color: "#888", textTransform: "uppercase" }}>Metric</span>
+          <span style={{ fontSize: 11, fontWeight: 700, color: "#6366f1", textTransform: "uppercase", textAlign: "center" }}>{a}</span>
+          <span style={{ fontSize: 11, fontWeight: 700, color: "#22c55e", textTransform: "uppercase", textAlign: "center" }}>{b}</span>
+        </div>
+        {ROWS.map((row, i) => (
+          <div key={i} style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr 1fr", padding: "12px 20px", borderBottom: i < ROWS.length - 1 ? "1px solid #f8f8f8" : "none", alignItems: "center" }}>
+            <span className="text-sm" style={{ color: "var(--text-secondary)", fontWeight: 500 }}>{row.label}</span>
+            <div style={{ textAlign: "center" }}>
+              <span style={{ fontSize: 14, fontWeight: 700, color: row.aWins ? "#6366f1" : "#1a1a1a", background: row.aWins ? "#eff0fe" : "transparent", padding: "2px 10px", borderRadius: 8 }}>
+                {row.aVal}{row.aWins && " ✓"}
+              </span>
+            </div>
+            <div style={{ textAlign: "center" }}>
+              <span style={{ fontSize: 14, fontWeight: 700, color: !row.aWins ? "#22c55e" : "#1a1a1a", background: !row.aWins ? "#dcfce7" : "transparent", padding: "2px 10px", borderRadius: 8 }}>
+                {row.bVal}{!row.aWins && " ✓"}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ExitCheckTab({ ticker }: { ticker: DemoTicker }) {  const [purchasePrice, setPurchasePrice] = useState("");
   const [analysed, setAnalysed] = useState(false);
 
   const pp = parseFloat(purchasePrice) || undefined;
@@ -493,6 +575,7 @@ function StockPage() {
     { id: "overview",   label: "Overview" },
     { id: "metrics",    label: "Key Metrics" },
     { id: "financials", label: "Financials" },
+    { id: "compare",    label: "Compare" },
     { id: "exit",       label: "Exit Check" },
     { id: "profile",    label: "My Profile Score" },
     { id: "learn",      label: "Learn" },
@@ -650,6 +733,7 @@ function StockPage() {
 
             {tab === "metrics" && <KeyMetricsTab ticker={current as DemoTicker} />}
             {tab === "financials" && <FinancialsTab ticker={current as DemoTicker} />}
+            {tab === "compare" && <CompareTab ticker={current as DemoTicker} />}
             {tab === "exit" && <ExitCheckTab ticker={current as DemoTicker} />}
             {tab === "profile" && <ProfileScoreTab ticker={current as DemoTicker} />}
 

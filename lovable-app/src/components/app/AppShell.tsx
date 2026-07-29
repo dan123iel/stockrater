@@ -1,6 +1,6 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
-  LayoutDashboard, BarChart2, Clock, Settings, User, GitCompare,
+  LayoutDashboard, BarChart2, Settings, User,
   Briefcase, Zap, Bot, FolderKanban, Search, Bell, Plus, Share2,
 } from "lucide-react";
 import { useState, useRef, useEffect, type ReactNode } from "react";
@@ -15,11 +15,10 @@ const SIDEBAR_W = 72;             // icon-only sidebar
 // ── Nav items ────────────────────────────────────────────────────────────────
 const NAV_ITEMS = [
   { to: "/app",           Icon: LayoutDashboard, label: "Dashboard"      },
-  { to: "/app/stock",     Icon: BarChart2,        label: "Stock Analysis" },
-  { to: "/app/compare",   Icon: GitCompare,       label: "Compare"        },
+  { to: "/app/stock",     Icon: BarChart2,        label: "Stock"          },
   { to: "/app/portfolio", Icon: Briefcase,        label: "Portfolio"      },
   { to: "/app/markets",   Icon: Zap,              label: "Markets"        },
-  { to: "/app/robo",      Icon: Bot,              label: "Robo Advisor"   },
+  { to: "/app/robo",      Icon: Bot,              label: "Robo"           },
   { to: "/app/cfd",       Icon: FolderKanban,     label: "CFD"            },
 ] as const;
 
