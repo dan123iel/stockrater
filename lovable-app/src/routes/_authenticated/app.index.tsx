@@ -1,149 +1,225 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { useState } from "react";
 import { AppShell } from "@/components/app/AppShell";
 import { DEMO_QUOTES, DEMO_TICKERS, DEMO_WATCHLIST, DEMO_EVENTS, type DemoTicker } from "@/lib/demo-data";
+import { Download, Settings2, ArrowUpRight, ArrowDownRight, Star } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/app/")({
-  head: () => ({
-    meta: [
-      { title: "Dashboard — pondex_" },
-      { name: "description", content: "Your watchlist, top movers, and upcoming events." },
-      { property: "og:title", content: "Dashboard — pondex_" },
-      { property: "og:description", content: "Your watchlist and top movers." },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
+  head: () => ({ meta: [{ title: "Dashboard — pondex_" }] }),
   component: Dashboard,
 });
 
-function greet() {
-  const h = new Date().getHours();
-  if (h < 12) return "Good morning";
-  if (h < 18) return "Good afternoon";
-  return "Good evening";
+const STAT_CARDS = [
+  { icon: "⭐", label: "Global Market Sentiment", value: "Bullish (74%)", change: "+12.4%", up: true },
+  { icon: "⭐", label: "Top Performing Sector", value: "Technology", change: "+4.8%", up: true },
+  { icon: "⭐", label: "Market Volatility Index", value: "14.28 VIX", change: "-2.4%", up: false },
+];
+
+const OPPORTUNITIES = [
+  { asset: "Ethereum (ETH)", signal: "Trend Reversal", confidence: 82, trend: "Bullish", action: "Buy" },
+  { asset: "Apple Inc. (AAPL)", signal: "Momentum",      confidence: 76, trend: "Bullish", action: "Buy" },
+  { asset: "Tesla (TSLA)",     signal: "Mean Reversion", confidence: 61, trend: "Bearish", action: "Sell" },
+];
+
+function SparkLine({ up }: { up: boolean }) {
+  const color = up ? "#22c55e" : "#ef4444";
+  const path = up
+    ? "M0,20 C10,18 20,10 30,12 C40,14 50,6 60,4"
+    : "M0,4 C10,6 20,14 30,12 C40,10 50,18 60,20";
+  return (
+    <svg width="60" height="24" viewBox="0 0 60 24" fill="none">
+      <path d={path} stroke={color} strokeWidth="2" fill="none" strokeLinecap="round" />
+    </svg>
+  );
 }
 
 function Dashboard() {
-  const [name, setName] = useState<string>("");
-  const [watchlist, setWatchlist] = useState<string[]>(DEMO_WATCHLIST);
-
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      const email = data.user?.email ?? "";
-      setName(email.split("@")[0] || "there");
-    });
-    supabase
-      .from("watchlist")
-      .select("ticker")
-      .order("added_at", { ascending: true })
-      .then(({ data }) => {
-        if (data && data.length > 0) setWatchlist(data.map((r) => r.ticker));
-      });
-  }, []);
-
-  const topMovers = DEMO_TICKERS.slice().sort(
-    (a, b) => Math.abs(DEMO_QUOTES[b].changePercent) - Math.abs(DEMO_QUOTES[a].changePercent),
-  );
-
-  const changeColor = (n: number) => (n > 0 ? "var(--color-up)" : n < 0 ? "var(--color-down)" : "var(--text-secondary)");
+  const [allocationFilter, setAllocationFilter] = useState("All");
+  const topMovers = DEMO_TICKERS.slice(0, 4);
+  const changeColor = (n: number) => (n > 0 ? "#22c55e" : n < 0 ? "#ef4444" : "#888");
 
   return (
     <AppShell>
-      <div className="mx-auto max-w-[1280px] px-6 md:px-8 py-8">
-        <h1 className="text-3xl md:text-4xl font-semibold tracking-tight">
-          {greet()}, {name}.
-        </h1>
+      {/* Header */}
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 24 }}>
+        <div>
+          <h1 style={{ fontSize: 26, fontWeight: 700, color: "#1a1a1a", marginBottom: 4 }}>Market Intelligence Center</h1>
+          <p style={{ fontSize: 13, color: "#888" }}>AI-powered insights across global markets • Last updated 2m ago</p>
+        </div>
+        <div style={{ display: "flex", gap: 10 }}>
+          <button style={{ display: "flex", alignItems: "center", gap: 6, padding: "9px 16px", border: "1px solid #e0e0e0", borderRadius: 10, background: "#fff", fontSize: 13, fontWeight: 600, cursor: "pointer", color: "#333" }}>
+            <Download size={14} /> Download Report
+          </button>
+          <button style={{ display: "flex", alignItems: "center", gap: 6, padding: "9px 16px", border: "none", borderRadius: 10, background: "#6366f1", fontSize: 13, fontWeight: 600, cursor: "pointer", color: "#fff" }}>
+            <Settings2 size={14} /> Customize Dashboard
+          </button>
+        </div>
+      </div>
 
-        <div className="mt-8 grid lg:grid-cols-[1fr_360px] gap-8">
-          <div className="space-y-6">
-            <div className="card-flat flex flex-wrap items-baseline justify-between gap-3">
-              <div>
-                <p className="section-label">Watchlist</p>
-                <p className="mt-1 text-lg font-semibold">{watchlist.length} stocks</p>
+      {/* Stat Cards */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16, marginBottom: 28 }}>
+        {STAT_CARDS.map((c, i) => (
+          <div key={i} style={{ background: "#fff", borderRadius: 16, padding: "20px 22px", border: "1px solid #f0f0f0" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+              <div style={{ width: 40, height: 40, background: "#eff0fe", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>
+                {c.icon}
               </div>
-              <p className="text-sm tabular" style={{ color: "var(--text-secondary)" }}>Today: —</p>
-              <Link to="/app/portfolio" className="text-sm font-medium underline underline-offset-4">View portfolio →</Link>
+              <span style={{ fontSize: 13, fontWeight: 600, color: c.up ? "#22c55e" : "#ef4444", display: "flex", alignItems: "center", gap: 2 }}>
+                {c.change} {c.up ? <ArrowUpRight size={13} /> : <ArrowDownRight size={13} />}
+              </span>
             </div>
+            <p style={{ fontSize: 12, color: "#888", marginBottom: 4 }}>{c.label}</p>
+            <p style={{ fontSize: 22, fontWeight: 700, color: "#1a1a1a" }}>{c.value}</p>
+          </div>
+        ))}
+      </div>
 
-            <div>
-              <p className="section-label">Top movers</p>
-              <div className="mt-4 grid grid-cols-2 md:grid-cols-3 gap-3">
-                {topMovers.map((t) => {
-                  const q = DEMO_QUOTES[t];
-                  return (
-                    <Link key={t} to="/app/stock" search={{ ticker: t } as never} className="card-flat hover:border-[var(--text-primary)] transition-colors">
-                      <p className="text-sm font-semibold">{t}</p>
-                      <p className="text-xs mt-0.5" style={{ color: "var(--text-secondary)" }}>{q.companyName}</p>
-                      <p className="mt-3 text-lg tabular font-semibold">${q.price.toFixed(2)}</p>
-                      <p className="text-xs tabular mt-0.5" style={{ color: changeColor(q.changePercent) }}>
-                        {q.changePercent > 0 ? "+" : ""}
-                        {q.changePercent.toFixed(2)}%
-                      </p>
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
+      {/* Trending Assets */}
+      <div style={{ background: "#fff", borderRadius: 16, padding: "20px 22px", border: "1px solid #f0f0f0", marginBottom: 20 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+          <h2 style={{ fontSize: 15, fontWeight: 700, color: "#1a1a1a" }}>Trending Assets</h2>
+          <Link to="/app/markets" style={{ fontSize: 13, color: "#6366f1", textDecoration: "none", fontWeight: 500 }}>View all market →</Link>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
+          {topMovers.map((t) => {
+            const q = DEMO_QUOTES[t];
+            const up = q.changePercent >= 0;
+            return (
+              <Link key={t} to="/app/stock" search={{ ticker: t } as never} style={{ textDecoration: "none", border: "1px solid #f0f0f0", borderRadius: 12, padding: "14px 16px", display: "block" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                  <div style={{ width: 32, height: 32, background: "#1a1a1a", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <span style={{ color: "#fff", fontSize: 11, fontWeight: 700 }}>{t.slice(0, 2)}</span>
+                  </div>
+                  <span style={{ fontSize: 12, fontWeight: 600, color: up ? "#22c55e" : "#ef4444" }}>
+                    {up ? "+" : ""}{q.changePercent.toFixed(1)}%
+                  </span>
+                </div>
+                <p style={{ fontSize: 13, fontWeight: 700, color: "#1a1a1a", marginBottom: 2 }}>{t}</p>
+                <p style={{ fontSize: 11, color: "#888", marginBottom: 8 }}>{q.companyName}</p>
+                <p style={{ fontSize: 15, fontWeight: 700, color: "#1a1a1a", marginBottom: 8 }}>${q.price.toFixed(2)}</p>
+                <SparkLine up={up} />
+              </Link>
+            );
+          })}
+        </div>
+      </div>
 
-            <div>
-              <p className="section-label">Watchlist</p>
-              <div className="mt-4 card-flat p-0 overflow-hidden">
-                {watchlist.map((t, i) => {
-                  const q = DEMO_QUOTES[t as DemoTicker];
-                  if (!q) return null;
-                  return (
-                    <Link key={t} to="/app/stock" search={{ ticker: t } as never} className="flex items-center justify-between px-6 py-4 hover:bg-[var(--bg-subtle)]" style={{ borderTop: i === 0 ? "none" : "1px solid var(--border-color)" }}>
-                      <div>
-                        <p className="text-sm font-semibold">{t}</p>
-                        <p className="text-xs" style={{ color: "var(--text-secondary)" }}>{q.companyName}</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm font-semibold tabular">${q.price.toFixed(2)}</p>
-                        <p className="text-xs tabular" style={{ color: changeColor(q.changePercent) }}>
-                          {q.changePercent > 0 ? "+" : ""}{q.changePercent.toFixed(2)}%
-                        </p>
-                      </div>
-                    </Link>
-                  );
-                })}
+      {/* Bottom row */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 340px", gap: 20 }}>
+
+        {/* Opportunity Scanner */}
+        <div style={{ background: "#fff", borderRadius: 16, padding: "20px 22px", border: "1px solid #f0f0f0" }}>
+          <h2 style={{ fontSize: 15, fontWeight: 700, color: "#1a1a1a", marginBottom: 4 }}>Opportunity Scanner</h2>
+          <p style={{ fontSize: 12, color: "#888", marginBottom: 16 }}>AI-identified trade opportunities based on pattern recognition</p>
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <thead>
+              <tr style={{ borderBottom: "1px solid #f0f0f0" }}>
+                {["Asset", "Signal Type", "Confidence", "Trend", "Action"].map((h) => (
+                  <th key={h} style={{ textAlign: "left", fontSize: 11, color: "#888", fontWeight: 600, paddingBottom: 10, paddingRight: 12 }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {OPPORTUNITIES.map((o, i) => (
+                <tr key={i} style={{ borderBottom: "1px solid #f9f9f9" }}>
+                  <td style={{ padding: "12px 12px 12px 0", fontSize: 13, fontWeight: 600, color: "#1a1a1a" }}>{o.asset}</td>
+                  <td style={{ padding: "12px 12px 12px 0", fontSize: 13, color: "#555" }}>{o.signal}</td>
+                  <td style={{ padding: "12px 12px 12px 0" }}>
+                    <span style={{ background: "#eff0fe", color: "#6366f1", borderRadius: 20, padding: "3px 10px", fontSize: 12, fontWeight: 600 }}>{o.confidence}%</span>
+                  </td>
+                  <td style={{ padding: "12px 12px 12px 0", fontSize: 13, color: o.trend === "Bullish" ? "#22c55e" : "#ef4444", fontWeight: 500 }}>{o.trend}</td>
+                  <td style={{ padding: "12px 0 12px 0" }}>
+                    <span style={{ color: o.action === "Buy" ? "#22c55e" : "#ef4444", fontSize: 13, fontWeight: 700 }}>{o.action}</span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Asset Allocation */}
+        <div style={{ background: "#fff", borderRadius: 16, padding: "20px 22px", border: "1px solid #f0f0f0" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+            <h2 style={{ fontSize: 15, fontWeight: 700, color: "#1a1a1a" }}>Asset Allocation</h2>
+            <select value={allocationFilter} onChange={e => setAllocationFilter(e.target.value)} style={{ fontSize: 12, border: "1px solid #e0e0e0", borderRadius: 8, padding: "4px 8px", color: "#555" }}>
+              <option>All</option><option>Stocks</option><option>Crypto</option>
+            </select>
+          </div>
+          {/* Donut chart placeholder */}
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: 20 }}>
+            <div style={{ position: "relative", width: 140, height: 140 }}>
+              <svg width="140" height="140" viewBox="0 0 140 140">
+                <circle cx="70" cy="70" r="54" fill="none" stroke="#e8eaed" strokeWidth="22" />
+                <circle cx="70" cy="70" r="54" fill="none" stroke="#6366f1" strokeWidth="22" strokeDasharray="169 170" strokeDashoffset="0" strokeLinecap="round" />
+                <circle cx="70" cy="70" r="54" fill="none" stroke="#22c55e" strokeWidth="22" strokeDasharray="85 254" strokeDashoffset="-169" strokeLinecap="round" />
+                <circle cx="70" cy="70" r="54" fill="none" stroke="#f59e0b" strokeWidth="22" strokeDasharray="85 254" strokeDashoffset="-254" strokeLinecap="round" />
+              </svg>
+              <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+                <span style={{ fontSize: 18, fontWeight: 700, color: "#1a1a1a" }}>$58.4k</span>
               </div>
             </div>
           </div>
-
-          <aside className="space-y-6">
-            <div className="card-flat" style={{ background: "var(--bg-dark)", borderColor: "var(--bg-dark)", color: "var(--text-inverse)" }}>
-              <p className="section-label" style={{ color: "var(--text-muted)" }}>Robo Advisor</p>
-              <p className="mt-3 text-xl font-semibold">Investing on autopilot.</p>
-              <Link to="/app/robo" className="btn-light mt-6 inline-flex text-sm">Get started →</Link>
-            </div>
-
-            <div>
-              <p className="section-label">Upcoming events</p>
-              <div className="mt-4 card-flat p-0">
-                {DEMO_EVENTS.map((e, i) => (
-                  <div key={i} className="flex items-center justify-between px-6 py-4" style={{ borderTop: i === 0 ? "none" : "1px solid var(--border-color)" }}>
-                    <div className="flex items-center gap-4">
-                      <span className="text-xs tabular w-12" style={{ color: "var(--text-secondary)" }}>{e.date}</span>
-                      <div>
-                        <p className="text-sm font-semibold">{e.ticker}</p>
-                        <p className="text-xs" style={{ color: "var(--text-secondary)" }}>{e.event}</p>
-                      </div>
-                    </div>
-                    <span
-                      className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full"
-                      style={{
-                        background: e.type === "earnings" ? "var(--badge-hold-bg)" : "var(--badge-buy-bg)",
-                        color: e.type === "earnings" ? "var(--badge-hold-text)" : "var(--badge-buy-text)",
-                      }}
-                    >
-                      {e.type}
-                    </span>
-                  </div>
-                ))}
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {[{ label: "Stocks", pct: 50, color: "#6366f1" }, { label: "Crypto", pct: 25, color: "#22c55e" }, { label: "Other", pct: 25, color: "#f59e0b" }].map((a) => (
+              <div key={a.label} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <div style={{ width: 10, height: 10, borderRadius: "50%", background: a.color }} />
+                  <span style={{ fontSize: 13, color: "#555" }}>{a.label}</span>
+                </div>
+                <span style={{ fontSize: 13, fontWeight: 600, color: "#1a1a1a" }}>{a.pct}%</span>
               </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Watchlist + Events */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 340px", gap: 20, marginTop: 20 }}>
+        {/* Watchlist */}
+        <div style={{ background: "#fff", borderRadius: 16, padding: "20px 22px", border: "1px solid #f0f0f0" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+            <h2 style={{ fontSize: 15, fontWeight: 700 }}>Watchlist</h2>
+            <Link to="/app/portfolio" style={{ fontSize: 13, color: "#6366f1", textDecoration: "none" }}>View portfolio →</Link>
+          </div>
+          {DEMO_WATCHLIST.map((t, i) => {
+            const q = DEMO_QUOTES[t as DemoTicker];
+            if (!q) return null;
+            const up = q.changePercent >= 0;
+            return (
+              <Link key={t} to="/app/stock" search={{ ticker: t } as never} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 0", borderTop: i === 0 ? "none" : "1px solid #f5f5f5", textDecoration: "none" }}>
+                <div>
+                  <p style={{ fontSize: 13, fontWeight: 700, color: "#1a1a1a" }}>{t}</p>
+                  <p style={{ fontSize: 12, color: "#888" }}>{q.companyName}</p>
+                </div>
+                <div style={{ textAlign: "right" }}>
+                  <p style={{ fontSize: 13, fontWeight: 700, color: "#1a1a1a" }}>${q.price.toFixed(2)}</p>
+                  <p style={{ fontSize: 12, color: up ? "#22c55e" : "#ef4444" }}>{up ? "+" : ""}{q.changePercent.toFixed(2)}%</p>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* Upcoming Events */}
+        <div style={{ background: "#fff", borderRadius: 16, padding: "20px 22px", border: "1px solid #f0f0f0" }}>
+          <h2 style={{ fontSize: 15, fontWeight: 700, marginBottom: 16 }}>Upcoming Events</h2>
+          {DEMO_EVENTS.map((e, i) => (
+            <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderTop: i === 0 ? "none" : "1px solid #f5f5f5" }}>
+              <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+                <span style={{ fontSize: 12, color: "#888", width: 36 }}>{e.date}</span>
+                <div>
+                  <p style={{ fontSize: 13, fontWeight: 700, color: "#1a1a1a" }}>{e.ticker}</p>
+                  <p style={{ fontSize: 12, color: "#888" }}>{e.event}</p>
+                </div>
+              </div>
+              <span style={{
+                fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em",
+                padding: "3px 8px", borderRadius: 6,
+                background: e.type === "earnings" ? "#fef9c3" : "#dcfce7",
+                color: e.type === "earnings" ? "#a16207" : "#15803d",
+              }}>{e.type}</span>
             </div>
-          </aside>
+          ))}
         </div>
       </div>
     </AppShell>
