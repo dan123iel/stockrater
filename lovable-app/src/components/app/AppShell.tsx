@@ -285,18 +285,39 @@ export function AppShell({ children }: { children: ReactNode }) {
         role="navigation"
         aria-label="Mobile navigation"
         className="md:hidden"
-        style={{ position: "fixed", bottom: 0, left: 0, right: 0, height: 60, background: CARD_BG, borderTop: "1px solid #e8eaed", display: "flex", zIndex: 50 }}
+        style={{
+          position: "fixed", bottom: 0, left: 0, right: 0,
+          height: 68,
+          background: "#fff",
+          borderTop: "1px solid #e8eaed",
+          display: "flex",
+          zIndex: 50,
+          paddingBottom: "env(safe-area-inset-bottom, 0px)",
+        }}
       >
         {NAV_ITEMS.slice(0, 5).map(({ to, Icon, label }) => {
           const active = isActive(to);
           return (
             <Link key={to} to={to} aria-label={label}
-              style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2, color: active ? "#1a1a1a" : "#9ca3b0", textDecoration: "none" }}
+              style={{
+                flex: 1, display: "flex", flexDirection: "column",
+                alignItems: "center", justifyContent: "center", gap: 4,
+                color: active ? "#1a1a1a" : "#9ca3b0",
+                textDecoration: "none",
+              }}
             >
-              <div style={{ width: 28, height: 28, borderRadius: 8, background: active ? ACCENT : "transparent", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <Icon size={16} strokeWidth={active ? 2.2 : 1.8} />
+              <div style={{
+                width: 44, height: 32,
+                borderRadius: 20,
+                background: active ? "#c8f135" : "transparent",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                transition: "background 0.15s",
+              }}>
+                <Icon size={18} strokeWidth={active ? 2.2 : 1.8} color={active ? "#1a1a1a" : "#9ca3b0"} />
               </div>
-              <span style={{ fontSize: 9, fontWeight: active ? 700 : 400 }}>{label.split(" ")[0]}</span>
+              <span style={{ fontSize: 10, fontWeight: active ? 700 : 400, color: active ? "#1a1a1a" : "#9ca3b0" }}>
+                {label.split(" ")[0]}
+              </span>
             </Link>
           );
         })}
