@@ -203,6 +203,7 @@ function WidgetPerformance() {
     </div>
   );
 }
+const OPPORTUNITIES = [
   { asset: "Ethereum (ETH)", signal: "Trend Reversal", confidence: 82, trend: "Bullish", action: "Buy" },
   { asset: "Apple Inc. (AAPL)", signal: "Momentum",    confidence: 76, trend: "Bullish", action: "Buy" },
   { asset: "Tesla (TSLA)",     signal: "Mean Reversion",confidence: 61, trend: "Bearish", action: "Sell" },
