@@ -55,7 +55,7 @@ function LoginPage() {
 
   return (
     <div
-      className="min-h-screen"
+      className="relative min-h-screen"
       style={{
         backgroundImage: "url('/stockrater/hero-mountains.png')",
         backgroundSize: "cover",
@@ -67,7 +67,7 @@ function LoginPage() {
       <Nav />
       <BlurMask />
 
-      <div className="relative flex min-h-screen items-center justify-center px-6 py-24">
+      <div className="relative z-10 flex min-h-screen items-center justify-center px-6 py-24">
         <div className="w-full max-w-md">
           {/* Card */}
           <div className="rounded-3xl border border-border-soft bg-white/90 backdrop-blur-xl shadow-[0_24px_64px_rgba(0,0,0,0.1)] px-10 py-10">
