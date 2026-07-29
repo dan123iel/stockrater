@@ -10,11 +10,11 @@ import { supabase } from "@/integrations/supabase/client";
 // ── Constants ────────────────────────────────────────────────────────────────
 
 const ACCENT = "#6366f1";
-const SIDEBAR_BG = "#0f1117";
+const SIDEBAR_BG = "#111218";
 const SIDEBAR_BORDER = "#1e2130";
-const SIDEBAR_TEXT_INACTIVE = "#8b8fa8";
-const SIDEBAR_TEXT_ACTIVE = "#ffffff";
-const SIDEBAR_HOVER_BG = "rgba(99,102,241,0.12)";
+const SIDEBAR_TEXT_INACTIVE = "#9ca3b0";
+const SIDEBAR_TEXT_ACTIVE = "#1a1a1a";  // dark text on white box
+const SIDEBAR_HOVER_BG = "rgba(255,255,255,0.06)";
 
 const NAV_ITEMS = [
   { to: "/app",           label: "Dashboard",     Icon: LayoutDashboard },
@@ -44,6 +44,7 @@ function NavLink({ to, label, Icon, active, collapsed }: {
   return (
     <Link
       to={to}
+      aria-current={active ? "page" : undefined}
       title={collapsed ? label : undefined}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
@@ -51,18 +52,20 @@ function NavLink({ to, label, Icon, active, collapsed }: {
         display: "flex",
         alignItems: "center",
         gap: 10,
-        padding: collapsed ? "10px 0" : "10px 12px",
+        padding: collapsed ? "10px 0" : "10px 14px",
         justifyContent: collapsed ? "center" : "flex-start",
-        borderRadius: 10,
-        background: active ? ACCENT : hover ? SIDEBAR_HOVER_BG : "transparent",
-        color: active ? SIDEBAR_TEXT_ACTIVE : hover ? "#fff" : SIDEBAR_TEXT_INACTIVE,
-        fontWeight: active ? 600 : 400,
+        borderRadius: 12,
+        // FintechX: active = white box with shadow, inactive = transparent
+        background: active ? "#ffffff" : hover ? SIDEBAR_HOVER_BG : "transparent",
+        color: active ? ACCENT : hover ? "#fff" : SIDEBAR_TEXT_INACTIVE,
+        fontWeight: active ? 700 : 400,
         fontSize: 14,
         textDecoration: "none",
         transition: "background 0.15s, color 0.15s",
+        boxShadow: active ? "0 2px 8px rgba(0,0,0,0.18)" : "none",
       }}
     >
-      <Icon size={18} strokeWidth={1.8} />
+      <Icon size={18} strokeWidth={active ? 2.2 : 1.8} />
       {!collapsed && <span>{label}</span>}
     </Link>
   );
@@ -162,14 +165,15 @@ export function AppShell({ children }: { children: ReactNode }) {
 
         {/* Upgrade banner */}
         {!collapsed && (
-          <div style={{ margin: "12px", background: "#1a1d2e", borderRadius: 14, padding: "16px 14px", textAlign: "center" }}>
-            <div style={{ fontSize: 26, marginBottom: 8 }}>⭐</div>
-            <p style={{ fontSize: 12, color: SIDEBAR_TEXT_INACTIVE, marginBottom: 12, lineHeight: 1.5 }}>
-              Upgrade to <strong style={{ color: "#fff" }}>PRO</strong> for unlimited access
+          <div style={{ margin: "12px", background: "#1a1d2e", borderRadius: 16, padding: "18px 16px", textAlign: "center" }}>
+            <div style={{ fontSize: 32, marginBottom: 10 }}>🌟</div>
+            <p style={{ fontSize: 12, color: "#9ca3b0", marginBottom: 4, fontWeight: 600, lineHeight: 1.5 }}>
+              Upgrade to <strong style={{ color: "#fff" }}>PRO</strong> to get
             </p>
+            <p style={{ fontSize: 12, color: "#9ca3b0", marginBottom: 14, lineHeight: 1.5 }}>access to all features!</p>
             <button
-              style={{ background: ACCENT, color: "#fff", border: "none", borderRadius: 20, padding: "8px 20px", fontSize: 12, fontWeight: 700, cursor: "pointer", width: "100%", transition: "opacity 0.15s" }}
-              onMouseEnter={e => (e.currentTarget.style.opacity = "0.85")}
+              style={{ background: "#fff", color: "#111218", border: "none", borderRadius: 20, padding: "9px 20px", fontSize: 12, fontWeight: 700, cursor: "pointer", width: "100%", transition: "opacity 0.15s" }}
+              onMouseEnter={e => (e.currentTarget.style.opacity = "0.9")}
               onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
             >
               Get Pro Now
@@ -185,13 +189,13 @@ export function AppShell({ children }: { children: ReactNode }) {
         {/* Topbar */}
         <header style={{
           position: "sticky", top: 0, zIndex: 40,
-          background: "#fff",
+          background: "#f8f9fa",
           borderBottom: "1px solid #e8eaed",
           height: 64,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "0 24px",
+          padding: "0 28px",
           gap: 16,
         }}>
           <span style={{ fontWeight: 700, fontSize: 18, color: "#1a1a1a", whiteSpace: "nowrap" }}>{pageTitle}</span>
@@ -207,12 +211,13 @@ export function AppShell({ children }: { children: ReactNode }) {
                 onFocus={() => setSearchFocused(true)}
                 onBlur={() => setSearchFocused(false)}
                 placeholder="Search anything..."
+                aria-label="Search stocks and tickers"
                 style={{
                   paddingLeft: 36, paddingRight: 16, height: 38,
-                  border: `1px solid ${searchFocused ? ACCENT : "#e8eaed"}`,
+                  border: `1px solid ${searchFocused ? ACCENT : "#e0e0e0"}`,
                   borderRadius: 20,
-                  fontSize: 13, background: "#f8f9fa", outline: "none",
-                  width: searchFocused ? 280 : 220,
+                  fontSize: 13, background: "#fff", outline: "none",
+                  width: searchFocused ? 300 : 240,
                   color: "#333",
                   transition: "width 0.2s, border-color 0.15s",
                   boxShadow: searchFocused ? `0 0 0 3px rgba(99,102,241,0.12)` : "none",

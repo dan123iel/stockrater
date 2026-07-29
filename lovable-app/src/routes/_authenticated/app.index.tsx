@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { AppShell } from "@/components/app/AppShell";
-import { DEMO_QUOTES, DEMO_TICKERS, DEMO_WATCHLIST, DEMO_EVENTS, type DemoTicker } from "@/lib/demo-data";
+import { DEMO_QUOTES, DEMO_TICKERS, DEMO_WATCHLIST, DEMO_EVENTS, DEMO_CANDLES, type DemoTicker } from "@/lib/demo-data";
 import { Download, Settings2, ArrowUpRight, ArrowDownRight, X, GripVertical, Plus } from "lucide-react";
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import {
   DndContext, closestCenter, KeyboardSensor, PointerSensor,
   useSensor, useSensors, type DragEndEvent,
@@ -21,13 +22,16 @@ export const Route = createFileRoute("/_authenticated/app/")({
 // ── Widget definitions ──────────────────────────────────────────────────────
 
 const ALL_WIDGETS = [
-  { id: "stats",       label: "Market Stats",        description: "Sentiment, top sector, volatility" },
-  { id: "trending",    label: "Trending Assets",      description: "Top 4 movers with sparklines" },
-  { id: "scanner",     label: "Opportunity Scanner",  description: "AI trade signals" },
-  { id: "allocation",  label: "Asset Allocation",     description: "Portfolio donut chart" },
-  { id: "watchlist",   label: "Watchlist",            description: "Your saved stocks" },
-  { id: "events",      label: "Upcoming Events",      description: "Earnings & dividends" },
+  { id: "hero",        label: "Financial Command",   description: "Portfolio summary + 4 stat cards" },
+  { id: "performance", label: "Investment Performance", description: "Portfolio chart over 6 months" },
+  { id: "trending",    label: "Trending Assets",     description: "Top 4 movers with sparklines" },
+  { id: "scanner",     label: "Opportunity Scanner", description: "AI trade signals" },
+  { id: "allocation",  label: "Asset Allocation",    description: "Portfolio donut chart" },
+  { id: "watchlist",   label: "Watchlist",           description: "Your saved stocks" },
+  { id: "events",      label: "Upcoming Events",     description: "Earnings & dividends" },
 ];
+
+const DEFAULT_WIDGETS = ["hero", "performance", "trending", "scanner", "allocation", "watchlist", "events"];
 
 const DEFAULT_WIDGETS = ALL_WIDGETS.map(w => w.id);
 
@@ -86,15 +90,119 @@ function SortableWidget({ id, customize, onRemove, children }: {
   );
 }
 
-// ── Sub-components ──────────────────────────────────────────────────────────
+// ── Hero Widget — FintechX "Financial Command" style ───────────────────────
 
-const STAT_CARDS = [
-  { icon: "⭐", label: "Global Market Sentiment", value: "Bullish (74%)", change: "+12.4%", up: true },
-  { icon: "⭐", label: "Top Performing Sector",   value: "Technology",    change: "+4.8%",  up: true },
-  { icon: "⭐", label: "Market Volatility Index", value: "14.28 VIX",     change: "-2.4%",  up: false },
+const STAT_4 = [
+  { icon: "⭐", iconBg: "#eff0fe", label: "Total Portfolio Value",  value: "$58,420.00", change: "+12.4%", up: true },
+  { icon: "📊", iconBg: "#fff3e0", label: "Today's Gain/Loss",      value: "+$1,240.50", change: "+2.1%",  up: true, highlight: true },
+  { icon: "💼", iconBg: "#e0f7f6", label: "Active Investments",     value: "24 Assets",  change: "6",      up: true },
+  { icon: "🎯", iconBg: "#fce4ec", label: "Risk Score",             value: "18 / 100",   change: "low",    up: true, badge: true },
 ];
 
-const OPPORTUNITIES = [
+function WidgetHero() {
+  return (
+    <div style={{ marginBottom: 4 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
+        <div>
+          <h1 style={{ fontSize: 24, fontWeight: 700, color: "#1a1a1a", marginBottom: 4 }}>Financial Command</h1>
+          <p style={{ fontSize: 13, color: "#888" }}>Welcome back, Daniel. Your portfolio is up 12.4% this quarter.</p>
+        </div>
+        <div style={{ display: "flex", gap: 8 }}>
+          <button style={{ padding: "8px 16px", border: "1px solid #e0e0e0", borderRadius: 10, background: "#fff", fontSize: 12, fontWeight: 600, cursor: "pointer", color: "#333" }}>Export CSV</button>
+          <button style={{ padding: "8px 16px", border: "1px solid #e0e0e0", borderRadius: 10, background: "#fff", fontSize: 12, fontWeight: 600, cursor: "pointer", color: "#333" }}>Share Insights</button>
+        </div>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14 }}>
+        {STAT_4.map((s, i) => (
+          <div key={i} style={{
+            background: s.highlight ? "#f8f9ff" : "#fff",
+            borderRadius: 16, padding: "18px 20px",
+            border: s.highlight ? "1px solid #e8eaff" : "1px solid #f0f0f0",
+            boxShadow: s.highlight ? "0 2px 12px rgba(99,102,241,0.08)" : "none",
+          }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
+              <div style={{ width: 38, height: 38, background: s.iconBg, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>{s.icon}</div>
+              {s.badge ? (
+                <span style={{ fontSize: 10, fontWeight: 700, background: "#dcfce7", color: "#15803d", padding: "2px 8px", borderRadius: 20 }}>low ✓</span>
+              ) : (
+                <span style={{ fontSize: 12, fontWeight: 600, color: s.up ? "#22c55e" : "#ef4444", display: "flex", alignItems: "center", gap: 2 }}>
+                  {s.change} <ArrowUpRight size={12} />
+                </span>
+              )}
+            </div>
+            <p style={{ fontSize: 12, color: "#888", marginBottom: 4 }}>{s.label}</p>
+            <p style={{ fontSize: 20, fontWeight: 700, color: "#1a1a1a" }}>{s.value}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── Performance Chart Widget ────────────────────────────────────────────────
+
+const CHART_TABS = ["Daily", "Weekly", "Monthly"] as const;
+
+function WidgetPerformance() {
+  const [tab, setTab] = useState<typeof CHART_TABS[number]>("Monthly");
+
+  // Use AAPL candles as portfolio proxy, slice to ~6 months
+  const raw = DEMO_CANDLES["AAPL"];
+  const pts = tab === "Daily" ? raw.slice(-30) : tab === "Weekly" ? raw.slice(-90) : raw.slice(-180);
+  const data = pts.filter((_, i) => i % (tab === "Daily" ? 1 : tab === "Weekly" ? 7 : 14) === 0).map(c => ({
+    date: c.date.slice(5), // MM-DD
+    portfolio: Math.round(c.close * 274),  // ~$58k baseline
+    benchmark: Math.round(c.close * 230),
+  }));
+
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 340px", gap: 16 }}>
+      {/* Chart */}
+      <div style={{ background: "#fff", borderRadius: 16, padding: "20px 22px", border: "1px solid #f0f0f0" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 4 }}>
+          <div>
+            <h2 style={{ fontSize: 15, fontWeight: 700, color: "#1a1a1a" }}>Investment Performance</h2>
+            <p style={{ fontSize: 12, color: "#888" }}>Portfolio value over the last 6 months</p>
+          </div>
+          <div style={{ display: "flex", gap: 4 }}>
+            {CHART_TABS.map(t => (
+              <button key={t} onClick={() => setTab(t)} style={{
+                padding: "4px 12px", border: "none", borderRadius: 20, fontSize: 12, fontWeight: 500, cursor: "pointer",
+                background: "none", color: tab === t ? "#6366f1" : "#888",
+                borderBottom: tab === t ? "2px solid #6366f1" : "2px solid transparent",
+              }}>{t}</button>
+            ))}
+          </div>
+        </div>
+        <div style={{ height: 220, marginTop: 16 }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart data={data} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
+              <defs>
+                <linearGradient id="grad1" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#22c55e" stopOpacity={0.15} />
+                  <stop offset="95%" stopColor="#22c55e" stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="grad2" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#6366f1" stopOpacity={0.12} />
+                  <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="#f5f5f5" />
+              <XAxis dataKey="date" tick={{ fontSize: 10, fill: "#aaa" }} tickLine={false} axisLine={false} />
+              <YAxis tick={{ fontSize: 10, fill: "#aaa" }} tickLine={false} axisLine={false} tickFormatter={v => `$${Math.round(v/1000)}k`} />
+              <Tooltip formatter={(v: number) => [`$${v.toLocaleString()}`, ""]} contentStyle={{ borderRadius: 10, border: "1px solid #f0f0f0", fontSize: 12 }} />
+              <Area type="monotone" dataKey="portfolio" stroke="#22c55e" strokeWidth={2} fill="url(#grad1)" name="Portfolio" />
+              <Area type="monotone" dataKey="benchmark" stroke="#6366f1" strokeWidth={2} fill="url(#grad2)" name="Benchmark" />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Asset Allocation */}
+      <WidgetAllocation />
+    </div>
+  );
+}
   { asset: "Ethereum (ETH)", signal: "Trend Reversal", confidence: 82, trend: "Bullish", action: "Buy" },
   { asset: "Apple Inc. (AAPL)", signal: "Momentum",    confidence: 76, trend: "Bullish", action: "Buy" },
   { asset: "Tesla (TSLA)",     signal: "Mean Reversion",confidence: 61, trend: "Bearish", action: "Sell" },
@@ -104,25 +212,6 @@ function SparkLine({ up }: { up: boolean }) {
   const color = up ? "#22c55e" : "#ef4444";
   const path = up ? "M0,20 C10,18 20,10 30,12 C40,14 50,6 60,4" : "M0,4 C10,6 20,14 30,12 C40,10 50,18 60,20";
   return <svg width="60" height="24" viewBox="0 0 60 24"><path d={path} stroke={color} strokeWidth="2" fill="none" strokeLinecap="round" /></svg>;
-}
-
-function WidgetStats() {
-  return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
-      {STAT_CARDS.map((c, i) => (
-        <div key={i} style={{ background: "#fff", borderRadius: 16, padding: "20px 22px", border: "1px solid #f0f0f0" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16 }}>
-            <div style={{ width: 40, height: 40, background: "#eff0fe", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>{c.icon}</div>
-            <span style={{ fontSize: 13, fontWeight: 600, color: c.up ? "#22c55e" : "#ef4444", display: "flex", alignItems: "center", gap: 2 }}>
-              {c.change} {c.up ? <ArrowUpRight size={13} /> : <ArrowDownRight size={13} />}
-            </span>
-          </div>
-          <p style={{ fontSize: 12, color: "#888", marginBottom: 4 }}>{c.label}</p>
-          <p style={{ fontSize: 22, fontWeight: 700, color: "#1a1a1a" }}>{c.value}</p>
-        </div>
-      ))}
-    </div>
-  );
 }
 
 function WidgetTrending() {
@@ -267,7 +356,8 @@ function WidgetEvents() {
 }
 
 const WIDGET_COMPONENTS: Record<string, () => React.ReactElement> = {
-  stats: WidgetStats,
+  hero: WidgetHero,
+  performance: WidgetPerformance,
   trending: WidgetTrending,
   scanner: WidgetScanner,
   allocation: WidgetAllocation,
