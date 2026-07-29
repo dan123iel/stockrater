@@ -3,10 +3,13 @@ import { Nav } from "@/components/pondex/Nav";
 import { BlurMask } from "@/components/pondex/BlurMask";
 import { Hero } from "@/components/pondex/Hero";
 import { TrustBar } from "@/components/pondex/TrustBar";
+import { VerdictBanner } from "@/components/pondex/VerdictBanner";
 import { BeforeAfter } from "@/components/pondex/BeforeAfter";
 import { Features } from "@/components/pondex/Features";
 import { DashboardPreview } from "@/components/pondex/DashboardPreview";
+import { InvestorProfile } from "@/components/pondex/InvestorProfile";
 import { HowItWorks } from "@/components/pondex/HowItWorks";
+import { CompareTeaser } from "@/components/pondex/CompareTeaser";
 import { Security } from "@/components/pondex/Security";
 import { UseCases } from "@/components/pondex/UseCases";
 import { Stats } from "@/components/pondex/Stats";
@@ -43,17 +46,19 @@ function Landing() {
       <BlurMask />
       <Hero />
       <TrustBar />
+      <VerdictBanner />
       <BeforeAfter />
       <Features />
       <DashboardPreview />
+      <InvestorProfile />
       <HowItWorks />
+      <CompareTeaser />
       <Security />
       <UseCases />
       <Stats />
       <Testimonials />
       <Pricing />
       <FAQ />
-      {/* Shared landscape background for FinalCTA + Footer — extends to bottom of page */}
       <div
         style={{
           backgroundImage: "url('/stockrater/hero-landscape.png')",
