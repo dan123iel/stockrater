@@ -33,8 +33,6 @@ const ALL_WIDGETS = [
 
 const DEFAULT_WIDGETS = ["hero", "performance", "trending", "scanner", "allocation", "watchlist", "events"];
 
-const DEFAULT_WIDGETS = ALL_WIDGETS.map(w => w.id);
-
 function useWidgets() {
   const [widgets, setWidgets] = useState<string[]>(() => {
     try {
