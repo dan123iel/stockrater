@@ -1,9 +1,9 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
-  LayoutDashboard, Briefcase, Zap, BarChart2, Bot, Users, FolderKanban,
-  Bell, ChevronDown, Search, LogOut, ChevronLeft, ChevronRight,
+  LayoutDashboard, Briefcase, Zap, BarChart2, Bot, FolderKanban,
+  Bell, ChevronDown, Search, ChevronLeft, ChevronRight, User, Settings, LogOut,
 } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { useState, useRef, useEffect, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 const NAV_ITEMS = [
@@ -13,9 +13,7 @@ const NAV_ITEMS = [
   { to: "/app/stock",      label: "Stock Analysis",   Icon: BarChart2 },
   { to: "/app/robo",       label: "Robo Advisor",     Icon: Bot },
   { to: "/app/cfd",        label: "CFD",              Icon: FolderKanban },
-  { to: "/app/account",    label: "Account",          Icon: Users },
 ] as const;
-
 const PAGE_TITLES: Record<string, string> = {
   "/app":           "Dashboard",
   "/app/portfolio": "Portfolio",
@@ -31,6 +29,18 @@ export function AppShell({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [collapsed, setCollapsed] = useState(false);
+  const [avatarOpen, setAvatarOpen] = useState(false);
+  const avatarRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (avatarRef.current && !avatarRef.current.contains(e.target as Node)) {
+        setAvatarOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
 
   const submitSearch = () => {
     const t = search.trim().toUpperCase();
@@ -183,11 +193,45 @@ export function AppShell({ children }: { children: ReactNode }) {
             </button>
 
             {/* Avatar + dropdown */}
-            <div style={{ display: "flex", alignItems: "center", gap: 6, cursor: "pointer" }} onClick={signOut} title="Sign out">
-              <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#6366f1", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <span style={{ color: "#fff", fontWeight: 700, fontSize: 14 }}>D</span>
+            <div ref={avatarRef} style={{ position: "relative" }}>
+              <div
+                onClick={() => setAvatarOpen(!avatarOpen)}
+                style={{ display: "flex", alignItems: "center", gap: 6, cursor: "pointer", padding: "4px 8px", borderRadius: 10, background: avatarOpen ? "#f0f0f0" : "transparent" }}
+              >
+                <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#6366f1", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <span style={{ color: "#fff", fontWeight: 700, fontSize: 14 }}>D</span>
+                </div>
+                <ChevronDown size={14} color="#888" />
               </div>
-              <ChevronDown size={14} color="#888" />
+              {avatarOpen && (
+                <div style={{ position: "absolute", top: "calc(100% + 8px)", right: 0, background: "#fff", border: "1px solid #e8eaed", borderRadius: 12, boxShadow: "0 8px 24px rgba(0,0,0,0.12)", minWidth: 180, zIndex: 100, overflow: "hidden" }}>
+                  <div style={{ padding: "12px 16px", borderBottom: "1px solid #f0f0f0" }}>
+                    <p style={{ fontSize: 13, fontWeight: 600, color: "#1a1a1a" }}>Daniel</p>
+                    <p style={{ fontSize: 11, color: "#888" }}>Free Plan</p>
+                  </div>
+                  {[
+                    { icon: User, label: "Account", to: "/app/account" },
+                    { icon: Settings, label: "Settings", to: "/app/account" },
+                  ].map(({ icon: Icon, label, to }) => (
+                    <Link key={label} to={to} onClick={() => setAvatarOpen(false)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 16px", fontSize: 13, color: "#333", textDecoration: "none" }}
+                      onMouseEnter={e => (e.currentTarget.style.background = "#f8f9fa")}
+                      onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+                    >
+                      <Icon size={15} color="#666" /> {label}
+                    </Link>
+                  ))}
+                  <div style={{ borderTop: "1px solid #f0f0f0" }}>
+                    <button
+                      onClick={signOut}
+                      style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 16px", fontSize: 13, color: "#ef4444", background: "none", border: "none", cursor: "pointer", width: "100%" }}
+                      onMouseEnter={e => (e.currentTarget.style.background = "#fff5f5")}
+                      onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
+                    >
+                      <LogOut size={15} /> Sign out
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </header>
