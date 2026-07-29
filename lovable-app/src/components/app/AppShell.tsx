@@ -1,6 +1,6 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
-  LayoutDashboard, Briefcase, Zap, BarChart2, Bot, FolderKanban,
+  LayoutDashboard, Briefcase, Zap, BarChart2, Bot, FolderKanban, GitCompare,
   Bell, ChevronDown, Search, ChevronLeft, ChevronRight,
   User, Settings, LogOut,
 } from "lucide-react";
@@ -21,6 +21,7 @@ const NAV_ITEMS = [
   { to: "/app/portfolio", label: "Portfolio",     Icon: Briefcase },
   { to: "/app/markets",   label: "Markets",       Icon: Zap },
   { to: "/app/stock",     label: "Stock Analysis",Icon: BarChart2 },
+  { to: "/app/compare",   label: "Compare",       Icon: GitCompare },
   { to: "/app/robo",      label: "Robo Advisor",  Icon: Bot },
   { to: "/app/cfd",       label: "CFD",           Icon: FolderKanban },
 ] as const;
@@ -30,6 +31,7 @@ const PAGE_TITLES: Record<string, string> = {
   "/app/portfolio": "Portfolio",
   "/app/markets":   "Markets",
   "/app/stock":     "Stock Analysis",
+  "/app/compare":   "Compare Stocks",
   "/app/robo":      "Robo Advisor",
   "/app/cfd":       "CFD",
   "/app/account":   "Account",
@@ -80,6 +82,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
   const [avatarOpen, setAvatarOpen] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
+  const [scrollPct, setScrollPct] = useState(0);
   const avatarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -89,6 +92,17 @@ export function AppShell({ children }: { children: ReactNode }) {
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  // Scroll progress
+  useEffect(() => {
+    const onScroll = () => {
+      const el = document.documentElement;
+      const pct = el.scrollTop / (el.scrollHeight - el.clientHeight) * 100;
+      setScrollPct(Math.min(100, Math.max(0, pct)));
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   const submitSearch = () => {
@@ -312,6 +326,11 @@ export function AppShell({ children }: { children: ReactNode }) {
             </div>
           </div>
         </header>
+
+        {/* Scroll progress bar */}
+        <div style={{ height: 2, background: "#f0f0f0", position: "sticky", top: 64, zIndex: 39 }}>
+          <div style={{ height: "100%", width: `${scrollPct}%`, background: ACCENT, transition: "width 0.1s linear" }} />
+        </div>
 
         {/* Page content */}
         <main style={{ flex: 1, padding: "24px 28px", paddingBottom: 80 }}>

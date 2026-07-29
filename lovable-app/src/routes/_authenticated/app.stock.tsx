@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { z } from "zod";
-import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid } from "recharts";
+import { Area, Line, ComposedChart, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid } from "recharts";
 import { supabase } from "@/integrations/supabase/client";
 import { AppShell } from "@/components/app/AppShell";
 import {
@@ -11,6 +11,79 @@ import {
   type DemoTicker, type ExitSignal, type InvestorStyle,
 } from "@/lib/demo-data";
 import { toast } from "sonner";
+import { Info } from "lucide-react";
+
+// ── Term Tooltip ───────────────────────────────────────────────────────────────
+const TERM_DEFINITIONS: Record<string, string> = {
+  "P/E Ratio":        "Price divided by earnings per share. Higher = market pays more per dollar of profit. Compare within same sector.",
+  "Forward P/E":      "Same as P/E but uses next year's estimated earnings. More forward-looking than trailing P/E.",
+  "Price / Book":     "Market price vs. book value of assets. <1 may indicate undervaluation.",
+  "Price / Sales":    "Market cap divided by revenue. Useful for companies without profits yet.",
+  "FCF Yield":        "Free cash flow divided by market cap. Higher = more cash generated per dollar invested.",
+  "Gross Margin":     "Revenue minus cost of goods, as a %. Higher = more efficient production.",
+  "Operating Margin": "Profit after operating expenses, as a %. Shows core business profitability.",
+  "Net Margin":       "Final profit after all costs and taxes, as a %. The bottom line.",
+  "Revenue Growth":   "Year-over-year increase in total revenue. Key signal for growth stocks.",
+  "Return on Equity": "Net income divided by shareholder equity. Measures how efficiently capital is used.",
+  "Return on Assets": "Net income divided by total assets. Measures asset efficiency.",
+  "Debt / Equity":    "Total debt divided by shareholder equity. Higher = more leveraged = more risk.",
+  "Current Ratio":    "Current assets divided by current liabilities. >1 means company can cover short-term debts.",
+  "Beta":             "Measures volatility vs. the market. Beta >1 = moves more than market. <1 = more stable.",
+  "DCF":              "Discounted Cash Flow — estimates intrinsic value based on projected future cash flows.",
+  "RSI":              "Relative Strength Index. >70 = potentially overbought, <30 = potentially oversold.",
+  "MACD":             "Moving Average Convergence Divergence. A momentum indicator comparing two EMAs.",
+  "SMA":              "Simple Moving Average. Average closing price over a period. 50/200-day are key levels.",
+  "EPS":              "Earnings Per Share — net income divided by shares outstanding. Core profitability metric.",
+  "Market Cap":       "Total market value = share price × shares outstanding.",
+};
+
+function TermTooltip({ term }: { term: string }) {
+  const [open, setOpen] = useState(false);
+  const def = TERM_DEFINITIONS[term];
+  if (!def) return <span>{term}</span>;
+  return (
+    <span style={{ position: "relative", display: "inline-flex", alignItems: "center", gap: 3 }}>
+      {term}
+      <button
+        onClick={() => setOpen(!open)}
+        onBlur={() => setTimeout(() => setOpen(false), 150)}
+        style={{ background: "none", border: "none", cursor: "pointer", padding: 0, color: "#aaa", display: "inline-flex" }}
+        aria-label={`Definition of ${term}`}
+      >
+        <Info size={12} />
+      </button>
+      {open && (
+        <span style={{
+          position: "absolute", bottom: "calc(100% + 6px)", left: 0,
+          background: "#1a1a1a", color: "#fff", borderRadius: 10,
+          padding: "8px 12px", fontSize: 11, lineHeight: 1.5,
+          width: 220, zIndex: 200, boxShadow: "0 4px 16px rgba(0,0,0,0.2)",
+        }}>
+          {def}
+          <span style={{ position: "absolute", bottom: -5, left: 10, width: 10, height: 10, background: "#1a1a1a", transform: "rotate(45deg)" }} />
+        </span>
+      )}
+    </span>
+  );
+}
+
+// ── Source Badge ───────────────────────────────────────────────────────────────
+function SourceBadge({ source, date }: { source: string; date?: string }) {
+  return (
+    <span style={{ fontSize: 10, color: "#aaa", background: "#f4f6f9", padding: "2px 7px", borderRadius: 20, fontWeight: 500, display: "inline-flex", alignItems: "center", gap: 3 }}>
+      📊 {source}{date ? ` · ${date}` : ""}
+    </span>
+  );
+}
+
+// ── SMA calculator ─────────────────────────────────────────────────────────────
+function calcSMA(data: { close: number }[], period: number): (number | null)[] {
+  return data.map((_, i) => {
+    if (i < period - 1) return null;
+    const slice = data.slice(i - period + 1, i + 1);
+    return parseFloat((slice.reduce((s, d) => s + d.close, 0) / period).toFixed(2));
+  });
+}
 
 const searchSchema = z.object({ ticker: z.string().optional() });
 
@@ -156,16 +229,16 @@ function KeyMetricsTab({ ticker }: { ticker: DemoTicker }) {
   const r = DEMO_RATIOS[ticker];
   const q = DEMO_QUOTES[ticker];
   const sections = [
-    { title: "Valuation", source: "Yahoo Finance – TTM", items: [
+    { title: "Valuation", source: "Yahoo Finance", items: [
       { l: "P/E Ratio", v: r.peRatio.toFixed(1) + "x" }, { l: "Forward P/E", v: r.forwardPE.toFixed(1) + "x" },
       { l: "Price / Book", v: r.priceToBook.toFixed(1) + "x" }, { l: "Price / Sales", v: r.priceToSales.toFixed(1) + "x" },
       { l: "FCF Yield", v: pct(r.fcfYield) },
     ]},
-    { title: "Profitability", source: "Yahoo Finance – TTM", items: [
+    { title: "Profitability", source: "Yahoo Finance", items: [
       { l: "Gross Margin", v: pct(r.grossMargin) }, { l: "Operating Margin", v: pct(r.operatingMargin) },
       { l: "Net Margin", v: pct(r.netMargin) }, { l: "Revenue Growth", v: pct(r.revenueGrowth) },
     ]},
-    { title: "Management", source: "Yahoo Finance – TTM", items: [
+    { title: "Management", source: "Yahoo Finance", items: [
       { l: "Return on Equity", v: pct(r.returnOnEquity) }, { l: "Return on Assets", v: pct(r.returnOnAssets) },
       { l: "Debt / Equity", v: r.debtToEquity.toFixed(2) }, { l: "Current Ratio", v: r.currentRatio.toFixed(2) },
     ]},
@@ -181,11 +254,11 @@ function KeyMetricsTab({ ticker }: { ticker: DemoTicker }) {
         <div key={sec.title} className="card-flat">
           <div className="flex justify-between items-baseline border-b pb-3 mb-0" style={{ borderColor: "var(--text-primary)" }}>
             <p className="section-label">{sec.title}</p>
-            <span className="text-xs" style={{ color: "var(--text-muted)" }}>{sec.source}</span>
+            <SourceBadge source={sec.source} date="TTM" />
           </div>
           {sec.items.map(item => (
             <div key={item.l} className="flex justify-between items-baseline py-3" style={{ borderBottom: "1px solid var(--bg-subtle)" }}>
-              <span className="text-sm" style={{ color: "var(--text-secondary)" }}>{item.l}</span>
+              <span className="text-sm" style={{ color: "var(--text-secondary)" }}><TermTooltip term={item.l} /></span>
               <span className="text-sm font-semibold tabular">{item.v}</span>
             </div>
           ))}
@@ -399,9 +472,21 @@ function StockPage() {
   const q = current && isDemoTicker(current) ? DEMO_QUOTES[current as DemoTicker] : null;
   const s = current && isDemoTicker(current) ? DEMO_SCORES[current as DemoTicker] : null;
   const candles = current && isDemoTicker(current) ? DEMO_CANDLES[current as DemoTicker] : [];
+  const [showSMA50, setShowSMA50] = useState(true);
+  const [showSMA200, setShowSMA200] = useState(true);
+
   const rangedCandles = useMemo(() => {
     const map: Record<string, number> = { "1W": 7, "1M": 30, "3M": 90, "6M": 180, "1Y": 252 };
-    return candles.slice(-Math.min(candles.length, map[range] ?? 180));
+    const sliced = candles.slice(-Math.min(candles.length, map[range] ?? 180));
+    // Attach SMA values using full candle history for correct calculation
+    const sma50all = calcSMA(candles, 50);
+    const sma200all = calcSMA(candles, 200);
+    const startIdx = candles.length - sliced.length;
+    return sliced.map((c, i) => ({
+      ...c,
+      sma50: sma50all[startIdx + i],
+      sma200: sma200all[startIdx + i],
+    }));
   }, [candles, range]);
 
   const TABS = [
@@ -484,21 +569,34 @@ function StockPage() {
             {tab === "overview" && (
               <div className="mt-8 space-y-8">
                 <div className="card-flat">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between flex-wrap gap-2">
                     <div><p className="section-label">Price chart</p><p className="mt-1 text-xs" style={{ color: "var(--text-muted)" }}>Illustrative · Live chart requires backend</p></div>
-                    <RangeSelector value={range} onChange={setRange} />
+                    <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+                      {/* SMA toggles */}
+                      <button onClick={() => setShowSMA50(!showSMA50)} style={{ fontSize: 11, fontWeight: 600, padding: "3px 10px", borderRadius: 20, border: "none", cursor: "pointer", background: showSMA50 ? "#f59e0b" : "#f0f0f0", color: showSMA50 ? "#fff" : "#888", transition: "all 0.15s" }}>SMA 50</button>
+                      <button onClick={() => setShowSMA200(!showSMA200)} style={{ fontSize: 11, fontWeight: 600, padding: "3px 10px", borderRadius: 20, border: "none", cursor: "pointer", background: showSMA200 ? "#6366f1" : "#f0f0f0", color: showSMA200 ? "#fff" : "#888", transition: "all 0.15s" }}>SMA 200</button>
+                      <RangeSelector value={range} onChange={setRange} />
+                    </div>
                   </div>
                   <div className="mt-4" style={{ height: 260 }}>
                     <ResponsiveContainer width="100%" height="100%">
-                      <AreaChart data={rangedCandles} margin={{ top: 8, right: 8, bottom: 8, left: 8 }}>
+                      <ComposedChart data={rangedCandles} margin={{ top: 8, right: 8, bottom: 8, left: 8 }}>
                         <defs><linearGradient id="pfill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="rgba(10,10,10,0.08)" /><stop offset="100%" stopColor="rgba(10,10,10,0)" /></linearGradient></defs>
                         <CartesianGrid stroke="#F3F4F6" vertical={false} />
                         <XAxis dataKey="date" tick={{ fontSize: 11, fill: "#9CA3AF" }} axisLine={false} tickLine={false} minTickGap={40} />
                         <YAxis tick={{ fontSize: 11, fill: "#9CA3AF" }} axisLine={false} tickLine={false} orientation="right" domain={["auto","auto"]} />
-                        <Tooltip contentStyle={{ background: "#fff", border: "1px solid #E5E7EB", borderRadius: 8, fontSize: 13, fontWeight: 600 }} formatter={(v: number) => [`$${v.toFixed(2)}`, "Close"]} />
-                        <Area type="monotone" dataKey="close" stroke="#0A0A0A" strokeWidth={1.5} fill="url(#pfill)" dot={false} />
-                      </AreaChart>
+                        <Tooltip contentStyle={{ background: "#fff", border: "1px solid #E5E7EB", borderRadius: 8, fontSize: 12 }} formatter={(v: number, name: string) => v !== null ? [`$${v.toFixed(2)}`, name] : [null, name]} />
+                        <Area type="monotone" dataKey="close" name="Price" stroke="#0A0A0A" strokeWidth={1.5} fill="url(#pfill)" dot={false} />
+                        {showSMA50 && <Line type="monotone" dataKey="sma50" name="SMA 50" stroke="#f59e0b" strokeWidth={1.5} dot={false} strokeDasharray="4 2" connectNulls={false} />}
+                        {showSMA200 && <Line type="monotone" dataKey="sma200" name="SMA 200" stroke="#6366f1" strokeWidth={1.5} dot={false} strokeDasharray="4 2" connectNulls={false} />}
+                      </ComposedChart>
                     </ResponsiveContainer>
+                  </div>
+                  {/* Legend */}
+                  <div style={{ display: "flex", gap: 16, marginTop: 8, fontSize: 11, color: "#888" }}>
+                    <span style={{ display: "flex", alignItems: "center", gap: 4 }}><span style={{ width: 16, height: 2, background: "#0A0A0A", display: "inline-block" }} /> Price</span>
+                    {showSMA50 && <span style={{ display: "flex", alignItems: "center", gap: 4 }}><span style={{ width: 16, height: 2, background: "#f59e0b", display: "inline-block" }} /> SMA 50</span>}
+                    {showSMA200 && <span style={{ display: "flex", alignItems: "center", gap: 4 }}><span style={{ width: 16, height: 2, background: "#6366f1", display: "inline-block" }} /> SMA 200</span>}
                   </div>
                 </div>
 
