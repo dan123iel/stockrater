@@ -1,8 +1,11 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
-import { toast } from "sonner";
+import { createFileRoute, redirect } from "@tanstack/react-router";
+
+export const Route = createFileRoute("/login")({
+  beforeLoad: () => {
+    throw redirect({ to: "/app" });
+  },
+  component: () => null,
+});
 
 export const Route = createFileRoute("/login")({
   head: () => ({

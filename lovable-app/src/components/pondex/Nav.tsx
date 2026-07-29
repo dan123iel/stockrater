@@ -76,7 +76,7 @@ export function Nav() {
 
         <div className="ml-auto flex items-center gap-1">
           <Link
-            to="/login"
+            to="/app"
             className="hidden rounded-full px-3 py-1.5 text-sm font-medium text-ink-mid transition-colors hover:text-ink sm:inline-block"
           >
             My Account
@@ -91,7 +91,7 @@ export function Nav() {
                 transition={{ duration: 0.2 }}
               >
                 <Link
-                  to="/login"
+                  to="/app"
                   className="hidden items-center gap-1.5 rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-ink/90 md:inline-flex"
                 >
                   Try it free <ArrowRight className="size-3.5" />
@@ -131,7 +131,7 @@ export function Nav() {
               ))}
               <li className="mt-2">
                 <Link
-                  to="/login"
+                  to="/app"
                   onClick={() => setOpen(false)}
                   className="flex items-center justify-center gap-1.5 rounded-full bg-ink px-4 py-2.5 text-sm font-semibold text-white"
                 >
