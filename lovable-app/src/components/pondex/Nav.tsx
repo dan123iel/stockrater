@@ -5,10 +5,9 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { Wordmark } from "./Wordmark";
 
 const links = [
-  { label: "Products",  to: "/",  hash: "#features" },
-  { label: "Features",  to: "/",  hash: "#features" },
-  { label: "Use Cases", to: "/",  hash: "#use-cases" },
-  { label: "Pricing",   to: "/",  hash: "#pricing" },
+  { label: "How it works", to: "/", hash: "#how-it-works" },
+  { label: "Features",     to: "/", hash: "#features" },
+  { label: "Pricing",      to: "/", hash: "#pricing" },
 ];
 
 export function Nav() {
