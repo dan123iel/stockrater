@@ -38,14 +38,14 @@ const DEFAULT_WIDGETS = ["hero", "performance", "trending", "scanner", "allocati
 function useWidgets() {
   const [widgets, setWidgets] = useState<string[]>(() => {
     try {
-      const saved = localStorage.getItem("pondex_dashboard_widgets");
+      const saved = localStorage.getItem("pondex_dashboard_widgets_v2");
       return saved ? JSON.parse(saved) : DEFAULT_WIDGETS;
     } catch { return DEFAULT_WIDGETS; }
   });
 
   const save = (next: string[]) => {
     setWidgets(next);
-    localStorage.setItem("pondex_dashboard_widgets", JSON.stringify(next));
+    localStorage.setItem("pondex_dashboard_widgets_v2", JSON.stringify(next));
   };
 
   return { widgets, save };
