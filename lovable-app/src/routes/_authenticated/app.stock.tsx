@@ -655,18 +655,19 @@ function StockPage() {
             {/* Overview */}
             {tab === "overview" && (
               <div className="mt-8 space-y-8">
-                <div className="card-flat">
-                  <div className="flex items-center justify-between flex-wrap gap-2">
+                {/* Chart — direct div, no card-flat wrapper to avoid Recharts sizing issues */}
+                <div style={{ background: "#fff", borderRadius: 20, padding: "20px 22px", boxShadow: "0 2px 12px rgba(0,0,0,0.05)" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
                     <div><p className="section-label">Price chart</p><p className="mt-1 text-xs" style={{ color: "#888888" }}>Illustrative · Live chart requires backend</p></div>
                     <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-                      {/* SMA toggles */}
-                      <button onClick={() => setShowSMA50(!showSMA50)} style={{ fontSize: 11, fontWeight: 600, padding: "3px 10px", borderRadius: 20, border: "none", cursor: "pointer", background: showSMA50 ? "#f59e0b" : "#f0f0f0", color: showSMA50 ? "#fff" : "#888", transition: "all 0.15s" }}>SMA 50</button>
-                      <button onClick={() => setShowSMA200(!showSMA200)} style={{ fontSize: 11, fontWeight: 600, padding: "3px 10px", borderRadius: 20, border: "none", cursor: "pointer", background: showSMA200 ? "#6366f1" : "#f0f0f0", color: showSMA200 ? "#fff" : "#888", transition: "all 0.15s" }}>SMA 200</button>
+                      <button onClick={() => setShowSMA50(!showSMA50)} style={{ fontSize: 11, fontWeight: 600, padding: "3px 10px", borderRadius: 20, border: "none", cursor: "pointer", background: showSMA50 ? "#f59e0b" : "#f0f0f0", color: showSMA50 ? "#fff" : "#888" }}>SMA 50</button>
+                      <button onClick={() => setShowSMA200(!showSMA200)} style={{ fontSize: 11, fontWeight: 600, padding: "3px 10px", borderRadius: 20, border: "none", cursor: "pointer", background: showSMA200 ? "#6366f1" : "#f0f0f0", color: showSMA200 ? "#fff" : "#888" }}>SMA 200</button>
                       <RangeSelector value={range} onChange={setRange} />
                     </div>
                   </div>
-                  <div className="mt-4" style={{ height: 260, width: "100%", minHeight: 260 }}>
-                    <ResponsiveContainer width="100%" height="100%">
+                  {/* Chart container — explicit px height required for ResponsiveContainer */}
+                  <div style={{ height: "260px", width: "100%" }}>
+                    <ResponsiveContainer width="100%" height={260}>
                       <ComposedChart data={rangedCandles} margin={{ top: 8, right: 8, bottom: 8, left: 8 }}>
                         <defs><linearGradient id="pfill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="rgba(10,10,10,0.08)" /><stop offset="100%" stopColor="rgba(10,10,10,0)" /></linearGradient></defs>
                         <CartesianGrid stroke="#F3F4F6" vertical={false} />
@@ -679,7 +680,6 @@ function StockPage() {
                       </ComposedChart>
                     </ResponsiveContainer>
                   </div>
-                  {/* Legend */}
                   <div style={{ display: "flex", gap: 16, marginTop: 8, fontSize: 11, color: "#888" }}>
                     <span style={{ display: "flex", alignItems: "center", gap: 4 }}><span style={{ width: 16, height: 2, background: "#0A0A0A", display: "inline-block" }} /> Price</span>
                     {showSMA50 && <span style={{ display: "flex", alignItems: "center", gap: 4 }}><span style={{ width: 16, height: 2, background: "#f59e0b", display: "inline-block" }} /> SMA 50</span>}
