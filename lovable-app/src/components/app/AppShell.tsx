@@ -112,10 +112,11 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: BG, fontFamily: "'Inter', sans-serif" }}>
 
-      {/* ── Icon-only sidebar ── */}
+      {/* ── Icon-only sidebar (desktop only) ── */}
       <aside
         role="navigation"
         aria-label="Main navigation"
+        className="hidden md:flex"
         style={{
           width: SIDEBAR_W,
           minHeight: "100vh",
@@ -205,7 +206,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       </aside>
 
       {/* ── Main content ── */}
-      <div style={{ flex: 1, marginLeft: SIDEBAR_W, display: "flex", flexDirection: "column", minWidth: 0 }}>
+      <div className="md:ml-[72px]" style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
 
         {/* Scroll progress */}
         <div style={{ height: 2, background: "transparent", position: "fixed", top: 0, left: SIDEBAR_W, right: 0, zIndex: 60 }}>
@@ -307,8 +308,8 @@ export function AppShell({ children }: { children: ReactNode }) {
               }}
             >
               <div style={{
-                width: 44, height: 32,
-                borderRadius: 20,
+                width: 48, height: 30,
+                borderRadius: 30,
                 background: active ? "#c8f135" : "transparent",
                 display: "flex", alignItems: "center", justifyContent: "center",
                 transition: "background 0.15s",
