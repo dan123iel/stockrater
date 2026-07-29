@@ -97,9 +97,17 @@ export const Route = createFileRoute("/_authenticated/app/stock")({
 function Gauge({ score }: { score: number }) {
   const [d, setD] = useState(0);
   useEffect(() => {
-    const start = performance.now(); const dur = 1200; let raf: number;
-    const step = (t: number) => { const p = Math.min(1, (t - start) / dur); setD(Math.round(score * (1 - Math.pow(1 - p, 3)))); if (p < 1) raf = requestAnimationFrame(step); };
-    raf = requestAnimationFrame(step); return () => cancelAnimationFrame(raf);
+    setD(0);
+    const dur = 1200;
+    const start = Date.now();
+    const interval = setInterval(() => {
+      const elapsed = Date.now() - start;
+      const p = Math.min(1, elapsed / dur);
+      const eased = 1 - Math.pow(1 - p, 3);
+      setD(Math.round(score * eased));
+      if (p >= 1) clearInterval(interval);
+    }, 16);
+    return () => clearInterval(interval);
   }, [score]);
   const color = score >= 70 ? "#22c55e" : score >= 50 ? "#f59e0b" : "#ef4444";
   const r = 80; const cx = 100; const cy = 100;
@@ -661,7 +669,7 @@ function StockPage() {
                       <RangeSelector value={range} onChange={setRange} />
                     </div>
                   </div>
-                  <div className="mt-4" style={{ height: 260 }}>
+                  <div className="mt-4" style={{ height: 260, width: "100%", minHeight: 260 }}>
                     <ResponsiveContainer width="100%" height="100%">
                       <ComposedChart data={rangedCandles} margin={{ top: 8, right: 8, bottom: 8, left: 8 }}>
                         <defs><linearGradient id="pfill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="rgba(10,10,10,0.08)" /><stop offset="100%" stopColor="rgba(10,10,10,0)" /></linearGradient></defs>
