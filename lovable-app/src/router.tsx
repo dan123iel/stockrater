@@ -11,6 +11,7 @@ export const getRouter = () => {
     routeTree,
     context: { queryClient },
     basepath,
+    trailingSlash: "never",
     scrollRestoration: true,
     defaultPreloadStaleTime: 0,
   });
