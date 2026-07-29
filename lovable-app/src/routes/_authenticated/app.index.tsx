@@ -19,7 +19,9 @@ export const Route = createFileRoute("/_authenticated/app/")({
   component: Dashboard,
 });
 
-// ── Widget definitions ──────────────────────────────────────────────────────
+// ── Design token ────────────────────────────────────────────────────────────
+const CARD = { background: "#fff", borderRadius: 20, padding: "22px 24px", boxShadow: "0 2px 12px rgba(0,0,0,0.05)", border: "none" } as const;
+const ACCENT = "#c8f135";
 
 const ALL_WIDGETS = [
   { id: "hero",        label: "Financial Command",   description: "Portfolio summary + 4 stat cards" },
@@ -113,23 +115,22 @@ function WidgetHero() {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14 }}>
         {STAT_4.map((s, i) => (
           <div key={i} style={{
-            background: s.highlight ? "#f8f9ff" : "#fff",
-            borderRadius: 16, padding: "18px 20px",
-            border: s.highlight ? "1px solid #e8eaff" : "1px solid #f0f0f0",
-            boxShadow: s.highlight ? "0 2px 12px rgba(99,102,241,0.08)" : "none",
+            ...CARD,
+            background: s.highlight ? "#f0f4ff" : "#fff",
+            boxShadow: s.highlight ? "0 4px 20px rgba(99,102,241,0.12)" : "0 2px 12px rgba(0,0,0,0.05)",
           }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
-              <div style={{ width: 38, height: 38, background: s.iconBg, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>{s.icon}</div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
+              <div style={{ width: 40, height: 40, background: s.highlight ? "#6366f122" : "#f4f6f9", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>{s.icon}</div>
               {s.badge ? (
-                <span style={{ fontSize: 10, fontWeight: 700, background: "#dcfce7", color: "#15803d", padding: "2px 8px", borderRadius: 20 }}>low ✓</span>
+                <span style={{ fontSize: 10, fontWeight: 700, background: "#dcfce7", color: "#15803d", padding: "3px 9px", borderRadius: 20 }}>low ✓</span>
               ) : (
-                <span style={{ fontSize: 12, fontWeight: 600, color: s.up ? "#22c55e" : "#ef4444", display: "flex", alignItems: "center", gap: 2 }}>
-                  {s.change} <ArrowUpRight size={12} />
+                <span style={{ fontSize: 12, fontWeight: 700, color: s.up ? "#22c55e" : "#ef4444", display: "flex", alignItems: "center", gap: 2, background: s.up ? "#f0fdf4" : "#fff5f5", padding: "3px 8px", borderRadius: 20 }}>
+                  {s.change} <ArrowUpRight size={11} />
                 </span>
               )}
             </div>
-            <p style={{ fontSize: 12, color: "#888", marginBottom: 4 }}>{s.label}</p>
-            <p style={{ fontSize: 20, fontWeight: 700, color: "#1a1a1a" }}>{s.value}</p>
+            <p style={{ fontSize: 12, color: "#9ca3b0", marginBottom: 6, fontWeight: 500 }}>{s.label}</p>
+            <p style={{ fontSize: 26, fontWeight: 800, color: "#1a1a1a", letterSpacing: "-0.5px", lineHeight: 1 }}>{s.value}</p>
           </div>
         ))}
       </div>
@@ -216,26 +217,26 @@ function SparkLine({ up }: { up: boolean }) {
 function WidgetTrending() {
   const topMovers = DEMO_TICKERS.slice(0, 4);
   return (
-    <div style={{ background: "#fff", borderRadius: 16, padding: "20px 22px", border: "1px solid #f0f0f0" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-        <h2 style={{ fontSize: 15, fontWeight: 700 }}>Trending Assets</h2>
-        <Link to="/app/markets" style={{ fontSize: 13, color: "#6366f1", textDecoration: "none" }}>View all →</Link>
+    <div style={{ ...CARD }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
+        <h2 style={{ fontSize: 16, fontWeight: 700, color: "#1a1a1a" }}>Trending Assets</h2>
+        <Link to="/app/markets" style={{ fontSize: 12, color: "#6366f1", textDecoration: "none", fontWeight: 600 }}>View all →</Link>
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
         {topMovers.map((t) => {
           const q = DEMO_QUOTES[t];
           const up = q.changePercent >= 0;
           return (
-            <Link key={t} to="/app/stock" search={{ ticker: t } as never} style={{ textDecoration: "none", border: "1px solid #f0f0f0", borderRadius: 12, padding: "14px 16px", display: "block" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
-                <div style={{ width: 32, height: 32, background: "#1a1a1a", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <span style={{ color: "#fff", fontSize: 11, fontWeight: 700 }}>{t.slice(0, 2)}</span>
+            <Link key={t} to="/app/stock" search={{ ticker: t } as never} style={{ textDecoration: "none", background: "#f8f9fc", border: "none", borderRadius: 14, padding: "14px 16px", display: "block" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}>
+                <div style={{ width: 30, height: 30, background: "#1a1a1a", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <span style={{ color: "#fff", fontSize: 10, fontWeight: 700 }}>{t.slice(0, 2)}</span>
                 </div>
-                <span style={{ fontSize: 12, fontWeight: 600, color: up ? "#22c55e" : "#ef4444" }}>{up ? "+" : ""}{q.changePercent.toFixed(1)}%</span>
+                <span style={{ fontSize: 11, fontWeight: 700, color: up ? "#22c55e" : "#ef4444", background: up ? "#f0fdf4" : "#fff5f5", padding: "2px 7px", borderRadius: 20 }}>{up ? "+" : ""}{q.changePercent.toFixed(1)}%</span>
               </div>
-              <p style={{ fontSize: 13, fontWeight: 700, color: "#1a1a1a", marginBottom: 2 }}>{t}</p>
-              <p style={{ fontSize: 11, color: "#888", marginBottom: 8 }}>{q.companyName}</p>
-              <p style={{ fontSize: 15, fontWeight: 700, color: "#1a1a1a", marginBottom: 8 }}>${q.price.toFixed(2)}</p>
+              <p style={{ fontSize: 13, fontWeight: 700, color: "#1a1a1a", marginBottom: 1 }}>{t}</p>
+              <p style={{ fontSize: 10, color: "#9ca3b0", marginBottom: 8 }}>{q.companyName}</p>
+              <p style={{ fontSize: 18, fontWeight: 800, color: "#1a1a1a", letterSpacing: "-0.5px" }}>${q.price.toFixed(2)}</p>
               <SparkLine up={up} />
             </Link>
           );

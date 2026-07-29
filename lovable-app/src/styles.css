@@ -173,10 +173,11 @@
 /* ── App utility classes (used by stock page + legacy components) ── */
 @layer components {
   .card-flat {
-    background: #fff;
-    border: 1px solid #f0f0f0;
-    border-radius: 12px;
-    padding: 20px;
+    background: #ffffff;
+    border: none;
+    border-radius: 20px;
+    padding: 22px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
   }
   .section-label {
     font-size: 11px;
