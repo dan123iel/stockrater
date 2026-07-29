@@ -1,137 +1,100 @@
 # pondex — Current To-Dos
 
-_Last updated: 2026-07-22 · Großer App-Aufbau abgeschlossen_
+_Last updated: 2026-07-29 · Großer App + Landing Page Überarbeitung_
 
 > Single source of truth für aktive Tasks.
 > Roadmap: `docs/specs/ROADMAP.md` · IA: `docs/specs/APP-INFORMATION-ARCHITECTURE.md`
 
 ---
 
-## ✅ Heute erledigt (2026-07-22) — Zusammenfassung
+## ✅ Heute erledigt (2026-07-29) — Zusammenfassung
 
-### Design & Navigation
-- [x] Jasper-Style Nav: Logo links, Links zentriert, Log in + Free Trial rechts ✅
-- [x] AppNav (authenticated): Home · Portfolio · Markets · Robo Advisor · CFD · Stock + Search + Log out + Profile ✅
-- [x] LandingNav (public): Product · Solutions · Resources · Company · Pricing ✅
-- [x] Active Nav-State: aktuell aktive Seite hervorgehoben ✅
-- [x] pondex_ Logo (PNG) in beiden Navbars ✅
-- [x] Dev Grid ausgeschaltet (DEV_GRID = false) ✅
-- [x] Bungee-Style Design Pass: alle App-Pages (Home, Portfolio, Markets, Robo, CFD, Stock) ✅
-- [x] `bungee.js` Design-System mit headline, card, btn, stat, tab, row ✅
+### App — FintechX Redesign
+- [x] AppShell komplett neu: dunkle Sidebar, weiße aktive Nav-Box, grauer Topbar ✅
+- [x] FintechX-Layout: Financial Command Hero, 4 Stat-Cards, Investment Performance Chart ✅
+- [x] Dashboard Customize Mode: Widgets drag & drop, hinzufügen, entfernen ✅
+- [x] Mobile Bottom Tab Bar (5 Tabs, dark bg, lila aktiv) ✅
+- [x] Hover-States überall (Nav, Buttons, Avatar-Dropdown) ✅
+- [x] Search expandiert on focus + lila Ring ✅
+- [x] Scroll-Progress-Bar unter Topbar ✅
+- [x] Avatar-Dropdown mit Account/Settings/Sign out + Keyboard-Support ✅
 
-### App Pages — vollständig gebaut
-- [x] **Home** (`/app`): Dashboard mit Live-Daten, Top Movers, Watchlist, Robo-Teaser, Events ✅
-- [x] **Portfolio** (`/app/portfolio`): Watchlist mit Live-Preisen, 4 Tabs, Account ✅
-- [x] **Markets** (`/app/markets`): Top Movers live, Collections, Calendar-Grid ✅
-- [x] **Robo Advisor** (`/app/robo`): 4 Tabs + Onboarding-Flow ✅
-- [x] **CFD** (`/app/cfd`): Instrumente-Tabelle, Risk Warning ✅
-- [x] **Stock** (`/app/stock`): 6 Tabs nach IA-Spec ✅
+### App — Neue Seiten
+- [x] **Portfolio** (`/app/portfolio`): Holdings-Tabelle, P&L, Add/Remove, Watchlist-Tab ✅
+- [x] **Markets** (`/app/markets`): Top Movers Toggle, Collections, Events Calendar ✅
+- [x] **Robo Advisor** (`/app/robo`): 3 Portfolios (Conservative/Core/Growth), Onboarding-Steps ✅
+- [x] **CFD** (`/app/cfd`): Instrumente-Tabelle, Risk Warning, Category-Filter ✅
+- [x] **Compare** (`/app/compare`): 2 Stock-Pickers, 13-Zeilen Vergleichstabelle, Winner-Highlight ✅
 
-### Stock Page — vollständig
-- [x] **Price Chart**: Recharts Area-Chart, 1W/1M/3M/6M/1Y Range, Volume-Bar ✅
-- [x] **Event-Marker im Chart**: lila Earnings-Linien mit E-Label, Legende ✅
-- [x] **Key Metrics**: 4 Sektionen — Price & Volume, Valuation, Profitability, Management Effectiveness ✅
-- [x] **Financials**: 3 Sub-Tabs — Income Statement, Balance Sheet, Cash Flow ✅
-- [x] **Overview**: Chart + Verdict + Factor Breakdown + Events inline + Similar Stocks + About ✅
-- [x] **News, Order Book, Learn** Tabs ✅
+### App — Stock-Seite Verbesserungen
+- [x] SMA 50 + SMA 200 Toggle-Buttons im Chart ✅
+- [x] TermTooltip: ⓘ Info-Icon auf P/E, FCF, Beta etc. → Popover-Definition ✅
+- [x] Source Badges: `📊 Yahoo Finance · TTM` überall ✅
+- [x] Compare in Nav (GitCompare Icon) ✅
 
-### Backend-Erweiterungen
-- [x] `/financials` erweitert: Balance Sheet + Cash Flow Felder ✅
-- [x] `/ratios` komplett: P/E, Forward P/E, P/B, P/S, ROE, ROA, Margen etc. ✅
+### Infrastructure
+- [x] Skeleton Loaders (shimmer CSS animation) ✅
+- [x] Accessibility: role="navigation", aria-labels, aria-expanded, keyboard nav ✅
+- [x] CSS-Variablen konsolidiert (--color-up/down/hold etc.) ✅
+- [x] CSS-Klassen (card-flat, btn-dark, badge-*) in styles.css ✅
 
-### Calendar
-- [x] Echter Monats-Grid in Markets > Calendar ✅
-- [x] Navigation ← → zwischen Monaten ✅
-- [x] Farbcodierung: lila Earnings, grün Dividend, grau Holiday ✅
-
----
-
-## 🔴 Morgen — Priorität 1: Landing Page fixen
-
-> **Problem:** Landing Page gefällt nicht — Sektionen unten ohne Funktion, Nav-Links ohne Ziel
-
-### LP-NAV-1: Nav-Links mit Inhalten verbinden
-- [ ] "Product" → scrollt zu `#features` Section (HowItWorks/Features)
-- [ ] "Solutions" → scrollt zu `#how-it-works`
-- [ ] "Resources" → scrollt zu `#faq`
-- [ ] "Company" → scrollt zu `#testimonials` oder eigene Seite
-- [ ] "Pricing" → scrollt zu `#pricing`
-- [ ] Smooth-scroll implementieren
-
-### LP-HERO-1: Hero neu gestalten
-- [ ] Aktueller Hero wirkt zu leer unter dem Headline
-- [ ] Score-Card Preview mit echten Daten (AAPL live vom Backend)
-- [ ] Oder: Video-Background wieder einbauen (war vorher besser)
-- [ ] "Start free trial" CTA klarer positionieren
-
-### LP-CONTENT-1: Alle Sektionen der Landing Page prüfen
-- [ ] HowItWorks: Inhalt stimmt — Grid-Ausrichtung prüfen
-- [ ] ProductDemo: noch vorhanden? Funktioniert sie?
-- [ ] Features: vollständig?
-- [ ] Testimonials: G/P/J Stacking-Cards — noch da?
-- [ ] Pricing: Free + Pro — aktuell?
-- [ ] FAQ: Antworten vollständig?
-- [ ] FinalCTA: Button funktioniert?
-- [ ] Footer: Links vollständig?
-
-### LP-DESIGN-1: Visual-Qualität
-- [ ] Konsistenz mit App-Design (gleiche Fonts, gleiche Abstände)
-- [ ] Hero-Visual überzeugender machen
-- [ ] Mobile-Check (mindestens 768px)
+### Landing Page
+- [x] VerdictBanner: scrollende Verdict-Cards (AAPL/MSFT/TSLA etc.) ✅
+- [x] CompareTeaser: Side-by-side AAPL vs MSFT mit Sector-Avg ✅
+- [x] InvestorProfile: 4 Investor-Typen, gleiche Aktie = 4 verschiedene Scores ✅
 
 ---
 
-## 🟡 Diese Woche — Code (Interview-validiert)
+## 🔴 Kritisch — Blockiert echte Nutzung
 
-### K. Score 1–100 final (statt 1–10 Backend-Basis)
-- [x] Score wird bereits als 0–100 angezeigt (fitScore * 20) ✅
-- [ ] Backend-Berechnung prüfen: stimmt die Skala?
+### C. Railway Backend deployen
+- [ ] FastAPI lokal → Railway deployen
+- [ ] `VITE_API_URL` auf Railway-URL setzen (GitHub Secret)
+- [ ] Frontend: API-Call zu Railway statt Demo-Daten
+- [ ] Smoke Test: AAPL → echte Score stimmt mit Demo überein
+- [ ] yfinance Rate-Limit + Caching testen
 
-### L. 50/200-Tage Moving Average im Chart
-- [ ] StockChart.jsx: SMA-Berechnung hinzufügen
-- [ ] Toggle: Chart + SMA(50) + SMA(200) ein/ausblenden
-
-### M. AI Chart-Interpretation
-- [ ] Unter Chart: 2–3 Sätze Groq-generiert (Trend, RSI, Support/Resistance)
-- [ ] Groq-Endpoint bereits vorhanden: `/ai/chat`
-
-### N. Tooltips für Fachbegriffe
-- [ ] Info-Symbol (ⓘ) neben DCF, Verdict, KGV, Forward-KGV, RSI
-- [ ] Hover/Click → Plain-Language-Erklärung
-
-### O. "Profile" → "Account" Seite bauen
-- [ ] Route `/app/account` erstellen
-- [ ] Zeigt: E-Mail, Plan, Logout, Einstellungen
-
-### P. Scroll-Indikator auf Stock-Page
-- [ ] Visueller Hinweis dass mehr Inhalt folgt
+### D. Auth reaktivieren (Supabase)
+- [ ] `_authenticated/route.tsx` Guard reaktivieren (aktuell bypass)
+- [ ] Supabase Email + Google + Apple Login vollständig testen
+- [ ] 5-Fragen Onboarding nach Signup einbauen
+- [ ] Score gewichtet nach User-Strategie (Value/Growth/Dividend/Momentum)
+- [ ] Freemium Gate: 1 Verdict/Tag zählen + Upgrade-Modal
 
 ---
 
-## 🟡 Phase C — Backend live (August 2026)
+## 🟡 App-Features noch offen
 
-- [ ] Railway Backend: aktuell läuft es lokal — auf Railway deployen
-- [ ] Frontend `VITE_API_URL` auf Railway-URL setzen
-- [ ] Smoke Test: AAPL Score + Chart vom Live-Backend
-- [ ] Sentry DSN auf Railway konfigurieren
+### Stock-Seite
+- [ ] **Similar Stocks** — horizontal scrollable Peer-Liste auf Overview Tab
+- [ ] **AI Chart Interpretation** — 2-3 Groq-Sätze unter Chart (Task M)
+- [ ] **Insights Tab** — Deep-Dive: Fundamentals / Analysten / Technisch / Sentiment
+
+### Dashboard
+- [ ] **Empty state** für neue User (noch keine Watchlist/Portfolio)
+- [ ] **Recently analysed** — letzte 5 gesuchten Stocks als Chips
+
+### Markets
+- [ ] **News Tab** — News-Feed (momentan nur in Stock-Detail)
+- [ ] **Dynamischer Calendar** — Events aus Portfolio/Watchlist des Users
+
+### Auth/Account
+- [ ] **Account-Seite** vollständig — E-Mail, Plan, Logout, Einstellungen
+- [ ] **Privacy Policy** live (Pflicht vor echtem Auth, DSGVO)
 
 ---
 
-## ⬜ Phase D — Auth (August 2026)
+## 🟢 Phase E — Pro Tier + Stripe (Sept–Okt 2026)
+- [ ] Stripe Integration (€4.99/Monat, €49.99/Jahr)
+- [ ] Free Tier Gate: nach 1 Verdict/Tag → Upgrade-Prompt
+- [ ] Pro Features: Unlimited + Compare + Portfolio Tracker
+- [ ] Van Westendorp Pricing Test auswerten
 
-- [ ] Supabase Auth (Email + Google)
-- [ ] Login/Signup Seiten mit echtem Auth verbinden (aktuell localStorage-Mock)
-- [ ] 5-Fragen Onboarding nach Signup
-- [ ] Score gewichtet nach User-Strategie
-- [ ] Freemium Gate: 1 Verdict/Tag zählen
-
----
-
-## ⬜ Phase E — Pro Tier + Stripe (Sept–Okt 2026)
-
-- [ ] Stripe (€4.99/Monat, €49.99/Jahr)
-- [ ] Free Tier Gate + Upgrade-Prompt
-- [ ] Comparison Feature (Pro-only)
+## 🟢 Phase E3 — AI Features (Okt–Nov 2026)
+- [ ] Groq API Key + Rate-Limit-Strategie
+- [ ] Score Explainer: `/explain/{ticker}` Endpoint
+- [ ] Investment Copilot: Chat-UI (Pro-Feature)
+- [ ] Quellenangaben in AI-Output erzwingen (71% WTP-Bedingung)
 
 ---
 
@@ -139,18 +102,18 @@ _Last updated: 2026-07-22 · Großer App-Aufbau abgeschlossen_
 
 | Topic | File |
 |---|---|
-| IA Spec | `docs/specs/APP-INFORMATION-ARCHITECTURE.md` |
-| Design Grid | `docs/specs/DESIGN-GRID.md` |
-| Landing Page Playbook | `docs/specs/LANDING-PAGE-PLAYBOOK.md` |
-| Revolut UI Referenz | `docs/research/competitors/revolut-ui-architecture.md` |
-| Design System (Code) | `frontend/src/lib/bungee.js` |
-| Grid System (Code) | `frontend/src/lib/grid.js` |
-| Farb-Tokens | `frontend/src/lib/colors.js` |
-| AppNav | `frontend/src/components/AppNav.jsx` |
-| LandingNav | `frontend/src/components/landing/LandingNav.jsx` |
-| Stock Chart | `frontend/src/components/StockChart.jsx` |
-| Dev Grid toggle | `frontend/src/App.jsx` → `DEV_GRID` |
-
----
-
-_Next: Landing Page fixen (LP-NAV-1, LP-HERO-1, LP-CONTENT-1) · dann Moving Averages im Chart_
+| App Shell | `lovable-app/src/components/app/AppShell.tsx` |
+| Dashboard | `lovable-app/src/routes/_authenticated/app.index.tsx` |
+| Stock Detail | `lovable-app/src/routes/_authenticated/app.stock.tsx` |
+| Compare | `lovable-app/src/routes/_authenticated/app.compare.tsx` |
+| Portfolio | `lovable-app/src/routes/_authenticated/app.portfolio.tsx` |
+| Markets | `lovable-app/src/routes/_authenticated/app.markets.tsx` |
+| Robo | `lovable-app/src/routes/_authenticated/app.robo.tsx` |
+| CFD | `lovable-app/src/routes/_authenticated/app.cfd.tsx` |
+| Landing Route | `lovable-app/src/routes/index.tsx` |
+| Verdict Banner | `lovable-app/src/components/pondex/VerdictBanner.tsx` |
+| Compare Teaser | `lovable-app/src/components/pondex/CompareTeaser.tsx` |
+| Investor Profile | `lovable-app/src/components/pondex/InvestorProfile.tsx` |
+| CSS Variables | `lovable-app/src/styles.css` |
+| Demo Data | `lovable-app/src/lib/demo-data.ts` |
+| Auth Guard | `lovable-app/src/routes/_authenticated/route.tsx` |
