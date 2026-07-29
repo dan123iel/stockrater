@@ -23,10 +23,10 @@ function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      if (data.user) navigate({ to: "/app" });
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session?.user) navigate({ to: "/app" });
     });
-  }, [navigate]);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,7 +59,7 @@ function LoginPage() {
       <div className="flex min-h-screen items-center justify-center px-6 py-24">
         <div className="w-full max-w-md">
           {/* Card */}
-          <div className="rounded-3xl border border-border-soft bg-white/90 backdrop-blur-xl shadow-[0_24px_64px_rgba(0,0,0,0.1)] px-10 py-10">
+          <div className="rounded-3xl border border-border-soft bg-white shadow-[0_24px_64px_rgba(0,0,0,0.1)] px-10 py-10">
             <img src="/stockrater/pondex-logo.png" alt="pondex_" style={{ height: "24px", width: "auto", marginBottom: "32px" }} />
 
             <h1 className="text-2xl font-bold tracking-tight text-ink">Welcome back.</h1>
