@@ -157,3 +157,105 @@
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
 }
+
+/* ── App utility classes (used by stock page + legacy components) ── */
+@layer components {
+  .card-flat {
+    background: #fff;
+    border: 1px solid #f0f0f0;
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #888;
+  }
+  .btn-dark {
+    background: #1a1a1a;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .btn-dark:hover { opacity: 0.85; }
+  .btn-outline {
+    background: transparent;
+    color: #1a1a1a;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .btn-outline:hover { background: #f4f6f9; }
+  .btn-light {
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 10px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+  }
+  .input-flat {
+    background: #f4f6f9;
+    border: 1px solid #e8eaed;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .input-flat:focus { border-color: #6366f1; }
+  .badge-buy {
+    background: #dcfce7;
+    color: #15803d;
+  }
+  .badge-hold {
+    background: #fef9c3;
+    color: #a16207;
+  }
+  .badge-sell {
+    background: #fee2e2;
+    color: #b91c1c;
+  }
+  .badge-fit {
+    background: #eff0fe;
+    color: #6366f1;
+  }
+  .tabular { font-variant-numeric: tabular-nums; }
+}
+
+/* CSS variables for stock page compatibility */
+:root {
+  --bg-primary: #ffffff;
+  --bg-dark: #0f1117;
+  --bg-subtle: #f4f6f9;
+  --text-primary: #1a1a1a;
+  --text-secondary: #555;
+  --text-muted: #888;
+  --text-inverse: #fff;
+  --border-color: #f0f0f0;
+  --color-up: #22c55e;
+  --color-down: #ef4444;
+  --color-hold: #f59e0b;
+  --badge-buy-bg: #dcfce7;
+  --badge-buy-text: #15803d;
+  --badge-hold-bg: #fef9c3;
+  --badge-hold-text: #a16207;
+  --badge-sell-bg: #fee2e2;
+  --badge-sell-text: #b91c1c;
+}
