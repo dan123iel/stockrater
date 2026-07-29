@@ -154,7 +154,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
 
         {/* Nav items */}
-        <nav style={{ flex: 1, padding: "12px 8px", display: "flex", flexDirection: "column", gap: 2 }}>
+        <nav role="navigation" aria-label="Main navigation" style={{ flex: 1, padding: "12px 8px", display: "flex", flexDirection: "column", gap: 2 }}>
           {NAV_ITEMS.map(({ to, label, Icon }) => (
             <NavLink key={to} to={to} label={label} Icon={Icon} active={isActive(to)} collapsed={collapsed} />
           ))}
@@ -222,6 +222,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
             {/* Bell */}
             <button
+              aria-label="Notifications (2 unread)"
               style={{ position: "relative", background: "none", border: "none", cursor: "pointer", padding: 8, borderRadius: 10, transition: "background 0.15s" }}
               onMouseEnter={e => (e.currentTarget.style.background = "#f4f6f9")}
               onMouseLeave={e => (e.currentTarget.style.background = "none")}
@@ -239,7 +240,13 @@ export function AppShell({ children }: { children: ReactNode }) {
             {/* Avatar dropdown */}
             <div ref={avatarRef} style={{ position: "relative" }}>
               <div
+                role="button"
+                tabIndex={0}
+                aria-label="Account menu"
+                aria-expanded={avatarOpen}
+                aria-haspopup="menu"
                 onClick={() => setAvatarOpen(!avatarOpen)}
+                onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setAvatarOpen(!avatarOpen); } if (e.key === "Escape") setAvatarOpen(false); }}
                 style={{
                   display: "flex", alignItems: "center", gap: 6, cursor: "pointer",
                   padding: "4px 8px", borderRadius: 10,
@@ -256,7 +263,10 @@ export function AppShell({ children }: { children: ReactNode }) {
               </div>
 
               {avatarOpen && (
-                <div style={{
+                <div
+                  role="menu"
+                  aria-label="Account options"
+                  style={{
                   position: "absolute", top: "calc(100% + 8px)", right: 0,
                   background: "#fff", border: "1px solid #e8eaed",
                   borderRadius: 14, boxShadow: "0 12px 32px rgba(0,0,0,0.12)",
@@ -306,6 +316,8 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       {/* ── Bottom Tab Bar (mobile only) ── */}
       <nav
+        role="navigation"
+        aria-label="Mobile navigation"
         className="md:hidden"
         style={{
           position: "fixed", bottom: 0, left: 0, right: 0,
