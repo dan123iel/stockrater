@@ -600,47 +600,43 @@ function StockPage() {
 
       <div className="mx-auto max-w-[1280px] px-6 md:px-8 py-8">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end gap-4 justify-between">
-          <div>
-            {q ? (
-              <>
-                <p className="section-label">{current} · {q.exchangeShortName} · {q.sector}</p>
-                <h1 className="mt-2 text-3xl md:text-4xl font-semibold tracking-tight">{q.companyName}</h1>
-                <p className="mt-2 text-2xl tabular font-semibold">
-                  ${q.price.toFixed(2)}{" "}
-                  <span className="text-base font-normal" style={{ color: q.change > 0 ? "#22c55e" : q.change < 0 ? "#ef4444" : "#555555" }}>
-                    {q.change > 0 ? "+" : ""}{q.change.toFixed(2)} ({q.changePercent > 0 ? "+" : ""}{q.changePercent.toFixed(2)}%)
-                  </span>
-                </p>
-              </>
-            ) : (
-              <><p className="section-label">Stock</p><h1 className="mt-2 text-3xl md:text-4xl font-semibold tracking-tight">Get your verdict.</h1></>
-            )}
-          </div>
-          <div className="flex gap-2" style={{ position: "relative", zIndex: 10 }}>
-            <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === "Enter" && runVerdict()} placeholder="Ticker…" className="input-flat max-w-[180px] uppercase" style={{ pointerEvents: "auto" }} />
-            <button onClick={runVerdict} className="btn-dark" style={{ pointerEvents: "auto" }}>GET VERDICT →</button>
-          </div>
-        </div>
-        <p className="mt-2 text-xs" style={{ color: "#888888" }}>⚠ Research tool only · Not financial advice</p>
-
-        {/* Empty / Error states */}
-        {!current && !error && (
-          <div className="mt-16 text-center" style={{ color: "#888888" }}>
-            <p>Enter a ticker to see its verdict.</p>
-            <div className="mt-4 flex flex-wrap gap-2 justify-center">
-              {DEMO_TICKERS.map(t => (
-                <button key={t} onClick={() => { setInput(t); setCurrent(t); setError(null); }} className="text-xs font-semibold tracking-wider px-3 py-1.5 rounded-full border" style={{ borderColor: "#f0f0f0" }}>{t}</button>
-              ))}
+        <div>
+          {q ? (
+            <>
+              <p className="section-label">{current} · {q.exchangeShortName} · {q.sector}</p>
+              <h1 className="mt-2 text-3xl md:text-4xl font-semibold tracking-tight">{q.companyName}</h1>
+              <p className="mt-2 text-2xl tabular font-semibold">
+                ${q.price.toFixed(2)}{" "}
+                <span className="text-base font-normal" style={{ color: q.change > 0 ? "#22c55e" : q.change < 0 ? "#ef4444" : "#555555" }}>
+                  {q.change > 0 ? "+" : ""}{q.change.toFixed(2)} ({q.changePercent > 0 ? "+" : ""}{q.changePercent.toFixed(2)}%)
+                </span>
+              </p>
+              <p className="mt-1 text-xs" style={{ color: "#888888" }}>⚠ Research tool only · Not financial advice</p>
+            </>
+          ) : (
+            <div className="mt-4 text-center" style={{ color: "#888888" }}>
+              <p className="text-lg font-semibold" style={{ color: "#1a1a1a" }}>Search a ticker using the search bar above</p>
+              <p className="mt-2 text-sm">Or pick one of these:</p>
+              <div className="mt-4 flex flex-wrap gap-2 justify-center">
+                {DEMO_TICKERS.map(t => (
+                  <button key={t} onClick={() => { setInput(t); setCurrent(t); setError(null); }}
+                    style={{ fontSize: 13, fontWeight: 600, padding: "8px 18px", borderRadius: 20, border: "none", background: "#fff", boxShadow: "0 2px 8px rgba(0,0,0,0.06)", cursor: "pointer", color: "#1a1a1a" }}>
+                    {t}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
         {error && (
           <div className="mt-10 card-flat text-center">
-            <p className="text-sm">Ticker not found or not in demo set.</p>
+            <p className="text-sm font-semibold">"{error}" not found. Try one of these:</p>
             <div className="mt-4 flex flex-wrap gap-2 justify-center">
               {DEMO_TICKERS.map(t => (
-                <button key={t} onClick={() => { setInput(t); setCurrent(t); setError(null); }} className="text-xs font-semibold tracking-wider px-3 py-1.5 rounded-full border" style={{ borderColor: "#f0f0f0" }}>{t}</button>
+                <button key={t} onClick={() => { setInput(t); setCurrent(t); setError(null); }}
+                  style={{ fontSize: 13, fontWeight: 600, padding: "8px 18px", borderRadius: 20, border: "none", background: "#f4f6f9", cursor: "pointer" }}>
+                  {t}
+                </button>
               ))}
             </div>
           </div>
